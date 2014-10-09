@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/Mainscreen">
+        <file>Resources/Mainscreen/ContactsActive.png</file>
+        <file>Resources/Mainscreen/ContactsInactive.png</file>
+    </qresource>
+</RCC>
