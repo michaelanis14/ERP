@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -100,6 +100,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+Product* Product::p_instance = 0;
+Product* Product::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new Product();
+		Product::getAll();
+	}
+return p_instance;
+}
 bool Product::save() {
 if(ProductID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO Product (Name,SellingPrice,NetPrice,TradeMargine,Description,Barcode,CriticalAmount,ProductNumber,MoreInfo,BarcodeOnly,isComposite,SpecialTaxDescription,SpecialTaxValue,TaxID,UnitID,generateBarcode,ShortDescription)"
@@ -132,13 +140,13 @@ return new Product();
  }
 
 QList<Product*> Product::getAll() {
-QList<Product*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product"));
-while (query.next()) {
-list.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString()));
+	Product::GetInstance()->products.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product"));
+	while (query.next()) {
+		Product::GetInstance()->products.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString()));
+	}
+	return Product::GetInstance()->products;
 }
-return list;
- }
 
 Product* Product::get(int id) {
 if(id != 0) {
@@ -184,6 +192,31 @@ list.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.v
 }
 return list;
  }
+
+QList<QString> Product::GetStringList() {
+	QList<QString> list;
+	int count =Product::GetInstance()->products.count();
+	if( count < 2){
+		Product::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(Product::GetInstance()->products[i]->Name);
+	}
+	return list;
+}
+
+int Product::GetIndex(QString name) {
+	int count =Product::GetInstance()->products.count();
+	if( count < 2){
+		Product::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(Product::GetInstance()->products[i]->Name == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<Product*> Product::select(QString select) {
 QList<Product*>list;

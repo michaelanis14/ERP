@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,6 +34,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+ContactType* ContactType::p_instance = 0;
+ContactType* ContactType::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new ContactType();
+		ContactType::getAll();
+	}
+return p_instance;
+}
 bool ContactType::save() {
 if(ContactTypeID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactType (Description)"
@@ -66,13 +74,13 @@ return new ContactType();
  }
 
 QList<ContactType*> ContactType::getAll() {
-QList<ContactType*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactType"));
-while (query.next()) {
-list.append(new ContactType(query.value(0).toInt(),query.value(1).toString()));
+	ContactType::GetInstance()->contacttypes.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactType"));
+	while (query.next()) {
+		ContactType::GetInstance()->contacttypes.append(new ContactType(query.value(0).toInt(),query.value(1).toString()));
+	}
+	return ContactType::GetInstance()->contacttypes;
 }
-return list;
- }
 
 ContactType* ContactType::get(int id) {
 if(id != 0) {
@@ -112,6 +120,31 @@ list.append(new ContactType(query.value(0).toInt(),query.value(1).toString()));
 }
 return list;
  }
+
+QList<QString> ContactType::GetStringList() {
+	QList<QString> list;
+	int count =ContactType::GetInstance()->contacttypes.count();
+	if( count < 2){
+		ContactType::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(ContactType::GetInstance()->contacttypes[i]->Description);
+	}
+	return list;
+}
+
+int ContactType::GetIndex(QString name) {
+	int count =ContactType::GetInstance()->contacttypes.count();
+	if( count < 2){
+		ContactType::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(ContactType::GetInstance()->contacttypes[i]->Description == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<ContactType*> ContactType::select(QString select) {
 QList<ContactType*>list;

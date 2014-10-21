@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currency.h
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,7 +13,9 @@ class Currency
 {
 public:
 	Currency();
-	Currency(QString Description);
+	Currency(QString Description);	int CurrencyID;
+	QString Description;
+	QList<Currency*> currencys;
 	static bool init();
 	bool save();
 	bool remove();
@@ -23,9 +25,13 @@ public:
 	static QList<Currency*> getAll();
 	static QList<Currency*> search(QString keyword);
 	static QList<Currency*> select(QString select);
+	static QList<QString> GetStringList();
+	static int GetIndex(QString title);
+	static Currency* GetInstance();
+
 private:
 	Currency(int CurrencyID,QString Description);
-	int CurrencyID;
-	QString Description;
+	static Currency* p_instance;
+
 };
 #endif

@@ -12,6 +12,7 @@
 #include "employee.h"
 #include "contact.h"
 #include "country.h"
+#include "currency.h"
 
 #include <QSql>
 #include <QSqlDatabase>
@@ -89,6 +90,7 @@ bool ErpModel::createTable(QString table,QString query){
 }
 
 
+
 bool ErpModel::init(){
 	ContactType::init();
 	if(ContactType::getAll().count() < 2){
@@ -143,10 +145,24 @@ bool ErpModel::init(){
 	}
 	Contact::init();
 	if(Contact::getAll().count() < 5){
-		Contact* cont = new Contact("Mr.","Abaaas"+QString::number(Contact::getAll().count()),"AbnAbaas","CO","5/5/5",1,1,1,1,"na"
-									,"na","na","na","na","na","na","na","na","na","na",1,
-									1,1,"na","na");
+	Contact* cont = new Contact("7abibi","Mr.","Abaaas"+QString::number(Contact::getAll().count()),"AbnAbaas","5/5/5",1,1,1,"AA","na"
+									,"na",1,1,1,1,"na","na","na","na","na","na","na","na"
+									"na","na","nnna");
 		cont->save();
+
+	}
+	Currency::init();
+	if(Currency::getAll().count() < 4){
+		Currency* curr = new Currency("USD");
+		curr->save();
+		curr = new Currency("EUR");
+		curr->save();
+		curr = new Currency("EGP");
+		curr->save();
+		curr = new Currency("YNN");
+		curr->save();
+
+
 
 	}
 

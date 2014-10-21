@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,6 +34,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+Unit* Unit::p_instance = 0;
+Unit* Unit::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new Unit();
+		Unit::getAll();
+	}
+return p_instance;
+}
 bool Unit::save() {
 if(UnitID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO Unit (Description)"
@@ -66,13 +74,13 @@ return new Unit();
  }
 
 QList<Unit*> Unit::getAll() {
-QList<Unit*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit"));
-while (query.next()) {
-list.append(new Unit(query.value(0).toInt(),query.value(1).toString()));
+	Unit::GetInstance()->units.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit"));
+	while (query.next()) {
+		Unit::GetInstance()->units.append(new Unit(query.value(0).toInt(),query.value(1).toString()));
+	}
+	return Unit::GetInstance()->units;
 }
-return list;
- }
 
 Unit* Unit::get(int id) {
 if(id != 0) {
@@ -112,6 +120,31 @@ list.append(new Unit(query.value(0).toInt(),query.value(1).toString()));
 }
 return list;
  }
+
+QList<QString> Unit::GetStringList() {
+	QList<QString> list;
+	int count =Unit::GetInstance()->units.count();
+	if( count < 2){
+		Unit::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(Unit::GetInstance()->units[i]->Description);
+	}
+	return list;
+}
+
+int Unit::GetIndex(QString name) {
+	int count =Unit::GetInstance()->units.count();
+	if( count < 2){
+		Unit::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(Unit::GetInstance()->units[i]->Description == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<Unit*> Unit::select(QString select) {
 QList<Unit*>list;

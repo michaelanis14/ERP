@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -38,6 +38,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+Tax* Tax::p_instance = 0;
+Tax* Tax::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new Tax();
+		Tax::getAll();
+	}
+return p_instance;
+}
 bool Tax::save() {
 if(TaxID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO Tax (Ratio,Description)"
@@ -70,13 +78,13 @@ return new Tax();
  }
 
 QList<Tax*> Tax::getAll() {
-QList<Tax*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax"));
-while (query.next()) {
-list.append(new Tax(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString()));
+	Tax::GetInstance()->taxs.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax"));
+	while (query.next()) {
+		Tax::GetInstance()->taxs.append(new Tax(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString()));
+	}
+	return Tax::GetInstance()->taxs;
 }
-return list;
- }
 
 Tax* Tax::get(int id) {
 if(id != 0) {
@@ -93,7 +101,7 @@ return new Tax();
 Tax* Tax::get(QString name) {
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax"
-"WHERE Ratio = '"+name+"'"));
+"WHERE Description = '"+name+"'"));
 while (query.next()) {
 return new Tax(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString());
  }
@@ -116,6 +124,31 @@ list.append(new Tax(query.value(0).toInt(),query.value(1).toInt(),query.value(2)
 }
 return list;
  }
+
+QList<QString> Tax::GetStringList() {
+	QList<QString> list;
+	int count =Tax::GetInstance()->taxs.count();
+	if( count < 2){
+		Tax::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(Tax::GetInstance()->taxs[i]->Description);
+	}
+	return list;
+}
+
+int Tax::GetIndex(QString name) {
+	int count =Tax::GetInstance()->taxs.count();
+	if( count < 2){
+		Tax::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(Tax::GetInstance()->taxs[i]->Description == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<Tax*> Tax::select(QString select) {
 QList<Tax*>list;

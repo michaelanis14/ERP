@@ -4,7 +4,7 @@
 
 #include "mainwindow.h"
 #include "erpdisplay.h"
-#include "displays/Contact/contactindexui.h"
+#include "displays/Contact/contactui.h"
 /**
 * A class.
 * The Main Window class it holds the application default styling setup,
@@ -31,13 +31,48 @@ mainwindow::mainwindow()
 	//QApplication::setStyle(new QCleanlooksStyle);
 #endif
 
+
 	this->setStyleSheet(
 				// make background white
-				"mainwindow { background-color: white; } "
+				"MainWindow { background-color: white; } "
+				"QWidget { outline: 0; }"  // removing dotted-border in all controls
+				"QWidget:focus { outline: 0; }"  // removing dotted-border in all controls
 
-				"QPushButton:pressed {	background-color: rgb(255,255,255) }"  // for the direction-animation-button
-				"");
+				"QMessageBox {font-size:16px; }"
+
+				"QWidget#formPanel { background-color: white; } "
+				"QScrollArea { background-color: white; } "
+
+				"QPushButton:checked {	background-color: rgb(200,200,200) }"  // checked style ist wichtig für gedrückte Menü-Buttons
+
+				"QLabel#NrName { color: darkblue; } "
+				"QLabel#errorMessage { color: darkred; font-size:16px } "
+
+				// make QCheckBox bigger
+				//"QCheckBox { width: 26px; height: 26px; } "
+				"QCheckBox::indicator { width: 38px; height: 38px; } "
+				"QCheckBox::indicator:unchecked { image: url(:/icons/checkbox/checkbox_unchecked.png); } "
+				"QCheckBox::indicator:checked { image: url(:/icons/checkbox/checkbox_checked.png); } "
+				"QCheckBox::indicator:focus { background-image: url(:/icons/checkbox/checkbox_unchecked_focus.png); } "
+				"QCheckBox::indicator:disabled { background-image: url(:/icons/checkbox/checkbox_disabled.png); } "
+				""
+				"QLineEdit {"
+				"background-color: gray;"
+				"border-style: outset;"
+				"border-width: 2px;"
+				"border-radius: 10px;"
+				"border-color: beige;"
+				"font: 14px;"
+				//"min-width: 10em;"
+				//"padding: 6px;"
+				"}"
+				"QLineEdit:focus {"
+				"background-color: rgb(76, 200, 98);"
+				"border-style: inset;"
+				"}"
+		);
 	//this->setSize(480,272);
+
 
 
 	currentDisplay = 0;
@@ -61,33 +96,33 @@ mainwindow::mainwindow()
 
 	mainLayout->addWidget(lblContacts,1,0,1,1);
 
-for(int i = 2; i <5 ; i++){
-	label = new QLabel();
-	label->setScaledContents(true);
-	label->setWordWrap(true);
-	label->setText("This is it");
-	label->setMinimumWidth(0);
+	for(int i = 2; i <5 ; i++){
+		label = new QLabel();
+		label->setScaledContents(true);
+		label->setWordWrap(true);
+		label->setText("This is it");
+		label->setMinimumWidth(0);
 
-	mainLayout->addWidget(label,i,0,1,1);
-}
-
-
+		mainLayout->addWidget(label,i,0,1,1);
+	}
 
 
 
-for(int i = 0; i <5 ; i++){
-	label = new QLabel();
-	label->setScaledContents(true);
-	label->setWordWrap(true);
-	label->setText("This is it");
-	//label->setMinimumWidth(0);
-	label->setMaximumHeight(30);
-	label->setAutoFillBackground(true);
-	mainLayout->addWidget(label,0,i,1,1);
-}
+
+
+	for(int i = 0; i <5 ; i++){
+		label = new QLabel();
+		label->setScaledContents(true);
+		label->setWordWrap(true);
+		label->setText("This is it");
+		//label->setMinimumWidth(0);
+		label->setMaximumHeight(30);
+		//label->setAutoFillBackground(true);
+		mainLayout->addWidget(label,0,i,1,1);
+	}
 	//	this->showFullScreen();
 
-this->setLayout(mainLayout);
+	this->setLayout(mainLayout);
 
 
 }
@@ -109,11 +144,11 @@ void mainwindow::ShowDisplay(ERPDisplay * display) {
 	}
 
 	if (p_instance->currentDisplay != 0) {
-	//	p_instance->currentDisplay->blockSignals(true);
+		//	p_instance->currentDisplay->blockSignals(true);
 		p_instance->currentDisplay->hide();
 	}
 	//
-	display->setAutoFillBackground(true);
+	//	display->setAutoFillBackground(true);
 	p_instance->mainLayout->removeItem(p_instance->boxLayout);
 	delete p_instance->boxLayout;
 	p_instance->boxLayout = new QVBoxLayout();
@@ -157,18 +192,43 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 	else {
 		//qDebug() << child->objectName();
 		if(child->objectName() == "lblContacts"){
-	//		if(!contactIndexUI::GetUI()->isVisible()){
+			//		if(!contactIndexUI::GetUI()->isVisible()){
 			//	qDebug() << child->objectName();
-				lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
-				contactIndexUI::ShowUI();
-	//		}
+			lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
+			ContactUI::ShowUI();
+			//		}
 		}
-			else{
-		//		qDebug() << "Visb";
-				contactIndexUI::GetUI()->setHidden(true);
-				lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsInactive.png"));
+		else{
+			//		qDebug() << "Visb";
+			ContactUI::GetUI()->setHidden(true);
+			lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsInactive.png"));
 
-			}
+		}
 
 	}
+
+}
+
+void mainwindow::updateSize(){
+	int height = this->height();
+	//int width = 0;
+	if(p_instance->currentDisplay != 0){
+
+			if(p_instance->currentDisplay->flowLayout != 0){
+				for(int i = 0; i < p_instance->currentDisplay->flowLayout->itemList.count(); i++){
+					height += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().height();
+		//	width += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().width();
+				}
+				p_instance->currentDisplay->repaint();
+			}
+			this->repaint();
+			p_instance->currentDisplay->formPanel->setGeometry(this->x(),this->y(),this->width(),height);
+
+	}
+}
+
+void mainwindow::resizeEvent(QResizeEvent * event){
+	this->updateSize();
+	QWidget::resizeEvent(event);
+
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.h
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,7 +13,10 @@ class Tax
 {
 public:
 	Tax();
-	Tax(double Ratio,QString Description);
+	Tax(double Ratio,QString Description);	int TaxID;
+	double Ratio;
+	QString Description;
+	QList<Tax*> taxs;
 	static bool init();
 	bool save();
 	bool remove();
@@ -23,10 +26,13 @@ public:
 	static QList<Tax*> getAll();
 	static QList<Tax*> search(QString keyword);
 	static QList<Tax*> select(QString select);
+	static QList<QString> GetStringList();
+	static int GetIndex(QString title);
+	static Tax* GetInstance();
+
 private:
 	Tax(int TaxID,double Ratio,QString Description);
-	int TaxID;
-	double Ratio;
-	QString Description;
+	static Tax* p_instance;
+
 };
 #endif

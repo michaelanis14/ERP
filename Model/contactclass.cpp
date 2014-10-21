@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclass.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,6 +34,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+ContactClass* ContactClass::p_instance = 0;
+ContactClass* ContactClass::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new ContactClass();
+		ContactClass::getAll();
+	}
+return p_instance;
+}
 bool ContactClass::save() {
 if(ContactClassID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactClass (Description)"
@@ -66,13 +74,13 @@ return new ContactClass();
  }
 
 QList<ContactClass*> ContactClass::getAll() {
-QList<ContactClass*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactClass"));
-while (query.next()) {
-list.append(new ContactClass(query.value(0).toInt(),query.value(1).toString()));
+	ContactClass::GetInstance()->contactclasss.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactClass"));
+	while (query.next()) {
+		ContactClass::GetInstance()->contactclasss.append(new ContactClass(query.value(0).toInt(),query.value(1).toString()));
+	}
+	return ContactClass::GetInstance()->contactclasss;
 }
-return list;
- }
 
 ContactClass* ContactClass::get(int id) {
 if(id != 0) {
@@ -112,6 +120,31 @@ list.append(new ContactClass(query.value(0).toInt(),query.value(1).toString()));
 }
 return list;
  }
+
+QList<QString> ContactClass::GetStringList() {
+	QList<QString> list;
+	int count =ContactClass::GetInstance()->contactclasss.count();
+	if( count < 2){
+		ContactClass::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(ContactClass::GetInstance()->contactclasss[i]->Description);
+	}
+	return list;
+}
+
+int ContactClass::GetIndex(QString name) {
+	int count =ContactClass::GetInstance()->contactclasss.count();
+	if( count < 2){
+		ContactClass::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(ContactClass::GetInstance()->contactclasss[i]->Description == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<ContactClass*> ContactClass::select(QString select) {
 QList<ContactClass*>list;

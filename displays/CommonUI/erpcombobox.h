@@ -17,10 +17,13 @@ public:
 	explicit ERPComboBox(QWidget *parent = 0);
 
 signals:
+	void refreshModel();
 
 public slots:
+
 protected slots:
 	void focusOutEvent(QFocusEvent *e);
+
 
 };
 

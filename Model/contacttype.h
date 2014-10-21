@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.h
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,7 +13,9 @@ class ContactType
 {
 public:
 	ContactType();
-	ContactType(QString Description);
+	ContactType(QString Description);	int ContactTypeID;
+	QString Description;
+	QList<ContactType*> contacttypes;
 	static bool init();
 	bool save();
 	bool remove();
@@ -23,9 +25,13 @@ public:
 	static QList<ContactType*> getAll();
 	static QList<ContactType*> search(QString keyword);
 	static QList<ContactType*> select(QString select);
+	static QList<QString> GetStringList();
+	static int GetIndex(QString title);
+	static ContactType* GetInstance();
+
 private:
 	ContactType(int ContactTypeID,QString Description);
-	int ContactTypeID;
-	QString Description;
+	static ContactType* p_instance;
+
 };
 #endif

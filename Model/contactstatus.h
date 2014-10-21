@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactstatus.h
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,7 +13,9 @@ class ContactStatus
 {
 public:
 	ContactStatus();
-	ContactStatus(QString Description);
+	ContactStatus(QString Description);	int ContactStatusID;
+	QString Description;
+	QList<ContactStatus*> contactstatuss;
 	static bool init();
 	bool save();
 	bool remove();
@@ -23,9 +25,13 @@ public:
 	static QList<ContactStatus*> getAll();
 	static QList<ContactStatus*> search(QString keyword);
 	static QList<ContactStatus*> select(QString select);
+	static QList<QString> GetStringList();
+	static int GetIndex(QString title);
+	static ContactStatus* GetInstance();
+
 private:
 	ContactStatus(int ContactStatusID,QString Description);
-	int ContactStatusID;
-	QString Description;
+	static ContactStatus* p_instance;
+
 };
 #endif

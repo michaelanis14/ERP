@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,6 +34,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+Country* Country::p_instance = 0;
+Country* Country::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new Country();
+		Country::getAll();
+	}
+return p_instance;
+}
 bool Country::save() {
 if(CountryID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO Country (Name)"
@@ -66,13 +74,13 @@ return new Country();
  }
 
 QList<Country*> Country::getAll() {
-QList<Country*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Country"));
-while (query.next()) {
-list.append(new Country(query.value(0).toInt(),query.value(1).toString()));
+	Country::GetInstance()->countrys.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Country"));
+	while (query.next()) {
+		Country::GetInstance()->countrys.append(new Country(query.value(0).toInt(),query.value(1).toString()));
+	}
+	return Country::GetInstance()->countrys;
 }
-return list;
- }
 
 Country* Country::get(int id) {
 if(id != 0) {
@@ -112,6 +120,31 @@ list.append(new Country(query.value(0).toInt(),query.value(1).toString()));
 }
 return list;
  }
+
+QList<QString> Country::GetStringList() {
+	QList<QString> list;
+	int count =Country::GetInstance()->countrys.count();
+	if( count < 2){
+		Country::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(Country::GetInstance()->countrys[i]->Name);
+	}
+	return list;
+}
+
+int Country::GetIndex(QString name) {
+	int count =Country::GetInstance()->countrys.count();
+	if( count < 2){
+		Country::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(Country::GetInstance()->countrys[i]->Name == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<Country*> Country::select(QString select) {
 QList<Country*>list;

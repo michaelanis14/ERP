@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employee.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,6 +34,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+Employee* Employee::p_instance = 0;
+Employee* Employee::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new Employee();
+		Employee::getAll();
+	}
+return p_instance;
+}
 bool Employee::save() {
 if(EmployeeID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO Employee (Name)"
@@ -66,13 +74,13 @@ return new Employee();
  }
 
 QList<Employee*> Employee::getAll() {
-QList<Employee*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Employee"));
-while (query.next()) {
-list.append(new Employee(query.value(0).toInt(),query.value(1).toString()));
+	Employee::GetInstance()->employees.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Employee"));
+	while (query.next()) {
+		Employee::GetInstance()->employees.append(new Employee(query.value(0).toInt(),query.value(1).toString()));
+	}
+	return Employee::GetInstance()->employees;
 }
-return list;
- }
 
 Employee* Employee::get(int id) {
 if(id != 0) {
@@ -112,6 +120,31 @@ list.append(new Employee(query.value(0).toInt(),query.value(1).toString()));
 }
 return list;
  }
+
+QList<QString> Employee::GetStringList() {
+	QList<QString> list;
+	int count =Employee::GetInstance()->employees.count();
+	if( count < 2){
+		Employee::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(Employee::GetInstance()->employees[i]->Name);
+	}
+	return list;
+}
+
+int Employee::GetIndex(QString name) {
+	int count =Employee::GetInstance()->employees.count();
+	if( count < 2){
+		Employee::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(Employee::GetInstance()->employees[i]->Name == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<Employee*> Employee::select(QString select) {
 QList<Employee*>list;

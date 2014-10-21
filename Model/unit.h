@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.h
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,7 +13,9 @@ class Unit
 {
 public:
 	Unit();
-	Unit(QString Description);
+	Unit(QString Description);	int UnitID;
+	QString Description;
+	QList<Unit*> units;
 	static bool init();
 	bool save();
 	bool remove();
@@ -23,9 +25,13 @@ public:
 	static QList<Unit*> getAll();
 	static QList<Unit*> search(QString keyword);
 	static QList<Unit*> select(QString select);
+	static QList<QString> GetStringList();
+	static int GetIndex(QString title);
+	static Unit* GetInstance();
+
 private:
 	Unit(int UnitID,QString Description);
-	int UnitID;
-	QString Description;
+	static Unit* p_instance;
+
 };
 #endif

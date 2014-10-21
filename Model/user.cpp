@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: user.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,6 +59,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+User* User::p_instance = 0;
+User* User::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new User();
+		User::getAll();
+	}
+return p_instance;
+}
 bool User::save() {
 if(UserID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO User (Name,Username,Password,LastLogin,EmployeeID,active,lastIP)"
@@ -91,13 +99,13 @@ return new User();
  }
 
 QList<User*> User::getAll() {
-QList<User*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User"));
-while (query.next()) {
-list.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString()));
+	User::GetInstance()->users.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User"));
+	while (query.next()) {
+		User::GetInstance()->users.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString()));
+	}
+	return User::GetInstance()->users;
 }
-return list;
- }
 
 User* User::get(int id) {
 if(id != 0) {
@@ -141,6 +149,31 @@ list.append(new User(query.value(0).toInt(),query.value(1).toString(),query.valu
 }
 return list;
  }
+
+QList<QString> User::GetStringList() {
+	QList<QString> list;
+	int count =User::GetInstance()->users.count();
+	if( count < 2){
+		User::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(User::GetInstance()->users[i]->Name);
+	}
+	return list;
+}
+
+int User::GetIndex(QString name) {
+	int count =User::GetInstance()->users.count();
+	if( count < 2){
+		User::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(User::GetInstance()->users[i]->Name == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<User*> User::select(QString select) {
 QList<User*>list;

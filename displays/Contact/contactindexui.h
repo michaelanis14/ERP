@@ -31,7 +31,7 @@ public:
 	static void ShowUI();
 	static contactIndexUI* GetUI();
 
-	QList<Contact> contacts;
+
 	Contact contact;
 	~contactIndexUI();
 

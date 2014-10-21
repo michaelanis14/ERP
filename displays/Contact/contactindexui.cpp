@@ -22,23 +22,22 @@ contactIndexUI::contactIndexUI(QWidget *parent) :
 	ui->setupUi(this);
 	boxLayout = new QVBoxLayout();
 	//QHBoxLayout* line1Layout = new QHBoxLayout();
-	flowLayout = new FlowLayout(this);
+	FlowLayout* flowLayout = new FlowLayout(this);
 	flowLayout->setContentsMargins(0,0,0,0);
-	for(int i =0;i<3 ;i++){
-		ERPFormBlock* line1Layout = new ERPFormBlock;
+	ERPFormBlock* line1Layout = new ERPFormBlock;
+	//combo->addItems(Contact::getAll());
+for(int i =0;i<3 ;i++){
+
 
 		combo = new ERPComboBox();
-		combo->addItem("One");
-		combo->addItem("tOne");
-		combo->addItem("Otne");
-		combo->addItem("Ottne");
-		combo->addItem("xfkjgjhfgdhfdhffjfjffe");
+//qDebug() << Contact::GetStringList().at(0);
+		combo->addItems(Contact::GetStringList());
 		combo->setEditable(true);
 		combo->setAutoCompletion(true);
 
 
 
-		QObject::connect(combo, SIGNAL(editTextChanged(QString)), this, SLOT(editTextChanged(QString)));
+//		QObject::connect(combo, SIGNAL(editTextChanged(QString)), this, SLOT(editTextChanged(QString)));
 		//QObject::connect(combo, SIGNAL(focusOutEvent()), this, SLOT(focusOutEvent ()));
 
 
@@ -49,6 +48,8 @@ contactIndexUI::contactIndexUI(QWidget *parent) :
 		flowLayout->addWidget(line1Layout);
 		//flowLayout->addWidget(combo);
 		//flowLayout->addItem();
+
+//		jhjh
 	}
 
 

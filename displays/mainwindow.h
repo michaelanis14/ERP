@@ -21,6 +21,8 @@ public:
 	static QDateTime lastEvent;
 	QLabel* label;
 	QLabel *lblContacts;
+	void updateSize();
+
 private:
 	static mainwindow* p_instance;
 	class ERPDisplay* currentDisplay;
@@ -28,6 +30,8 @@ private:
 	QGridLayout* mainLayout;
 protected:
 	void mousePressEvent(QMouseEvent *event);
+	void resizeEvent(QResizeEvent * event);
+
 
 };
 

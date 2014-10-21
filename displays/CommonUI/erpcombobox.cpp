@@ -11,7 +11,8 @@
 ERPComboBox::ERPComboBox(QWidget *parent) :
 	QComboBox(parent)
 {
-
+	this->setEditable(true);
+	this->setAutoCompletion(true);
 }
 void ERPComboBox::focusOutEvent(QFocusEvent *e)
 {
@@ -53,3 +54,5 @@ void ERPComboBox::focusOutEvent(QFocusEvent *e)
 	//QLineEdit::focusOutEvent(e);
 	//emit(focussed(false));
 }
+
+

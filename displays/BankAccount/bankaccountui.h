@@ -1,14 +1,13 @@
 ﻿/*************************************
-**   Created on:  10/9/2014
+**   Created on:  10/18/2014
 **   Author: michaelbishara
 **   Copyright: Bishara©.
 **************************************/
 
-#ifndef CONTACTUI_H
-#define CONTACTUI_H
+#ifndef BANKACCOUNTUI_H
+#define BANKACCOUNTUI_H
 
 #include "../../erpdisplay.h"
-#include "../BankAccount/bankaccountui.h"
 #include "../../Model/contact.h"
 
 #include "../CommonUI/erpformblock.h"
@@ -20,30 +19,26 @@
 #include "../../Model/contacttype.h"
 #include "../../Model/employee.h"
 #include "../../Model/country.h"
+#include "../../Model/currency.h"
 
 #include <QWidget>
 #include <QLineEdit>
 #include <QCheckBox>
-#include <QPushButton>
 
-class ContactUI : public ERPDisplay
+class BankAccountUI : public ERPDisplay
 {
 	Q_OBJECT
 public:
-	explicit ContactUI(QWidget *parent = 0);
+	explicit BankAccountUI(QWidget *parent = 0);
 	static void ShowUI();
-	static ContactUI* GetUI();
-	ERPFormBlock* block4Layout;
+	static BankAccountUI* GetUI();
 
 private:
 	static ERPDisplay* p_instance;
-	Contact* contact;
-private slots:
-	void addBankAccount();
+signals:
 
-
-
+public slots:
 
 };
 
-#endif // CONTACTUI_H
+#endif // BANKACCOUNTUI_H

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.h
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,7 +13,9 @@ class Country
 {
 public:
 	Country();
-	Country(QString Name);
+	Country(QString Name);	int CountryID;
+	QString Name;
+	QList<Country*> countrys;
 	static bool init();
 	bool save();
 	bool remove();
@@ -23,9 +25,13 @@ public:
 	static QList<Country*> getAll();
 	static QList<Country*> search(QString keyword);
 	static QList<Country*> select(QString select);
+	static QList<QString> GetStringList();
+	static int GetIndex(QString title);
+	static Country* GetInstance();
+
 private:
 	Country(int CountryID,QString Name);
-	int CountryID;
-	QString Name;
+	static Country* p_instance;
+
 };
 #endif

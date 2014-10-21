@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currency.cpp
-**   Created on: Fri Sep 26 22:51:30 EET 2014
+**   Created on: Sat Oct 18 13:10:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,6 +34,14 @@ QString query =
 ErpModel::GetInstance()->createTable(table,query);
 return true;
 }
+Currency* Currency::p_instance = 0;
+Currency* Currency::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new Currency();
+		Currency::getAll();
+	}
+return p_instance;
+}
 bool Currency::save() {
 if(CurrencyID== 0) {
 ErpModel::GetInstance()->qeryExec("INSERT INTO Currency (Description)"
@@ -66,13 +74,13 @@ return new Currency();
  }
 
 QList<Currency*> Currency::getAll() {
-QList<Currency*>list;
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency"));
-while (query.next()) {
-list.append(new Currency(query.value(0).toInt(),query.value(1).toString()));
+	Currency::GetInstance()->currencys.clear();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency"));
+	while (query.next()) {
+		Currency::GetInstance()->currencys.append(new Currency(query.value(0).toInt(),query.value(1).toString()));
+	}
+	return Currency::GetInstance()->currencys;
 }
-return list;
- }
 
 Currency* Currency::get(int id) {
 if(id != 0) {
@@ -112,6 +120,31 @@ list.append(new Currency(query.value(0).toInt(),query.value(1).toString()));
 }
 return list;
  }
+
+QList<QString> Currency::GetStringList() {
+	QList<QString> list;
+	int count =Currency::GetInstance()->currencys.count();
+	if( count < 2){
+		Currency::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.append(Currency::GetInstance()->currencys[i]->Description);
+	}
+	return list;
+}
+
+int Currency::GetIndex(QString name) {
+	int count =Currency::GetInstance()->currencys.count();
+	if( count < 2){
+		Currency::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		if(Currency::GetInstance()->currencys[i]->Description == name){
+			return i;
+		}
+	}
+	return 0;
+}
 
 QList<Currency*> Currency::select(QString select) {
 QList<Currency*>list;
