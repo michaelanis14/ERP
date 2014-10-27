@@ -34,7 +34,8 @@ SOURCES += main.cpp \
 	displays/CommonUI/flowlayout.cpp \
 	displays/CommonUI/erpformblock.cpp \
     displays/Contact/contactui.cpp \
-    displays/BankAccount/bankaccountui.cpp
+    displays/BankAccount/bankaccountui.cpp \
+    displays/CommonUI/addremovebuttons.cpp
 
 HEADERS  += displays/mainwindow.h \
 	erpdisplay.h \
@@ -57,7 +58,8 @@ HEADERS  += displays/mainwindow.h \
 	displays/CommonUI/flowlayout.h \
 	displays/CommonUI/erpformblock.h \
     displays/Contact/contactui.h \
-    displays/BankAccount/bankaccountui.h
+    displays/BankAccount/bankaccountui.h \
+    displays/CommonUI/addremovebuttons.h
 
 FORMS    += mainwindow.ui \
 	displays/Contact/indexcontactdisplay.ui \

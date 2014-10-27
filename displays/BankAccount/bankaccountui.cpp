@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountui.h
-**   Created on: Sat Oct 18 22:17:44 EET 2014
+**   Created on: Mon Oct 27 11:26:01 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@
 BankAccountUI::BankAccountUI(QWidget *parent) :ERPDisplay(parent)
 {
 
-FlowLayout* flowLayout = new FlowLayout(this);
+flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);

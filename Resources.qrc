@@ -3,4 +3,10 @@
         <file>Resources/Mainscreen/ContactsActive.png</file>
         <file>Resources/Mainscreen/ContactsInactive.png</file>
     </qresource>
+    <qresource prefix="/Buttons">
+        <file>Resources/Buttons/addActive.png</file>
+        <file>Resources/Buttons/add.png</file>
+        <file>Resources/Buttons/remove.png</file>
+        <file>Resources/Buttons/removeActive.png</file>
+    </qresource>
 </RCC>

@@ -16,8 +16,11 @@ class ERPFormBlock : public QWidget
 public:
 	explicit ERPFormBlock(QWidget *parent = 0);
 	void addRow(const QString & labelText, QWidget * field );
-private:
+	void addWidget(QWidget *widget);
 	QFormLayout *formLayout ;
+	QVBoxLayout *boxLayout ;
+private:
+
 signals:
 
 public slots:

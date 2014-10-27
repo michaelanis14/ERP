@@ -13,6 +13,7 @@
 
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
+#include "../CommonUI/addremovebuttons.h"
 
 #include "../../Model/contactclass.h"
 #include "../../Model/contactperson.h"
@@ -33,13 +34,15 @@ public:
 	explicit ContactUI(QWidget *parent = 0);
 	static void ShowUI();
 	static ContactUI* GetUI();
-	ERPFormBlock* block4Layout;
+	ERPFormBlock* block5Layout;
+	QList<BankAccountUI*> BankAccounts;
 
 private:
 	static ERPDisplay* p_instance;
 	Contact* contact;
 private slots:
 	void addBankAccount();
+	void removeBankAccount();
 
 
 

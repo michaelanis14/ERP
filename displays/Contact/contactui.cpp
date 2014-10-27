@@ -1,6 +1,6 @@
 ﻿/**************************************************************************
 **   File: contactui.h
-**   Created on: Sat Oct 18 22:17:44 EET 2014
+**   Created on: Mon Oct 27 11:26:01 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -65,7 +65,7 @@ employee->addItems(Employee::GetStringList());
 block3Layout->addRow("Employee",employee);
 flowLayout->addWidget(block3Layout);
 
-block4Layout = new ERPFormBlock;
+ERPFormBlock* block4Layout = new ERPFormBlock;
 QLineEdit*phonenum = new QLineEdit();
 block4Layout->addRow("Phone Num",phonenum);
 QLineEdit*phonenum2 = new QLineEdit();
@@ -82,14 +82,31 @@ QLineEdit*website = new QLineEdit();
 block4Layout->addRow("webSite",website);
 QLineEdit*taxnumber = new QLineEdit();
 block4Layout->addRow("Tax Number",taxnumber);
-QLineEdit*createdon = new QLineEdit();
+
+//BankAccounts =  QList<BankAccount*>();
 BankAccountUI* bankui = new BankAccountUI();
+BankAccounts.append(bankui);
 //block4Layout->addRow("Created On",createdon);
-QPushButton* add = new QPushButton();
- QObject::connect(add, SIGNAL(clicked()),this, SLOT(addBankAccount()));
-block4Layout->addRow("",add);
-block4Layout->addRow("",bankui);
+//QHbox lay out
+// labels with
+AddRemoveButtons* addrem = new AddRemoveButtons();
+block4Layout->addWidget(addrem);
+block4Layout->addWidget(bankui);
+QObject::connect(addrem, SIGNAL(addPressed()), this, SLOT(addBankAccount()));
+QObject::connect(addrem, SIGNAL(removePressed()), this, SLOT(removeBankAccount()));
 flowLayout->addWidget(block4Layout);
+
+block5Layout = new ERPFormBlock;
+AddRemoveButtons* addremoveButtons = new AddRemoveButtons();
+block5Layout->addWidget(addremoveButtons);
+block5Layout->addRow("Tax Number",taxnumber);
+QObject::connect(addremoveButtons, SIGNAL(addPressed()), this, SLOT(addBankAccount()));
+QObject::connect(addremoveButtons, SIGNAL(removePressed()), this, SLOT(removeBankAccount()));
+BankAccountUI* bankaccountui = new BankAccountUI();
+BankAccounts.append(bankaccountui);
+block5Layout->addWidget(bankaccountui);
+
+flowLayout->addWidget(block5Layout);
 
 }
 ERPDisplay* ContactUI::p_instance = 0;
@@ -106,7 +123,17 @@ ContactUI*ContactUI::GetUI(){
 	return (ContactUI*) p_instance;
 }
 void ContactUI::addBankAccount(){
-BankAccountUI* bankui = new BankAccountUI();
-block4Layout->addRow("",bankui);
+BankAccountUI* bankaccountui = new BankAccountUI();
+BankAccounts.append(bankaccountui);
+block5Layout->addWidget(bankaccountui);
 mainwindow::GetMainDisplay()->updateSize();
+}
+void ContactUI::removeBankAccount(){
+if(BankAccounts.count()  > 0){
+BankAccountUI* bankaccountui = BankAccounts.takeLast();
+BankAccounts.append(bankaccountui);
+block5Layout->boxLayout->removeWidget(bankaccountui);
+delete bankaccountui;
+mainwindow::GetMainDisplay()->updateSize();
+}
 }

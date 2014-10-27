@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "erpdisplay.h"
 #include "displays/Contact/contactui.h"
+#include "displays/BankAccount/bankaccountui.h"
 /**
 * A class.
 * The Main Window class it holds the application default styling setup,
@@ -71,18 +72,19 @@ mainwindow::mainwindow()
 				"border-style: inset;"
 				"}"
 		);
-	//this->setSize(480,272);
+	//this->setSize(800,600);
 
 
 
 	currentDisplay = 0;
 
-	mainLayout = new QGridLayout ();
+	mainLayout = new QGridLayout (this);
 	mainLayout->setContentsMargins(0, 0, 0, 0);
 
 	boxLayout = new QVBoxLayout();
 	boxLayout->setContentsMargins(0, 0, 0, 0);
-	mainLayout->addLayout(boxLayout,1,1,1,1);
+	//boxLayout->setGeometry(QRect(0,0,900,20));
+	mainLayout->addLayout(boxLayout,1,1,-1,-1);
 
 
 	lblContacts = new QLabel();
@@ -96,7 +98,7 @@ mainwindow::mainwindow()
 
 	mainLayout->addWidget(lblContacts,1,0,1,1);
 
-	for(int i = 2; i <5 ; i++){
+	for(int i = 2; i <9 ; i++){
 		label = new QLabel();
 		label->setScaledContents(true);
 		label->setWordWrap(true);
@@ -122,6 +124,7 @@ mainwindow::mainwindow()
 	}
 	//	this->showFullScreen();
 
+	this->setContentsMargins(0, 0, 0, 0);
 	this->setLayout(mainLayout);
 
 
@@ -161,6 +164,7 @@ void mainwindow::ShowDisplay(ERPDisplay * display) {
 	//p_instance->mainLayout->addLayout(p_instance->boxLayout,1,1,-1,-1);
 
 	p_instance->currentDisplay = display;
+	p_instance->updateSize();
 	//p_instance->currentDisplay->blockSignals(false);
 	display->show();
 	display->setFocus();
@@ -196,6 +200,7 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 			//	qDebug() << child->objectName();
 			lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
 			ContactUI::ShowUI();
+			//BankAccountUI::ShowUI();
 			//		}
 		}
 		else{
@@ -222,13 +227,13 @@ void mainwindow::updateSize(){
 				p_instance->currentDisplay->repaint();
 			}
 			this->repaint();
-			p_instance->currentDisplay->formPanel->setGeometry(this->x(),this->y(),this->width(),height);
+			p_instance->currentDisplay->formPanel->setGeometry(0,0,this->width(),height);
 
 	}
 }
 
 void mainwindow::resizeEvent(QResizeEvent * event){
 	this->updateSize();
-	QWidget::resizeEvent(event);
+	//QWidget::resizeEvent(event);
 
 }

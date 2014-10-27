@@ -4,6 +4,8 @@
 
 #include <QtWidgets/QWidget>
 #include "QScrollArea"
+#include "QDebug"
+#include "QResizeEvent"
 
 class ERPDisplay : public QWidget
 {
@@ -13,10 +15,15 @@ public:
 	QWidget* formPanel;
 	class QScrollArea* scrollAreaFormPanel;
 	FlowLayout* flowLayout;
-
+	void updateSize();
 signals:
 
 public slots:
+
+protected:
+	//void mousePressEvent(QMouseEvent *event);
+	void resizeEvent(QResizeEvent * event);
+	void showEvent(QShowEvent * event);
 
 };
 
