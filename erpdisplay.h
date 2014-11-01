@@ -13,7 +13,7 @@ class ERPDisplay : public QWidget
 public:
 	explicit ERPDisplay(QWidget *parent = 0);
 	QWidget* formPanel;
-	class QScrollArea* scrollAreaFormPanel;
+	QScrollArea* scrollAreaFormPanel;
 	FlowLayout* flowLayout;
 	void updateSize();
 signals:

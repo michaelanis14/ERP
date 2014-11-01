@@ -43,7 +43,8 @@ private:
 private slots:
 	void addBankAccount();
 	void removeBankAccount();
-
+protected:
+	//void mousePressEvent(QMouseEvent *event);
 
 
 

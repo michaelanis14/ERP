@@ -5,6 +5,7 @@
 #include "mainwindow.h"
 #include "erpdisplay.h"
 #include "displays/Contact/contactui.h"
+#include "displays/Contact/contactindexui.h"
 #include "displays/BankAccount/bankaccountui.h"
 /**
 * A class.
@@ -71,8 +72,13 @@ mainwindow::mainwindow()
 				"background-color: rgb(76, 200, 98);"
 				"border-style: inset;"
 				"}"
-		);
-	//this->setSize(800,600);
+				"QWidget#baseWidget {"
+				"border-radius: 5px; "
+				"border: 1px solid black;"
+				"border: 2px groove gray;"
+				"}"
+				);
+	this->setMinimumSize(800,600);
 
 
 
@@ -122,11 +128,11 @@ mainwindow::mainwindow()
 		//label->setAutoFillBackground(true);
 		mainLayout->addWidget(label,0,i,1,1);
 	}
-	//	this->showFullScreen();
+
 
 	this->setContentsMargins(0, 0, 0, 0);
 	this->setLayout(mainLayout);
-
+	//this->showFullScreen();
 
 }
 // initialize static singleton pointer
@@ -199,8 +205,9 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 			//		if(!contactIndexUI::GetUI()->isVisible()){
 			//	qDebug() << child->objectName();
 			lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
-			ContactUI::ShowUI();
+			//ContactUI::ShowUI();
 			//BankAccountUI::ShowUI();
+			contactIndexUI::ShowUI();
 			//		}
 		}
 		else{
@@ -217,22 +224,23 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 void mainwindow::updateSize(){
 	int height = this->height();
 	//int width = 0;
-	if(p_instance->currentDisplay != 0){
+	if(p_instance != 0 &&p_instance->currentDisplay != 0){
 
-			if(p_instance->currentDisplay->flowLayout != 0){
-				for(int i = 0; i < p_instance->currentDisplay->flowLayout->itemList.count(); i++){
-					height += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().height();
-		//	width += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().width();
-				}
-				p_instance->currentDisplay->repaint();
+		if(p_instance->currentDisplay->flowLayout != 0){
+			for(int i = 0; i < p_instance->currentDisplay->flowLayout->itemList.count(); i++){
+				height += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().height();
+				//	width += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().width();
 			}
-			this->repaint();
-			p_instance->currentDisplay->formPanel->setGeometry(0,0,this->width(),height);
+			p_instance->currentDisplay->repaint();
+		}
+		//this->repaint();
+		p_instance->currentDisplay->formPanel->setGeometry(0,0,this->width(),height);
 
 	}
 }
 
 void mainwindow::resizeEvent(QResizeEvent * event){
+
 	this->updateSize();
 	//QWidget::resizeEvent(event);
 

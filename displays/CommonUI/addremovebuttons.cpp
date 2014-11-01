@@ -29,7 +29,7 @@ AddRemoveButtons::AddRemoveButtons(QWidget *parent) :
 
 	layout->addStretch(1);
 	layout->addWidget(remove,0,Qt::AlignCenter);
-	layout->addStretch(0.5);
+	layout->addStretch(0);
 	layout->addWidget(add,0,Qt::AlignCenter);
 	layout->addStretch(1);
 }

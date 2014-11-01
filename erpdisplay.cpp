@@ -29,15 +29,17 @@ ERPDisplay::ERPDisplay(QWidget *parent) : QWidget(parent) {
 
 	// prepare form panel, where the rest of the GUI-elements reside
 	formPanel = new QWidget(scrollAreaFormPanel);
+
 	//formPanel->setAutoFillBackground(false);
 	formPanel->setObjectName("formPanel");  // for stylesheet reference
-	//formPanel->setGeometry(0,0,1024,623);
+	formPanel->setFixedWidth(800);
+
 	formPanel->setContentsMargins(0,0,0,0);
 //	formPanel->setFont(font3);
 	scrollAreaFormPanel->setWidget(this->formPanel);  // coordinates of formPanel are relative to scrollArea now
 
-	//scrollAreaFormPanel->setGeometry(0,75,1024,1455+60);  // nimm Rücksicht auf Wizards, wo es keine Toolbar gibt
-//	scrollAreaFormPanel->setBaseSize(1024,310);
+	scrollAreaFormPanel->setGeometry(0,0,800,600);  // nimm Rücksicht auf Wizards, wo es keine Toolbar gibt
+	//scrollAreaFormPanel->setBaseSize(800,600);
 	//scrollAreaFormPanel->setMinimumHeight(310);
 	//crollAreaFormPanel->setMaximumHeight(910);
 
@@ -65,10 +67,14 @@ void ERPDisplay::showEvent(QShowEvent * event){
 	if(this->parent() != 0){
 
 		//this->formPanel->setFixedHeight(((QWidget*)this->parent())->height());
-		this->formPanel->setFixedWidth(((QWidget*)this->parent())->width());
+		//this->formPanel->setFixedWidth(((QWidget*)this->parent())->width());
 		//this->scrollAreaFormPanel->setFixedHeight(((QWidget*)this->parent())->height());
 		this->scrollAreaFormPanel->setFixedWidth(((QWidget*)this->parent())->width());
 	}
+
+	event->accept();
+
+
 }
 
 

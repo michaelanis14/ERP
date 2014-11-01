@@ -16,6 +16,12 @@
 #include "../CommonUI/erpformblock.h"
 
 #include <QWidget>
+#include <QPushButton>
+#include <QTableView>
+#include <QSqlRelationalDelegate>
+#include <QSqlRelationalTableModel>
+
+
 
 namespace Ui {
 class contactIndexUI;
@@ -30,9 +36,10 @@ public:
 
 	static void ShowUI();
 	static contactIndexUI* GetUI();
-
-
+	QTableView *view;
+	Contact *model;
 	Contact contact;
+	QPushButton* remove;
 	~contactIndexUI();
 
 private:
@@ -41,11 +48,14 @@ private:
 	class QVBoxLayout* boxLayout;
 	class FlowLayout * flowLayout;
 	ERPComboBox* combo;
-protected slots:
-
 
 protected:
 	void showEvent(QShowEvent * event);
+private slots:
+	void addRow();
+	void removeRow();
+	void onSelectionChanged();
+
 };
 
 #endif // CONTACTINDEXUI_H

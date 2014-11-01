@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QPalette>
 
 class BankAccountUI : public ERPDisplay
 {

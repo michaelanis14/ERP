@@ -17,6 +17,7 @@ public:
 	explicit ERPFormBlock(QWidget *parent = 0);
 	void addRow(const QString & labelText, QWidget * field );
 	void addWidget(QWidget *widget);
+	QWidget * baseWidget;
 	QFormLayout *formLayout ;
 	QVBoxLayout *boxLayout ;
 private:

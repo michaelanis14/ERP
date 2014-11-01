@@ -7,54 +7,80 @@
 
 
 #include "contactindexui.h"
+#include "contactui.h"
 #include "ui_contactindexui.h"
 #include "../MainWindow.h"
+#include "../../Model/erpmodel.h"
 
 
 #include <QLineEdit>
 
+#include <QtSql>
+#include <QSqlQueryModel>
+#include <QModelIndex>
+#include <QSqlRelationalTableModel>
+
 
 
 contactIndexUI::contactIndexUI(QWidget *parent) :
-	ERPDisplay(parent),
-	ui(new Ui::contactIndexUI)
+	ERPDisplay(parent)
 {
-	ui->setupUi(this);
-	boxLayout = new QVBoxLayout();
-	//QHBoxLayout* line1Layout = new QHBoxLayout();
-	FlowLayout* flowLayout = new FlowLayout(this);
+	//ui->setupUi(this);
+	flowLayout = new FlowLayout(formPanel);
+
 	flowLayout->setContentsMargins(0,0,0,0);
-	ERPFormBlock* line1Layout = new ERPFormBlock;
-	//combo->addItems(Contact::getAll());
-for(int i =0;i<3 ;i++){
+	ERPFormBlock* block0Layout = new ERPFormBlock;
+	//Index = new QTableView(this);
 
 
-		combo = new ERPComboBox();
-//qDebug() << Contact::GetStringList().at(0);
-		combo->addItems(Contact::GetStringList());
-		combo->setEditable(true);
-		combo->setAutoCompletion(true);
+	model = new Contact();
+
+//	model->setQuery("select * from Contact");
 
 
+	model->refresh();
+	//model->setHeaderData(0, Qt::Horizontal, ("Name"));
+	//model->setHeaderData(1, Qt::Horizontal, ("Salary"));
+	if(!ErpModel::GetInstance()->db.open())
+	qDebug() <<"Couldn't open databaseee!";
 
-//		QObject::connect(combo, SIGNAL(editTextChanged(QString)), this, SLOT(editTextChanged(QString)));
-		//QObject::connect(combo, SIGNAL(focusOutEvent()), this, SLOT(focusOutEvent ()));
+	view = new QTableView();
+	view->setModel(model);
+	view->setItemDelegate(new QSqlRelationalDelegate(view));
+	view->setMinimumWidth(600);
+	view->hideColumn(0); // don't show the ID
+	//view->show();
+	//view->horizontalHeader()->setSectionResizeMode(QTableView::);
+	view->setSortingEnabled(true);
+
+	block0Layout->addRow("",view);
+	ErpModel::GetInstance()->db.close();
+	flowLayout->addWidget(block0Layout);
+
+	QWidget* addremove = new QWidget();
+	QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
+	addRemovelayout->setContentsMargins(0,0,0,0);
+	QPushButton* add = new QPushButton("Add");
+	QObject::connect(add, SIGNAL(clicked()), this, SLOT(addRow()));
+	add->setObjectName("add");
+	remove = new QPushButton("Remove");
+	remove->setObjectName("remove");
+	QObject::connect(remove, SIGNAL(clicked()), this, SLOT(removeRow()));
+
+	remove->setEnabled(false);
 
 
+	addRemovelayout->addStretch(1);
+	addRemovelayout->addWidget(add,0,Qt::AlignCenter);
+	addRemovelayout->addStretch(0);
+	addRemovelayout->addWidget(remove,0,Qt::AlignCenter);
+	addRemovelayout->addStretch(1);
 
-		line1Layout->addRow("COMBO"+QString::number(i),combo);
-		//line1Layout->addWidget(combo);
-		//flowLayout->addWidget(label1);
-		flowLayout->addWidget(line1Layout);
-		//flowLayout->addWidget(combo);
-		//flowLayout->addItem();
+	block0Layout->addWidget(addremove);
 
-//		jhjh
-	}
+	// enable remove button when a row is selected
+	QObject::connect(view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &contactIndexUI::onSelectionChanged);
 
-
-	//this->setLayout(flowLayout);
-	//boxLayout->addLayout(flowLayout);
 
 
 }
@@ -72,14 +98,29 @@ void contactIndexUI::ShowUI() {
 }
 
 contactIndexUI* contactIndexUI::GetUI(){
-	   if (p_instance == 0) {
-		   p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
-	   }
-	   return (contactIndexUI*) p_instance;
+	if (p_instance == 0) {
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
+	}
+	return (contactIndexUI*) p_instance;
 
 }
 
+void contactIndexUI::addRow(){
+	ContactUI::ShowUI();
+}
+void contactIndexUI::removeRow()
+{
+	foreach (const QModelIndex &index, view->selectionModel()->selectedRows()) {
 
+		model->remove(index);
+
+	}
+}
+
+void contactIndexUI::onSelectionChanged()
+{
+	remove->setEnabled(view->selectionModel()->selectedRows().count());
+}
 
 
 void contactIndexUI::showEvent(QShowEvent * event) {
