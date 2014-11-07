@@ -6,6 +6,7 @@
 
 #include "erpformblock.h"
 #include <QPushButton>
+#include <QLabel>
 
 ERPFormBlock::ERPFormBlock(QWidget *parent) :
 	QWidget(parent)
@@ -42,6 +43,14 @@ void ERPFormBlock::addRow(const QString &labelText, QWidget *field){
 	this->baseWidget->setHidden(false);
 	//this->repaint();
 }
+
+void ERPFormBlock::removeRow(QWidget* field){
+	QWidget* label = formLayout->labelForField(field);
+	  if (label)
+		  label->deleteLater();
+	  field->deleteLater();
+}
+
 void ERPFormBlock::addWidget(QWidget *widget){
 
 	boxLayout->addWidget(widget);

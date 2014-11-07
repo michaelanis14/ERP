@@ -12,6 +12,7 @@ ERPComboBox::ERPComboBox(QWidget *parent) :
 	QComboBox(parent)
 {
 	this->setEditable(true);
+	this->setInsertPolicy(QComboBox::NoInsert);
 	this->setAutoCompletion(true);
 }
 void ERPComboBox::focusOutEvent(QFocusEvent *e)

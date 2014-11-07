@@ -208,8 +208,7 @@ Contact* Contact::get(int id) {
 
 Contact* Contact::get(QString name) {
 	if(name != NULL) {
-		QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact"
-															 "WHERE Name = '"+name+"'"));
+		QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Contact WHERE Name = '"+name+"'"));
 		while (query.next()) {
 			return new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toString(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString(),query.value(20).toString(),query.value(21).toString(),query.value(22).toString(),query.value(23).toString(),query.value(24).toString(),query.value(25).toString());
 		}
@@ -275,7 +274,7 @@ int Contact::GetIndex(QString name) {
 	return 0;
 }
 
-QList<Contact*> Contact::selectt(QString select) {
+QList<Contact*> Contact::querySelect(QString select) {
 	QList<Contact*>list;
 	if(select != NULL) {
 		QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact"
@@ -316,9 +315,10 @@ bool Contact::setData(const QModelIndex &index, const QVariant &value, int /* ro
 	//clear();
 
 	bool ok;
+	ok = true;
 	if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 		if (index.column() == 1) {
-			ok = setFirstName(id, value.toString());
+			ok = setName(id, value.toString());
 		} else {
 			ok = setLastName(id, value.toString());
 		}
@@ -334,7 +334,7 @@ bool Contact::remove(const QModelIndex &index)
 	QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
 
 	bool ok;
-
+	ok = true;
 	this->ContactID = data(primaryKeyIndex).toInt();
 	qDebug() << this->ContactID;
 	this->remove();
@@ -350,7 +350,6 @@ void Contact::refresh()
 	if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 		qDebug() <<"Couldn't open ddddatabase!";
 
-	qDebug() << "Refresh";
 	this->setHeaderData(1, Qt::Horizontal, QObject::tr("First name"));
 	this->setHeaderData(2, Qt::Horizontal, QObject::tr("Last name"));
 	this->select();
@@ -361,7 +360,7 @@ void Contact::refresh()
 
 
 //! [2]
-bool Contact::setFirstName(int personId, const QString &firstName)
+bool Contact::setName(int personId, const QString &firstName)
 {
 	QSqlQuery query;
 	query.prepare("update Contact set firstname = ? where id = ?");

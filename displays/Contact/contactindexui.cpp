@@ -94,6 +94,7 @@ void contactIndexUI::ShowUI() {
 	if (p_instance == 0) {
 		p_instance = new contactIndexUI(mainwindow::GetMainDisplay());
 	}
+	contactIndexUI::GetUI()->model->refresh();
 	mainwindow::ShowDisplay(p_instance);
 }
 
@@ -110,6 +111,7 @@ void contactIndexUI::addRow(){
 }
 void contactIndexUI::removeRow()
 {
+	qDebug() << view->selectionModel()->selectedRows();
 	foreach (const QModelIndex &index, view->selectionModel()->selectedRows()) {
 
 		model->remove(index);
@@ -124,6 +126,7 @@ void contactIndexUI::onSelectionChanged()
 
 
 void contactIndexUI::showEvent(QShowEvent * event) {
+
 	event->accept();
 }
 contactIndexUI::~contactIndexUI()

@@ -212,8 +212,8 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 		}
 		else{
 			//		qDebug() << "Visb";
-			ContactUI::GetUI()->setHidden(true);
-			lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsInactive.png"));
+			//ContactUI::GetUI()->setHidden(true);
+			//lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsInactive.png"));
 
 		}
 
@@ -243,5 +243,5 @@ void mainwindow::resizeEvent(QResizeEvent * event){
 
 	this->updateSize();
 	//QWidget::resizeEvent(event);
-
+	event->accept();
 }
