@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.h
-**   Created on: Tue Nov 04 17:16:43 EET 2014
+**   Created on: Tue Nov 11 18:50:49 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -8,6 +8,7 @@
 #define CONTACT_H
 
 #include <QSqlRelationalTableModel>
+#include <QSqlError>
 #include <QtGui>
 #include "bankaccount.h"
 
@@ -54,6 +55,7 @@ public:
 	static QList<Contact*> search(QString keyword);
 	static QList<Contact*> querySelect(QString select);
 	static QList<QString> GetStringList();
+	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
 	static Contact* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;

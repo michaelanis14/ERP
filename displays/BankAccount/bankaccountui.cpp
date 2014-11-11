@@ -1,6 +1,6 @@
 ﻿/**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Wed Nov 05 13:58:50 EET 2014
+**   Created on: Sun Nov 09 16:51:23 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,13 +11,39 @@
 BankAccountUI::BankAccountUI(QWidget *parent) :ERPDisplay(parent)
 {
 
-flowLayout = new FlowLayout(this);
+flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
 QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
+ERPFormBlock * blockSaveCancel = new ERPFormBlock;
+ QWidget* addremove = new QWidget();
+ QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
+ addRemovelayout->setContentsMargins(0,0,0,0);
+ QPushButton* save = new QPushButton("Save");
+ QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
+ save->setObjectName("save");
+ QPushButton* cancel = new QPushButton("Cancel");
+ cancel->setObjectName("cancel");
+ QObject::connect(cancel, SIGNAL(clicked()), this, SLOT(cancel()));
+ QPushButton* clear = new QPushButton("Clear");
+ QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
+ clear->setObjectName("clear");
+ addRemovelayout->addStretch(1);
+ addRemovelayout->addWidget(save,0,Qt::AlignCenter);
+ addRemovelayout->addStretch(0);
+ addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
+ addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
+ addRemovelayout->addStretch(1);
+ blockSaveCancel->addRow("",addremove);
+ flowLayout->addWidget(blockSaveCancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
+QStringList* list = new QStringList(BankAccount::GetStringList());
+QCompleter *completer = new QCompleter(*list);
+completer->setCaseSensitivity(Qt::CaseInsensitive);
+name->setCompleter(completer);
+QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectBankAccount()));
 block0Layout->addRow("Name",name);
 bankaddress = new QLineEdit();
 block0Layout->addRow("Bank Address",bankaddress);
@@ -34,13 +60,13 @@ block0Layout->addRow("B I C",bic);
 zipcode = new QLineEdit();
 block0Layout->addRow("Zip Code",zipcode);
 currency = new ERPComboBox();
-currency->addItems(Currency::GetStringList());
+currency->addItems(Currency::GetHashList());
 block0Layout->addRow("Currency",currency);
 contact = new ERPComboBox();
-contact->addItems(Contact::GetStringList());
+contact->addItems(Contact::GetHashList());
 block0Layout->addRow("Contact",contact);
 country = new ERPComboBox();
-country->addItems(Country::GetStringList());
+country->addItems(Country::GetHashList());
 block0Layout->addRow("Country",country);
 bankcountrycode = new QLineEdit();
 block0Layout->addRow("Bank Country Code",bankcountrycode);
@@ -70,4 +96,33 @@ iban->setText(bankaccount->IBAN);
 bic->setText(bankaccount->BIC);
 zipcode->setText(bankaccount->ZipCode);
 bankcountrycode->setText(bankaccount->BankCountryCode);
+}
+void BankAccountUI::clear(){
+bankaddress->setText("");
+bankcode->setText("");
+accountname->setText("");
+accountnumber->setText("");
+iban->setText("");
+bic->setText("");
+zipcode->setText("");
+bankcountrycode->setText("");
+this->bankaccount = new BankAccount();
+}
+void BankAccountUI::selectBankAccount(){
+if(BankAccount::GetStringList().contains(name->text()))
+{
+BankAccount* con = BankAccount::get(name->text());
+if(this->bankaccount->BankAccountID != con->BankAccountID){
+this->bankaccount = con;
+fill(this->bankaccount);
+}
+}
+else if(bankaccount->BankAccountID != 0)
+clear();
+}
+void BankAccountUI::save(){
+bankaccount->save();
+}
+void BankAccountUI::cancel(){
+//bankaccountIndexUI::ShowUI();
 }

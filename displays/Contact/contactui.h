@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: contactui.h
-**   Created on: Thu Nov 06 01:32:13 EET 2014
+**   Created on: Tue Nov 11 18:50:49 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -41,12 +41,6 @@ public:
 	ERPFormBlock* block4Layout;
 	ERPFormBlock* block5Layout;
 	QList<BankAccountUI*> BankAccounts;
-	void fill(Contact* contact);
-
-	void clear();
-private:
-	static ERPDisplay* p_instance;
-	Contact* contact = new Contact();
 	QLineEdit*personalsalutation;
 	QLineEdit*salutation;
 	QLineEdit*name;
@@ -70,8 +64,10 @@ private:
 	QLineEdit*email2;
 	QLineEdit*website;
 	QLineEdit*taxnumber;
-	QLineEdit*createdon;
-	QLineEdit*editedon;
+	void fill(Contact* contact);
+private:
+	static ERPDisplay* p_instance;
+	Contact* contact = new Contact();
 private slots:
 	void addBankAccount();
 	void addBankAccount(BankAccount* BankAccount);
@@ -79,5 +75,6 @@ private slots:
 	void selectContact();
 	void save();
 	void cancel();
+	void clear();
 };
 #endif

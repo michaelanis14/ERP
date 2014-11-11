@@ -54,7 +54,7 @@ contactIndexUI::contactIndexUI(QWidget *parent) :
 	view->setSortingEnabled(true);
 
 	block0Layout->addRow("",view);
-	ErpModel::GetInstance()->db.close();
+	//ErpModel::GetInstance()->db.close();
 	flowLayout->addWidget(block0Layout);
 
 	QWidget* addremove = new QWidget();

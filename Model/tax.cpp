@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.cpp
-**   Created on: Sat Oct 18 13:10:05 EET 2014
+**   Created on: Tue Nov 11 17:36:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -8,19 +8,22 @@
 #include "erpmodel.h"
 
 Tax::Tax()
-{
+ : QSqlRelationalTableModel(){
 
 this->TaxID = 0 ;
 this->Ratio = 0 ;
 this->Description = " ";
+this->setTable("Tax");
+this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
-Tax::Tax(int TaxID,double Ratio,QString Description){
+Tax::Tax(int TaxID,double Ratio,QString Description) : QSqlRelationalTableModel(){
 this->TaxID = TaxID ;
 this->Ratio = Ratio ;
 this->Description = Description ;
 }
 
-Tax::Tax(double Ratio,QString Description){
+Tax::Tax(double Ratio,QString Description) : QSqlRelationalTableModel(){
+this->TaxID = 0 ;
 this->Ratio = Ratio ;
 this->Description = Description ;
 }
@@ -58,8 +61,7 @@ return true;
 
 bool Tax::remove() {
 if(TaxID!= 0) {
-(ErpModel::GetInstance()->qeryExec("DELETE FROM Tax"
-"WHERE TaxID ='"+QString::number(this->TaxID)+"'"));
+(ErpModel::GetInstance()->qeryExec("DELETE FROM Tax WHERE TaxID ="+QString::number(this->TaxID)+""));
 return true;
  }
 return false;
@@ -100,8 +102,7 @@ return new Tax();
 
 Tax* Tax::get(QString name) {
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax"
-"WHERE Description = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax WHERE Description = '"+name+"'"));
 while (query.next()) {
 return new Tax(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString());
  }
@@ -137,6 +138,18 @@ QList<QString> Tax::GetStringList() {
 	return list;
 }
 
+QHash<int,QString> Tax::GetHashList() {
+	QHash<int,QString> list;
+	int count =Tax::GetInstance()->taxs.count();
+	if( count < 2){
+		Tax::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.insert(Tax::GetInstance()->taxs[i]->TaxID,Tax::GetInstance()->taxs[i]->Description);
+	}
+	return list;
+}
+
 int Tax::GetIndex(QString name) {
 	int count =Tax::GetInstance()->taxs.count();
 	if( count < 2){
@@ -150,7 +163,7 @@ int Tax::GetIndex(QString name) {
 	return 0;
 }
 
-QList<Tax*> Tax::select(QString select) {
+QList<Tax*> Tax::querySelect(QString select) {
 QList<Tax*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax"
@@ -162,3 +175,66 @@ list.append(new Tax(query.value(0).toInt(),query.value(1).toInt(),query.value(2)
 }
 return list;
  }
+
+Qt::ItemFlags Tax::flags(const QModelIndex &index) const {
+Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
+flags ^= Qt::ItemIsEditable;
+if (
+index.column() == 1 || index.column() == 2)
+flags |= Qt::ItemIsEditable;
+return flags;
+}
+
+bool Tax::setData(const QModelIndex &index, const QVariant &value, int /* role */) {
+	if (index.column() < 1)
+		return false;
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+int id = data(primaryKeyIndex).toInt();
+bool ok = true;
+if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
+if (index.column() == 1)
+ok = setRatio(id, value.toString());
+else if (index.column() == 2)
+ok = setDescription(id, value.toString());
+refresh();
+}
+return ok;
+}
+
+bool Tax::remove(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+bool ok = true;
+this->TaxID = data(primaryKeyIndex).toInt();
+ok = this->remove();
+refresh();
+return ok;
+}
+
+void Tax::refresh() {
+if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
+qDebug() <<"Couldn't open DataBase at Refresh() Tax!";
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Ratio"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Description"));
+	this->select();
+//	if(ErpModel::GetInstance()->db.isOpen())
+//		ErpModel::GetInstance()->db.close();
+}
+bool Tax::setRatio(int TaxID, const QString &Ratio) {
+QSqlQuery query;
+query.prepare("update Tax set Ratio = ? where TaxID = ?");
+query.addBindValue(Ratio);
+query.addBindValue(TaxID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Tax::setDescription(int TaxID, const QString &Description) {
+QSqlQuery query;
+query.prepare("update Tax set Description = ? where TaxID = ?");
+query.addBindValue(Description);
+query.addBindValue(TaxID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+

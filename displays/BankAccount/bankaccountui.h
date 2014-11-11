@@ -1,6 +1,6 @@
 ﻿/**************************************************************************
 **   File: bankaccountui.h
-**   Created on: Wed Nov 05 13:58:50 EET 2014
+**   Created on: Sun Nov 09 16:51:23 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -8,6 +8,7 @@
 #ifndef BANKACCOUNTUI_H
 #define BANKACCOUNTUI_H
 #include "../../erpdisplay.h"
+//#include "bankaccountindexui.h"
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
@@ -22,6 +23,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QCompleter>
 class BankAccountUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -30,12 +32,6 @@ public:
 	static void ShowUI();
 	static BankAccountUI* GetUI();
 	ERPFormBlock* block0Layout;
-	void fill(BankAccount* bankaccount);
-	void save();
-	ERPComboBox*contact;
-private:
-	static ERPDisplay* p_instance;
-	BankAccount* bankaccount = new BankAccount();
 	QLineEdit*name;
 	QLineEdit*bankaddress;
 	QLineEdit*bankcode;
@@ -45,9 +41,17 @@ private:
 	QLineEdit*bic;
 	QLineEdit*zipcode;
 	ERPComboBox*currency;
-
+	ERPComboBox*contact;
 	ERPComboBox*country;
 	QLineEdit*bankcountrycode;
+	void fill(BankAccount* bankaccount);
+private:
+	static ERPDisplay* p_instance;
+	BankAccount* bankaccount = new BankAccount();
 private slots:
+	void selectBankAccount();
+	void save();
+	void cancel();
+	void clear();
 };
 #endif

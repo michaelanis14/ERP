@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currency.cpp
-**   Created on: Sat Oct 18 13:10:05 EET 2014
+**   Created on: Tue Nov 11 17:36:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -8,17 +8,20 @@
 #include "erpmodel.h"
 
 Currency::Currency()
-{
+ : QSqlRelationalTableModel(){
 
 this->CurrencyID = 0 ;
 this->Description = " ";
+this->setTable("Currency");
+this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
-Currency::Currency(int CurrencyID,QString Description){
+Currency::Currency(int CurrencyID,QString Description) : QSqlRelationalTableModel(){
 this->CurrencyID = CurrencyID ;
 this->Description = Description ;
 }
 
-Currency::Currency(QString Description){
+Currency::Currency(QString Description) : QSqlRelationalTableModel(){
+this->CurrencyID = 0 ;
 this->Description = Description ;
 }
 
@@ -54,8 +57,7 @@ return true;
 
 bool Currency::remove() {
 if(CurrencyID!= 0) {
-(ErpModel::GetInstance()->qeryExec("DELETE FROM Currency"
-"WHERE CurrencyID ='"+QString::number(this->CurrencyID)+"'"));
+(ErpModel::GetInstance()->qeryExec("DELETE FROM Currency WHERE CurrencyID ="+QString::number(this->CurrencyID)+""));
 return true;
  }
 return false;
@@ -96,8 +98,7 @@ return new Currency();
 
 Currency* Currency::get(QString name) {
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency"
-"WHERE Description = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency WHERE Description = '"+name+"'"));
 while (query.next()) {
 return new Currency(query.value(0).toInt(),query.value(1).toString());
  }
@@ -133,6 +134,18 @@ QList<QString> Currency::GetStringList() {
 	return list;
 }
 
+QHash<int,QString> Currency::GetHashList() {
+	QHash<int,QString> list;
+	int count =Currency::GetInstance()->currencys.count();
+	if( count < 2){
+		Currency::getAll();
+	}
+	for(int i = 0; i < count; i++){
+		list.insert(Currency::GetInstance()->currencys[i]->CurrencyID,Currency::GetInstance()->currencys[i]->Description);
+	}
+	return list;
+}
+
 int Currency::GetIndex(QString name) {
 	int count =Currency::GetInstance()->currencys.count();
 	if( count < 2){
@@ -146,7 +159,7 @@ int Currency::GetIndex(QString name) {
 	return 0;
 }
 
-QList<Currency*> Currency::select(QString select) {
+QList<Currency*> Currency::querySelect(QString select) {
 QList<Currency*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency"
@@ -158,3 +171,54 @@ list.append(new Currency(query.value(0).toInt(),query.value(1).toString()));
 }
 return list;
  }
+
+Qt::ItemFlags Currency::flags(const QModelIndex &index) const {
+Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
+flags ^= Qt::ItemIsEditable;
+if (
+index.column() == 1)
+flags |= Qt::ItemIsEditable;
+return flags;
+}
+
+bool Currency::setData(const QModelIndex &index, const QVariant &value, int /* role */) {
+	if (index.column() < 1)
+		return false;
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+int id = data(primaryKeyIndex).toInt();
+bool ok = true;
+if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
+if (index.column() == 1)
+ok = setDescription(id, value.toString());
+refresh();
+}
+return ok;
+}
+
+bool Currency::remove(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+bool ok = true;
+this->CurrencyID = data(primaryKeyIndex).toInt();
+ok = this->remove();
+refresh();
+return ok;
+}
+
+void Currency::refresh() {
+if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
+qDebug() <<"Couldn't open DataBase at Refresh() Currency!";
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Description"));
+	this->select();
+//	if(ErpModel::GetInstance()->db.isOpen())
+//		ErpModel::GetInstance()->db.close();
+}
+bool Currency::setDescription(int CurrencyID, const QString &Description) {
+QSqlQuery query;
+query.prepare("update Currency set Description = ? where CurrencyID = ?");
+query.addBindValue(Description);
+query.addBindValue(CurrencyID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+

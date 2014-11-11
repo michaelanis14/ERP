@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: contactui.cpp
-**   Created on: Thu Nov 06 01:32:13 EET 2014
+**   Created on: Tue Nov 11 18:50:49 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,28 +16,28 @@ flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
 QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
+ERPFormBlock * blockSaveCancel = new ERPFormBlock;
+ QWidget* addremove = new QWidget();
+ QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
+ addRemovelayout->setContentsMargins(0,0,0,0);
+ QPushButton* save = new QPushButton("Save");
+ QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
+ save->setObjectName("save");
+ QPushButton* cancel = new QPushButton("Cancel");
+ cancel->setObjectName("cancel");
+ QObject::connect(cancel, SIGNAL(clicked()), this, SLOT(cancel()));
+ QPushButton* clear = new QPushButton("Clear");
+ QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
+ clear->setObjectName("clear");
+ addRemovelayout->addStretch(1);
+ addRemovelayout->addWidget(save,0,Qt::AlignCenter);
+ addRemovelayout->addStretch(0);
+ addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
+ addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
+ addRemovelayout->addStretch(1);
+ blockSaveCancel->addRow("",addremove);
+ flowLayout->addWidget(blockSaveCancel);
 block0Layout = new ERPFormBlock;
-
-QWidget* addremove = new QWidget();
-QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
-addRemovelayout->setContentsMargins(0,0,0,0);
-QPushButton* save = new QPushButton("Save");
-QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
-save->setObjectName("save");
-QPushButton* cancel = new QPushButton("Cancel");
-cancel->setObjectName("cancel");
-QObject::connect(cancel, SIGNAL(clicked()), this, SLOT(cancel()));
-
-//save->setEnabled(false);
-
-
-addRemovelayout->addStretch(1);
-addRemovelayout->addWidget(save,0,Qt::AlignCenter);
-addRemovelayout->addStretch(0);
-addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
-addRemovelayout->addStretch(1);
-block0Layout->addRow("",addremove);
-
 personalsalutation = new QLineEdit();
 block0Layout->addRow("Personal Salutation",personalsalutation);
 salutation = new QLineEdit();
@@ -57,10 +57,10 @@ flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
 contacttype = new ERPComboBox();
-contacttype->addItems(ContactType::GetStringList());
+contacttype->addItems(ContactType::GetHashList());
 block1Layout->addRow("Contact Type",contacttype);
 contactclass = new ERPComboBox();
-contactclass->addItems(ContactClass::GetStringList());
+contactclass->addItems(ContactClass::GetHashList());
 block1Layout->addRow("Contact Class",contactclass);
 contactnumber = new QLineEdit();
 contactnumber->setValidator( intValidator );
@@ -75,18 +75,18 @@ block2Layout->addRow("Postal Code",postalcode);
 city = new QLineEdit();
 block2Layout->addRow("City",city);
 country = new ERPComboBox();
-country->addItems(Country::GetStringList());
+country->addItems(Country::GetHashList());
 block2Layout->addRow("Country",country);
 flowLayout->addWidget(block2Layout);
 
 block3Layout = new ERPFormBlock;
 contactstatus = new ERPComboBox();
-contactstatus->addItems(ContactStatus::GetStringList());
+contactstatus->addItems(ContactStatus::GetHashList());
 block3Layout->addRow("Contact Status",contactstatus);
 active = new QCheckBox();
 block3Layout->addRow("Active",active);
 employee = new ERPComboBox();
-employee->addItems(Employee::GetStringList());
+employee->addItems(Employee::GetHashList());
 block3Layout->addRow("Employee",employee);
 flowLayout->addWidget(block3Layout);
 
@@ -118,34 +118,30 @@ BankAccountUI* bankaccountui = new BankAccountUI();
 BankAccounts.append(bankaccountui);
 block5Layout->addWidget(bankaccountui);
 
-
-
-
 flowLayout->addWidget(block5Layout);
-
 
 }
 ERPDisplay* ContactUI::p_instance = 0;
-void ContactUI::ShowUI() {
-	if (p_instance == 0) {
+void ContactUI::ShowUI() { 
+	if (p_instance == 0) { 
 		p_instance = new ContactUI(mainwindow::GetMainDisplay());
-	}
-	mainwindow::ShowDisplay(p_instance);
+	} 
+	mainwindow::ShowDisplay(p_instance); 
 }
-ContactUI*ContactUI::GetUI(){
-	if (p_instance == 0) {
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
-	}
-	return (ContactUI*) p_instance;
+ContactUI*ContactUI::GetUI(){ 
+ 	if (p_instance == 0) { 
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
+	} 
+	return (ContactUI*) p_instance; 
 }
-void ContactUI::addBankAccount(){
+void ContactUI::addBankAccount(){ 
 BankAccountUI* bankaccountui = new BankAccountUI();
 bankaccountui->block0Layout->removeRow(bankaccountui->contact);
 BankAccounts.append(bankaccountui);
 block5Layout->addWidget(bankaccountui);
 mainwindow::GetMainDisplay()->updateSize();
 }
-void ContactUI::addBankAccount(BankAccount* BankAccount){
+void ContactUI::addBankAccount(BankAccount* BankAccount){ 
 BankAccountUI* bankaccountui = new BankAccountUI();
 bankaccountui->block0Layout->removeRow(bankaccountui->contact);
 bankaccountui->fill(BankAccount);
@@ -153,7 +149,7 @@ BankAccounts.append(bankaccountui);
 block5Layout->addWidget(bankaccountui);
 mainwindow::GetMainDisplay()->updateSize();
 }
-void ContactUI::removeBankAccount(){
+void ContactUI::removeBankAccount(){ 
 if(BankAccounts.count()  > 0){
 BankAccountUI* bankaccountui = BankAccounts.takeLast();
 block5Layout->boxLayout->removeWidget(bankaccountui);
@@ -161,7 +157,7 @@ delete bankaccountui;
 mainwindow::GetMainDisplay()->updateSize();
 }
 }
-void ContactUI::fill(Contact* contact){
+void ContactUI::fill(Contact* contact){ 
 personalsalutation->setText(contact->PersonalSalutation);
 salutation->setText(contact->Salutation);
 name->setText(contact->Name);
@@ -184,8 +180,8 @@ foreach(BankAccountUI* bankaccount, BankAccounts) removeBankAccount();
 foreach(BankAccount* bankaccount, contact->bankaccounts) {
 addBankAccount(bankaccount);
 }
-}
-void ContactUI::clear(){
+} 
+void ContactUI::clear(){ 
 personalsalutation->setText("");
 salutation->setText("");
 lastname->setText("");
@@ -205,8 +201,8 @@ website->setText("");
 taxnumber->setText("");
 foreach(BankAccountUI* bankaccount, BankAccounts) removeBankAccount();
 this->contact = new Contact();
-}
-void ContactUI::selectContact(){
+} 
+void ContactUI::selectContact(){ 
 if(Contact::GetStringList().contains(name->text()))
 {
 Contact* con = Contact::get(name->text());
@@ -218,9 +214,33 @@ fill(this->contact);
 else if(contact->ContactID != 0)
 clear();
 }
-void ContactUI::save(){
-	contact->save();
+void ContactUI::save(){ 
+contact->PersonalSalutation = personalsalutation->text();
+contact->Salutation = salutation->text();
+contact->Name = name->text();
+contact->LastName = lastname->text();
+contact->BirthdateOrDateOfFoundation = birthdateordateoffoundation->text();
+contact->ContactTypeID = contacttype->getKey();
+contact->ContactClassID = contactclass->getKey();
+contact->ContactNumber = contactnumber->text().toInt();
+contact->Address = address->text();
+contact->PostalCode = postalcode->text();
+contact->City = city->text();
+contact->CountryID = country->getKey();
+contact->ContactStatusID = contactstatus->getKey();
+contact->Active = active->text().toInt();
+contact->EmployeeID = employee->getKey();
+contact->PhoneNum = phonenum->text();
+contact->PhoneNum2 = phonenum2->text();
+contact->Fax = fax->text();
+contact->Mobile = mobile->text();
+contact->Email = email->text();
+contact->Email2 = email2->text();
+contact->webSite = website->text();
+contact->TaxNumber = taxnumber->text();
+contact->save();
+contactIndexUI::ShowUI();
 }
-void ContactUI::cancel(){
-	contactIndexUI::ShowUI();
+void ContactUI::cancel(){ 
+contactIndexUI::ShowUI();
 }

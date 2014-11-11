@@ -7,6 +7,7 @@
 #include "erpcombobox.h"
 #include "QDebug"
 #include "QCompleter"
+#include <QHashIterator>
 
 ERPComboBox::ERPComboBox(QWidget *parent) :
 	QComboBox(parent)
@@ -15,6 +16,17 @@ ERPComboBox::ERPComboBox(QWidget *parent) :
 	this->setInsertPolicy(QComboBox::NoInsert);
 	this->setAutoCompletion(true);
 }
+void ERPComboBox::addItems(QHash<int,QString> items){
+	this->items = items;
+	QList<QString> list;
+	QHashIterator<int, QString> i(items);
+	while (i.hasNext()) {
+		i.next();
+		list.append(i.value());
+	}
+	QComboBox::addItems(list);
+}
+
 void ERPComboBox::focusOutEvent(QFocusEvent *e)
 {
 
@@ -55,5 +67,19 @@ void ERPComboBox::focusOutEvent(QFocusEvent *e)
 	//QLineEdit::focusOutEvent(e);
 	//emit(focussed(false));
 }
+
+
+int ERPComboBox::getKey(){
+	int j = 0;
+	QHashIterator<int, QString> i(items);
+	while (i.hasNext()) {
+		 i.next();
+	if(j == currentIndex())
+			return i.key();
+		j++;
+	}
+	return 0;
+}
+
 
 

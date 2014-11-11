@@ -165,6 +165,8 @@ bool ErpModel::init(){
 
 
 	}
+	BankAccount::init();
+
 
 	return true;
 }
