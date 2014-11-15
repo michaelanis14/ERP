@@ -1,6 +1,6 @@
 ﻿/**************************************************************************
 **   File: bankaccountui.h
-**   Created on: Sun Nov 09 16:51:23 EET 2014
+**   Created on: Fri Nov 14 15:16:41 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,15 +43,18 @@ public:
 	ERPComboBox*currency;
 	ERPComboBox*contact;
 	ERPComboBox*country;
+	QWidget* addremove;
+	ERPFormBlock *blockSaveCancel;
 	QLineEdit*bankcountrycode;
 	void fill(BankAccount* bankaccount);
+	BankAccount* bankaccount = new BankAccount();
 private:
 	static ERPDisplay* p_instance;
-	BankAccount* bankaccount = new BankAccount();
 private slots:
 	void selectBankAccount();
-	void save();
 	void cancel();
 	void clear();
+public slots:
+	void save();
 };
 #endif

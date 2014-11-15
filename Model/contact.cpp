@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.cpp
-**   Created on: Tue Nov 11 18:50:49 EET 2014
+**   Created on: Sat Nov 15 20:33:03 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -102,7 +102,7 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-bool Contact::init()
+bool Contact::Init()
 {
 
 QString table = "Contact";
@@ -147,7 +147,7 @@ Contact* Contact::p_instance = 0;
 Contact* Contact::GetInstance() {
 	if (p_instance == 0) {
 		p_instance = new Contact();
-		Contact::getAll();
+		Contact::GetAll();
 	}
 return p_instance;
 }
@@ -188,7 +188,7 @@ return new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(
 return new Contact();
  }
 
-QList<Contact*> Contact::getAll() {
+QList<Contact*> Contact::GetAll() {
 	Contact::GetInstance()->contacts.clear();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact"));
 	while (query.next()) {
@@ -197,30 +197,41 @@ QList<Contact*> Contact::getAll() {
 	return Contact::GetInstance()->contacts;
 }
 
-Contact* Contact::get(int id) {
+Contact* Contact::Get(int id) {
+Contact* contact = new Contact();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Contact"
-"WHERE ContactID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Contact WHERE ContactID = '"+QString::number(id)+"'"));
 while (query.next()) {
-return new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toString(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString(),query.value(20).toString(),query.value(21).toString(),query.value(22).toString(),query.value(23).toString(),query.value(24).toString(),query.value(25).toString());
+contact = new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toString(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString(),query.value(20).toString(),query.value(21).toString(),query.value(22).toString(),query.value(23).toString(),query.value(24).toString(),query.value(25).toString());
  }
+contact->bankaccounts = BankAccount::QuerySelect("ContactID = " + QString::number(id));
 
 }
-return new Contact();
- }
+return contact;
+}
 
-Contact* Contact::get(QString name) {
+Contact* Contact::get(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
+ if(data(primaryKeyIndex).toInt() != 0) 
+ return Get(data(primaryKeyIndex).toInt());
+else return new Contact();
+}
+
+Contact* Contact::Get(QString name) {
+Contact* contact = new Contact();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact WHERE Name = '"+name+"'"));
 while (query.next()) {
-return new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toString(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString(),query.value(20).toString(),query.value(21).toString(),query.value(22).toString(),query.value(23).toString(),query.value(24).toString(),query.value(25).toString());
+contact = new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toString(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString(),query.value(20).toString(),query.value(21).toString(),query.value(22).toString(),query.value(23).toString(),query.value(24).toString(),query.value(25).toString());
+
  }
+contact->bankaccounts = BankAccount::QuerySelect("ContactID = " +QString::number(contact->ContactID));
 
 }
-return new Contact();
+return contact;
  }
 
-QList<Contact*> Contact::search(QString keyword) {
+QList<Contact*> Contact::Search(QString keyword) {
 QList<Contact*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact"
@@ -256,7 +267,7 @@ QList<QString> Contact::GetStringList() {
 	QList<QString> list;
 	int count =Contact::GetInstance()->contacts.count();
 	if( count < 2){
-		Contact::getAll();
+		Contact::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.append(Contact::GetInstance()->contacts[i]->Name);
@@ -268,7 +279,7 @@ QHash<int,QString> Contact::GetHashList() {
 	QHash<int,QString> list;
 	int count =Contact::GetInstance()->contacts.count();
 	if( count < 2){
-		Contact::getAll();
+		Contact::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.insert(Contact::GetInstance()->contacts[i]->ContactID,Contact::GetInstance()->contacts[i]->Name);
@@ -279,7 +290,7 @@ QHash<int,QString> Contact::GetHashList() {
 int Contact::GetIndex(QString name) {
 	int count =Contact::GetInstance()->contacts.count();
 	if( count < 2){
-		Contact::getAll();
+		Contact::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		if(Contact::GetInstance()->contacts[i]->Name == name){
@@ -289,11 +300,10 @@ int Contact::GetIndex(QString name) {
 	return 0;
 }
 
-QList<Contact*> Contact::querySelect(QString select) {
+QList<Contact*> Contact::QuerySelect(QString select) {
 QList<Contact*>list;
 if(select != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact"
-"WHERE '"+select+"'" ));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact WHERE "+select+"" ));
 while (query.next()) {
 list.append(new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toString(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString(),query.value(20).toString(),query.value(21).toString(),query.value(22).toString(),query.value(23).toString(),query.value(24).toString(),query.value(25).toString()));
  }

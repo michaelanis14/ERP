@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.cpp
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,27 +12,35 @@ Unit::Unit()
 
 this->UnitID = 0 ;
 this->Description = " ";
+this->CreatedOn = " ";
+this->EditedOn = " ";
 this->setTable("Unit");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
-Unit::Unit(int UnitID,QString Description) : QSqlRelationalTableModel(){
+Unit::Unit(int UnitID,QString Description,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->UnitID = UnitID ;
 this->Description = Description ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
 }
 
-Unit::Unit(QString Description) : QSqlRelationalTableModel(){
+Unit::Unit(QString Description,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->UnitID = 0 ;
 this->Description = Description ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
 }
 
-bool Unit::init()
+bool Unit::Init()
 {
 
 QString table = "Unit";
 QString query =
 "(UnitID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (UnitID),"
-"Description VARCHAR(40) NOT NULL )" ;
+"Description VARCHAR(40) NOT NULL, "
+"CreatedOn VARCHAR(40) NOT NULL, "
+"EditedOn VARCHAR(40) NOT NULL )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -41,16 +49,23 @@ Unit* Unit::p_instance = 0;
 Unit* Unit::GetInstance() {
 	if (p_instance == 0) {
 		p_instance = new Unit();
-		Unit::getAll();
+		Unit::GetAll();
 	}
 return p_instance;
 }
 bool Unit::save() {
 if(UnitID== 0) {
-ErpModel::GetInstance()->qeryExec("INSERT INTO Unit (Description)"
-"VALUES ('" +QString(this->Description)+"')");
+this->CreatedOn = QDateTime::currentDateTime().toString(); 
+	this->EditedOn = QDateTime::currentDateTime().toString();
+ErpModel::GetInstance()->qeryExec("INSERT INTO Unit (Description,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Description)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Unit SET ""Description = '"+QString(this->Description)+"' WHERE UnitID ='"+QString::number(this->UnitID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Unit SET ""Description = '"+QString(this->Description)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE UnitID ='"+QString::number(this->UnitID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  UnitID FROM Unit WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
+while (query.next()) { 
+ if(query.value(0).toInt() != 0){ 
+ this->UnitID = query.value(0).toInt();	
+ } 
  }
 return true;
 }
@@ -68,54 +83,65 @@ if(UnitID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Unit"
 "WHERE UnitID ='"+QString::number(this->UnitID)+"'"));
 while (query.next()) {
-return new Unit(query.value(0).toInt(),query.value(1).toString());
+return new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
 
 }
 return new Unit();
  }
 
-QList<Unit*> Unit::getAll() {
+QList<Unit*> Unit::GetAll() {
 	Unit::GetInstance()->units.clear();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit"));
 	while (query.next()) {
-		Unit::GetInstance()->units.append(new Unit(query.value(0).toInt(),query.value(1).toString()));
+		Unit::GetInstance()->units.append(new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
 	return Unit::GetInstance()->units;
 }
 
-Unit* Unit::get(int id) {
+Unit* Unit::Get(int id) {
+Unit* unit = new Unit();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Unit"
-"WHERE UnitID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Unit WHERE UnitID = '"+QString::number(id)+"'"));
 while (query.next()) {
-return new Unit(query.value(0).toInt(),query.value(1).toString());
+unit = new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
 
 }
-return new Unit();
- }
+return unit;
+}
 
-Unit* Unit::get(QString name) {
+Unit* Unit::get(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
+ if(data(primaryKeyIndex).toInt() != 0) 
+ return Get(data(primaryKeyIndex).toInt());
+else return new Unit();
+}
+
+Unit* Unit::Get(QString name) {
+Unit* unit = new Unit();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit WHERE Description = '"+name+"'"));
 while (query.next()) {
-return new Unit(query.value(0).toInt(),query.value(1).toString());
+unit = new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
+
  }
 
 }
-return new Unit();
+return unit;
  }
 
-QList<Unit*> Unit::search(QString keyword) {
+QList<Unit*> Unit::Search(QString keyword) {
 QList<Unit*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit"
 "WHERE" 
 "Description LIKE '%"+keyword+"%'"
+"OR CreatedOn LIKE '%"+keyword+"%'"
+"OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new Unit(query.value(0).toInt(),query.value(1).toString()));
+list.append(new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
  }
 
 }
@@ -126,7 +152,7 @@ QList<QString> Unit::GetStringList() {
 	QList<QString> list;
 	int count =Unit::GetInstance()->units.count();
 	if( count < 2){
-		Unit::getAll();
+		Unit::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.append(Unit::GetInstance()->units[i]->Description);
@@ -138,7 +164,7 @@ QHash<int,QString> Unit::GetHashList() {
 	QHash<int,QString> list;
 	int count =Unit::GetInstance()->units.count();
 	if( count < 2){
-		Unit::getAll();
+		Unit::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.insert(Unit::GetInstance()->units[i]->UnitID,Unit::GetInstance()->units[i]->Description);
@@ -149,7 +175,7 @@ QHash<int,QString> Unit::GetHashList() {
 int Unit::GetIndex(QString name) {
 	int count =Unit::GetInstance()->units.count();
 	if( count < 2){
-		Unit::getAll();
+		Unit::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		if(Unit::GetInstance()->units[i]->Description == name){
@@ -159,13 +185,12 @@ int Unit::GetIndex(QString name) {
 	return 0;
 }
 
-QList<Unit*> Unit::querySelect(QString select) {
+QList<Unit*> Unit::QuerySelect(QString select) {
 QList<Unit*>list;
 if(select != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit"
-"WHERE '"+select+"'" ));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit WHERE "+select+"" ));
 while (query.next()) {
-list.append(new Unit(query.value(0).toInt(),query.value(1).toString()));
+list.append(new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
  }
 
 }
@@ -176,7 +201,7 @@ Qt::ItemFlags Unit::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1)
+index.column() == 1 || index.column() == 2 || index.column() == 3)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -190,6 +215,10 @@ bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
 ok = setDescription(id, value.toString());
+else if (index.column() == 2)
+ok = setCreatedOn(id, value.toString());
+else if (index.column() == 3)
+ok = setEditedOn(id, value.toString());
 refresh();
 }
 return ok;
@@ -208,6 +237,8 @@ void Unit::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() Unit!";
 this->setHeaderData(1, Qt::Horizontal, QObject::tr("Description"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
@@ -216,6 +247,24 @@ bool Unit::setDescription(int UnitID, const QString &Description) {
 QSqlQuery query;
 query.prepare("update Unit set Description = ? where UnitID = ?");
 query.addBindValue(Description);
+query.addBindValue(UnitID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Unit::setCreatedOn(int UnitID, const QString &CreatedOn) {
+QSqlQuery query;
+query.prepare("update Unit set CreatedOn = ? where UnitID = ?");
+query.addBindValue(CreatedOn);
+query.addBindValue(UnitID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Unit::setEditedOn(int UnitID, const QString &EditedOn) {
+QSqlQuery query;
+query.prepare("update Unit set EditedOn = ? where UnitID = ?");
+query.addBindValue(EditedOn);
 query.addBindValue(UnitID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

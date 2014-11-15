@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employee.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,18 +16,21 @@ class Employee  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Employee();
-	Employee(QString Name);	int EmployeeID;
+	Employee(QString Name,QString CreatedOn,QString EditedOn);	int EmployeeID;
 	QString Name;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<Employee*> employees;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	Employee* get();
-	static Employee* get(int id);
-	static Employee* get(QString name);
-	static QList<Employee*> getAll();
-	static QList<Employee*> search(QString keyword);
-	static QList<Employee*> querySelect(QString select);
+	Employee* get(const QModelIndex &index);
+	static Employee* Get(int id);
+	static Employee* Get(QString name);
+	static QList<Employee*> GetAll();
+	static QList<Employee*> Search(QString keyword);
+	static QList<Employee*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -38,8 +41,10 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Employee(int EmployeeID,QString Name);	static Employee* p_instance;
+	Employee(int EmployeeID,QString Name,QString CreatedOn,QString EditedOn);	static Employee* p_instance;
 	bool setName(int EmployeeID, const QString &name);
+	bool setCreatedOn(int EmployeeID, const QString &createdon);
+	bool setEditedOn(int EmployeeID, const QString &editedon);
 
 };
 #endif

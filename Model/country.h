@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,18 +16,21 @@ class Country  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Country();
-	Country(QString Name);	int CountryID;
+	Country(QString Name,QString CreatedOn,QString EditedOn);	int CountryID;
 	QString Name;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<Country*> countrys;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	Country* get();
-	static Country* get(int id);
-	static Country* get(QString name);
-	static QList<Country*> getAll();
-	static QList<Country*> search(QString keyword);
-	static QList<Country*> querySelect(QString select);
+	Country* get(const QModelIndex &index);
+	static Country* Get(int id);
+	static Country* Get(QString name);
+	static QList<Country*> GetAll();
+	static QList<Country*> Search(QString keyword);
+	static QList<Country*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -38,8 +41,10 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Country(int CountryID,QString Name);	static Country* p_instance;
+	Country(int CountryID,QString Name,QString CreatedOn,QString EditedOn);	static Country* p_instance;
 	bool setName(int CountryID, const QString &name);
+	bool setCreatedOn(int CountryID, const QString &createdon);
+	bool setEditedOn(int CountryID, const QString &editedon);
 
 };
 #endif

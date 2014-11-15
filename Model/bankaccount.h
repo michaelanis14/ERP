@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccount.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,7 +16,7 @@ class BankAccount  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	BankAccount();
-	BankAccount(QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode);	int BankAccountID;
+	BankAccount(QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode,QString CreatedOn,QString EditedOn);	int BankAccountID;
 	QString Name;
 	QString BankAddress;
 	QString BankCode;
@@ -29,16 +29,19 @@ public:
 	int ContactID;
 	int CountryID;
 	QString BankCountryCode;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<BankAccount*> bankaccounts;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	BankAccount* get();
-	static BankAccount* get(int id);
-	static BankAccount* get(QString name);
-	static QList<BankAccount*> getAll();
-	static QList<BankAccount*> search(QString keyword);
-	static QList<BankAccount*> querySelect(QString select);
+	BankAccount* get(const QModelIndex &index);
+	static BankAccount* Get(int id);
+	static BankAccount* Get(QString name);
+	static QList<BankAccount*> GetAll();
+	static QList<BankAccount*> Search(QString keyword);
+	static QList<BankAccount*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -49,7 +52,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	BankAccount(int BankAccountID,QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode);	static BankAccount* p_instance;
+	BankAccount(int BankAccountID,QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode,QString CreatedOn,QString EditedOn);	static BankAccount* p_instance;
 	bool setName(int BankAccountID, const QString &name);
 	bool setBankAddress(int BankAccountID, const QString &bankaddress);
 	bool setBankCode(int BankAccountID, const QString &bankcode);
@@ -62,6 +65,8 @@ private:
 	bool setContactID(int BankAccountID, const QString &contactid);
 	bool setCountryID(int BankAccountID, const QString &countryid);
 	bool setBankCountryCode(int BankAccountID, const QString &bankcountrycode);
+	bool setCreatedOn(int BankAccountID, const QString &createdon);
+	bool setEditedOn(int BankAccountID, const QString &editedon);
 
 };
 #endif

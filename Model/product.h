@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,7 +16,7 @@ class Product  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Product();
-	Product(QString Name,double SellingPrice,double NetPrice,double TradeMargine,QString Description,QString Barcode,double CriticalAmount,QString ProductNumber,QString MoreInfo,bool BarcodeOnly,bool isComposite,QString SpecialTaxDescription,double SpecialTaxValue,int TaxID,int UnitID,bool generateBarcode,QString ShortDescription);	int ProductID;
+	Product(QString Name,double SellingPrice,double NetPrice,double TradeMargine,QString Description,QString Barcode,double CriticalAmount,QString ProductNumber,QString MoreInfo,bool BarcodeOnly,bool isComposite,QString SpecialTaxDescription,double SpecialTaxValue,int TaxID,int UnitID,bool generateBarcode,QString ShortDescription,QString CreatedOn,QString EditedOn);	int ProductID;
 	QString Name;
 	double SellingPrice;
 	double NetPrice;
@@ -34,16 +34,19 @@ public:
 	int UnitID;
 	bool generateBarcode;
 	QString ShortDescription;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<Product*> products;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	Product* get();
-	static Product* get(int id);
-	static Product* get(QString name);
-	static QList<Product*> getAll();
-	static QList<Product*> search(QString keyword);
-	static QList<Product*> querySelect(QString select);
+	Product* get(const QModelIndex &index);
+	static Product* Get(int id);
+	static Product* Get(QString name);
+	static QList<Product*> GetAll();
+	static QList<Product*> Search(QString keyword);
+	static QList<Product*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -54,7 +57,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Product(int ProductID,QString Name,double SellingPrice,double NetPrice,double TradeMargine,QString Description,QString Barcode,double CriticalAmount,QString ProductNumber,QString MoreInfo,bool BarcodeOnly,bool isComposite,QString SpecialTaxDescription,double SpecialTaxValue,int TaxID,int UnitID,bool generateBarcode,QString ShortDescription);	static Product* p_instance;
+	Product(int ProductID,QString Name,double SellingPrice,double NetPrice,double TradeMargine,QString Description,QString Barcode,double CriticalAmount,QString ProductNumber,QString MoreInfo,bool BarcodeOnly,bool isComposite,QString SpecialTaxDescription,double SpecialTaxValue,int TaxID,int UnitID,bool generateBarcode,QString ShortDescription,QString CreatedOn,QString EditedOn);	static Product* p_instance;
 	bool setName(int ProductID, const QString &name);
 	bool setSellingPrice(int ProductID, const QString &sellingprice);
 	bool setNetPrice(int ProductID, const QString &netprice);
@@ -72,6 +75,8 @@ private:
 	bool setUnitID(int ProductID, const QString &unitid);
 	bool setgenerateBarcode(int ProductID, const QString &generatebarcode);
 	bool setShortDescription(int ProductID, const QString &shortdescription);
+	bool setCreatedOn(int ProductID, const QString &createdon);
+	bool setEditedOn(int ProductID, const QString &editedon);
 
 };
 #endif

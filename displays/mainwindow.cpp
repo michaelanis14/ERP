@@ -207,7 +207,7 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 			lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
 			//ContactUI::ShowUI();
 			//BankAccountUI::ShowUI();
-			contactIndexUI::ShowUI();
+			ContactIndexUI::ShowUI();
 			//		}
 		}
 		else{
@@ -227,9 +227,12 @@ void mainwindow::updateSize(){
 	if(p_instance != 0 &&p_instance->currentDisplay != 0){
 
 		if(p_instance->currentDisplay->flowLayout != 0){
+
 			for(int i = 0; i < p_instance->currentDisplay->flowLayout->itemList.count(); i++){
 				height += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().height();
 				//	width += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().width();
+
+
 			}
 			p_instance->currentDisplay->repaint();
 		}

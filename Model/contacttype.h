@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,18 +16,21 @@ class ContactType  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	ContactType();
-	ContactType(QString Description);	int ContactTypeID;
+	ContactType(QString Description,QString CreatedOn,QString EditedOn);	int ContactTypeID;
 	QString Description;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<ContactType*> contacttypes;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	ContactType* get();
-	static ContactType* get(int id);
-	static ContactType* get(QString name);
-	static QList<ContactType*> getAll();
-	static QList<ContactType*> search(QString keyword);
-	static QList<ContactType*> querySelect(QString select);
+	ContactType* get(const QModelIndex &index);
+	static ContactType* Get(int id);
+	static ContactType* Get(QString name);
+	static QList<ContactType*> GetAll();
+	static QList<ContactType*> Search(QString keyword);
+	static QList<ContactType*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -38,8 +41,10 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	ContactType(int ContactTypeID,QString Description);	static ContactType* p_instance;
+	ContactType(int ContactTypeID,QString Description,QString CreatedOn,QString EditedOn);	static ContactType* p_instance;
 	bool setDescription(int ContactTypeID, const QString &description);
+	bool setCreatedOn(int ContactTypeID, const QString &createdon);
+	bool setEditedOn(int ContactTypeID, const QString &editedon);
 
 };
 #endif

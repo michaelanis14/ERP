@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,19 +16,22 @@ class Tax  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Tax();
-	Tax(double Ratio,QString Description);	int TaxID;
+	Tax(double Ratio,QString Description,QString CreatedOn,QString EditedOn);	int TaxID;
 	double Ratio;
 	QString Description;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<Tax*> taxs;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	Tax* get();
-	static Tax* get(int id);
-	static Tax* get(QString name);
-	static QList<Tax*> getAll();
-	static QList<Tax*> search(QString keyword);
-	static QList<Tax*> querySelect(QString select);
+	Tax* get(const QModelIndex &index);
+	static Tax* Get(int id);
+	static Tax* Get(QString name);
+	static QList<Tax*> GetAll();
+	static QList<Tax*> Search(QString keyword);
+	static QList<Tax*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -39,9 +42,11 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Tax(int TaxID,double Ratio,QString Description);	static Tax* p_instance;
+	Tax(int TaxID,double Ratio,QString Description,QString CreatedOn,QString EditedOn);	static Tax* p_instance;
 	bool setRatio(int TaxID, const QString &ratio);
 	bool setDescription(int TaxID, const QString &description);
+	bool setCreatedOn(int TaxID, const QString &createdon);
+	bool setEditedOn(int TaxID, const QString &editedon);
 
 };
 #endif

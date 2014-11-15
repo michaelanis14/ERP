@@ -1,6 +1,6 @@
 ﻿/**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Sun Nov 09 16:51:23 EET 2014
+**   Created on: Fri Nov 14 15:16:41 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,13 +11,13 @@
 BankAccountUI::BankAccountUI(QWidget *parent) :ERPDisplay(parent)
 {
 
-flowLayout = new FlowLayout(formPanel);
+flowLayout = new FlowLayout(this);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
 QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
+ blockSaveCancel = new ERPFormBlock;
+ addremove = new QWidget();
  QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
  addRemovelayout->setContentsMargins(0,0,0,0);
  QPushButton* save = new QPushButton("Save");
@@ -36,6 +36,7 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
  addRemovelayout->addStretch(1);
  blockSaveCancel->addRow("",addremove);
+
  flowLayout->addWidget(blockSaveCancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
@@ -87,6 +88,7 @@ BankAccountUI*BankAccountUI::GetUI(){
 	return (BankAccountUI*) p_instance;
 }
 void BankAccountUI::fill(BankAccount* bankaccount){
+this->bankaccount = bankaccount;
 name->setText(bankaccount->Name);
 bankaddress->setText(bankaccount->BankAddress);
 bankcode->setText(bankaccount->BankCode);
@@ -111,7 +113,7 @@ this->bankaccount = new BankAccount();
 void BankAccountUI::selectBankAccount(){
 if(BankAccount::GetStringList().contains(name->text()))
 {
-BankAccount* con = BankAccount::get(name->text());
+BankAccount* con = BankAccount::Get(name->text());
 if(this->bankaccount->BankAccountID != con->BankAccountID){
 this->bankaccount = con;
 fill(this->bankaccount);
@@ -121,7 +123,23 @@ else if(bankaccount->BankAccountID != 0)
 clear();
 }
 void BankAccountUI::save(){
+bankaccount->Name = name->text();
+bankaccount->BankAddress = bankaddress->text();
+bankaccount->BankCode = bankcode->text();
+bankaccount->AccountName = accountname->text();
+bankaccount->AccountNumber = accountnumber->text();
+bankaccount->IBAN = iban->text();
+bankaccount->BIC = bic->text();
+bankaccount->ZipCode = zipcode->text();
+if(bankaccount->CurrencyID == 0)
+bankaccount->CurrencyID = currency->getKey();
+if(bankaccount->ContactID == 0)
+bankaccount->ContactID = contact->getKey();
+if(bankaccount->CountryID == 0)
+bankaccount->CountryID = country->getKey();
+bankaccount->BankCountryCode = bankcountrycode->text();
 bankaccount->save();
+//bankaccountIndexUI::ShowUI();
 }
 void BankAccountUI::cancel(){
 //bankaccountIndexUI::ShowUI();

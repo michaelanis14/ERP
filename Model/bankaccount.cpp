@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccount.cpp
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -23,13 +23,15 @@ this->CurrencyID = 0 ;
 this->ContactID = 0 ;
 this->CountryID = 0 ;
 this->BankCountryCode = " ";
+this->CreatedOn = " ";
+this->EditedOn = " ";
 this->setTable("BankAccount");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(9, QSqlRelation("Currency", "CurrencyID", "Description"));
 this->setRelation(10, QSqlRelation("Contact", "ContactID", "Name"));
 this->setRelation(11, QSqlRelation("Country", "CountryID", "Name"));
 }
-BankAccount::BankAccount(int BankAccountID,QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode) : QSqlRelationalTableModel(){
+BankAccount::BankAccount(int BankAccountID,QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->BankAccountID = BankAccountID ;
 this->Name = Name ;
 this->BankAddress = BankAddress ;
@@ -43,9 +45,11 @@ this->CurrencyID = CurrencyID ;
 this->ContactID = ContactID ;
 this->CountryID = CountryID ;
 this->BankCountryCode = BankCountryCode ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
 }
 
-BankAccount::BankAccount(QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode) : QSqlRelationalTableModel(){
+BankAccount::BankAccount(QString Name,QString BankAddress,QString BankCode,QString AccountName,QString AccountNumber,QString IBAN,QString BIC,QString ZipCode,int CurrencyID,int ContactID,int CountryID,QString BankCountryCode,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->BankAccountID = 0 ;
 this->Name = Name ;
 this->BankAddress = BankAddress ;
@@ -59,9 +63,11 @@ this->CurrencyID = CurrencyID ;
 this->ContactID = ContactID ;
 this->CountryID = CountryID ;
 this->BankCountryCode = BankCountryCode ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
 }
 
-bool BankAccount::init()
+bool BankAccount::Init()
 {
 
 QString table = "BankAccount";
@@ -82,7 +88,9 @@ QString query =
 "FOREIGN KEY (ContactID) REFERENCES Contact(ContactID),"
 "CountryID INT NOT NULL, "
 "FOREIGN KEY (CountryID) REFERENCES Country(CountryID),"
-"BankCountryCode VARCHAR(40) NOT NULL )" ;
+"BankCountryCode VARCHAR(40) NOT NULL, "
+"CreatedOn VARCHAR(40) NOT NULL, "
+"EditedOn VARCHAR(40) NOT NULL )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -91,16 +99,23 @@ BankAccount* BankAccount::p_instance = 0;
 BankAccount* BankAccount::GetInstance() {
 	if (p_instance == 0) {
 		p_instance = new BankAccount();
-		BankAccount::getAll();
+		BankAccount::GetAll();
 	}
 return p_instance;
 }
 bool BankAccount::save() {
 if(BankAccountID== 0) {
-ErpModel::GetInstance()->qeryExec("INSERT INTO BankAccount (Name,BankAddress,BankCode,AccountName,AccountNumber,IBAN,BIC,ZipCode,CurrencyID,ContactID,CountryID,BankCountryCode)"
-"VALUES ('" +QString(this->Name)+"','"+QString(this->BankAddress)+"','"+QString(this->BankCode)+"','"+QString(this->AccountName)+"','"+QString(this->AccountNumber)+"','"+QString(this->IBAN)+"','"+QString(this->BIC)+"','"+QString(this->ZipCode)+"','"+QString::number(this->CurrencyID)+"','"+QString::number(this->ContactID)+"','"+QString::number(this->CountryID)+"','"+QString(this->BankCountryCode)+"')");
+this->CreatedOn = QDateTime::currentDateTime().toString(); 
+	this->EditedOn = QDateTime::currentDateTime().toString();
+ErpModel::GetInstance()->qeryExec("INSERT INTO BankAccount (Name,BankAddress,BankCode,AccountName,AccountNumber,IBAN,BIC,ZipCode,CurrencyID,ContactID,CountryID,BankCountryCode,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Name)+"','"+QString(this->BankAddress)+"','"+QString(this->BankCode)+"','"+QString(this->AccountName)+"','"+QString(this->AccountNumber)+"','"+QString(this->IBAN)+"','"+QString(this->BIC)+"','"+QString(this->ZipCode)+"','"+QString::number(this->CurrencyID)+"','"+QString::number(this->ContactID)+"','"+QString::number(this->CountryID)+"','"+QString(this->BankCountryCode)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE BankAccount SET ""Name = '"+QString(this->Name)+"','"+"BankAddress = '"+QString(this->BankAddress)+"','"+"BankCode = '"+QString(this->BankCode)+"','"+"AccountName = '"+QString(this->AccountName)+"','"+"AccountNumber = '"+QString(this->AccountNumber)+"','"+"IBAN = '"+QString(this->IBAN)+"','"+"BIC = '"+QString(this->BIC)+"','"+"ZipCode = '"+QString(this->ZipCode)+"','"+"CurrencyID = '"+QString::number(this->CurrencyID)+"','"+"ContactID = '"+QString::number(this->ContactID)+"','"+"CountryID = '"+QString::number(this->CountryID)+"','"+"BankCountryCode = '"+QString(this->BankCountryCode)+"' WHERE BankAccountID ='"+QString::number(this->BankAccountID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE BankAccount SET ""Name = '"+QString(this->Name)+"','"+"BankAddress = '"+QString(this->BankAddress)+"','"+"BankCode = '"+QString(this->BankCode)+"','"+"AccountName = '"+QString(this->AccountName)+"','"+"AccountNumber = '"+QString(this->AccountNumber)+"','"+"IBAN = '"+QString(this->IBAN)+"','"+"BIC = '"+QString(this->BIC)+"','"+"ZipCode = '"+QString(this->ZipCode)+"','"+"CurrencyID = '"+QString::number(this->CurrencyID)+"','"+"ContactID = '"+QString::number(this->ContactID)+"','"+"CountryID = '"+QString::number(this->CountryID)+"','"+"BankCountryCode = '"+QString(this->BankCountryCode)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE BankAccountID ='"+QString::number(this->BankAccountID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  BankAccountID FROM BankAccount WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
+while (query.next()) { 
+ if(query.value(0).toInt() != 0){ 
+ this->BankAccountID = query.value(0).toInt();	
+ } 
  }
 return true;
 }
@@ -118,46 +133,55 @@ if(BankAccountID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM BankAccount"
 "WHERE BankAccountID ='"+QString::number(this->BankAccountID)+"'"));
 while (query.next()) {
-return new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString());
+return new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString(),query.value(14).toString());
  }
 
 }
 return new BankAccount();
  }
 
-QList<BankAccount*> BankAccount::getAll() {
+QList<BankAccount*> BankAccount::GetAll() {
 	BankAccount::GetInstance()->bankaccounts.clear();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount"));
 	while (query.next()) {
-		BankAccount::GetInstance()->bankaccounts.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString()));
+		BankAccount::GetInstance()->bankaccounts.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString(),query.value(14).toString()));
 	}
 	return BankAccount::GetInstance()->bankaccounts;
 }
 
-BankAccount* BankAccount::get(int id) {
+BankAccount* BankAccount::Get(int id) {
+BankAccount* bankaccount = new BankAccount();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM BankAccount"
-"WHERE BankAccountID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM BankAccount WHERE BankAccountID = '"+QString::number(id)+"'"));
 while (query.next()) {
-return new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString());
+bankaccount = new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString(),query.value(14).toString());
  }
 
 }
-return new BankAccount();
- }
+return bankaccount;
+}
 
-BankAccount* BankAccount::get(QString name) {
+BankAccount* BankAccount::get(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
+ if(data(primaryKeyIndex).toInt() != 0) 
+ return Get(data(primaryKeyIndex).toInt());
+else return new BankAccount();
+}
+
+BankAccount* BankAccount::Get(QString name) {
+BankAccount* bankaccount = new BankAccount();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount WHERE Name = '"+name+"'"));
 while (query.next()) {
-return new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString());
+bankaccount = new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString(),query.value(14).toString());
+
  }
 
 }
-return new BankAccount();
+return bankaccount;
  }
 
-QList<BankAccount*> BankAccount::search(QString keyword) {
+QList<BankAccount*> BankAccount::Search(QString keyword) {
 QList<BankAccount*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount"
@@ -171,9 +195,11 @@ QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount
 "OR BIC LIKE '%"+keyword+"%'"
 "OR ZipCode LIKE '%"+keyword+"%'"
 "OR BankCountryCode LIKE '%"+keyword+"%'"
+"OR CreatedOn LIKE '%"+keyword+"%'"
+"OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString()));
+list.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString(),query.value(14).toString()));
  }
 
 }
@@ -184,7 +210,7 @@ QList<QString> BankAccount::GetStringList() {
 	QList<QString> list;
 	int count =BankAccount::GetInstance()->bankaccounts.count();
 	if( count < 2){
-		BankAccount::getAll();
+		BankAccount::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.append(BankAccount::GetInstance()->bankaccounts[i]->Name);
@@ -196,7 +222,7 @@ QHash<int,QString> BankAccount::GetHashList() {
 	QHash<int,QString> list;
 	int count =BankAccount::GetInstance()->bankaccounts.count();
 	if( count < 2){
-		BankAccount::getAll();
+		BankAccount::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.insert(BankAccount::GetInstance()->bankaccounts[i]->BankAccountID,BankAccount::GetInstance()->bankaccounts[i]->Name);
@@ -207,7 +233,7 @@ QHash<int,QString> BankAccount::GetHashList() {
 int BankAccount::GetIndex(QString name) {
 	int count =BankAccount::GetInstance()->bankaccounts.count();
 	if( count < 2){
-		BankAccount::getAll();
+		BankAccount::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		if(BankAccount::GetInstance()->bankaccounts[i]->Name == name){
@@ -217,13 +243,12 @@ int BankAccount::GetIndex(QString name) {
 	return 0;
 }
 
-QList<BankAccount*> BankAccount::querySelect(QString select) {
+QList<BankAccount*> BankAccount::QuerySelect(QString select) {
 QList<BankAccount*>list;
 if(select != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount"
-"WHERE '"+select+"'" ));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount WHERE "+select+"" ));
 while (query.next()) {
-list.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString()));
+list.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString(),query.value(14).toString()));
  }
 
 }
@@ -234,7 +259,7 @@ Qt::ItemFlags BankAccount::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13 || index.column() == 14)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -270,6 +295,10 @@ else if (index.column() == 11)
 ok = setCountryID(id, value.toString());
 else if (index.column() == 12)
 ok = setBankCountryCode(id, value.toString());
+else if (index.column() == 13)
+ok = setCreatedOn(id, value.toString());
+else if (index.column() == 14)
+ok = setEditedOn(id, value.toString());
 refresh();
 }
 return ok;
@@ -299,6 +328,8 @@ this->setHeaderData(9, Qt::Horizontal, QObject::tr("Currency"));
 this->setHeaderData(10, Qt::Horizontal, QObject::tr("Contact"));
 this->setHeaderData(11, Qt::Horizontal, QObject::tr("Country"));
 this->setHeaderData(12, Qt::Horizontal, QObject::tr("Bank Country Code"));
+this->setHeaderData(13, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(14, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
@@ -406,6 +437,24 @@ bool BankAccount::setBankCountryCode(int BankAccountID, const QString &BankCount
 QSqlQuery query;
 query.prepare("update BankAccount set BankCountryCode = ? where BankAccountID = ?");
 query.addBindValue(BankCountryCode);
+query.addBindValue(BankAccountID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool BankAccount::setCreatedOn(int BankAccountID, const QString &CreatedOn) {
+QSqlQuery query;
+query.prepare("update BankAccount set CreatedOn = ? where BankAccountID = ?");
+query.addBindValue(CreatedOn);
+query.addBindValue(BankAccountID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool BankAccount::setEditedOn(int BankAccountID, const QString &EditedOn) {
+QSqlQuery query;
+query.prepare("update BankAccount set EditedOn = ? where BankAccountID = ?");
+query.addBindValue(EditedOn);
 query.addBindValue(BankAccountID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

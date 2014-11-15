@@ -1,135 +1,86 @@
-﻿/*************************************
-**   Created on:  10/3/2014
-**   Author: michaelbishara
-**   Copyright: Bishara©.
-**************************************/
-
-
+/**************************************************************************
+**   File: contactindexui.cpp
+**   Created on: Sat Nov 15 20:44:26 EET 2014
+**   Author: Michael Bishara
+**   Copyright: SphinxSolutions.
+**************************************************************************/
 
 #include "contactindexui.h"
 #include "contactui.h"
-#include "ui_contactindexui.h"
 #include "../MainWindow.h"
 #include "../../Model/erpmodel.h"
 
-
-#include <QLineEdit>
-
-#include <QtSql>
-#include <QSqlQueryModel>
-#include <QModelIndex>
-#include <QSqlRelationalTableModel>
-
-
-
-contactIndexUI::contactIndexUI(QWidget *parent) :
-	ERPDisplay(parent)
+ContactIndexUI::ContactIndexUI(QWidget *parent) :ERPDisplay(parent)
 {
-	//ui->setupUi(this);
-	flowLayout = new FlowLayout(formPanel);
 
-	flowLayout->setContentsMargins(0,0,0,0);
-	ERPFormBlock* block0Layout = new ERPFormBlock;
-	//Index = new QTableView(this);
-
-
-	model = new Contact();
-
-//	model->setQuery("select * from Contact");
-
-
-	model->refresh();
-	//model->setHeaderData(0, Qt::Horizontal, ("Name"));
-	//model->setHeaderData(1, Qt::Horizontal, ("Salary"));
-	if(!ErpModel::GetInstance()->db.open())
+flowLayout = new FlowLayout(formPanel);
+flowLayout->setContentsMargins(0,0,0,0);
+model = new Contact(); 
+	model->refresh(); 
+	if(!ErpModel::GetInstance()->db.open()) 
 	qDebug() <<"Couldn't open databaseee!";
-
-	view = new QTableView();
-	view->setModel(model);
-	view->setItemDelegate(new QSqlRelationalDelegate(view));
-	view->setMinimumWidth(600);
-	view->hideColumn(0); // don't show the ID
-	//view->show();
-	//view->horizontalHeader()->setSectionResizeMode(QTableView::);
-	view->setSortingEnabled(true);
-
-	block0Layout->addRow("",view);
-	//ErpModel::GetInstance()->db.close();
-	flowLayout->addWidget(block0Layout);
-
-	QWidget* addremove = new QWidget();
-	QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
-	addRemovelayout->setContentsMargins(0,0,0,0);
-	QPushButton* add = new QPushButton("Add");
-	QObject::connect(add, SIGNAL(clicked()), this, SLOT(addRow()));
-	add->setObjectName("add");
-	remove = new QPushButton("Remove");
-	remove->setObjectName("remove");
-	QObject::connect(remove, SIGNAL(clicked()), this, SLOT(removeRow()));
-
-	remove->setEnabled(false);
-
-
-	addRemovelayout->addStretch(1);
-	addRemovelayout->addWidget(add,0,Qt::AlignCenter);
-	addRemovelayout->addStretch(0);
-	addRemovelayout->addWidget(remove,0,Qt::AlignCenter);
-	addRemovelayout->addStretch(1);
-
-	block0Layout->addWidget(addremove);
-
-	// enable remove button when a row is selected
-	QObject::connect(view->selectionModel(), &QItemSelectionModel::selectionChanged, this, &contactIndexUI::onSelectionChanged);
-
-
-
+ERPFormBlock* block0Layout = new ERPFormBlock; 
+ tabel = new QTableView(); 
+ tabel->setModel(model); 
+ tabel->setItemDelegate(new QSqlRelationalDelegate(tabel)); 
+ tabel->setMinimumWidth(this->width()); 
+ tabel->setMinimumHeight(this->height() - 50); 
+ tabel->hideColumn(0); // don't show the ID 
+ tabel->setSortingEnabled(true); 
+ tabel->setSelectionBehavior(QAbstractItemView::SelectRows); 
+ tabel->setSelectionMode(QAbstractItemView::SingleSelection); 
+ block0Layout->addRow("",tabel); 
+ flowLayout->addWidget(block0Layout); 
+ QWidget* addremove = new QWidget(); 
+ QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove); 
+ addRemovelayout->setContentsMargins(0,0,0,0); 
+ add = new QPushButton("Add"); 
+ QObject::connect(add, SIGNAL(clicked()), this, SLOT(addRow())); 
+ add->setObjectName("add"); 
+ remove = new QPushButton("Remove"); 
+ remove->setObjectName("remove"); 
+ QObject::connect(remove, SIGNAL(clicked()), this, SLOT(removeRow())); 
+ edit = new QPushButton("Edit"); 
+ QObject::connect(edit, SIGNAL(clicked()), this, SLOT(editRow())); 
+ edit->setObjectName("edit"); 
+ edit->setEnabled(false); 
+ remove->setEnabled(false); 
+ addRemovelayout->addStretch(1); 
+ addRemovelayout->addWidget(add,0,Qt::AlignCenter); 
+ addRemovelayout->addWidget(edit,0,Qt::AlignCenter); 
+ addRemovelayout->addWidget(remove,0,Qt::AlignCenter); 
+ addRemovelayout->addStretch(1); 
+ block0Layout->addWidget(addremove); 
+ QObject::connect(tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContactIndexUI::onSelectionChanged); 
+ }
+ERPDisplay* ContactIndexUI::p_instance = 0;
+void ContactIndexUI::ShowUI() { 
+	if (p_instance == 0) { 
+		p_instance = new ContactIndexUI(mainwindow::GetMainDisplay());
+	} 
+ ContactIndexUI::GetUI()->model->refresh();	
+ mainwindow::ShowDisplay(p_instance); 
 }
-ERPDisplay* contactIndexUI::p_instance = 0;
-/**
-* A function.
-* Calls the Main Window show function
-* passing for the function this displays static instance
-*/
-void contactIndexUI::ShowUI() {
-	if (p_instance == 0) {
-		p_instance = new contactIndexUI(mainwindow::GetMainDisplay());
-	}
-	contactIndexUI::GetUI()->model->refresh();
-	mainwindow::ShowDisplay(p_instance);
+ContactIndexUI*ContactIndexUI::GetUI(){ 
+ 	if (p_instance == 0) { 
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
+	} 
+	return (ContactIndexUI*) p_instance; 
 }
+void ContactIndexUI::addRow(){ 
+ ContactUI::ShowUI(); 
+ ContactUI::GetUI()->fill(new Contact()); 
+ }
+void ContactIndexUI::editRow(){ 
+ ContactUI::ShowUI(); 
+ ContactUI::GetUI()->fill(model->get(tabel->selectionModel()->selectedRows().last())); 
+ }
+void ContactIndexUI::removeRow(){ 
+ model->remove(tabel->selectionModel()->selectedRows().last()); 
+ }
+void ContactIndexUI::onSelectionChanged(){ 
+ int e = tabel->selectionModel()->selectedRows().count(); 
+ remove->setEnabled(e); 
+ edit->setEnabled(e); 
+ }
 
-contactIndexUI* contactIndexUI::GetUI(){
-	if (p_instance == 0) {
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
-	}
-	return (contactIndexUI*) p_instance;
-
-}
-
-void contactIndexUI::addRow(){
-	ContactUI::ShowUI();
-}
-void contactIndexUI::removeRow()
-{
-	qDebug() << view->selectionModel()->selectedRows();
-	foreach (const QModelIndex &index, view->selectionModel()->selectedRows()) {
-
-		model->remove(index);
-
-	}
-}
-
-void contactIndexUI::onSelectionChanged()
-{
-	remove->setEnabled(view->selectionModel()->selectedRows().count());
-}
-
-
-void contactIndexUI::showEvent(QShowEvent * event) {
-
-	event->accept();
-}
-contactIndexUI::~contactIndexUI()
-{
-	delete ui;
-}

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: user.cpp
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -18,11 +18,13 @@ this->LastLogin = " ";
 this->EmployeeID = 0 ;
 this->active = 0 ;
 this->lastIP = " ";
+this->CreatedOn = " ";
+this->EditedOn = " ";
 this->setTable("User");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(5, QSqlRelation("Employee", "EmployeeID", "Name"));
 }
-User::User(int UserID,QString Name,QString Username,QString Password,QString LastLogin,int EmployeeID,bool active,QString lastIP) : QSqlRelationalTableModel(){
+User::User(int UserID,QString Name,QString Username,QString Password,QString LastLogin,int EmployeeID,bool active,QString lastIP,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->UserID = UserID ;
 this->Name = Name ;
 this->Username = Username ;
@@ -31,9 +33,11 @@ this->LastLogin = LastLogin ;
 this->EmployeeID = EmployeeID ;
 this->active = active ;
 this->lastIP = lastIP ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
 }
 
-User::User(QString Name,QString Username,QString Password,QString LastLogin,int EmployeeID,bool active,QString lastIP) : QSqlRelationalTableModel(){
+User::User(QString Name,QString Username,QString Password,QString LastLogin,int EmployeeID,bool active,QString lastIP,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->UserID = 0 ;
 this->Name = Name ;
 this->Username = Username ;
@@ -42,9 +46,11 @@ this->LastLogin = LastLogin ;
 this->EmployeeID = EmployeeID ;
 this->active = active ;
 this->lastIP = lastIP ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
 }
 
-bool User::init()
+bool User::Init()
 {
 
 QString table = "User";
@@ -58,7 +64,9 @@ QString query =
 "EmployeeID INT NOT NULL, "
 "FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),"
 "active VARCHAR(1) NOT NULL, "
-"lastIP VARCHAR(40) NOT NULL )" ;
+"lastIP VARCHAR(40) NOT NULL, "
+"CreatedOn VARCHAR(40) NOT NULL, "
+"EditedOn VARCHAR(40) NOT NULL )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -67,16 +75,23 @@ User* User::p_instance = 0;
 User* User::GetInstance() {
 	if (p_instance == 0) {
 		p_instance = new User();
-		User::getAll();
+		User::GetAll();
 	}
 return p_instance;
 }
 bool User::save() {
 if(UserID== 0) {
-ErpModel::GetInstance()->qeryExec("INSERT INTO User (Name,Username,Password,LastLogin,EmployeeID,active,lastIP)"
-"VALUES ('" +QString(this->Name)+"','"+QString(this->Username)+"','"+QString(this->Password)+"','"+QString(this->LastLogin)+"','"+QString::number(this->EmployeeID)+"','"+QString::number(this->active)+"','"+QString(this->lastIP)+"')");
+this->CreatedOn = QDateTime::currentDateTime().toString(); 
+	this->EditedOn = QDateTime::currentDateTime().toString();
+ErpModel::GetInstance()->qeryExec("INSERT INTO User (Name,Username,Password,LastLogin,EmployeeID,active,lastIP,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Name)+"','"+QString(this->Username)+"','"+QString(this->Password)+"','"+QString(this->LastLogin)+"','"+QString::number(this->EmployeeID)+"','"+QString::number(this->active)+"','"+QString(this->lastIP)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE User SET ""Name = '"+QString(this->Name)+"','"+"Username = '"+QString(this->Username)+"','"+"Password = '"+QString(this->Password)+"','"+"LastLogin = '"+QString(this->LastLogin)+"','"+"EmployeeID = '"+QString::number(this->EmployeeID)+"','"+"active = '"+QString::number(this->active)+"','"+"lastIP = '"+QString(this->lastIP)+"' WHERE UserID ='"+QString::number(this->UserID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE User SET ""Name = '"+QString(this->Name)+"','"+"Username = '"+QString(this->Username)+"','"+"Password = '"+QString(this->Password)+"','"+"LastLogin = '"+QString(this->LastLogin)+"','"+"EmployeeID = '"+QString::number(this->EmployeeID)+"','"+"active = '"+QString::number(this->active)+"','"+"lastIP = '"+QString(this->lastIP)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE UserID ='"+QString::number(this->UserID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  UserID FROM User WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
+while (query.next()) { 
+ if(query.value(0).toInt() != 0){ 
+ this->UserID = query.value(0).toInt();	
+ } 
  }
 return true;
 }
@@ -94,46 +109,55 @@ if(UserID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM User"
 "WHERE UserID ='"+QString::number(this->UserID)+"'"));
 while (query.next()) {
-return new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString());
+return new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString());
  }
 
 }
 return new User();
  }
 
-QList<User*> User::getAll() {
+QList<User*> User::GetAll() {
 	User::GetInstance()->users.clear();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User"));
 	while (query.next()) {
-		User::GetInstance()->users.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString()));
+		User::GetInstance()->users.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
 	}
 	return User::GetInstance()->users;
 }
 
-User* User::get(int id) {
+User* User::Get(int id) {
+User* user = new User();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM User"
-"WHERE UserID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM User WHERE UserID = '"+QString::number(id)+"'"));
 while (query.next()) {
-return new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString());
+user = new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString());
  }
 
 }
-return new User();
- }
+return user;
+}
 
-User* User::get(QString name) {
+User* User::get(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
+ if(data(primaryKeyIndex).toInt() != 0) 
+ return Get(data(primaryKeyIndex).toInt());
+else return new User();
+}
+
+User* User::Get(QString name) {
+User* user = new User();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User WHERE Name = '"+name+"'"));
 while (query.next()) {
-return new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString());
+user = new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString());
+
  }
 
 }
-return new User();
+return user;
  }
 
-QList<User*> User::search(QString keyword) {
+QList<User*> User::Search(QString keyword) {
 QList<User*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User"
@@ -143,9 +167,11 @@ QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User"
 "OR Password LIKE '%"+keyword+"%'"
 "OR LastLogin LIKE '%"+keyword+"%'"
 "OR lastIP LIKE '%"+keyword+"%'"
+"OR CreatedOn LIKE '%"+keyword+"%'"
+"OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString()));
+list.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
  }
 
 }
@@ -156,7 +182,7 @@ QList<QString> User::GetStringList() {
 	QList<QString> list;
 	int count =User::GetInstance()->users.count();
 	if( count < 2){
-		User::getAll();
+		User::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.append(User::GetInstance()->users[i]->Name);
@@ -168,7 +194,7 @@ QHash<int,QString> User::GetHashList() {
 	QHash<int,QString> list;
 	int count =User::GetInstance()->users.count();
 	if( count < 2){
-		User::getAll();
+		User::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		list.insert(User::GetInstance()->users[i]->UserID,User::GetInstance()->users[i]->Name);
@@ -179,7 +205,7 @@ QHash<int,QString> User::GetHashList() {
 int User::GetIndex(QString name) {
 	int count =User::GetInstance()->users.count();
 	if( count < 2){
-		User::getAll();
+		User::GetAll();
 	}
 	for(int i = 0; i < count; i++){
 		if(User::GetInstance()->users[i]->Name == name){
@@ -189,13 +215,12 @@ int User::GetIndex(QString name) {
 	return 0;
 }
 
-QList<User*> User::querySelect(QString select) {
+QList<User*> User::QuerySelect(QString select) {
 QList<User*>list;
 if(select != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User"
-"WHERE '"+select+"'" ));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM User WHERE "+select+"" ));
 while (query.next()) {
-list.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString()));
+list.append(new User(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
  }
 
 }
@@ -206,7 +231,7 @@ Qt::ItemFlags User::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -232,6 +257,10 @@ else if (index.column() == 6)
 ok = setactive(id, value.toString());
 else if (index.column() == 7)
 ok = setlastIP(id, value.toString());
+else if (index.column() == 8)
+ok = setCreatedOn(id, value.toString());
+else if (index.column() == 9)
+ok = setEditedOn(id, value.toString());
 refresh();
 }
 return ok;
@@ -256,6 +285,8 @@ this->setHeaderData(4, Qt::Horizontal, QObject::tr("Last Login"));
 this->setHeaderData(5, Qt::Horizontal, QObject::tr("Employee"));
 this->setHeaderData(6, Qt::Horizontal, QObject::tr("active"));
 this->setHeaderData(7, Qt::Horizontal, QObject::tr("lastI P"));
+this->setHeaderData(8, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(9, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
@@ -318,6 +349,24 @@ bool User::setlastIP(int UserID, const QString &lastIP) {
 QSqlQuery query;
 query.prepare("update User set lastIP = ? where UserID = ?");
 query.addBindValue(lastIP);
+query.addBindValue(UserID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool User::setCreatedOn(int UserID, const QString &CreatedOn) {
+QSqlQuery query;
+query.prepare("update User set CreatedOn = ? where UserID = ?");
+query.addBindValue(CreatedOn);
+query.addBindValue(UserID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool User::setEditedOn(int UserID, const QString &EditedOn) {
+QSqlQuery query;
+query.prepare("update User set EditedOn = ? where UserID = ?");
+query.addBindValue(EditedOn);
 query.addBindValue(UserID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

@@ -106,6 +106,6 @@ int main(int argc, char *argv[])
 
 	mainwindow w;
 	//w.show();
-	contactIndexUI::ShowUI();
+	ContactIndexUI::ShowUI();
 	return a.exec();
 }

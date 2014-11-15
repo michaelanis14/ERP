@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.h
-**   Created on: Tue Nov 11 18:50:49 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -45,15 +45,16 @@ public:
 	QString CreatedOn;
 	QString EditedOn;
 	QList<Contact*> contacts;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	Contact* get();
-	static Contact* get(int id);
-	static Contact* get(QString name);
-	static QList<Contact*> getAll();
-	static QList<Contact*> search(QString keyword);
-	static QList<Contact*> querySelect(QString select);
+	Contact* get(const QModelIndex &index);
+	static Contact* Get(int id);
+	static Contact* Get(QString name);
+	static QList<Contact*> GetAll();
+	static QList<Contact*> Search(QString keyword);
+	static QList<Contact*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);

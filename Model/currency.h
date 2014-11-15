@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currency.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,18 +16,21 @@ class Currency  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Currency();
-	Currency(QString Description);	int CurrencyID;
+	Currency(QString Description,QString CreatedOn,QString EditedOn);	int CurrencyID;
 	QString Description;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<Currency*> currencys;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	Currency* get();
-	static Currency* get(int id);
-	static Currency* get(QString name);
-	static QList<Currency*> getAll();
-	static QList<Currency*> search(QString keyword);
-	static QList<Currency*> querySelect(QString select);
+	Currency* get(const QModelIndex &index);
+	static Currency* Get(int id);
+	static Currency* Get(QString name);
+	static QList<Currency*> GetAll();
+	static QList<Currency*> Search(QString keyword);
+	static QList<Currency*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -38,8 +41,10 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Currency(int CurrencyID,QString Description);	static Currency* p_instance;
+	Currency(int CurrencyID,QString Description,QString CreatedOn,QString EditedOn);	static Currency* p_instance;
 	bool setDescription(int CurrencyID, const QString &description);
+	bool setCreatedOn(int CurrencyID, const QString &createdon);
+	bool setEditedOn(int CurrencyID, const QString &editedon);
 
 };
 #endif

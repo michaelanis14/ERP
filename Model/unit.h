@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.h
-**   Created on: Tue Nov 11 17:36:07 EET 2014
+**   Created on: Sat Nov 15 20:33:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,18 +16,21 @@ class Unit  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Unit();
-	Unit(QString Description);	int UnitID;
+	Unit(QString Description,QString CreatedOn,QString EditedOn);	int UnitID;
 	QString Description;
+	QString CreatedOn;
+	QString EditedOn;
 	QList<Unit*> units;
-	static bool init();
+	static bool Init();
 	bool save();
 	bool remove();
 	Unit* get();
-	static Unit* get(int id);
-	static Unit* get(QString name);
-	static QList<Unit*> getAll();
-	static QList<Unit*> search(QString keyword);
-	static QList<Unit*> querySelect(QString select);
+	Unit* get(const QModelIndex &index);
+	static Unit* Get(int id);
+	static Unit* Get(QString name);
+	static QList<Unit*> GetAll();
+	static QList<Unit*> Search(QString keyword);
+	static QList<Unit*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
 	static QHash<int,QString> GetHashList();
 	static int GetIndex(QString title);
@@ -38,8 +41,10 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Unit(int UnitID,QString Description);	static Unit* p_instance;
+	Unit(int UnitID,QString Description,QString CreatedOn,QString EditedOn);	static Unit* p_instance;
 	bool setDescription(int UnitID, const QString &description);
+	bool setCreatedOn(int UnitID, const QString &createdon);
+	bool setEditedOn(int UnitID, const QString &editedon);
 
 };
 #endif

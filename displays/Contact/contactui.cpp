@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.cpp
-**   Created on: Tue Nov 11 18:50:49 EET 2014
+**   Created on: Sat Nov 15 20:44:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -158,6 +158,7 @@ mainwindow::GetMainDisplay()->updateSize();
 }
 }
 void ContactUI::fill(Contact* contact){ 
+this->contact = contact;
 personalsalutation->setText(contact->PersonalSalutation);
 salutation->setText(contact->Salutation);
 name->setText(contact->Name);
@@ -205,7 +206,7 @@ this->contact = new Contact();
 void ContactUI::selectContact(){ 
 if(Contact::GetStringList().contains(name->text()))
 {
-Contact* con = Contact::get(name->text());
+Contact* con = Contact::Get(name->text());
 if(this->contact->ContactID != con->ContactID){
 this->contact = con;
 fill(this->contact);
@@ -220,15 +221,20 @@ contact->Salutation = salutation->text();
 contact->Name = name->text();
 contact->LastName = lastname->text();
 contact->BirthdateOrDateOfFoundation = birthdateordateoffoundation->text();
+if(contact->ContactTypeID == 0) 
 contact->ContactTypeID = contacttype->getKey();
+if(contact->ContactClassID == 0) 
 contact->ContactClassID = contactclass->getKey();
 contact->ContactNumber = contactnumber->text().toInt();
 contact->Address = address->text();
 contact->PostalCode = postalcode->text();
 contact->City = city->text();
+if(contact->CountryID == 0) 
 contact->CountryID = country->getKey();
+if(contact->ContactStatusID == 0) 
 contact->ContactStatusID = contactstatus->getKey();
 contact->Active = active->text().toInt();
+if(contact->EmployeeID == 0) 
 contact->EmployeeID = employee->getKey();
 contact->PhoneNum = phonenum->text();
 contact->PhoneNum2 = phonenum2->text();
@@ -239,8 +245,27 @@ contact->Email2 = email2->text();
 contact->webSite = website->text();
 contact->TaxNumber = taxnumber->text();
 contact->save();
-contactIndexUI::ShowUI();
+foreach(BankAccountUI* bankaccountui, BankAccounts) {
+bool saved = false;
+BankAccount* toRemove;
+if(bankaccountui->bankaccount->BankAccountID == 0){
+bankaccountui->bankaccount->ContactID =  contact->ContactID;
+bankaccountui->save();
+}
+else{
+foreach(BankAccount* bankaccount,contact->bankaccounts){
+toRemove = bankaccount;
+if(bankaccount->BankAccountID == bankaccountui->bankaccount->BankAccountID){
+bankaccountui->save();
+saved = true;
+}else 
+ saved = false;
+} if(!saved){
+toRemove->remove();
+} 	}
+	}
+ContactIndexUI::ShowUI();
 }
 void ContactUI::cancel(){ 
-contactIndexUI::ShowUI();
+ContactIndexUI::ShowUI();
 }
