@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.cpp
-**   Created on: Sat Nov 15 20:33:04 EET 2014
+**   Created on: Sun Nov 16 16:19:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -24,16 +24,14 @@ this->PhoneNum2 = " ";
 this->Mobile = " ";
 this->Fax = " ";
 this->active = 0 ;
-this->CreatedBy_UserID = 0 ;
-this->EditedBy_UserID = 0 ;
 this->ContactID = 0 ;
 this->CreatedOn = " ";
 this->EditedOn = " ";
 this->setTable("ContactPerson");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(16, QSqlRelation("Contact", "ContactID", "Name"));
+this->setRelation(14, QSqlRelation("Contact", "ContactID", "Name"));
 }
-ContactPerson::ContactPerson(int ContactPersonID,QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int CreatedBy_UserID,int EditedBy_UserID,int ContactID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+ContactPerson::ContactPerson(int ContactPersonID,QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int ContactID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ContactPersonID = ContactPersonID ;
 this->PersonalSalut = PersonalSalut ;
 this->TitlePrefix = TitlePrefix ;
@@ -48,14 +46,12 @@ this->PhoneNum2 = PhoneNum2 ;
 this->Mobile = Mobile ;
 this->Fax = Fax ;
 this->active = active ;
-this->CreatedBy_UserID = CreatedBy_UserID ;
-this->EditedBy_UserID = EditedBy_UserID ;
 this->ContactID = ContactID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-ContactPerson::ContactPerson(QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int CreatedBy_UserID,int EditedBy_UserID,int ContactID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+ContactPerson::ContactPerson(QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int ContactID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ContactPersonID = 0 ;
 this->PersonalSalut = PersonalSalut ;
 this->TitlePrefix = TitlePrefix ;
@@ -70,8 +66,6 @@ this->PhoneNum2 = PhoneNum2 ;
 this->Mobile = Mobile ;
 this->Fax = Fax ;
 this->active = active ;
-this->CreatedBy_UserID = CreatedBy_UserID ;
-this->EditedBy_UserID = EditedBy_UserID ;
 this->ContactID = ContactID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
@@ -97,10 +91,6 @@ QString query =
 "Mobile VARCHAR(40) NOT NULL, "
 "Fax VARCHAR(40) NOT NULL, "
 "active VARCHAR(1) NOT NULL, "
-"CreatedBy_UserID INT NOT NULL, "
-"FOREIGN KEY (CreatedBy_UserID) REFERENCES CreatedBy_User(CreatedBy_UserID),"
-"EditedBy_UserID INT NOT NULL, "
-"FOREIGN KEY (EditedBy_UserID) REFERENCES EditedBy_User(EditedBy_UserID),"
 "ContactID INT NOT NULL, "
 "FOREIGN KEY (ContactID) REFERENCES Contact(ContactID),"
 "CreatedOn VARCHAR(40) NOT NULL, "
@@ -121,10 +111,10 @@ bool ContactPerson::save() {
 if(ContactPersonID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString(); 
 	this->EditedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO ContactPerson (PersonalSalut,TitlePrefix,Name,LastName,Position,Birthdate,ContactPersoneNumber,Email,PhoneNum,PhoneNum2,Mobile,Fax,active,CreatedBy_UserID,EditedBy_UserID,ContactID,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->PersonalSalut)+"','"+QString(this->TitlePrefix)+"','"+QString(this->Name)+"','"+QString(this->LastName)+"','"+QString(this->Position)+"','"+QString(this->Birthdate)+"','"+QString::number(this->ContactPersoneNumber)+"','"+QString(this->Email)+"','"+QString(this->PhoneNum)+"','"+QString(this->PhoneNum2)+"','"+QString(this->Mobile)+"','"+QString(this->Fax)+"','"+QString::number(this->active)+"','"+QString::number(this->CreatedBy_UserID)+"','"+QString::number(this->EditedBy_UserID)+"','"+QString::number(this->ContactID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO ContactPerson (PersonalSalut,TitlePrefix,Name,LastName,Position,Birthdate,ContactPersoneNumber,Email,PhoneNum,PhoneNum2,Mobile,Fax,active,ContactID,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->PersonalSalut)+"','"+QString(this->TitlePrefix)+"','"+QString(this->Name)+"','"+QString(this->LastName)+"','"+QString(this->Position)+"','"+QString(this->Birthdate)+"','"+QString::number(this->ContactPersoneNumber)+"','"+QString(this->Email)+"','"+QString(this->PhoneNum)+"','"+QString(this->PhoneNum2)+"','"+QString(this->Mobile)+"','"+QString(this->Fax)+"','"+QString::number(this->active)+"','"+QString::number(this->ContactID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE ContactPerson SET ""PersonalSalut = '"+QString(this->PersonalSalut)+"','"+"TitlePrefix = '"+QString(this->TitlePrefix)+"','"+"Name = '"+QString(this->Name)+"','"+"LastName = '"+QString(this->LastName)+"','"+"Position = '"+QString(this->Position)+"','"+"Birthdate = '"+QString(this->Birthdate)+"','"+"ContactPersoneNumber = '"+QString::number(this->ContactPersoneNumber)+"','"+"Email = '"+QString(this->Email)+"','"+"PhoneNum = '"+QString(this->PhoneNum)+"','"+"PhoneNum2 = '"+QString(this->PhoneNum2)+"','"+"Mobile = '"+QString(this->Mobile)+"','"+"Fax = '"+QString(this->Fax)+"','"+"active = '"+QString::number(this->active)+"','"+"CreatedBy_UserID = '"+QString::number(this->CreatedBy_UserID)+"','"+"EditedBy_UserID = '"+QString::number(this->EditedBy_UserID)+"','"+"ContactID = '"+QString::number(this->ContactID)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactPersonID ='"+QString::number(this->ContactPersonID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE ContactPerson SET ""PersonalSalut = '"+QString(this->PersonalSalut)+"','"+"TitlePrefix = '"+QString(this->TitlePrefix)+"','"+"Name = '"+QString(this->Name)+"','"+"LastName = '"+QString(this->LastName)+"','"+"Position = '"+QString(this->Position)+"','"+"Birthdate = '"+QString(this->Birthdate)+"','"+"ContactPersoneNumber = '"+QString::number(this->ContactPersoneNumber)+"','"+"Email = '"+QString(this->Email)+"','"+"PhoneNum = '"+QString(this->PhoneNum)+"','"+"PhoneNum2 = '"+QString(this->PhoneNum2)+"','"+"Mobile = '"+QString(this->Mobile)+"','"+"Fax = '"+QString(this->Fax)+"','"+"active = '"+QString::number(this->active)+"','"+"ContactID = '"+QString::number(this->ContactID)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactPersonID ='"+QString::number(this->ContactPersonID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactPersonID FROM ContactPerson WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
@@ -147,7 +137,7 @@ if(ContactPersonID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPerson"
 "WHERE ContactPersonID ='"+QString::number(this->ContactPersonID)+"'"));
 while (query.next()) {
-return new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString());
+return new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toString(),query.value(16).toString());
  }
 
 }
@@ -158,7 +148,7 @@ QList<ContactPerson*> ContactPerson::GetAll() {
 	ContactPerson::GetInstance()->contactpersons.clear();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPerson"));
 	while (query.next()) {
-		ContactPerson::GetInstance()->contactpersons.append(new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString()));
+		ContactPerson::GetInstance()->contactpersons.append(new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toString(),query.value(16).toString()));
 	}
 	return ContactPerson::GetInstance()->contactpersons;
 }
@@ -168,7 +158,7 @@ ContactPerson* contactperson = new ContactPerson();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPerson WHERE ContactPersonID = '"+QString::number(id)+"'"));
 while (query.next()) {
-contactperson = new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString());
+contactperson = new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toString(),query.value(16).toString());
  }
 
 }
@@ -187,7 +177,7 @@ ContactPerson* contactperson = new ContactPerson();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPerson WHERE Name = '"+name+"'"));
 while (query.next()) {
-contactperson = new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString());
+contactperson = new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toString(),query.value(16).toString());
 
  }
 
@@ -215,7 +205,7 @@ QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPers
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString()));
+list.append(new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toString(),query.value(16).toString()));
  }
 
 }
@@ -264,7 +254,7 @@ QList<ContactPerson*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPerson WHERE "+select+"" ));
 while (query.next()) {
-list.append(new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString()));
+list.append(new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toString(),query.value(16).toString()));
  }
 
 }
@@ -275,7 +265,7 @@ Qt::ItemFlags ContactPerson::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13 || index.column() == 14 || index.column() == 15 || index.column() == 16 || index.column() == 17 || index.column() == 18)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13 || index.column() == 14 || index.column() == 15 || index.column() == 16)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -314,14 +304,10 @@ ok = setFax(id, value.toString());
 else if (index.column() == 13)
 ok = setactive(id, value.toString());
 else if (index.column() == 14)
-ok = setCreatedBy_UserID(id, value.toString());
-else if (index.column() == 15)
-ok = setEditedBy_UserID(id, value.toString());
-else if (index.column() == 16)
 ok = setContactID(id, value.toString());
-else if (index.column() == 17)
+else if (index.column() == 15)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 18)
+else if (index.column() == 16)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -353,11 +339,9 @@ this->setHeaderData(10, Qt::Horizontal, QObject::tr("Phone Num2"));
 this->setHeaderData(11, Qt::Horizontal, QObject::tr("Mobile"));
 this->setHeaderData(12, Qt::Horizontal, QObject::tr("Fax"));
 this->setHeaderData(13, Qt::Horizontal, QObject::tr("active"));
-this->setHeaderData(14, Qt::Horizontal, QObject::tr("Created By_ User"));
-this->setHeaderData(15, Qt::Horizontal, QObject::tr("Edited By_ User"));
-this->setHeaderData(16, Qt::Horizontal, QObject::tr("Contact"));
-this->setHeaderData(17, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(18, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(14, Qt::Horizontal, QObject::tr("Contact"));
+this->setHeaderData(15, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(16, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
@@ -474,24 +458,6 @@ bool ContactPerson::setactive(int ContactPersonID, const QString &active) {
 QSqlQuery query;
 query.prepare("update ContactPerson set active = ? where ContactPersonID = ?");
 query.addBindValue(active);
-query.addBindValue(ContactPersonID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool ContactPerson::setCreatedBy_UserID(int ContactPersonID, const QString &CreatedBy_UserID) {
-QSqlQuery query;
-query.prepare("update ContactPerson set CreatedBy_UserID = ? where ContactPersonID = ?");
-query.addBindValue(CreatedBy_UserID);
-query.addBindValue(ContactPersonID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool ContactPerson::setEditedBy_UserID(int ContactPersonID, const QString &EditedBy_UserID) {
-QSqlQuery query;
-query.prepare("update ContactPerson set EditedBy_UserID = ? where ContactPersonID = ?");
-query.addBindValue(EditedBy_UserID);
 query.addBindValue(ContactPersonID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

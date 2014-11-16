@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: bankaccountui.h
-**   Created on: Fri Nov 14 15:16:41 EET 2014
+**   Created on: Sun Nov 16 16:19:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -8,7 +8,7 @@
 #ifndef BANKACCOUNTUI_H
 #define BANKACCOUNTUI_H
 #include "../../erpdisplay.h"
-//#include "bankaccountindexui.h"
+#include "bankaccountindexui.h"
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
@@ -43,8 +43,6 @@ public:
 	ERPComboBox*currency;
 	ERPComboBox*contact;
 	ERPComboBox*country;
-	QWidget* addremove;
-	ERPFormBlock *blockSaveCancel;
 	QLineEdit*bankcountrycode;
 	void fill(BankAccount* bankaccount);
 	BankAccount* bankaccount = new BankAccount();

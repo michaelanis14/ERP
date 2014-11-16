@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.h
-**   Created on: Sat Nov 15 20:33:04 EET 2014
+**   Created on: Sun Nov 16 16:19:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,7 +16,7 @@ class ContactPerson  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	ContactPerson();
-	ContactPerson(QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int CreatedBy_UserID,int EditedBy_UserID,int ContactID,QString CreatedOn,QString EditedOn);	int ContactPersonID;
+	ContactPerson(QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int ContactID,QString CreatedOn,QString EditedOn);	int ContactPersonID;
 	QString PersonalSalut;
 	QString TitlePrefix;
 	QString Name;
@@ -30,8 +30,6 @@ public:
 	QString Mobile;
 	QString Fax;
 	bool active;
-	int CreatedBy_UserID;
-	int EditedBy_UserID;
 	int ContactID;
 	QString CreatedOn;
 	QString EditedOn;
@@ -56,7 +54,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	ContactPerson(int ContactPersonID,QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int CreatedBy_UserID,int EditedBy_UserID,int ContactID,QString CreatedOn,QString EditedOn);	static ContactPerson* p_instance;
+	ContactPerson(int ContactPersonID,QString PersonalSalut,QString TitlePrefix,QString Name,QString LastName,QString Position,QString Birthdate,int ContactPersoneNumber,QString Email,QString PhoneNum,QString PhoneNum2,QString Mobile,QString Fax,bool active,int ContactID,QString CreatedOn,QString EditedOn);	static ContactPerson* p_instance;
 	bool setPersonalSalut(int ContactPersonID, const QString &personalsalut);
 	bool setTitlePrefix(int ContactPersonID, const QString &titleprefix);
 	bool setName(int ContactPersonID, const QString &name);
@@ -70,8 +68,6 @@ private:
 	bool setMobile(int ContactPersonID, const QString &mobile);
 	bool setFax(int ContactPersonID, const QString &fax);
 	bool setactive(int ContactPersonID, const QString &active);
-	bool setCreatedBy_UserID(int ContactPersonID, const QString &createdby_userid);
-	bool setEditedBy_UserID(int ContactPersonID, const QString &editedby_userid);
 	bool setContactID(int ContactPersonID, const QString &contactid);
 	bool setCreatedOn(int ContactPersonID, const QString &createdon);
 	bool setEditedOn(int ContactPersonID, const QString &editedon);

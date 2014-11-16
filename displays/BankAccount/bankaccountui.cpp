@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Fri Nov 14 15:16:41 EET 2014
+**   Created on: Sun Nov 16 16:19:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,13 +11,13 @@
 BankAccountUI::BankAccountUI(QWidget *parent) :ERPDisplay(parent)
 {
 
-flowLayout = new FlowLayout(this);
+flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
 QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
- blockSaveCancel = new ERPFormBlock;
- addremove = new QWidget();
+ERPFormBlock * blockSaveCancel = new ERPFormBlock;
+ QWidget* addremove = new QWidget();
  QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
  addRemovelayout->setContentsMargins(0,0,0,0);
  QPushButton* save = new QPushButton("Save");
@@ -36,7 +36,6 @@ QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
  addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
  addRemovelayout->addStretch(1);
  blockSaveCancel->addRow("",addremove);
-
  flowLayout->addWidget(blockSaveCancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
@@ -75,19 +74,19 @@ flowLayout->addWidget(block0Layout);
 
 }
 ERPDisplay* BankAccountUI::p_instance = 0;
-void BankAccountUI::ShowUI() {
-	if (p_instance == 0) {
+void BankAccountUI::ShowUI() { 
+	if (p_instance == 0) { 
 		p_instance = new BankAccountUI(mainwindow::GetMainDisplay());
-	}
-	mainwindow::ShowDisplay(p_instance);
+	} 
+	mainwindow::ShowDisplay(p_instance); 
 }
-BankAccountUI*BankAccountUI::GetUI(){
-	if (p_instance == 0) {
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
-	}
-	return (BankAccountUI*) p_instance;
+BankAccountUI*BankAccountUI::GetUI(){ 
+ 	if (p_instance == 0) { 
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
+	} 
+	return (BankAccountUI*) p_instance; 
 }
-void BankAccountUI::fill(BankAccount* bankaccount){
+void BankAccountUI::fill(BankAccount* bankaccount){ 
 this->bankaccount = bankaccount;
 name->setText(bankaccount->Name);
 bankaddress->setText(bankaccount->BankAddress);
@@ -98,8 +97,8 @@ iban->setText(bankaccount->IBAN);
 bic->setText(bankaccount->BIC);
 zipcode->setText(bankaccount->ZipCode);
 bankcountrycode->setText(bankaccount->BankCountryCode);
-}
-void BankAccountUI::clear(){
+} 
+void BankAccountUI::clear(){ 
 bankaddress->setText("");
 bankcode->setText("");
 accountname->setText("");
@@ -109,8 +108,8 @@ bic->setText("");
 zipcode->setText("");
 bankcountrycode->setText("");
 this->bankaccount = new BankAccount();
-}
-void BankAccountUI::selectBankAccount(){
+} 
+void BankAccountUI::selectBankAccount(){ 
 if(BankAccount::GetStringList().contains(name->text()))
 {
 BankAccount* con = BankAccount::Get(name->text());
@@ -122,7 +121,7 @@ fill(this->bankaccount);
 else if(bankaccount->BankAccountID != 0)
 clear();
 }
-void BankAccountUI::save(){
+void BankAccountUI::save(){ 
 bankaccount->Name = name->text();
 bankaccount->BankAddress = bankaddress->text();
 bankaccount->BankCode = bankcode->text();
@@ -131,16 +130,16 @@ bankaccount->AccountNumber = accountnumber->text();
 bankaccount->IBAN = iban->text();
 bankaccount->BIC = bic->text();
 bankaccount->ZipCode = zipcode->text();
-if(bankaccount->CurrencyID == 0)
+if(bankaccount->CurrencyID == 0) 
 bankaccount->CurrencyID = currency->getKey();
-if(bankaccount->ContactID == 0)
+if(bankaccount->ContactID == 0) 
 bankaccount->ContactID = contact->getKey();
-if(bankaccount->CountryID == 0)
+if(bankaccount->CountryID == 0) 
 bankaccount->CountryID = country->getKey();
 bankaccount->BankCountryCode = bankcountrycode->text();
 bankaccount->save();
-//bankaccountIndexUI::ShowUI();
+BankAccountIndexUI::ShowUI();
 }
-void BankAccountUI::cancel(){
-//bankaccountIndexUI::ShowUI();
+void BankAccountUI::cancel(){ 
+BankAccountIndexUI::ShowUI();
 }
