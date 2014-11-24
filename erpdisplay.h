@@ -1,6 +1,7 @@
 ﻿#ifndef ERPDISPLAY_H
 #define ERPDISPLAY_H
 #include "displays/CommonUI/flowlayout.h"
+#include "displays/CommonUI/HNavigationButtons.h"
 
 #include <QtWidgets/QWidget>
 #include "QScrollArea"
@@ -14,6 +15,7 @@ public:
 	explicit ERPDisplay(QWidget *parent = 0);
 	QWidget* formPanel;
 	QScrollArea* scrollAreaFormPanel;
+	class HNavigationButtons* controllers;
 	FlowLayout* flowLayout;
 	void updateSize();
 signals:

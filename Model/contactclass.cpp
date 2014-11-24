@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclass.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,10 +10,9 @@
 ContactClass::ContactClass()
  : QSqlRelationalTableModel(){
 
-this->ContactClassID = 0 ;
-this->Description = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Description = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("ContactClass");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -54,13 +53,13 @@ ContactClass* ContactClass::GetInstance() {
 return p_instance;
 }
 bool ContactClass::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(ContactClassID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactClass (Description,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Description)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE ContactClass SET ""Description = '"+QString(this->Description)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactClassID ='"+QString::number(this->ContactClassID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE ContactClass SET "	"Description = '"+QString(this->Description)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactClassID ='"+QString::number(this->ContactClassID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactClassID FROM ContactClass WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

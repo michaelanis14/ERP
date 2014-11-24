@@ -16,7 +16,7 @@
 
 #include <QSql>
 #include <QSqlDatabase>
-
+#include <QMessageBox>
 #include <QSqlError>
 #include <QDebug>
 
@@ -45,21 +45,21 @@ ErpModel* ErpModel::GetInstance() {
 }
 
 QSqlQuery ErpModel::qeryExec(QString q){
-	//qDebug() << q;
+	qDebug() << q;
 	QDateTime startTime = QDateTime::currentDateTime();
 	if(db.open())   {
 
 		QSqlQuery query(db);
 		query.prepare(q);
 		if( !query.exec() )
-			qDebug() << query.lastError().text();
+			QMessageBox::warning(0,"BataBase Issue",query.lastError().text());
 		else
 			qDebug() << q +"Exec: " +QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch() - startTime.toMSecsSinceEpoch()) +"ms";
 		db.close();
 		return query;
 	}
 	else    {
-		qDebug() << "Something went Wrong:" << db.lastError().text();
+		QMessageBox::warning(0,"BataBase Issue","Something went Wrong:" + db.lastError().text());
 		QSqlQuery query;
 		return query;
 	}

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,10 +10,9 @@
 Country::Country()
  : QSqlRelationalTableModel(){
 
-this->CountryID = 0 ;
-this->Name = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Name = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("Country");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -54,13 +53,13 @@ Country* Country::GetInstance() {
 return p_instance;
 }
 bool Country::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(CountryID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Country (Name,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Country SET ""Name = '"+QString(this->Name)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE CountryID ='"+QString::number(this->CountryID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Country SET "	"Name = '"+QString(this->Name)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE CountryID ='"+QString::number(this->CountryID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  CountryID FROM Country WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

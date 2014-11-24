@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,10 +10,9 @@
 Unit::Unit()
  : QSqlRelationalTableModel(){
 
-this->UnitID = 0 ;
-this->Description = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Description = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("Unit");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -54,13 +53,13 @@ Unit* Unit::GetInstance() {
 return p_instance;
 }
 bool Unit::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(UnitID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Unit (Description,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Description)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Unit SET ""Description = '"+QString(this->Description)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE UnitID ='"+QString::number(this->UnitID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Unit SET "	"Description = '"+QString(this->Description)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE UnitID ='"+QString::number(this->UnitID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  UnitID FROM Unit WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

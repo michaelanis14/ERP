@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonindexui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,10 +31,7 @@ ERPFormBlock* block0Layout = new ERPFormBlock;
  tabel->setSelectionMode(QAbstractItemView::SingleSelection); 
  block0Layout->addRow("",tabel); 
  flowLayout->addWidget(block0Layout); 
- QWidget* addremove = new QWidget(); 
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove); 
- addRemovelayout->setContentsMargins(0,0,0,0); 
- add = new QPushButton("Add"); 
+  add = new QPushButton("Add"); 
  QObject::connect(add, SIGNAL(clicked()), this, SLOT(addRow())); 
  add->setObjectName("add"); 
  remove = new QPushButton("Remove"); 
@@ -45,14 +42,11 @@ ERPFormBlock* block0Layout = new ERPFormBlock;
  edit->setObjectName("edit"); 
  edit->setEnabled(false); 
  remove->setEnabled(false); 
- addRemovelayout->addStretch(1); 
- addRemovelayout->addWidget(add,0,Qt::AlignCenter); 
- addRemovelayout->addWidget(edit,0,Qt::AlignCenter); 
- addRemovelayout->addWidget(remove,0,Qt::AlignCenter); 
- addRemovelayout->addStretch(1); 
- block0Layout->addWidget(addremove); 
- QObject::connect(tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContactPersonIndexUI::onSelectionChanged); 
- }
+ QObject::connect(tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContactPersonIndexUI::onSelectionChanged);
+this->controllers->addControllerButton(add); 
+ this->controllers->addControllerButton(edit);  
+ this->controllers->addControllerButton(remove);
+}
 ERPDisplay* ContactPersonIndexUI::p_instance = 0;
 void ContactPersonIndexUI::ShowUI() { 
 	if (p_instance == 0) { 

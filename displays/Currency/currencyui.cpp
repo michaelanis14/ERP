@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currencyui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,11 @@
 CurrencyUI::CurrencyUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+currency = new Currency();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +24,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 description = new QLineEdit();
 block0Layout->addRow("Description",description);
@@ -57,10 +47,12 @@ CurrencyUI*CurrencyUI::GetUI(){
 	return (CurrencyUI*) p_instance; 
 }
 void CurrencyUI::fill(Currency* currency){ 
+clear();
 this->currency = currency;
 description->setText(currency->Description);
 } 
 void CurrencyUI::clear(){ 
+delete this->currency;
 description->setText("");
 this->currency = new Currency();
 } 
@@ -69,17 +61,37 @@ if(Currency::GetStringList().contains(description->text()))
 {
 Currency* con = Currency::Get(description->text());
 if(this->currency->CurrencyID != con->CurrencyID){
-this->currency = con;
-fill(this->currency);
+fill(con);
 }
 }
 else if(currency->CurrencyID != 0)
 clear();
 }
 void CurrencyUI::save(){ 
-currency->Description = description->text();
+bool errors = false;
+QString errorString =  "";
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+currency->Description = description->text().trimmed();
+}
+if(!errors) {
 currency->save();
 CurrencyIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void CurrencyUI::cancel(){ 
 CurrencyIndexUI::ShowUI();

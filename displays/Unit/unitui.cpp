@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unitui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,11 @@
 UnitUI::UnitUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+unit = new Unit();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +24,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 description = new QLineEdit();
 block0Layout->addRow("Description",description);
@@ -57,10 +47,12 @@ UnitUI*UnitUI::GetUI(){
 	return (UnitUI*) p_instance; 
 }
 void UnitUI::fill(Unit* unit){ 
+clear();
 this->unit = unit;
 description->setText(unit->Description);
 } 
 void UnitUI::clear(){ 
+delete this->unit;
 description->setText("");
 this->unit = new Unit();
 } 
@@ -69,17 +61,37 @@ if(Unit::GetStringList().contains(description->text()))
 {
 Unit* con = Unit::Get(description->text());
 if(this->unit->UnitID != con->UnitID){
-this->unit = con;
-fill(this->unit);
+fill(con);
 }
 }
 else if(unit->UnitID != 0)
 clear();
 }
 void UnitUI::save(){ 
-unit->Description = description->text();
+bool errors = false;
+QString errorString =  "";
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+unit->Description = description->text().trimmed();
+}
+if(!errors) {
 unit->save();
 UnitIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void UnitUI::cancel(){ 
 UnitIndexUI::ShowUI();

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,26 +10,15 @@
 Product::Product()
  : QSqlRelationalTableModel(){
 
-this->ProductID = 0 ;
-this->Name = " ";
-this->SellingPrice = 0 ;
-this->NetPrice = 0 ;
-this->TradeMargine = 0 ;
-this->Description = " ";
-this->Barcode = " ";
-this->CriticalAmount = 0 ;
-this->ProductNumber = " ";
-this->MoreInfo = " ";
-this->BarcodeOnly = 0 ;
-this->isComposite = 0 ;
-this->SpecialTaxDescription = " ";
-this->SpecialTaxValue = 0 ;
-this->TaxID = 0 ;
-this->UnitID = 0 ;
-this->generateBarcode = 0 ;
-this->ShortDescription = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Name = "";
+this->Description = "";
+this->Barcode = "";
+this->ProductNumber = "";
+this->MoreInfo = "";
+this->SpecialTaxDescription = "";
+this->ShortDescription = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("Product");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(14, QSqlRelation("Tax", "TaxID", "Description"));
@@ -122,13 +111,13 @@ Product* Product::GetInstance() {
 return p_instance;
 }
 bool Product::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(ProductID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Product (Name,SellingPrice,NetPrice,TradeMargine,Description,Barcode,CriticalAmount,ProductNumber,MoreInfo,BarcodeOnly,isComposite,SpecialTaxDescription,SpecialTaxValue,TaxID,UnitID,generateBarcode,ShortDescription,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString::number(this->SellingPrice)+"','"+QString::number(this->NetPrice)+"','"+QString::number(this->TradeMargine)+"','"+QString(this->Description)+"','"+QString(this->Barcode)+"','"+QString::number(this->CriticalAmount)+"','"+QString(this->ProductNumber)+"','"+QString(this->MoreInfo)+"','"+QString::number(this->BarcodeOnly)+"','"+QString::number(this->isComposite)+"','"+QString(this->SpecialTaxDescription)+"','"+QString::number(this->SpecialTaxValue)+"','"+QString::number(this->TaxID)+"','"+QString::number(this->UnitID)+"','"+QString::number(this->generateBarcode)+"','"+QString(this->ShortDescription)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Product SET ""Name = '"+QString(this->Name)+"','"+"SellingPrice = '"+QString::number(this->SellingPrice)+"','"+"NetPrice = '"+QString::number(this->NetPrice)+"','"+"TradeMargine = '"+QString::number(this->TradeMargine)+"','"+"Description = '"+QString(this->Description)+"','"+"Barcode = '"+QString(this->Barcode)+"','"+"CriticalAmount = '"+QString::number(this->CriticalAmount)+"','"+"ProductNumber = '"+QString(this->ProductNumber)+"','"+"MoreInfo = '"+QString(this->MoreInfo)+"','"+"BarcodeOnly = '"+QString::number(this->BarcodeOnly)+"','"+"isComposite = '"+QString::number(this->isComposite)+"','"+"SpecialTaxDescription = '"+QString(this->SpecialTaxDescription)+"','"+"SpecialTaxValue = '"+QString::number(this->SpecialTaxValue)+"','"+"TaxID = '"+QString::number(this->TaxID)+"','"+"UnitID = '"+QString::number(this->UnitID)+"','"+"generateBarcode = '"+QString::number(this->generateBarcode)+"','"+"ShortDescription = '"+QString(this->ShortDescription)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductID ='"+QString::number(this->ProductID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Product SET "	"Name = '"+QString(this->Name)+"',"+"SellingPrice = '"+QString::number(this->SellingPrice)+"',"+"NetPrice = '"+QString::number(this->NetPrice)+"',"+"TradeMargine = '"+QString::number(this->TradeMargine)+"',"+"Description = '"+QString(this->Description)+"',"+"Barcode = '"+QString(this->Barcode)+"',"+"CriticalAmount = '"+QString::number(this->CriticalAmount)+"',"+"ProductNumber = '"+QString(this->ProductNumber)+"',"+"MoreInfo = '"+QString(this->MoreInfo)+"',"+"BarcodeOnly = '"+QString::number(this->BarcodeOnly)+"',"+"isComposite = '"+QString::number(this->isComposite)+"',"+"SpecialTaxDescription = '"+QString(this->SpecialTaxDescription)+"',"+"SpecialTaxValue = '"+QString::number(this->SpecialTaxValue)+"',"+"TaxID = '"+QString::number(this->TaxID)+"',"+"UnitID = '"+QString::number(this->UnitID)+"',"+"generateBarcode = '"+QString::number(this->generateBarcode)+"',"+"ShortDescription = '"+QString(this->ShortDescription)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductID ='"+QString::number(this->ProductID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProductID FROM Product WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

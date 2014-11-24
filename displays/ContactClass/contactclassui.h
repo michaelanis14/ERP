@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclassui.h
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,6 +21,7 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QCompleter>
+#include <QMessageBox>
 class ContactClassUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -31,7 +32,7 @@ public:
 	ERPFormBlock* block0Layout;
 	QLineEdit*description;
 	void fill(ContactClass* contactclass);
-	ContactClass* contactclass = new ContactClass();
+ContactClass* contactclass;
 private:
 	static ERPDisplay* p_instance;
 private slots:

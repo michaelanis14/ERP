@@ -9,6 +9,8 @@
 #include <QDateTime>
 
 #include "erpdisplay.h"
+#include "CommonUI/navigationButtons.h"
+#include "CommonUI/HNavigationButtons.h"
 
 class mainwindow : public QWidget
 {
@@ -22,17 +24,33 @@ public:
 	QLabel* label;
 	QLabel *lblContacts;
 	void updateSize();
+	class NavigationButtons* navigation;
+	class HNavigationButtons* innerNavigation;
+	class QToolButton* btnHome;
+	class QToolButton* btnContacts;
+	class QToolButton* btnProducts;
+	class QToolButton* btnAccounting;
+	class QToolButton* btnReports;
 
+
+	class QPushButton* inNavContacts;
+	class QPushButton* inNavcontactPersones;
+	class QPushButton* inNavcontactType;
 private:
 	static mainwindow* p_instance;
 	class ERPDisplay* currentDisplay;
 	class QVBoxLayout* boxLayout;
-	QGridLayout* mainLayout;
 protected:
 	void mousePressEvent(QMouseEvent *event);
 	void resizeEvent(QResizeEvent * event);
 
-
+protected slots:
+	void btnHomeClicked();
+	void btnContactsClicked();
+	void btnProductsClicked();
+	void btnAccountingClicked();
+	void btnReportsClicked();
+	void innerNavClicked();
 };
 
 #endif // MAINWINDOW_H

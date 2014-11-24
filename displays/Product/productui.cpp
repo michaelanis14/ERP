@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,12 @@
 ProductUI::ProductUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+product = new Product();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
 QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +25,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
 QStringList* list = new QStringList(Product::GetStringList());
@@ -101,6 +92,7 @@ ProductUI*ProductUI::GetUI(){
 	return (ProductUI*) p_instance; 
 }
 void ProductUI::fill(Product* product){ 
+clear();
 this->product = product;
 name->setText(product->Name);
 sellingprice->setText(QString::number(product->SellingPrice));
@@ -119,6 +111,7 @@ generatebarcode->setChecked(product->generateBarcode);
 shortdescription->setText(product->ShortDescription);
 } 
 void ProductUI::clear(){ 
+delete this->product;
 sellingprice->setText("");
 netprice->setText("");
 trademargine->setText("");
@@ -140,35 +133,209 @@ if(Product::GetStringList().contains(name->text()))
 {
 Product* con = Product::Get(name->text());
 if(this->product->ProductID != con->ProductID){
-this->product = con;
-fill(this->product);
+fill(con);
 }
 }
 else if(product->ProductID != 0)
 clear();
 }
 void ProductUI::save(){ 
-product->Name = name->text();
-product->SellingPrice = sellingprice->text().toDouble();
-product->NetPrice = netprice->text().toDouble();
-product->TradeMargine = trademargine->text().toDouble();
-product->Description = description->text();
-product->Barcode = barcode->text();
-product->CriticalAmount = criticalamount->text().toDouble();
-product->ProductNumber = productnumber->text();
-product->MoreInfo = moreinfo->text();
-product->BarcodeOnly = barcodeonly->text().toInt();
-product->isComposite = iscomposite->text().toInt();
-product->SpecialTaxDescription = specialtaxdescription->text();
-product->SpecialTaxValue = specialtaxvalue->text().toDouble();
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+product->Name = name->text().trimmed();
+}
+if(sellingprice->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Selling Price Can't be Empty! \n";
+sellingprice->setObjectName("error");
+sellingprice->style()->unpolish(sellingprice);
+sellingprice->style()->polish(sellingprice);
+sellingprice->update();
+}
+else { 
+sellingprice->setObjectName("sellingprice");
+sellingprice->style()->unpolish(sellingprice);
+sellingprice->style()->polish(sellingprice);
+sellingprice->update();
+product->SellingPrice = sellingprice->text().trimmed().toDouble();
+}
+if(netprice->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Net Price Can't be Empty! \n";
+netprice->setObjectName("error");
+netprice->style()->unpolish(netprice);
+netprice->style()->polish(netprice);
+netprice->update();
+}
+else { 
+netprice->setObjectName("netprice");
+netprice->style()->unpolish(netprice);
+netprice->style()->polish(netprice);
+netprice->update();
+product->NetPrice = netprice->text().trimmed().toDouble();
+}
+if(trademargine->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Trade Margine Can't be Empty! \n";
+trademargine->setObjectName("error");
+trademargine->style()->unpolish(trademargine);
+trademargine->style()->polish(trademargine);
+trademargine->update();
+}
+else { 
+trademargine->setObjectName("trademargine");
+trademargine->style()->unpolish(trademargine);
+trademargine->style()->polish(trademargine);
+trademargine->update();
+product->TradeMargine = trademargine->text().trimmed().toDouble();
+}
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+product->Description = description->text().trimmed();
+}
+if(barcode->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Barcode Can't be Empty! \n";
+barcode->setObjectName("error");
+barcode->style()->unpolish(barcode);
+barcode->style()->polish(barcode);
+barcode->update();
+}
+else { 
+barcode->setObjectName("barcode");
+barcode->style()->unpolish(barcode);
+barcode->style()->polish(barcode);
+barcode->update();
+product->Barcode = barcode->text().trimmed();
+}
+if(criticalamount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Critical Amount Can't be Empty! \n";
+criticalamount->setObjectName("error");
+criticalamount->style()->unpolish(criticalamount);
+criticalamount->style()->polish(criticalamount);
+criticalamount->update();
+}
+else { 
+criticalamount->setObjectName("criticalamount");
+criticalamount->style()->unpolish(criticalamount);
+criticalamount->style()->polish(criticalamount);
+criticalamount->update();
+product->CriticalAmount = criticalamount->text().trimmed().toDouble();
+}
+if(productnumber->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Product Number Can't be Empty! \n";
+productnumber->setObjectName("error");
+productnumber->style()->unpolish(productnumber);
+productnumber->style()->polish(productnumber);
+productnumber->update();
+}
+else { 
+productnumber->setObjectName("productnumber");
+productnumber->style()->unpolish(productnumber);
+productnumber->style()->polish(productnumber);
+productnumber->update();
+product->ProductNumber = productnumber->text().trimmed();
+}
+if(moreinfo->text().trimmed().isEmpty()){
+errors = true;
+errorString += "More Info Can't be Empty! \n";
+moreinfo->setObjectName("error");
+moreinfo->style()->unpolish(moreinfo);
+moreinfo->style()->polish(moreinfo);
+moreinfo->update();
+}
+else { 
+moreinfo->setObjectName("moreinfo");
+moreinfo->style()->unpolish(moreinfo);
+moreinfo->style()->polish(moreinfo);
+moreinfo->update();
+product->MoreInfo = moreinfo->text().trimmed();
+}
+product->BarcodeOnly = barcodeonly->text().trimmed().toInt();
+product->isComposite = iscomposite->text().trimmed().toInt();
+if(specialtaxdescription->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Special Tax Description Can't be Empty! \n";
+specialtaxdescription->setObjectName("error");
+specialtaxdescription->style()->unpolish(specialtaxdescription);
+specialtaxdescription->style()->polish(specialtaxdescription);
+specialtaxdescription->update();
+}
+else { 
+specialtaxdescription->setObjectName("specialtaxdescription");
+specialtaxdescription->style()->unpolish(specialtaxdescription);
+specialtaxdescription->style()->polish(specialtaxdescription);
+specialtaxdescription->update();
+product->SpecialTaxDescription = specialtaxdescription->text().trimmed();
+}
+if(specialtaxvalue->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Special Tax Value Can't be Empty! \n";
+specialtaxvalue->setObjectName("error");
+specialtaxvalue->style()->unpolish(specialtaxvalue);
+specialtaxvalue->style()->polish(specialtaxvalue);
+specialtaxvalue->update();
+}
+else { 
+specialtaxvalue->setObjectName("specialtaxvalue");
+specialtaxvalue->style()->unpolish(specialtaxvalue);
+specialtaxvalue->style()->polish(specialtaxvalue);
+specialtaxvalue->update();
+product->SpecialTaxValue = specialtaxvalue->text().trimmed().toDouble();
+}
 if(product->TaxID == 0) 
 product->TaxID = tax->getKey();
 if(product->UnitID == 0) 
 product->UnitID = unit->getKey();
-product->generateBarcode = generatebarcode->text().toInt();
-product->ShortDescription = shortdescription->text();
+product->generateBarcode = generatebarcode->text().trimmed().toInt();
+if(shortdescription->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Short Description Can't be Empty! \n";
+shortdescription->setObjectName("error");
+shortdescription->style()->unpolish(shortdescription);
+shortdescription->style()->polish(shortdescription);
+shortdescription->update();
+}
+else { 
+shortdescription->setObjectName("shortdescription");
+shortdescription->style()->unpolish(shortdescription);
+shortdescription->style()->polish(shortdescription);
+shortdescription->update();
+product->ShortDescription = shortdescription->text().trimmed();
+}
+if(!errors) {
 product->save();
 ProductIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void ProductUI::cancel(){ 
 ProductIndexUI::ShowUI();

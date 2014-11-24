@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,10 +10,9 @@
 ContactType::ContactType()
  : QSqlRelationalTableModel(){
 
-this->ContactTypeID = 0 ;
-this->Description = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Description = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("ContactType");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -54,13 +53,13 @@ ContactType* ContactType::GetInstance() {
 return p_instance;
 }
 bool ContactType::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(ContactTypeID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactType (Description,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Description)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE ContactType SET ""Description = '"+QString(this->Description)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactTypeID ='"+QString::number(this->ContactTypeID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE ContactType SET "	"Description = '"+QString(this->Description)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactTypeID ='"+QString::number(this->ContactTypeID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactTypeID FROM ContactType WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

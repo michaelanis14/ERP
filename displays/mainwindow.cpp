@@ -5,6 +5,8 @@
 #include "mainwindow.h"
 #include "erpdisplay.h"
 #include "displays/Contact/contactui.h"
+#include "displays/ContactPerson/contactpersonindexui.h"
+#include "displays/ContactType/contacttypeindexui.h"
 #include "displays/Contact/contactindexui.h"
 #include "displays/BankAccount/bankaccountui.h"
 /**
@@ -37,12 +39,13 @@ mainwindow::mainwindow()
 	this->setStyleSheet(
 				// make background white
 				"MainWindow { background-color: white; } "
+				"formPanel { background-color: white; } "
 				"QWidget { outline: 0; }"  // removing dotted-border in all controls
 				"QWidget:focus { outline: 0; }"  // removing dotted-border in all controls
 
 				"QMessageBox {font-size:16px; }"
 
-				"QWidget#formPanel { background-color: white; } "
+				//"QWidget#formPanel { background-color: white; } "
 				"QScrollArea { background-color: white; } "
 
 				"QPushButton:checked {	background-color: rgb(200,200,200) }"  // checked style ist wichtig für gedrückte Menü-Buttons
@@ -59,19 +62,23 @@ mainwindow::mainwindow()
 				"QCheckBox::indicator:disabled { background-image: url(:/icons/checkbox/checkbox_disabled.png); } "
 				""
 				"QLineEdit {"
-				"background-color: gray;"
+				//"background-color: gray;"
 				"border-style: outset;"
-				"border-width: 2px;"
-				"border-radius: 10px;"
-				"border-color: beige;"
+				"border-width: 0.5px;"
+				"border-radius: 5px;"
+				"border-color: black;"
 				"font: 14px;"
 				//"min-width: 10em;"
 				//"padding: 6px;"
 				"}"
+
 				"QLineEdit:focus {"
-				"background-color: rgb(76, 200, 98);"
+				//"background-color: rgb(76, 200, 98);"
 				"border-style: inset;"
 				"}"
+				"QLineEdit#error { border-style: outset; border-width: 0.5px; border-radius: 5px; border-color: red;}"
+
+
 				"QWidget#baseWidget {"
 				"border-radius: 5px; "
 				"border: 1px solid black;"
@@ -80,59 +87,69 @@ mainwindow::mainwindow()
 				);
 	this->setMinimumSize(800,600);
 
+	this->setContentsMargins(0, 0, 0, 0);
 
 
 	currentDisplay = 0;
 
-	mainLayout = new QGridLayout (this);
-	mainLayout->setContentsMargins(0, 0, 0, 0);
+	QIcon icon1(":/new/Mainscreen/Resources/Mainscreen/ContactsInactive.png");
 
-	boxLayout = new QVBoxLayout();
-	boxLayout->setContentsMargins(0, 0, 0, 0);
-	//boxLayout->setGeometry(QRect(0,0,900,20));
-	mainLayout->addLayout(boxLayout,1,1,-1,-1);
+	navigation = new NavigationButtons(this);
+	navigation->setGeometry(0,0,120,this->height());
 
 
-	lblContacts = new QLabel();
-	lblContacts->setScaledContents(true);
-	//label->setWordWrap(true);
-	lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsInactive.png"));
+	btnHome = new QToolButton(navigation);
+	btnHome->setIcon(icon1);
+	btnHome->setText("Home");
+	navigation->addButton(btnHome);
+	connect(this->btnHome, SIGNAL(clicked()), this, SLOT(btnHomeClicked()));
 
-	lblContacts->setMaximumHeight(100);
-	lblContacts->setMaximumWidth(100);
-	lblContacts->setObjectName("lblContacts");
+	btnContacts = new QToolButton(navigation);
+	btnContacts->setIcon(icon1);
+	btnContacts->setText("Contacts");
+	navigation->addButton(btnContacts);
+	connect(this->btnContacts, SIGNAL(clicked()), this, SLOT(btnContactsClicked()));
 
-	mainLayout->addWidget(lblContacts,1,0,1,1);
+	btnProducts = new QToolButton(navigation);
+	btnProducts->setIcon(icon1);
+	btnProducts->setText("Products");
+	navigation->addButton(btnProducts);
+	connect(this->btnProducts, SIGNAL(clicked()), this, SLOT(btnProductsClicked()));
 
-	for(int i = 2; i <9 ; i++){
-		label = new QLabel();
-		label->setScaledContents(true);
-		label->setWordWrap(true);
-		label->setText("This is it");
-		label->setMinimumWidth(0);
+	btnAccounting = new QToolButton(navigation);
+	btnAccounting->setIcon(icon1);
+	btnAccounting->setText("Accounting");
+	navigation->addButton(btnAccounting);
+	connect(this->btnAccounting, SIGNAL(clicked()), this, SLOT(btnAccountingClicked()));
 
-		mainLayout->addWidget(label,i,0,1,1);
-	}
+	btnReports = new QToolButton(navigation);
+	btnReports->setIcon(icon1);
+	btnReports->setText("Reports");
+	navigation->addButton(btnReports);
+	connect(this->btnReports, SIGNAL(clicked()), this, SLOT(btnReportsClicked()));
 
-
-
-
-
-	for(int i = 0; i <5 ; i++){
-		label = new QLabel();
-		label->setScaledContents(true);
-		label->setWordWrap(true);
-		label->setText("This is it");
-		//label->setMinimumWidth(0);
-		label->setMaximumHeight(30);
-		//label->setAutoFillBackground(true);
-		mainLayout->addWidget(label,0,i,1,1);
-	}
+	innerNavigation = new HNavigationButtons(this);
+	innerNavigation->setGeometry(this->navigation->width(),0,this->width()-this->navigation->width(),40);
 
 
-	this->setContentsMargins(0, 0, 0, 0);
-	this->setLayout(mainLayout);
-	//this->showFullScreen();
+
+	boxLayout = new QVBoxLayout(this);
+	boxLayout->setContentsMargins(this->navigation->width(), this->innerNavigation->height(), 0, 0);
+
+
+
+
+
+	inNavContacts = new QPushButton(icon1,"Contacts");
+	inNavContacts->setObjectName("inNavContacts");
+	connect(this->inNavContacts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavcontactPersones = new QPushButton(icon1,"ContactPersone");
+	inNavcontactPersones->setObjectName("inNavcontactPersones");
+	connect(this->inNavcontactPersones, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavcontactType = new QPushButton(icon1,"Contact Type");
+	inNavcontactType->setObjectName("inNavcontactType");
+	connect(this->inNavcontactType, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
 
 }
 // initialize static singleton pointer
@@ -158,14 +175,14 @@ void mainwindow::ShowDisplay(ERPDisplay * display) {
 	}
 	//
 	//	display->setAutoFillBackground(true);
-	p_instance->mainLayout->removeItem(p_instance->boxLayout);
-	delete p_instance->boxLayout;
-	p_instance->boxLayout = new QVBoxLayout();
-	p_instance->boxLayout->setContentsMargins(0, 0, 0, 0);
+//	p_instance->mainLayout->removeItem(p_instance->boxLayout);
+	//delete p_instance->boxLayout;
+	//p_instance->boxLayout = new QVBoxLayout(this);
+	//p_instance->boxLayout->setContentsMargins(0, 0, 0, 0);
 	//p_instance->mainLayout->addWidget((QWidget*)display,1,0,1,1);
 	p_instance->boxLayout->addWidget((QWidget*)display);
-	p_instance->mainLayout->addLayout(p_instance->boxLayout,1,1,-1,-1);
-	p_instance->setLayout(p_instance->mainLayout);
+	//p_instance->mainLayout->addLayout(p_instance->boxLayout,1,1,-1,-1);
+	p_instance->setLayout(p_instance->boxLayout);
 
 	//p_instance->mainLayout->addLayout(p_instance->boxLayout,1,1,-1,-1);
 
@@ -204,7 +221,7 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 		if(child->objectName() == "lblContacts"){
 			//		if(!contactIndexUI::GetUI()->isVisible()){
 			//	qDebug() << child->objectName();
-			lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
+		//	lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
 			//ContactUI::ShowUI();
 			//BankAccountUI::ShowUI();
 			ContactIndexUI::ShowUI();
@@ -237,9 +254,40 @@ void mainwindow::updateSize(){
 			p_instance->currentDisplay->repaint();
 		}
 		//this->repaint();
-		p_instance->currentDisplay->formPanel->setGeometry(0,0,this->width(),height);
+	//	qDebug() <<this->width()- this->navigation->width() <<this->width() <<this->navigation->width();
+		p_instance->currentDisplay->formPanel->setGeometry(0,0,(this->width()- this->navigation->width()),height);
 
 	}
+}
+void mainwindow::btnHomeClicked() {
+innerNavigation->removeAll();
+	qDebug() << "wassup";
+
+}
+void mainwindow::btnContactsClicked(){
+innerNavigation->removeAll();
+innerNavigation->addButton(inNavContacts);
+innerNavigation->addButton(inNavcontactPersones);
+innerNavigation->addButton(inNavcontactType);
+
+ContactIndexUI::ShowUI();
+}
+
+void mainwindow::btnProductsClicked(){innerNavigation->removeAll();innerNavigation->addButton(inNavContacts);}
+void mainwindow::btnAccountingClicked(){;}
+void mainwindow::btnReportsClicked(){;}
+void mainwindow::innerNavClicked(){
+	  QPushButton* sender = (QPushButton*) this->sender();
+	  if(!sender)
+		  return;
+	  if(sender->objectName() == "inNavContacts")
+		  ContactIndexUI::ShowUI();
+	  else  if(sender->objectName() == "inNavcontactPersones")
+		  ContactPersonIndexUI::ShowUI();
+	  else  if(sender->objectName() == "inNavcontactType")
+		  ContactTypeIndexUI::ShowUI();
+
+
 }
 
 void mainwindow::resizeEvent(QResizeEvent * event){

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,11 @@
 BankAccountUI::BankAccountUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+bankaccount = new BankAccount();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +24,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
 QStringList* list = new QStringList(BankAccount::GetStringList());
@@ -87,6 +77,7 @@ BankAccountUI*BankAccountUI::GetUI(){
 	return (BankAccountUI*) p_instance; 
 }
 void BankAccountUI::fill(BankAccount* bankaccount){ 
+clear();
 this->bankaccount = bankaccount;
 name->setText(bankaccount->Name);
 bankaddress->setText(bankaccount->BankAddress);
@@ -99,6 +90,7 @@ zipcode->setText(bankaccount->ZipCode);
 bankcountrycode->setText(bankaccount->BankCountryCode);
 } 
 void BankAccountUI::clear(){ 
+delete this->bankaccount;
 bankaddress->setText("");
 bankcode->setText("");
 accountname->setText("");
@@ -114,31 +106,163 @@ if(BankAccount::GetStringList().contains(name->text()))
 {
 BankAccount* con = BankAccount::Get(name->text());
 if(this->bankaccount->BankAccountID != con->BankAccountID){
-this->bankaccount = con;
-fill(this->bankaccount);
+fill(con);
 }
 }
 else if(bankaccount->BankAccountID != 0)
 clear();
 }
 void BankAccountUI::save(){ 
-bankaccount->Name = name->text();
-bankaccount->BankAddress = bankaddress->text();
-bankaccount->BankCode = bankcode->text();
-bankaccount->AccountName = accountname->text();
-bankaccount->AccountNumber = accountnumber->text();
-bankaccount->IBAN = iban->text();
-bankaccount->BIC = bic->text();
-bankaccount->ZipCode = zipcode->text();
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+bankaccount->Name = name->text().trimmed();
+}
+if(bankaddress->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Bank Address Can't be Empty! \n";
+bankaddress->setObjectName("error");
+bankaddress->style()->unpolish(bankaddress);
+bankaddress->style()->polish(bankaddress);
+bankaddress->update();
+}
+else { 
+bankaddress->setObjectName("bankaddress");
+bankaddress->style()->unpolish(bankaddress);
+bankaddress->style()->polish(bankaddress);
+bankaddress->update();
+bankaccount->BankAddress = bankaddress->text().trimmed();
+}
+if(bankcode->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Bank Code Can't be Empty! \n";
+bankcode->setObjectName("error");
+bankcode->style()->unpolish(bankcode);
+bankcode->style()->polish(bankcode);
+bankcode->update();
+}
+else { 
+bankcode->setObjectName("bankcode");
+bankcode->style()->unpolish(bankcode);
+bankcode->style()->polish(bankcode);
+bankcode->update();
+bankaccount->BankCode = bankcode->text().trimmed();
+}
+if(accountname->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Account Name Can't be Empty! \n";
+accountname->setObjectName("error");
+accountname->style()->unpolish(accountname);
+accountname->style()->polish(accountname);
+accountname->update();
+}
+else { 
+accountname->setObjectName("accountname");
+accountname->style()->unpolish(accountname);
+accountname->style()->polish(accountname);
+accountname->update();
+bankaccount->AccountName = accountname->text().trimmed();
+}
+if(accountnumber->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Account Number Can't be Empty! \n";
+accountnumber->setObjectName("error");
+accountnumber->style()->unpolish(accountnumber);
+accountnumber->style()->polish(accountnumber);
+accountnumber->update();
+}
+else { 
+accountnumber->setObjectName("accountnumber");
+accountnumber->style()->unpolish(accountnumber);
+accountnumber->style()->polish(accountnumber);
+accountnumber->update();
+bankaccount->AccountNumber = accountnumber->text().trimmed();
+}
+if(iban->text().trimmed().isEmpty()){
+errors = true;
+errorString += "I B A N Can't be Empty! \n";
+iban->setObjectName("error");
+iban->style()->unpolish(iban);
+iban->style()->polish(iban);
+iban->update();
+}
+else { 
+iban->setObjectName("iban");
+iban->style()->unpolish(iban);
+iban->style()->polish(iban);
+iban->update();
+bankaccount->IBAN = iban->text().trimmed();
+}
+if(bic->text().trimmed().isEmpty()){
+errors = true;
+errorString += "B I C Can't be Empty! \n";
+bic->setObjectName("error");
+bic->style()->unpolish(bic);
+bic->style()->polish(bic);
+bic->update();
+}
+else { 
+bic->setObjectName("bic");
+bic->style()->unpolish(bic);
+bic->style()->polish(bic);
+bic->update();
+bankaccount->BIC = bic->text().trimmed();
+}
+if(zipcode->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Zip Code Can't be Empty! \n";
+zipcode->setObjectName("error");
+zipcode->style()->unpolish(zipcode);
+zipcode->style()->polish(zipcode);
+zipcode->update();
+}
+else { 
+zipcode->setObjectName("zipcode");
+zipcode->style()->unpolish(zipcode);
+zipcode->style()->polish(zipcode);
+zipcode->update();
+bankaccount->ZipCode = zipcode->text().trimmed();
+}
 if(bankaccount->CurrencyID == 0) 
 bankaccount->CurrencyID = currency->getKey();
 if(bankaccount->ContactID == 0) 
 bankaccount->ContactID = contact->getKey();
 if(bankaccount->CountryID == 0) 
 bankaccount->CountryID = country->getKey();
-bankaccount->BankCountryCode = bankcountrycode->text();
+if(bankcountrycode->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Bank Country Code Can't be Empty! \n";
+bankcountrycode->setObjectName("error");
+bankcountrycode->style()->unpolish(bankcountrycode);
+bankcountrycode->style()->polish(bankcountrycode);
+bankcountrycode->update();
+}
+else { 
+bankcountrycode->setObjectName("bankcountrycode");
+bankcountrycode->style()->unpolish(bankcountrycode);
+bankcountrycode->style()->polish(bankcountrycode);
+bankcountrycode->update();
+bankaccount->BankCountryCode = bankcountrycode->text().trimmed();
+}
+if(!errors) {
 bankaccount->save();
 BankAccountIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void BankAccountUI::cancel(){ 
 BankAccountIndexUI::ShowUI();

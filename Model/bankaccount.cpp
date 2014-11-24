@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccount.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,21 +10,17 @@
 BankAccount::BankAccount()
  : QSqlRelationalTableModel(){
 
-this->BankAccountID = 0 ;
-this->Name = " ";
-this->BankAddress = " ";
-this->BankCode = " ";
-this->AccountName = " ";
-this->AccountNumber = " ";
-this->IBAN = " ";
-this->BIC = " ";
-this->ZipCode = " ";
-this->CurrencyID = 0 ;
-this->ContactID = 0 ;
-this->CountryID = 0 ;
-this->BankCountryCode = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Name = "";
+this->BankAddress = "";
+this->BankCode = "";
+this->AccountName = "";
+this->AccountNumber = "";
+this->IBAN = "";
+this->BIC = "";
+this->ZipCode = "";
+this->BankCountryCode = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("BankAccount");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(9, QSqlRelation("Currency", "CurrencyID", "Description"));
@@ -104,13 +100,13 @@ BankAccount* BankAccount::GetInstance() {
 return p_instance;
 }
 bool BankAccount::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(BankAccountID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO BankAccount (Name,BankAddress,BankCode,AccountName,AccountNumber,IBAN,BIC,ZipCode,CurrencyID,ContactID,CountryID,BankCountryCode,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->BankAddress)+"','"+QString(this->BankCode)+"','"+QString(this->AccountName)+"','"+QString(this->AccountNumber)+"','"+QString(this->IBAN)+"','"+QString(this->BIC)+"','"+QString(this->ZipCode)+"','"+QString::number(this->CurrencyID)+"','"+QString::number(this->ContactID)+"','"+QString::number(this->CountryID)+"','"+QString(this->BankCountryCode)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE BankAccount SET ""Name = '"+QString(this->Name)+"','"+"BankAddress = '"+QString(this->BankAddress)+"','"+"BankCode = '"+QString(this->BankCode)+"','"+"AccountName = '"+QString(this->AccountName)+"','"+"AccountNumber = '"+QString(this->AccountNumber)+"','"+"IBAN = '"+QString(this->IBAN)+"','"+"BIC = '"+QString(this->BIC)+"','"+"ZipCode = '"+QString(this->ZipCode)+"','"+"CurrencyID = '"+QString::number(this->CurrencyID)+"','"+"ContactID = '"+QString::number(this->ContactID)+"','"+"CountryID = '"+QString::number(this->CountryID)+"','"+"BankCountryCode = '"+QString(this->BankCountryCode)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE BankAccountID ='"+QString::number(this->BankAccountID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE BankAccount SET "	"Name = '"+QString(this->Name)+"',"+"BankAddress = '"+QString(this->BankAddress)+"',"+"BankCode = '"+QString(this->BankCode)+"',"+"AccountName = '"+QString(this->AccountName)+"',"+"AccountNumber = '"+QString(this->AccountNumber)+"',"+"IBAN = '"+QString(this->IBAN)+"',"+"BIC = '"+QString(this->BIC)+"',"+"ZipCode = '"+QString(this->ZipCode)+"',"+"CurrencyID = '"+QString::number(this->CurrencyID)+"',"+"ContactID = '"+QString::number(this->ContactID)+"',"+"CountryID = '"+QString::number(this->CountryID)+"',"+"BankCountryCode = '"+QString(this->BankCountryCode)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE BankAccountID ='"+QString::number(this->BankAccountID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  BankAccountID FROM BankAccount WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

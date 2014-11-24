@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: user.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,16 +10,13 @@
 User::User()
  : QSqlRelationalTableModel(){
 
-this->UserID = 0 ;
-this->Name = " ";
-this->Username = " ";
-this->Password = " ";
-this->LastLogin = " ";
-this->EmployeeID = 0 ;
-this->active = 0 ;
-this->lastIP = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Name = "";
+this->Username = "";
+this->Password = "";
+this->LastLogin = "";
+this->lastIP = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("User");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(5, QSqlRelation("Employee", "EmployeeID", "Name"));
@@ -80,13 +77,13 @@ User* User::GetInstance() {
 return p_instance;
 }
 bool User::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(UserID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO User (Name,Username,Password,LastLogin,EmployeeID,active,lastIP,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->Username)+"','"+QString(this->Password)+"','"+QString(this->LastLogin)+"','"+QString::number(this->EmployeeID)+"','"+QString::number(this->active)+"','"+QString(this->lastIP)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE User SET ""Name = '"+QString(this->Name)+"','"+"Username = '"+QString(this->Username)+"','"+"Password = '"+QString(this->Password)+"','"+"LastLogin = '"+QString(this->LastLogin)+"','"+"EmployeeID = '"+QString::number(this->EmployeeID)+"','"+"active = '"+QString::number(this->active)+"','"+"lastIP = '"+QString(this->lastIP)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE UserID ='"+QString::number(this->UserID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE User SET "	"Name = '"+QString(this->Name)+"',"+"Username = '"+QString(this->Username)+"',"+"Password = '"+QString(this->Password)+"',"+"LastLogin = '"+QString(this->LastLogin)+"',"+"EmployeeID = '"+QString::number(this->EmployeeID)+"',"+"active = '"+QString::number(this->active)+"',"+"lastIP = '"+QString(this->lastIP)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE UserID ='"+QString::number(this->UserID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  UserID FROM User WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

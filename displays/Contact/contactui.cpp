@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,12 @@
 ContactUI::ContactUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+contact = new Contact();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +25,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 personalsalutation = new QLineEdit();
 block0Layout->addRow("Personal Salutation",personalsalutation);
@@ -137,6 +128,7 @@ ContactUI*ContactUI::GetUI(){
 void ContactUI::addBankAccount(){ 
 BankAccountUI* bankaccountui = new BankAccountUI();
 bankaccountui->block0Layout->removeRow(bankaccountui->contact);
+bankaccountui->controllers->setFixedHeight(0);
 BankAccounts.append(bankaccountui);
 block5Layout->addWidget(bankaccountui);
 mainwindow::GetMainDisplay()->updateSize();
@@ -144,6 +136,7 @@ mainwindow::GetMainDisplay()->updateSize();
 void ContactUI::addBankAccount(BankAccount* BankAccount){ 
 BankAccountUI* bankaccountui = new BankAccountUI();
 bankaccountui->block0Layout->removeRow(bankaccountui->contact);
+bankaccountui->controllers->setFixedHeight(0);
 bankaccountui->fill(BankAccount);
 BankAccounts.append(bankaccountui);
 block5Layout->addWidget(bankaccountui);
@@ -153,11 +146,13 @@ void ContactUI::removeBankAccount(){
 if(BankAccounts.count()  > 0){
 BankAccountUI* bankaccountui = BankAccounts.takeLast();
 block5Layout->boxLayout->removeWidget(bankaccountui);
+bankaccountui->setHidden(true);
 delete bankaccountui;
 mainwindow::GetMainDisplay()->updateSize();
 }
 }
 void ContactUI::fill(Contact* contact){ 
+clear();
 this->contact = contact;
 personalsalutation->setText(contact->PersonalSalutation);
 salutation->setText(contact->Salutation);
@@ -177,12 +172,12 @@ email->setText(contact->Email);
 email2->setText(contact->Email2);
 website->setText(contact->webSite);
 taxnumber->setText(contact->TaxNumber);
-foreach(BankAccountUI* bankaccount, BankAccounts) removeBankAccount();
 foreach(BankAccount* bankaccount, contact->bankaccounts) {
 addBankAccount(bankaccount);
 }
 } 
 void ContactUI::clear(){ 
+delete this->contact;
 personalsalutation->setText("");
 salutation->setText("");
 lastname->setText("");
@@ -200,7 +195,11 @@ email->setText("");
 email2->setText("");
 website->setText("");
 taxnumber->setText("");
-foreach(BankAccountUI* bankaccount, BankAccounts) removeBankAccount();
+QList<BankAccountUI *> Widgets = this->findChildren<BankAccountUI *>();
+foreach(BankAccountUI * child, Widgets)
+{ BankAccounts.clear();
+delete child;
+}
 this->contact = new Contact();
 } 
 void ContactUI::selectContact(){ 
@@ -208,63 +207,300 @@ if(Contact::GetStringList().contains(name->text()))
 {
 Contact* con = Contact::Get(name->text());
 if(this->contact->ContactID != con->ContactID){
-this->contact = con;
-fill(this->contact);
+fill(con);
 }
 }
 else if(contact->ContactID != 0)
 clear();
 }
 void ContactUI::save(){ 
-contact->PersonalSalutation = personalsalutation->text();
-contact->Salutation = salutation->text();
-contact->Name = name->text();
-contact->LastName = lastname->text();
-contact->BirthdateOrDateOfFoundation = birthdateordateoffoundation->text();
+bool errors = false;
+QString errorString =  "";
+if(personalsalutation->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Personal Salutation Can't be Empty! \n";
+personalsalutation->setObjectName("error");
+personalsalutation->style()->unpolish(personalsalutation);
+personalsalutation->style()->polish(personalsalutation);
+personalsalutation->update();
+}
+else { 
+personalsalutation->setObjectName("personalsalutation");
+personalsalutation->style()->unpolish(personalsalutation);
+personalsalutation->style()->polish(personalsalutation);
+personalsalutation->update();
+contact->PersonalSalutation = personalsalutation->text().trimmed();
+}
+if(salutation->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Salutation Can't be Empty! \n";
+salutation->setObjectName("error");
+salutation->style()->unpolish(salutation);
+salutation->style()->polish(salutation);
+salutation->update();
+}
+else { 
+salutation->setObjectName("salutation");
+salutation->style()->unpolish(salutation);
+salutation->style()->polish(salutation);
+salutation->update();
+contact->Salutation = salutation->text().trimmed();
+}
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+contact->Name = name->text().trimmed();
+}
+if(lastname->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Last Name Can't be Empty! \n";
+lastname->setObjectName("error");
+lastname->style()->unpolish(lastname);
+lastname->style()->polish(lastname);
+lastname->update();
+}
+else { 
+lastname->setObjectName("lastname");
+lastname->style()->unpolish(lastname);
+lastname->style()->polish(lastname);
+lastname->update();
+contact->LastName = lastname->text().trimmed();
+}
+if(birthdateordateoffoundation->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Birthdate Or Date Of Foundation Can't be Empty! \n";
+birthdateordateoffoundation->setObjectName("error");
+birthdateordateoffoundation->style()->unpolish(birthdateordateoffoundation);
+birthdateordateoffoundation->style()->polish(birthdateordateoffoundation);
+birthdateordateoffoundation->update();
+}
+else { 
+birthdateordateoffoundation->setObjectName("birthdateordateoffoundation");
+birthdateordateoffoundation->style()->unpolish(birthdateordateoffoundation);
+birthdateordateoffoundation->style()->polish(birthdateordateoffoundation);
+birthdateordateoffoundation->update();
+contact->BirthdateOrDateOfFoundation = birthdateordateoffoundation->text().trimmed();
+}
 if(contact->ContactTypeID == 0) 
 contact->ContactTypeID = contacttype->getKey();
 if(contact->ContactClassID == 0) 
 contact->ContactClassID = contactclass->getKey();
-contact->ContactNumber = contactnumber->text().toInt();
-contact->Address = address->text();
-contact->PostalCode = postalcode->text();
-contact->City = city->text();
+if(contactnumber->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Contact Number Can't be Empty! \n";
+contactnumber->setObjectName("error");
+contactnumber->style()->unpolish(contactnumber);
+contactnumber->style()->polish(contactnumber);
+contactnumber->update();
+}
+else { 
+contactnumber->setObjectName("contactnumber");
+contactnumber->style()->unpolish(contactnumber);
+contactnumber->style()->polish(contactnumber);
+contactnumber->update();
+contact->ContactNumber = contactnumber->text().trimmed().toInt();
+}
+if(address->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Address Can't be Empty! \n";
+address->setObjectName("error");
+address->style()->unpolish(address);
+address->style()->polish(address);
+address->update();
+}
+else { 
+address->setObjectName("address");
+address->style()->unpolish(address);
+address->style()->polish(address);
+address->update();
+contact->Address = address->text().trimmed();
+}
+if(postalcode->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Postal Code Can't be Empty! \n";
+postalcode->setObjectName("error");
+postalcode->style()->unpolish(postalcode);
+postalcode->style()->polish(postalcode);
+postalcode->update();
+}
+else { 
+postalcode->setObjectName("postalcode");
+postalcode->style()->unpolish(postalcode);
+postalcode->style()->polish(postalcode);
+postalcode->update();
+contact->PostalCode = postalcode->text().trimmed();
+}
+if(city->text().trimmed().isEmpty()){
+errors = true;
+errorString += "City Can't be Empty! \n";
+city->setObjectName("error");
+city->style()->unpolish(city);
+city->style()->polish(city);
+city->update();
+}
+else { 
+city->setObjectName("city");
+city->style()->unpolish(city);
+city->style()->polish(city);
+city->update();
+contact->City = city->text().trimmed();
+}
 if(contact->CountryID == 0) 
 contact->CountryID = country->getKey();
 if(contact->ContactStatusID == 0) 
 contact->ContactStatusID = contactstatus->getKey();
-contact->Active = active->text().toInt();
+contact->Active = active->text().trimmed().toInt();
 if(contact->EmployeeID == 0) 
 contact->EmployeeID = employee->getKey();
-contact->PhoneNum = phonenum->text();
-contact->PhoneNum2 = phonenum2->text();
-contact->Fax = fax->text();
-contact->Mobile = mobile->text();
-contact->Email = email->text();
-contact->Email2 = email2->text();
-contact->webSite = website->text();
-contact->TaxNumber = taxnumber->text();
-contact->save();
-foreach(BankAccountUI* bankaccountui, BankAccounts) {
-bool saved = false;
-BankAccount* toRemove;
-if(bankaccountui->bankaccount->BankAccountID == 0){
-bankaccountui->bankaccount->ContactID =  contact->ContactID;
-bankaccountui->save();
+if(phonenum->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Phone Num Can't be Empty! \n";
+phonenum->setObjectName("error");
+phonenum->style()->unpolish(phonenum);
+phonenum->style()->polish(phonenum);
+phonenum->update();
 }
-else{
-foreach(BankAccount* bankaccount,contact->bankaccounts){
-toRemove = bankaccount;
-if(bankaccount->BankAccountID == bankaccountui->bankaccount->BankAccountID){
-bankaccountui->save();
-saved = true;
-}else 
- saved = false;
-} if(!saved){
-toRemove->remove();
-} 	}
-	}
+else { 
+phonenum->setObjectName("phonenum");
+phonenum->style()->unpolish(phonenum);
+phonenum->style()->polish(phonenum);
+phonenum->update();
+contact->PhoneNum = phonenum->text().trimmed();
+}
+if(phonenum2->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Phone Num2 Can't be Empty! \n";
+phonenum2->setObjectName("error");
+phonenum2->style()->unpolish(phonenum2);
+phonenum2->style()->polish(phonenum2);
+phonenum2->update();
+}
+else { 
+phonenum2->setObjectName("phonenum2");
+phonenum2->style()->unpolish(phonenum2);
+phonenum2->style()->polish(phonenum2);
+phonenum2->update();
+contact->PhoneNum2 = phonenum2->text().trimmed();
+}
+if(fax->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Fax Can't be Empty! \n";
+fax->setObjectName("error");
+fax->style()->unpolish(fax);
+fax->style()->polish(fax);
+fax->update();
+}
+else { 
+fax->setObjectName("fax");
+fax->style()->unpolish(fax);
+fax->style()->polish(fax);
+fax->update();
+contact->Fax = fax->text().trimmed();
+}
+if(mobile->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Mobile Can't be Empty! \n";
+mobile->setObjectName("error");
+mobile->style()->unpolish(mobile);
+mobile->style()->polish(mobile);
+mobile->update();
+}
+else { 
+mobile->setObjectName("mobile");
+mobile->style()->unpolish(mobile);
+mobile->style()->polish(mobile);
+mobile->update();
+contact->Mobile = mobile->text().trimmed();
+}
+if(email->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Email Can't be Empty! \n";
+email->setObjectName("error");
+email->style()->unpolish(email);
+email->style()->polish(email);
+email->update();
+}
+else { 
+email->setObjectName("email");
+email->style()->unpolish(email);
+email->style()->polish(email);
+email->update();
+contact->Email = email->text().trimmed();
+}
+if(email2->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Email2 Can't be Empty! \n";
+email2->setObjectName("error");
+email2->style()->unpolish(email2);
+email2->style()->polish(email2);
+email2->update();
+}
+else { 
+email2->setObjectName("email2");
+email2->style()->unpolish(email2);
+email2->style()->polish(email2);
+email2->update();
+contact->Email2 = email2->text().trimmed();
+}
+if(website->text().trimmed().isEmpty()){
+errors = true;
+errorString += "webSite Can't be Empty! \n";
+website->setObjectName("error");
+website->style()->unpolish(website);
+website->style()->polish(website);
+website->update();
+}
+else { 
+website->setObjectName("website");
+website->style()->unpolish(website);
+website->style()->polish(website);
+website->update();
+contact->webSite = website->text().trimmed();
+}
+if(taxnumber->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Tax Number Can't be Empty! \n";
+taxnumber->setObjectName("error");
+taxnumber->style()->unpolish(taxnumber);
+taxnumber->style()->polish(taxnumber);
+taxnumber->update();
+}
+else { 
+taxnumber->setObjectName("taxnumber");
+taxnumber->style()->unpolish(taxnumber);
+taxnumber->style()->polish(taxnumber);
+taxnumber->update();
+contact->TaxNumber = taxnumber->text().trimmed();
+}
+if(!errors) {
+contact->save();
+for(int i = 0; i < BankAccounts.length(); i++){
+BankAccounts.at(i)->bankaccount->ContactID= contact->ContactID;
+BankAccounts.at(i)->save(); 
+}
+for(int i = 0; i < contact->bankaccounts.length(); i++){
+bool flag = false;
+for(int j = 0; j < BankAccounts.length(); j++){
+if(contact->bankaccounts.at(i)->BankAccountID == BankAccounts.at(j)->bankaccount->BankAccountID){
+flag = true;}}
+if(!flag){
+contact->bankaccounts.at(i)->remove();}
+}
 ContactIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void ContactUI::cancel(){ 
 ContactIndexUI::ShowUI();

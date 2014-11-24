@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: userui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,11 @@
 UserUI::UserUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+user = new User();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +24,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
 QStringList* list = new QStringList(User::GetStringList());
@@ -75,6 +65,7 @@ UserUI*UserUI::GetUI(){
 	return (UserUI*) p_instance; 
 }
 void UserUI::fill(User* user){ 
+clear();
 this->user = user;
 name->setText(user->Name);
 username->setText(user->Username);
@@ -84,6 +75,7 @@ active->setChecked(user->active);
 lastip->setText(user->lastIP);
 } 
 void UserUI::clear(){ 
+delete this->user;
 username->setText("");
 password->setText("");
 lastlogin->setText("");
@@ -96,24 +88,100 @@ if(User::GetStringList().contains(name->text()))
 {
 User* con = User::Get(name->text());
 if(this->user->UserID != con->UserID){
-this->user = con;
-fill(this->user);
+fill(con);
 }
 }
 else if(user->UserID != 0)
 clear();
 }
 void UserUI::save(){ 
-user->Name = name->text();
-user->Username = username->text();
-user->Password = password->text();
-user->LastLogin = lastlogin->text();
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+user->Name = name->text().trimmed();
+}
+if(username->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Username Can't be Empty! \n";
+username->setObjectName("error");
+username->style()->unpolish(username);
+username->style()->polish(username);
+username->update();
+}
+else { 
+username->setObjectName("username");
+username->style()->unpolish(username);
+username->style()->polish(username);
+username->update();
+user->Username = username->text().trimmed();
+}
+if(password->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Password Can't be Empty! \n";
+password->setObjectName("error");
+password->style()->unpolish(password);
+password->style()->polish(password);
+password->update();
+}
+else { 
+password->setObjectName("password");
+password->style()->unpolish(password);
+password->style()->polish(password);
+password->update();
+user->Password = password->text().trimmed();
+}
+if(lastlogin->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Last Login Can't be Empty! \n";
+lastlogin->setObjectName("error");
+lastlogin->style()->unpolish(lastlogin);
+lastlogin->style()->polish(lastlogin);
+lastlogin->update();
+}
+else { 
+lastlogin->setObjectName("lastlogin");
+lastlogin->style()->unpolish(lastlogin);
+lastlogin->style()->polish(lastlogin);
+lastlogin->update();
+user->LastLogin = lastlogin->text().trimmed();
+}
 if(user->EmployeeID == 0) 
 user->EmployeeID = employee->getKey();
-user->active = active->text().toInt();
-user->lastIP = lastip->text();
+user->active = active->text().trimmed().toInt();
+if(lastip->text().trimmed().isEmpty()){
+errors = true;
+errorString += "lastI P Can't be Empty! \n";
+lastip->setObjectName("error");
+lastip->style()->unpolish(lastip);
+lastip->style()->polish(lastip);
+lastip->update();
+}
+else { 
+lastip->setObjectName("lastip");
+lastip->style()->unpolish(lastip);
+lastip->style()->polish(lastip);
+lastip->update();
+user->lastIP = lastip->text().trimmed();
+}
+if(!errors) {
 user->save();
 UserIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void UserUI::cancel(){ 
 UserIndexUI::ShowUI();

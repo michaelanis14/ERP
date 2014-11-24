@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,23 +10,19 @@
 ContactPerson::ContactPerson()
  : QSqlRelationalTableModel(){
 
-this->ContactPersonID = 0 ;
-this->PersonalSalut = " ";
-this->TitlePrefix = " ";
-this->Name = " ";
-this->LastName = " ";
-this->Position = " ";
-this->Birthdate = " ";
-this->ContactPersoneNumber = 0 ;
-this->Email = " ";
-this->PhoneNum = " ";
-this->PhoneNum2 = " ";
-this->Mobile = " ";
-this->Fax = " ";
-this->active = 0 ;
-this->ContactID = 0 ;
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->PersonalSalut = "";
+this->TitlePrefix = "";
+this->Name = "";
+this->LastName = "";
+this->Position = "";
+this->Birthdate = "";
+this->Email = "";
+this->PhoneNum = "";
+this->PhoneNum2 = "";
+this->Mobile = "";
+this->Fax = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("ContactPerson");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(14, QSqlRelation("Contact", "ContactID", "Name"));
@@ -108,13 +104,13 @@ ContactPerson* ContactPerson::GetInstance() {
 return p_instance;
 }
 bool ContactPerson::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(ContactPersonID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactPerson (PersonalSalut,TitlePrefix,Name,LastName,Position,Birthdate,ContactPersoneNumber,Email,PhoneNum,PhoneNum2,Mobile,Fax,active,ContactID,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->PersonalSalut)+"','"+QString(this->TitlePrefix)+"','"+QString(this->Name)+"','"+QString(this->LastName)+"','"+QString(this->Position)+"','"+QString(this->Birthdate)+"','"+QString::number(this->ContactPersoneNumber)+"','"+QString(this->Email)+"','"+QString(this->PhoneNum)+"','"+QString(this->PhoneNum2)+"','"+QString(this->Mobile)+"','"+QString(this->Fax)+"','"+QString::number(this->active)+"','"+QString::number(this->ContactID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE ContactPerson SET ""PersonalSalut = '"+QString(this->PersonalSalut)+"','"+"TitlePrefix = '"+QString(this->TitlePrefix)+"','"+"Name = '"+QString(this->Name)+"','"+"LastName = '"+QString(this->LastName)+"','"+"Position = '"+QString(this->Position)+"','"+"Birthdate = '"+QString(this->Birthdate)+"','"+"ContactPersoneNumber = '"+QString::number(this->ContactPersoneNumber)+"','"+"Email = '"+QString(this->Email)+"','"+"PhoneNum = '"+QString(this->PhoneNum)+"','"+"PhoneNum2 = '"+QString(this->PhoneNum2)+"','"+"Mobile = '"+QString(this->Mobile)+"','"+"Fax = '"+QString(this->Fax)+"','"+"active = '"+QString::number(this->active)+"','"+"ContactID = '"+QString::number(this->ContactID)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactPersonID ='"+QString::number(this->ContactPersonID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE ContactPerson SET "	"PersonalSalut = '"+QString(this->PersonalSalut)+"',"+"TitlePrefix = '"+QString(this->TitlePrefix)+"',"+"Name = '"+QString(this->Name)+"',"+"LastName = '"+QString(this->LastName)+"',"+"Position = '"+QString(this->Position)+"',"+"Birthdate = '"+QString(this->Birthdate)+"',"+"ContactPersoneNumber = '"+QString::number(this->ContactPersoneNumber)+"',"+"Email = '"+QString(this->Email)+"',"+"PhoneNum = '"+QString(this->PhoneNum)+"',"+"PhoneNum2 = '"+QString(this->PhoneNum2)+"',"+"Mobile = '"+QString(this->Mobile)+"',"+"Fax = '"+QString(this->Fax)+"',"+"active = '"+QString::number(this->active)+"',"+"ContactID = '"+QString::number(this->ContactID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactPersonID ='"+QString::number(this->ContactPersonID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactPersonID FROM ContactPerson WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

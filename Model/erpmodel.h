@@ -9,6 +9,7 @@
 
 #include <QSqlQuery>
 
+
 class ErpModel
 {
 public:

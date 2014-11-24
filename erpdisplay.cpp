@@ -13,52 +13,40 @@
 */
 ERPDisplay::ERPDisplay(QWidget *parent) : QWidget(parent) {
 
-	// prepare this widget, where the rest of the GUI-elements reside
-  //  this->setGeometry(0,0,480,272);
 	this->setContentsMargins(0,0,0,0);
 	setMouseTracking( true );
-	// prepare ScrollArea where the form panel resides
+
+
 	scrollAreaFormPanel = new QScrollArea(this);
-	scrollAreaFormPanel->setObjectName("scrollAreaFormPanel");  // for debugging
-	//scrollAreaFormPanel->setGeometry(0,0,1024,623);
+	scrollAreaFormPanel->setObjectName("scrollAreaFormPanel");
 	scrollAreaFormPanel->setContentsMargins(0,0,0,0);
-	//scrollAreaFormPanel->setAutoFillBackground(false);
 	scrollAreaFormPanel->setFrameStyle(QFrame::NoFrame);
 	//scrollAreaFormPanel->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	//scrollAreaFormPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	scrollAreaFormPanel->setGeometry(0,0,800,530);
 
-	// prepare form panel, where the rest of the GUI-elements reside
-	formPanel = new QWidget(scrollAreaFormPanel);
-
-	//formPanel->setAutoFillBackground(false);
-	formPanel->setObjectName("formPanel");  // for stylesheet reference
+	formPanel = new QWidget(scrollAreaFormPanel);// for stylesheet reference
 	formPanel->setFixedWidth(800);
-
 	formPanel->setContentsMargins(0,0,0,0);
+	formPanel->setObjectName("formPanel");
+
 //	formPanel->setFont(font3);
-	scrollAreaFormPanel->setWidget(this->formPanel);  // coordinates of formPanel are relative to scrollArea now
+	scrollAreaFormPanel->setWidget(this->formPanel);
 
-	scrollAreaFormPanel->setGeometry(0,0,800,600);  // nimm Rücksicht auf Wizards, wo es keine Toolbar gibt
-	//scrollAreaFormPanel->setBaseSize(800,600);
-	//scrollAreaFormPanel->setMinimumHeight(310);
-	//crollAreaFormPanel->setMaximumHeight(910);
-
+	controllers = new HNavigationButtons(this);
+	controllers->setGeometry(0,this->scrollAreaFormPanel->height(),this->width(),40);
 
 }
 void ERPDisplay::updateSize(){
 
 }
 void ERPDisplay::resizeEvent(QResizeEvent * event){
-	//qDebug()  << "ErpDisplay";
-	if(true){
-		//this->formPanel->setGeometry(0,0,);
-		//this->formPanel->setFixedHeight(event->size().height());
+	if((event->size().height() - this->controllers->height()) > 50 && event->size().width() > 50){
 		this->formPanel->setFixedWidth(event->size().width());
-		this->scrollAreaFormPanel->setFixedHeight(event->size().height());
+		this->scrollAreaFormPanel->setFixedHeight(event->size().height() - this->controllers->height());
 		this->scrollAreaFormPanel->setFixedWidth(event->size().width());
-		//this->scrollAreaFormPanel->repaint();
+		this->controllers->setGeometry(0,this->scrollAreaFormPanel->height(),this->width(),40);
 	}
-	//this->updateSize();
 	QWidget::resizeEvent(event);
 
 }
@@ -66,9 +54,6 @@ void ERPDisplay::resizeEvent(QResizeEvent * event){
 void ERPDisplay::showEvent(QShowEvent * event){
 	if(this->parent() != 0){
 
-		//this->formPanel->setFixedHeight(((QWidget*)this->parent())->height());
-		//this->formPanel->setFixedWidth(((QWidget*)this->parent())->width());
-		//this->scrollAreaFormPanel->setFixedHeight(((QWidget*)this->parent())->height());
 		this->scrollAreaFormPanel->setFixedWidth(((QWidget*)this->parent())->width());
 	}
 

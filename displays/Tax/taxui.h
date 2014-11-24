@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxui.h
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,6 +21,7 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QCompleter>
+#include <QMessageBox>
 class TaxUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -32,7 +33,7 @@ public:
 	QLineEdit*ratio;
 	QLineEdit*description;
 	void fill(Tax* tax);
-	Tax* tax = new Tax();
+Tax* tax;
 private:
 	static ERPDisplay* p_instance;
 private slots:

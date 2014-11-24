@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.cpp
-**   Created on: Sun Nov 16 16:19:25 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,32 +10,24 @@
 Contact::Contact()
  : QSqlRelationalTableModel(){
 
-this->ContactID = 0 ;
-this->PersonalSalutation = " ";
-this->Salutation = " ";
-this->Name = " ";
-this->LastName = " ";
-this->BirthdateOrDateOfFoundation = " ";
-this->ContactTypeID = 0 ;
-this->ContactClassID = 0 ;
-this->ContactNumber = 0 ;
-this->Address = " ";
-this->PostalCode = " ";
-this->City = " ";
-this->CountryID = 0 ;
-this->ContactStatusID = 0 ;
-this->Active = 0 ;
-this->EmployeeID = 0 ;
-this->PhoneNum = " ";
-this->PhoneNum2 = " ";
-this->Fax = " ";
-this->Mobile = " ";
-this->Email = " ";
-this->Email2 = " ";
-this->webSite = " ";
-this->TaxNumber = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->PersonalSalutation = "";
+this->Salutation = "";
+this->Name = "";
+this->LastName = "";
+this->BirthdateOrDateOfFoundation = "";
+this->Address = "";
+this->PostalCode = "";
+this->City = "";
+this->PhoneNum = "";
+this->PhoneNum2 = "";
+this->Fax = "";
+this->Mobile = "";
+this->Email = "";
+this->Email2 = "";
+this->webSite = "";
+this->TaxNumber = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("Contact");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(6, QSqlRelation("ContactType", "ContactTypeID", "Description"));
@@ -152,13 +144,13 @@ Contact* Contact::GetInstance() {
 return p_instance;
 }
 bool Contact::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(ContactID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Contact (PersonalSalutation,Salutation,Name,LastName,BirthdateOrDateOfFoundation,ContactTypeID,ContactClassID,ContactNumber,Address,PostalCode,City,CountryID,ContactStatusID,Active,EmployeeID,PhoneNum,PhoneNum2,Fax,Mobile,Email,Email2,webSite,TaxNumber,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->PersonalSalutation)+"','"+QString(this->Salutation)+"','"+QString(this->Name)+"','"+QString(this->LastName)+"','"+QString(this->BirthdateOrDateOfFoundation)+"','"+QString::number(this->ContactTypeID)+"','"+QString::number(this->ContactClassID)+"','"+QString::number(this->ContactNumber)+"','"+QString(this->Address)+"','"+QString(this->PostalCode)+"','"+QString(this->City)+"','"+QString::number(this->CountryID)+"','"+QString::number(this->ContactStatusID)+"','"+QString::number(this->Active)+"','"+QString::number(this->EmployeeID)+"','"+QString(this->PhoneNum)+"','"+QString(this->PhoneNum2)+"','"+QString(this->Fax)+"','"+QString(this->Mobile)+"','"+QString(this->Email)+"','"+QString(this->Email2)+"','"+QString(this->webSite)+"','"+QString(this->TaxNumber)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Contact SET ""PersonalSalutation = '"+QString(this->PersonalSalutation)+"','"+"Salutation = '"+QString(this->Salutation)+"','"+"Name = '"+QString(this->Name)+"','"+"LastName = '"+QString(this->LastName)+"','"+"BirthdateOrDateOfFoundation = '"+QString(this->BirthdateOrDateOfFoundation)+"','"+"ContactTypeID = '"+QString::number(this->ContactTypeID)+"','"+"ContactClassID = '"+QString::number(this->ContactClassID)+"','"+"ContactNumber = '"+QString::number(this->ContactNumber)+"','"+"Address = '"+QString(this->Address)+"','"+"PostalCode = '"+QString(this->PostalCode)+"','"+"City = '"+QString(this->City)+"','"+"CountryID = '"+QString::number(this->CountryID)+"','"+"ContactStatusID = '"+QString::number(this->ContactStatusID)+"','"+"Active = '"+QString::number(this->Active)+"','"+"EmployeeID = '"+QString::number(this->EmployeeID)+"','"+"PhoneNum = '"+QString(this->PhoneNum)+"','"+"PhoneNum2 = '"+QString(this->PhoneNum2)+"','"+"Fax = '"+QString(this->Fax)+"','"+"Mobile = '"+QString(this->Mobile)+"','"+"Email = '"+QString(this->Email)+"','"+"Email2 = '"+QString(this->Email2)+"','"+"webSite = '"+QString(this->webSite)+"','"+"TaxNumber = '"+QString(this->TaxNumber)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactID ='"+QString::number(this->ContactID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Contact SET "	"PersonalSalutation = '"+QString(this->PersonalSalutation)+"',"+"Salutation = '"+QString(this->Salutation)+"',"+"Name = '"+QString(this->Name)+"',"+"LastName = '"+QString(this->LastName)+"',"+"BirthdateOrDateOfFoundation = '"+QString(this->BirthdateOrDateOfFoundation)+"',"+"ContactTypeID = '"+QString::number(this->ContactTypeID)+"',"+"ContactClassID = '"+QString::number(this->ContactClassID)+"',"+"ContactNumber = '"+QString::number(this->ContactNumber)+"',"+"Address = '"+QString(this->Address)+"',"+"PostalCode = '"+QString(this->PostalCode)+"',"+"City = '"+QString(this->City)+"',"+"CountryID = '"+QString::number(this->CountryID)+"',"+"ContactStatusID = '"+QString::number(this->ContactStatusID)+"',"+"Active = '"+QString::number(this->Active)+"',"+"EmployeeID = '"+QString::number(this->EmployeeID)+"',"+"PhoneNum = '"+QString(this->PhoneNum)+"',"+"PhoneNum2 = '"+QString(this->PhoneNum2)+"',"+"Fax = '"+QString(this->Fax)+"',"+"Mobile = '"+QString(this->Mobile)+"',"+"Email = '"+QString(this->Email)+"',"+"Email2 = '"+QString(this->Email2)+"',"+"webSite = '"+QString(this->webSite)+"',"+"TaxNumber = '"+QString(this->TaxNumber)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactID ='"+QString::number(this->ContactID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactID FROM Contact WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

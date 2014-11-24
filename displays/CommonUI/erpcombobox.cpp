@@ -60,12 +60,6 @@ void ERPComboBox::focusOutEvent(QFocusEvent *e)
 
 	QWidget::focusOutEvent(e);
 
-
-
-
-	//qDebug() << ;
-	//QLineEdit::focusOutEvent(e);
-	//emit(focussed(false));
 }
 
 

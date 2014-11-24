@@ -9,4 +9,7 @@
         <file>Resources/Buttons/remove.png</file>
         <file>Resources/Buttons/removeActive.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>Resources/icons/home.ico</file>
+    </qresource>
 </RCC>

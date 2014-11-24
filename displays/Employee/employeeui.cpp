@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employeeui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,11 @@
 EmployeeUI::EmployeeUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+employee = new Employee();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +24,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
 QStringList* list = new QStringList(Employee::GetStringList());
@@ -62,10 +52,12 @@ EmployeeUI*EmployeeUI::GetUI(){
 	return (EmployeeUI*) p_instance; 
 }
 void EmployeeUI::fill(Employee* employee){ 
+clear();
 this->employee = employee;
 name->setText(employee->Name);
 } 
 void EmployeeUI::clear(){ 
+delete this->employee;
 this->employee = new Employee();
 } 
 void EmployeeUI::selectEmployee(){ 
@@ -73,17 +65,37 @@ if(Employee::GetStringList().contains(name->text()))
 {
 Employee* con = Employee::Get(name->text());
 if(this->employee->EmployeeID != con->EmployeeID){
-this->employee = con;
-fill(this->employee);
+fill(con);
 }
 }
 else if(employee->EmployeeID != 0)
 clear();
 }
 void EmployeeUI::save(){ 
-employee->Name = name->text();
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+employee->Name = name->text().trimmed();
+}
+if(!errors) {
 employee->save();
 EmployeeIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void EmployeeUI::cancel(){ 
 EmployeeIndexUI::ShowUI();

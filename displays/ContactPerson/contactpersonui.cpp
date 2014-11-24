@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,12 @@
 ContactPersonUI::ContactPersonUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+contactperson = new ContactPerson();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +25,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 personalsalut = new QLineEdit();
 block0Layout->addRow("Personal Salut",personalsalut);
@@ -90,6 +81,7 @@ ContactPersonUI*ContactPersonUI::GetUI(){
 	return (ContactPersonUI*) p_instance; 
 }
 void ContactPersonUI::fill(ContactPerson* contactperson){ 
+clear();
 this->contactperson = contactperson;
 personalsalut->setText(contactperson->PersonalSalut);
 titleprefix->setText(contactperson->TitlePrefix);
@@ -106,6 +98,7 @@ fax->setText(contactperson->Fax);
 active->setChecked(contactperson->active);
 } 
 void ContactPersonUI::clear(){ 
+delete this->contactperson;
 personalsalut->setText("");
 titleprefix->setText("");
 lastname->setText("");
@@ -125,31 +118,205 @@ if(ContactPerson::GetStringList().contains(name->text()))
 {
 ContactPerson* con = ContactPerson::Get(name->text());
 if(this->contactperson->ContactPersonID != con->ContactPersonID){
-this->contactperson = con;
-fill(this->contactperson);
+fill(con);
 }
 }
 else if(contactperson->ContactPersonID != 0)
 clear();
 }
 void ContactPersonUI::save(){ 
-contactperson->PersonalSalut = personalsalut->text();
-contactperson->TitlePrefix = titleprefix->text();
-contactperson->Name = name->text();
-contactperson->LastName = lastname->text();
-contactperson->Position = position->text();
-contactperson->Birthdate = birthdate->text();
-contactperson->ContactPersoneNumber = contactpersonenumber->text().toInt();
-contactperson->Email = email->text();
-contactperson->PhoneNum = phonenum->text();
-contactperson->PhoneNum2 = phonenum2->text();
-contactperson->Mobile = mobile->text();
-contactperson->Fax = fax->text();
-contactperson->active = active->text().toInt();
+bool errors = false;
+QString errorString =  "";
+if(personalsalut->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Personal Salut Can't be Empty! \n";
+personalsalut->setObjectName("error");
+personalsalut->style()->unpolish(personalsalut);
+personalsalut->style()->polish(personalsalut);
+personalsalut->update();
+}
+else { 
+personalsalut->setObjectName("personalsalut");
+personalsalut->style()->unpolish(personalsalut);
+personalsalut->style()->polish(personalsalut);
+personalsalut->update();
+contactperson->PersonalSalut = personalsalut->text().trimmed();
+}
+if(titleprefix->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Title Prefix Can't be Empty! \n";
+titleprefix->setObjectName("error");
+titleprefix->style()->unpolish(titleprefix);
+titleprefix->style()->polish(titleprefix);
+titleprefix->update();
+}
+else { 
+titleprefix->setObjectName("titleprefix");
+titleprefix->style()->unpolish(titleprefix);
+titleprefix->style()->polish(titleprefix);
+titleprefix->update();
+contactperson->TitlePrefix = titleprefix->text().trimmed();
+}
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+contactperson->Name = name->text().trimmed();
+}
+if(lastname->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Last Name Can't be Empty! \n";
+lastname->setObjectName("error");
+lastname->style()->unpolish(lastname);
+lastname->style()->polish(lastname);
+lastname->update();
+}
+else { 
+lastname->setObjectName("lastname");
+lastname->style()->unpolish(lastname);
+lastname->style()->polish(lastname);
+lastname->update();
+contactperson->LastName = lastname->text().trimmed();
+}
+if(position->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Position Can't be Empty! \n";
+position->setObjectName("error");
+position->style()->unpolish(position);
+position->style()->polish(position);
+position->update();
+}
+else { 
+position->setObjectName("position");
+position->style()->unpolish(position);
+position->style()->polish(position);
+position->update();
+contactperson->Position = position->text().trimmed();
+}
+if(birthdate->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Birthdate Can't be Empty! \n";
+birthdate->setObjectName("error");
+birthdate->style()->unpolish(birthdate);
+birthdate->style()->polish(birthdate);
+birthdate->update();
+}
+else { 
+birthdate->setObjectName("birthdate");
+birthdate->style()->unpolish(birthdate);
+birthdate->style()->polish(birthdate);
+birthdate->update();
+contactperson->Birthdate = birthdate->text().trimmed();
+}
+if(contactpersonenumber->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Contact Persone Number Can't be Empty! \n";
+contactpersonenumber->setObjectName("error");
+contactpersonenumber->style()->unpolish(contactpersonenumber);
+contactpersonenumber->style()->polish(contactpersonenumber);
+contactpersonenumber->update();
+}
+else { 
+contactpersonenumber->setObjectName("contactpersonenumber");
+contactpersonenumber->style()->unpolish(contactpersonenumber);
+contactpersonenumber->style()->polish(contactpersonenumber);
+contactpersonenumber->update();
+contactperson->ContactPersoneNumber = contactpersonenumber->text().trimmed().toInt();
+}
+if(email->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Email Can't be Empty! \n";
+email->setObjectName("error");
+email->style()->unpolish(email);
+email->style()->polish(email);
+email->update();
+}
+else { 
+email->setObjectName("email");
+email->style()->unpolish(email);
+email->style()->polish(email);
+email->update();
+contactperson->Email = email->text().trimmed();
+}
+if(phonenum->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Phone Num Can't be Empty! \n";
+phonenum->setObjectName("error");
+phonenum->style()->unpolish(phonenum);
+phonenum->style()->polish(phonenum);
+phonenum->update();
+}
+else { 
+phonenum->setObjectName("phonenum");
+phonenum->style()->unpolish(phonenum);
+phonenum->style()->polish(phonenum);
+phonenum->update();
+contactperson->PhoneNum = phonenum->text().trimmed();
+}
+if(phonenum2->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Phone Num2 Can't be Empty! \n";
+phonenum2->setObjectName("error");
+phonenum2->style()->unpolish(phonenum2);
+phonenum2->style()->polish(phonenum2);
+phonenum2->update();
+}
+else { 
+phonenum2->setObjectName("phonenum2");
+phonenum2->style()->unpolish(phonenum2);
+phonenum2->style()->polish(phonenum2);
+phonenum2->update();
+contactperson->PhoneNum2 = phonenum2->text().trimmed();
+}
+if(mobile->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Mobile Can't be Empty! \n";
+mobile->setObjectName("error");
+mobile->style()->unpolish(mobile);
+mobile->style()->polish(mobile);
+mobile->update();
+}
+else { 
+mobile->setObjectName("mobile");
+mobile->style()->unpolish(mobile);
+mobile->style()->polish(mobile);
+mobile->update();
+contactperson->Mobile = mobile->text().trimmed();
+}
+if(fax->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Fax Can't be Empty! \n";
+fax->setObjectName("error");
+fax->style()->unpolish(fax);
+fax->style()->polish(fax);
+fax->update();
+}
+else { 
+fax->setObjectName("fax");
+fax->style()->unpolish(fax);
+fax->style()->polish(fax);
+fax->update();
+contactperson->Fax = fax->text().trimmed();
+}
+contactperson->active = active->text().trimmed().toInt();
 if(contactperson->ContactID == 0) 
 contactperson->ContactID = contact->getKey();
+if(!errors) {
 contactperson->save();
 ContactPersonIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void ContactPersonUI::cancel(){ 
 ContactPersonIndexUI::ShowUI();

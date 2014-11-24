@@ -62,7 +62,12 @@ SOURCES += main.cpp \
 	displays/Unit/unitindexui.cpp \
 	displays/Unit/unitui.cpp \
 	displays/User/userindexui.cpp \
-	displays/User/userui.cpp
+	displays/User/userui.cpp \
+    displays/CommonUI/navigationButtons.cpp \
+    displays/CommonUI/HNavigationButtons.cpp \
+    displays/CommonUI/ean13.cpp \
+    displays/CommonUI/barcode.cpp \
+    displays/CommonUI/LineEditValidator.cpp
 
 HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/erpcombobox.h \
@@ -108,7 +113,12 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Unit/unitindexui.h \
 	displays/Unit/unitui.h \
 	displays/User/userindexui.h \
-	displays/User/userui.h
+	displays/User/userui.h \
+    displays/CommonUI/navigationButtons.h \
+    displays/CommonUI/HNavigationButtons.h \
+    displays/CommonUI/ean13.h \
+    displays/CommonUI/barcode.h \
+    displays/CommonUI/LineEditValidator.h
 
 FORMS	+= mainwindow.ui
 

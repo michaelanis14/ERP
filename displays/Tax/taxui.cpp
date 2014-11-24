@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxui.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,16 +11,12 @@
 TaxUI::TaxUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+tax = new Tax();
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
 QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
-ERPFormBlock * blockSaveCancel = new ERPFormBlock;
- QWidget* addremove = new QWidget();
- QHBoxLayout* addRemovelayout = new QHBoxLayout(addremove);
- addRemovelayout->setContentsMargins(0,0,0,0);
- QPushButton* save = new QPushButton("Save");
+QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
  QPushButton* cancel = new QPushButton("Cancel");
@@ -29,14 +25,9 @@ ERPFormBlock * blockSaveCancel = new ERPFormBlock;
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- addRemovelayout->addStretch(1);
- addRemovelayout->addWidget(save,0,Qt::AlignCenter);
- addRemovelayout->addStretch(0);
- addRemovelayout->addWidget(clear,0,Qt::AlignCenter);
- addRemovelayout->addWidget(cancel,0,Qt::AlignCenter);
- addRemovelayout->addStretch(1);
- blockSaveCancel->addRow("",addremove);
- flowLayout->addWidget(blockSaveCancel);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 ratio = new QLineEdit();
 ratio->setValidator( doubleValidator );
@@ -60,11 +51,13 @@ TaxUI*TaxUI::GetUI(){
 	return (TaxUI*) p_instance; 
 }
 void TaxUI::fill(Tax* tax){ 
+clear();
 this->tax = tax;
 ratio->setText(QString::number(tax->Ratio));
 description->setText(tax->Description);
 } 
 void TaxUI::clear(){ 
+delete this->tax;
 ratio->setText("");
 description->setText("");
 this->tax = new Tax();
@@ -74,18 +67,52 @@ if(Tax::GetStringList().contains(description->text()))
 {
 Tax* con = Tax::Get(description->text());
 if(this->tax->TaxID != con->TaxID){
-this->tax = con;
-fill(this->tax);
+fill(con);
 }
 }
 else if(tax->TaxID != 0)
 clear();
 }
 void TaxUI::save(){ 
-tax->Ratio = ratio->text().toDouble();
-tax->Description = description->text();
+bool errors = false;
+QString errorString =  "";
+if(ratio->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Ratio Can't be Empty! \n";
+ratio->setObjectName("error");
+ratio->style()->unpolish(ratio);
+ratio->style()->polish(ratio);
+ratio->update();
+}
+else { 
+ratio->setObjectName("ratio");
+ratio->style()->unpolish(ratio);
+ratio->style()->polish(ratio);
+ratio->update();
+tax->Ratio = ratio->text().trimmed().toDouble();
+}
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+tax->Description = description->text().trimmed();
+}
+if(!errors) {
 tax->save();
 TaxIndexUI::ShowUI();
+}
+else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
+ QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+ }
 }
 void TaxUI::cancel(){ 
 TaxIndexUI::ShowUI();

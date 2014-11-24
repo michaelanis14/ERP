@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employee.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,10 +10,9 @@
 Employee::Employee()
  : QSqlRelationalTableModel(){
 
-this->EmployeeID = 0 ;
-this->Name = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Name = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("Employee");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -54,13 +53,13 @@ Employee* Employee::GetInstance() {
 return p_instance;
 }
 bool Employee::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(EmployeeID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Employee (Name,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Employee SET ""Name = '"+QString(this->Name)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE EmployeeID ='"+QString::number(this->EmployeeID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Employee SET "	"Name = '"+QString(this->Name)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE EmployeeID ='"+QString::number(this->EmployeeID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  EmployeeID FROM Employee WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 

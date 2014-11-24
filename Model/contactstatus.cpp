@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactstatus.cpp
-**   Created on: Sun Nov 16 16:19:26 EET 2014
+**   Created on: Sun Nov 23 14:11:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,10 +10,9 @@
 ContactStatus::ContactStatus()
  : QSqlRelationalTableModel(){
 
-this->ContactStatusID = 0 ;
-this->Description = " ";
-this->CreatedOn = " ";
-this->EditedOn = " ";
+this->Description = "";
+this->CreatedOn = "";
+this->EditedOn = "";
 this->setTable("ContactStatus");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 }
@@ -54,13 +53,13 @@ ContactStatus* ContactStatus::GetInstance() {
 return p_instance;
 }
 bool ContactStatus::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
 if(ContactStatusID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString(); 
-	this->EditedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDateTime::currentDateTime().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactStatus (Description,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Description)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE ContactStatus SET ""Description = '"+QString(this->Description)+"','"+"CreatedOn = '"+QString(this->CreatedOn)+"','"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactStatusID ='"+QString::number(this->ContactStatusID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE ContactStatus SET "	"Description = '"+QString(this->Description)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactStatusID ='"+QString::number(this->ContactStatusID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactStatusID FROM ContactStatus WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
