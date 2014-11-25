@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@ BankAccountUI::BankAccountUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 bankaccount = new BankAccount();
-flowLayout = new FlowLayout(formPanel);
+flowLayout = new FlowLayout(this);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QPushButton* save = new QPushButton("Save");
@@ -24,8 +24,8 @@ QPushButton* save = new QPushButton("Save");
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- this->controllers->addControllerButton(save); 
- this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(save);
+ this->controllers->addControllerButton(clear);
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
 name = new QLineEdit();
@@ -64,19 +64,19 @@ flowLayout->addWidget(block0Layout);
 
 }
 ERPDisplay* BankAccountUI::p_instance = 0;
-void BankAccountUI::ShowUI() { 
-	if (p_instance == 0) { 
+void BankAccountUI::ShowUI() {
+	if (p_instance == 0) {
 		p_instance = new BankAccountUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	}
+	mainwindow::ShowDisplay(p_instance);
 }
-BankAccountUI*BankAccountUI::GetUI(){ 
- 	if (p_instance == 0) { 
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
-	} 
-	return (BankAccountUI*) p_instance; 
+BankAccountUI*BankAccountUI::GetUI(){
+	if (p_instance == 0) {
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
+	}
+	return (BankAccountUI*) p_instance;
 }
-void BankAccountUI::fill(BankAccount* bankaccount){ 
+void BankAccountUI::fill(BankAccount* bankaccount){
 clear();
 this->bankaccount = bankaccount;
 name->setText(bankaccount->Name);
@@ -88,8 +88,8 @@ iban->setText(bankaccount->IBAN);
 bic->setText(bankaccount->BIC);
 zipcode->setText(bankaccount->ZipCode);
 bankcountrycode->setText(bankaccount->BankCountryCode);
-} 
-void BankAccountUI::clear(){ 
+}
+void BankAccountUI::clear(){
 delete this->bankaccount;
 bankaddress->setText("");
 bankcode->setText("");
@@ -100,8 +100,8 @@ bic->setText("");
 zipcode->setText("");
 bankcountrycode->setText("");
 this->bankaccount = new BankAccount();
-} 
-void BankAccountUI::selectBankAccount(){ 
+}
+void BankAccountUI::selectBankAccount(){
 if(BankAccount::GetStringList().contains(name->text()))
 {
 BankAccount* con = BankAccount::Get(name->text());
@@ -112,7 +112,7 @@ fill(con);
 else if(bankaccount->BankAccountID != 0)
 clear();
 }
-void BankAccountUI::save(){ 
+bool BankAccountUI::save(){
 bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
@@ -123,7 +123,7 @@ name->style()->unpolish(name);
 name->style()->polish(name);
 name->update();
 }
-else { 
+else {
 name->setObjectName("name");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -138,7 +138,7 @@ bankaddress->style()->unpolish(bankaddress);
 bankaddress->style()->polish(bankaddress);
 bankaddress->update();
 }
-else { 
+else {
 bankaddress->setObjectName("bankaddress");
 bankaddress->style()->unpolish(bankaddress);
 bankaddress->style()->polish(bankaddress);
@@ -153,7 +153,7 @@ bankcode->style()->unpolish(bankcode);
 bankcode->style()->polish(bankcode);
 bankcode->update();
 }
-else { 
+else {
 bankcode->setObjectName("bankcode");
 bankcode->style()->unpolish(bankcode);
 bankcode->style()->polish(bankcode);
@@ -168,7 +168,7 @@ accountname->style()->unpolish(accountname);
 accountname->style()->polish(accountname);
 accountname->update();
 }
-else { 
+else {
 accountname->setObjectName("accountname");
 accountname->style()->unpolish(accountname);
 accountname->style()->polish(accountname);
@@ -183,7 +183,7 @@ accountnumber->style()->unpolish(accountnumber);
 accountnumber->style()->polish(accountnumber);
 accountnumber->update();
 }
-else { 
+else {
 accountnumber->setObjectName("accountnumber");
 accountnumber->style()->unpolish(accountnumber);
 accountnumber->style()->polish(accountnumber);
@@ -198,7 +198,7 @@ iban->style()->unpolish(iban);
 iban->style()->polish(iban);
 iban->update();
 }
-else { 
+else {
 iban->setObjectName("iban");
 iban->style()->unpolish(iban);
 iban->style()->polish(iban);
@@ -213,7 +213,7 @@ bic->style()->unpolish(bic);
 bic->style()->polish(bic);
 bic->update();
 }
-else { 
+else {
 bic->setObjectName("bic");
 bic->style()->unpolish(bic);
 bic->style()->polish(bic);
@@ -228,18 +228,18 @@ zipcode->style()->unpolish(zipcode);
 zipcode->style()->polish(zipcode);
 zipcode->update();
 }
-else { 
+else {
 zipcode->setObjectName("zipcode");
 zipcode->style()->unpolish(zipcode);
 zipcode->style()->polish(zipcode);
 zipcode->update();
 bankaccount->ZipCode = zipcode->text().trimmed();
 }
-if(bankaccount->CurrencyID == 0) 
+if(bankaccount->CurrencyID == 0)
 bankaccount->CurrencyID = currency->getKey();
-if(bankaccount->ContactID == 0) 
+if(bankaccount->ContactID == 0)
 bankaccount->ContactID = contact->getKey();
-if(bankaccount->CountryID == 0) 
+if(bankaccount->CountryID == 0)
 bankaccount->CountryID = country->getKey();
 if(bankcountrycode->text().trimmed().isEmpty()){
 errors = true;
@@ -249,7 +249,7 @@ bankcountrycode->style()->unpolish(bankcountrycode);
 bankcountrycode->style()->polish(bankcountrycode);
 bankcountrycode->update();
 }
-else { 
+else {
 bankcountrycode->setObjectName("bankcountrycode");
 bankcountrycode->style()->unpolish(bankcountrycode);
 bankcountrycode->style()->polish(bankcountrycode);
@@ -258,12 +258,15 @@ bankaccount->BankCountryCode = bankcountrycode->text().trimmed();
 }
 if(!errors) {
 bankaccount->save();
+if(!errors){
 BankAccountIndexUI::ShowUI();
+return true;}
+else return false;
 }
-else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
- QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+else{ QMessageBox::warning(this, "BankAccount",errorString.trimmed());
+return false;
  }
 }
-void BankAccountUI::cancel(){ 
+void BankAccountUI::cancel(){
 BankAccountIndexUI::ShowUI();
 }

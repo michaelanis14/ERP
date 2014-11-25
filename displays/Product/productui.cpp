@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -139,7 +139,7 @@ fill(con);
 else if(product->ProductID != 0)
 clear();
 }
-void ProductUI::save(){ 
+bool ProductUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
@@ -331,10 +331,13 @@ product->ShortDescription = shortdescription->text().trimmed();
 }
 if(!errors) {
 product->save();
+if(!errors){
 ProductIndexUI::ShowUI();
+return true;}
+else return false;
 }
-else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
- QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+else{ QMessageBox::warning(this, "Product",errorString.trimmed());
+return false; 
  }
 }
 void ProductUI::cancel(){ 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,17 +10,21 @@
 ContactPerson::ContactPerson()
  : QSqlRelationalTableModel(){
 
+this->ContactPersonID = 0 ;
 this->PersonalSalut = "";
 this->TitlePrefix = "";
 this->Name = "";
 this->LastName = "";
 this->Position = "";
 this->Birthdate = "";
+this->ContactPersoneNumber = 0 ;
 this->Email = "";
 this->PhoneNum = "";
 this->PhoneNum2 = "";
 this->Mobile = "";
 this->Fax = "";
+this->active = 0 ;
+this->ContactID = 0 ;
 this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("ContactPerson");

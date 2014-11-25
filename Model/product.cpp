@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,12 +10,23 @@
 Product::Product()
  : QSqlRelationalTableModel(){
 
+this->ProductID = 0 ;
 this->Name = "";
+this->SellingPrice = 0 ;
+this->NetPrice = 0 ;
+this->TradeMargine = 0 ;
 this->Description = "";
 this->Barcode = "";
+this->CriticalAmount = 0 ;
 this->ProductNumber = "";
 this->MoreInfo = "";
+this->BarcodeOnly = 0 ;
+this->isComposite = 0 ;
 this->SpecialTaxDescription = "";
+this->SpecialTaxValue = 0 ;
+this->TaxID = 0 ;
+this->UnitID = 0 ;
+this->generateBarcode = 0 ;
 this->ShortDescription = "";
 this->CreatedOn = "";
 this->EditedOn = "";

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttypeui.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -67,7 +67,7 @@ fill(con);
 else if(contacttype->ContactTypeID != 0)
 clear();
 }
-void ContactTypeUI::save(){ 
+bool ContactTypeUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
@@ -87,10 +87,13 @@ contacttype->Description = description->text().trimmed();
 }
 if(!errors) {
 contacttype->save();
+if(!errors){
 ContactTypeIndexUI::ShowUI();
+return true;}
+else return false;
 }
-else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
- QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+else{ QMessageBox::warning(this, "ContactType",errorString.trimmed());
+return false; 
  }
 }
 void ContactTypeUI::cancel(){ 

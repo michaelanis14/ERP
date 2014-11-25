@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,14 +10,22 @@
 Contact::Contact()
  : QSqlRelationalTableModel(){
 
+this->ContactID = 0 ;
 this->PersonalSalutation = "";
 this->Salutation = "";
 this->Name = "";
 this->LastName = "";
 this->BirthdateOrDateOfFoundation = "";
+this->ContactTypeID = 0 ;
+this->ContactClassID = 0 ;
+this->ContactNumber = 0 ;
 this->Address = "";
 this->PostalCode = "";
 this->City = "";
+this->CountryID = 0 ;
+this->ContactStatusID = 0 ;
+this->Active = 0 ;
+this->EmployeeID = 0 ;
 this->PhoneNum = "";
 this->PhoneNum2 = "";
 this->Fax = "";

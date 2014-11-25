@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employeeui.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -71,7 +71,7 @@ fill(con);
 else if(employee->EmployeeID != 0)
 clear();
 }
-void EmployeeUI::save(){ 
+bool EmployeeUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
@@ -91,10 +91,13 @@ employee->Name = name->text().trimmed();
 }
 if(!errors) {
 employee->save();
+if(!errors){
 EmployeeIndexUI::ShowUI();
+return true;}
+else return false;
 }
-else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
- QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+else{ QMessageBox::warning(this, "Employee",errorString.trimmed());
+return false; 
  }
 }
 void EmployeeUI::cancel(){ 

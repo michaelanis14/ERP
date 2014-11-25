@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employeeui.h
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,6 +12,7 @@
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
+#include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/employee.h"
 #include "../../Model/employee.h"
 
@@ -40,6 +41,6 @@ private slots:
 	void cancel();
 	void clear();
 public slots:
-	void save();
+	bool save();
 };
 #endif

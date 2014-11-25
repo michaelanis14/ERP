@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.h
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,6 +12,7 @@
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
+#include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/contact.h"
 #include "../../Model/contact.h"
 #include "../../Model/contacttype.h"
@@ -72,11 +73,11 @@ private:
 private slots:
 	void addBankAccount();
 	void addBankAccount(BankAccount* BankAccount);
-	void removeBankAccount();
+	void removeBankAccount(QWidget* widget);
 	void selectContact();
 	void cancel();
 	void clear();
 public slots:
-	void save();
+	bool save();
 };
 #endif

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unitui.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -67,7 +67,7 @@ fill(con);
 else if(unit->UnitID != 0)
 clear();
 }
-void UnitUI::save(){ 
+bool UnitUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
@@ -87,10 +87,13 @@ unit->Description = description->text().trimmed();
 }
 if(!errors) {
 unit->save();
+if(!errors){
 UnitIndexUI::ShowUI();
+return true;}
+else return false;
 }
-else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
- QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+else{ QMessageBox::warning(this, "Unit",errorString.trimmed());
+return false; 
  }
 }
 void UnitUI::cancel(){ 

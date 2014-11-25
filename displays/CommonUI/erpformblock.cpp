@@ -38,7 +38,7 @@ ERPFormBlock::ERPFormBlock(QWidget *parent) :
 }
 
 void ERPFormBlock::addRow(const QString &labelText, QWidget *field){
-
+	field->setParent(this);
 	formLayout->addRow(labelText,field);
 	this->baseWidget->setHidden(false);
 	//this->repaint();

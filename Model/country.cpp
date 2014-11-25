@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,6 +10,7 @@
 Country::Country()
  : QSqlRelationalTableModel(){
 
+this->CountryID = 0 ;
 this->Name = "";
 this->CreatedOn = "";
 this->EditedOn = "";

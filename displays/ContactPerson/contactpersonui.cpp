@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -124,7 +124,7 @@ fill(con);
 else if(contactperson->ContactPersonID != 0)
 clear();
 }
-void ContactPersonUI::save(){ 
+bool ContactPersonUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(personalsalut->text().trimmed().isEmpty()){
@@ -312,10 +312,13 @@ if(contactperson->ContactID == 0)
 contactperson->ContactID = contact->getKey();
 if(!errors) {
 contactperson->save();
+if(!errors){
 ContactPersonIndexUI::ShowUI();
+return true;}
+else return false;
 }
-else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
- QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+else{ QMessageBox::warning(this, "ContactPerson",errorString.trimmed());
+return false; 
  }
 }
 void ContactPersonUI::cancel(){ 

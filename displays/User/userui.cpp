@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: userui.cpp
-**   Created on: Sun Nov 23 14:11:12 EET 2014
+**   Created on: Tue Nov 25 00:34:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -94,7 +94,7 @@ fill(con);
 else if(user->UserID != 0)
 clear();
 }
-void UserUI::save(){ 
+bool UserUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
@@ -177,10 +177,13 @@ user->lastIP = lastip->text().trimmed();
 }
 if(!errors) {
 user->save();
+if(!errors){
 UserIndexUI::ShowUI();
+return true;}
+else return false;
 }
-else{ QByteArray byteArray = errorString.toUtf8();	const char* cString = byteArray.constData(); 
- QMessageBox::warning(this, tr("My Application"), tr(cString)); 
+else{ QMessageBox::warning(this, "User",errorString.trimmed());
+return false; 
  }
 }
 void UserUI::cancel(){ 

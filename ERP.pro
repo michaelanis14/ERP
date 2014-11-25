@@ -67,7 +67,8 @@ SOURCES += main.cpp \
     displays/CommonUI/HNavigationButtons.cpp \
     displays/CommonUI/ean13.cpp \
     displays/CommonUI/barcode.cpp \
-    displays/CommonUI/LineEditValidator.cpp
+    displays/CommonUI/LineEditValidator.cpp \
+    displays/CommonUI/RemovebtnWidgets.cpp
 
 HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/erpcombobox.h \
@@ -118,7 +119,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
     displays/CommonUI/HNavigationButtons.h \
     displays/CommonUI/ean13.h \
     displays/CommonUI/barcode.h \
-    displays/CommonUI/LineEditValidator.h
+    displays/CommonUI/LineEditValidator.h \
+    displays/CommonUI/RemovebtnWidgets.h
 
 FORMS	+= mainwindow.ui
 
