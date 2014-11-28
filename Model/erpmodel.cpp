@@ -11,6 +11,7 @@
 #include "contactstatus.h"
 #include "employee.h"
 #include "contact.h"
+#include "contactperson.h"
 #include "country.h"
 #include "currency.h"
 
@@ -166,6 +167,7 @@ bool ErpModel::init(){
 
 	}
 	BankAccount::Init();
+	ContactPerson::Init();
 
 
 	return true;

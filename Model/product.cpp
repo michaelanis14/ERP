@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.cpp
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -102,13 +102,13 @@ QString query =
 "SpecialTaxDescription VARCHAR(40) NOT NULL, "
 "SpecialTaxValue DECIMAL(6,2) NOT NULL, "
 "TaxID INT NOT NULL, "
-"FOREIGN KEY (TaxID) REFERENCES Tax(TaxID),"
+"FOREIGN KEY (TaxID) REFERENCES Tax(TaxID)  ON DELETE CASCADE,"
 "UnitID INT NOT NULL, "
-"FOREIGN KEY (UnitID) REFERENCES Unit(UnitID),"
+"FOREIGN KEY (UnitID) REFERENCES Unit(UnitID)  ON DELETE CASCADE,"
 "generateBarcode VARCHAR(1) NOT NULL, "
 "ShortDescription VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL )" ;
+"EditedOn VARCHAR(40) NOT NULL)" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

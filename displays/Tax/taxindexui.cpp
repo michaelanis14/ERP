@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxindexui.cpp
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,6 +13,7 @@
 TaxIndexUI::TaxIndexUI(QWidget *parent) :ERPDisplay(parent)
 {
 
+this->setObjectName("TaxIndexUI");
 flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 model = new Tax(); 
@@ -23,8 +24,6 @@ ERPFormBlock* block0Layout = new ERPFormBlock;
  tabel = new QTableView(); 
  tabel->setModel(model); 
  tabel->setItemDelegate(new QSqlRelationalDelegate(tabel)); 
- tabel->setMinimumWidth(this->width()); 
- tabel->setMinimumHeight(this->height() - 50); 
  tabel->hideColumn(0); // don't show the ID 
  tabel->setSortingEnabled(true); 
  tabel->setSelectionBehavior(QAbstractItemView::SelectRows); 
@@ -76,5 +75,12 @@ void TaxIndexUI::onSelectionChanged(){
  int e = tabel->selectionModel()->selectedRows().count(); 
  remove->setEnabled(e); 
  edit->setEnabled(e); 
+ }
+void TaxIndexUI::showEvent(QShowEvent * event){ 
+ 	if(this->parent() != 0){ 
+ tabel->setMinimumWidth(mainwindow::GetMainDisplay()->width() - mainwindow::GetMainDisplay()->navigation->width() - 50); 
+ tabel->setMinimumHeight(mainwindow::GetMainDisplay()->height() - mainwindow::GetMainDisplay()->inNavContacts->height() - 100); 
+	} 
+ event->accept(); 
  }
 

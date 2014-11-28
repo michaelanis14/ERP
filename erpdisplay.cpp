@@ -23,16 +23,17 @@ ERPDisplay::ERPDisplay(QWidget *parent) : QWidget(parent) {
 	scrollAreaFormPanel->setFrameStyle(QFrame::NoFrame);
 	//scrollAreaFormPanel->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	//scrollAreaFormPanel->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	scrollAreaFormPanel->setGeometry(0,0,800,530);
+	//scrollAreaFormPanel->setGeometry(0,0,800,530);
 
-	formPanel = new QWidget(scrollAreaFormPanel);// for stylesheet reference
-	formPanel->setFixedWidth(800);
+	//formPanel = new QWidget(scrollAreaFormPanel);
+	formPanel = new QWidget();
+	//	formPanel->setFixedWidth();
 	formPanel->setContentsMargins(0,0,0,0);
 	formPanel->setObjectName("formPanel");
 
-//	formPanel->setFont(font3);
+	//	formPanel->setFont(font3);
 	scrollAreaFormPanel->setWidget(this->formPanel);
-
+	scrollAreaFormPanel->setWidgetResizable(true);
 	controllers = new HNavigationButtons(this);
 	controllers->setGeometry(0,this->scrollAreaFormPanel->height(),this->width(),40);
 
@@ -41,12 +42,15 @@ void ERPDisplay::updateSize(){
 
 }
 void ERPDisplay::resizeEvent(QResizeEvent * event){
+
 	if((event->size().height() - this->controllers->height()) > 50 && event->size().width() > 50){
 		this->formPanel->setFixedWidth(event->size().width());
 		this->scrollAreaFormPanel->setFixedHeight(event->size().height() - this->controllers->height());
 		this->scrollAreaFormPanel->setFixedWidth(event->size().width());
 		this->controllers->setGeometry(0,this->scrollAreaFormPanel->height(),this->width(),40);
 	}
+//	if()
+	/*	*/
 	QWidget::resizeEvent(event);
 
 }
@@ -54,7 +58,7 @@ void ERPDisplay::resizeEvent(QResizeEvent * event){
 void ERPDisplay::showEvent(QShowEvent * event){
 	if(this->parent() != 0){
 
-		this->scrollAreaFormPanel->setFixedWidth(((QWidget*)this->parent())->width());
+	//	this->scrollAreaFormPanel->setFixedWidth(((QWidget*)this->parent())->width());
 	}
 
 	event->accept();

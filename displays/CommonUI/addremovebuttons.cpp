@@ -26,6 +26,7 @@ AddRemoveButtons::AddRemoveButtons(QWidget *parent) :
 	remove->setMaximumWidth(20);
 	remove->setMaximumHeight(20);
 	remove->setScaledContents(true);
+	remove->setHidden(true);
 
 	layout->addStretch(1);
 	layout->addWidget(remove,0,Qt::AlignCenter);
@@ -69,3 +70,5 @@ void AddRemoveButtons::mouseReleaseEvent(QMouseEvent *event){
 		}
 	}
 }
+
+

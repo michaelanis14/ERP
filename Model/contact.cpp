@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.cpp
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -115,20 +115,20 @@ QString query =
 "LastName VARCHAR(40) NOT NULL, "
 "BirthdateOrDateOfFoundation VARCHAR(40) NOT NULL, "
 "ContactTypeID INT NOT NULL, "
-"FOREIGN KEY (ContactTypeID) REFERENCES ContactType(ContactTypeID),"
+"FOREIGN KEY (ContactTypeID) REFERENCES ContactType(ContactTypeID)  ON DELETE CASCADE,"
 "ContactClassID INT NOT NULL, "
-"FOREIGN KEY (ContactClassID) REFERENCES ContactClass(ContactClassID),"
+"FOREIGN KEY (ContactClassID) REFERENCES ContactClass(ContactClassID)  ON DELETE CASCADE,"
 "ContactNumber INT NOT NULL, "
 "Address VARCHAR(40) NOT NULL, "
 "PostalCode VARCHAR(40) NOT NULL, "
 "City VARCHAR(40) NOT NULL, "
 "CountryID INT NOT NULL, "
-"FOREIGN KEY (CountryID) REFERENCES Country(CountryID),"
+"FOREIGN KEY (CountryID) REFERENCES Country(CountryID)  ON DELETE CASCADE,"
 "ContactStatusID INT NOT NULL, "
-"FOREIGN KEY (ContactStatusID) REFERENCES ContactStatus(ContactStatusID),"
+"FOREIGN KEY (ContactStatusID) REFERENCES ContactStatus(ContactStatusID)  ON DELETE CASCADE,"
 "Active VARCHAR(1) NOT NULL, "
 "EmployeeID INT NOT NULL, "
-"FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),"
+"FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)  ON DELETE CASCADE,"
 "PhoneNum VARCHAR(40) NOT NULL, "
 "PhoneNum2 VARCHAR(40) NOT NULL, "
 "Fax VARCHAR(40) NOT NULL, "
@@ -138,7 +138,7 @@ QString query =
 "webSite VARCHAR(40) NOT NULL, "
 "TaxNumber VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL )" ;
+"EditedOn VARCHAR(40) NOT NULL)" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

@@ -12,6 +12,7 @@ ERPFormBlock::ERPFormBlock(QWidget *parent) :
 	QWidget(parent)
 {
 
+	this->setObjectName("ERPFormBlock");
 
 	baseWidget= new QWidget();
 	baseWidget->setObjectName("baseWidget");
@@ -45,10 +46,20 @@ void ERPFormBlock::addRow(const QString &labelText, QWidget *field){
 }
 
 void ERPFormBlock::removeRow(QWidget* field){
-	QWidget* label = formLayout->labelForField(field);
-	  if (label)
-		  label->deleteLater();
-	  field->deleteLater();
+	QLabel* label = (QLabel*)formLayout->labelForField(field);
+	QList<QWidget *> Widgets = field->findChildren<QWidget *>();
+	foreach(QWidget * child, Widgets)
+	{
+			child->setHidden(true);
+			formLayout->removeWidget(child);
+	}
+	  if (label){
+		  label->setHidden(true);
+		  formLayout->removeWidget(label);
+	  }
+
+	   field->setHidden(true);
+	   field->deleteLater();
 }
 
 void ERPFormBlock::addWidget(QWidget *widget){

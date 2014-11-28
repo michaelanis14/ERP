@@ -175,7 +175,7 @@ void mainwindow::ShowDisplay(ERPDisplay * display) {
 	}
 	//
 	//	display->setAutoFillBackground(true);
-//	p_instance->mainLayout->removeItem(p_instance->boxLayout);
+	//	p_instance->mainLayout->removeItem(p_instance->boxLayout);
 	//delete p_instance->boxLayout;
 	//p_instance->boxLayout = new QVBoxLayout(this);
 	//p_instance->boxLayout->setContentsMargins(0, 0, 0, 0);
@@ -204,6 +204,7 @@ ERPDisplay* mainwindow::GetCurrentDisplay() {
 * returns the main window object
 */
 mainwindow* mainwindow::GetMainDisplay() {
+
 	return p_instance;
 }
 
@@ -221,7 +222,7 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 		if(child->objectName() == "lblContacts"){
 			//		if(!contactIndexUI::GetUI()->isVisible()){
 			//	qDebug() << child->objectName();
-		//	lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
+			//	lblContacts->setPixmap(QPixmap(":/new/Mainscreen/Resources/Mainscreen/ContactsActive.png"));
 			//ContactUI::ShowUI();
 			//BankAccountUI::ShowUI();
 			ContactIndexUI::ShowUI();
@@ -254,45 +255,56 @@ void mainwindow::updateSize(){
 			p_instance->currentDisplay->repaint();
 		}
 		//this->repaint();
-	//	qDebug() <<this->width()- this->navigation->width() <<this->width() <<this->navigation->width();
+		//	qDebug() <<this->width()- this->navigation->width() <<this->width() <<this->navigation->width();
 		p_instance->currentDisplay->formPanel->setGeometry(0,0,(this->width()- this->navigation->width()),height);
 
 	}
 }
 void mainwindow::btnHomeClicked() {
-innerNavigation->removeAll();
+	innerNavigation->removeAll();
 	qDebug() << "wassup";
 
 }
 void mainwindow::btnContactsClicked(){
-innerNavigation->removeAll();
-innerNavigation->addButton(inNavContacts);
-innerNavigation->addButton(inNavcontactPersones);
-innerNavigation->addButton(inNavcontactType);
+	innerNavigation->removeAll();
+	innerNavigation->addButton(inNavContacts);
+	innerNavigation->addButton(inNavcontactPersones);
+	innerNavigation->addButton(inNavcontactType);
 
-ContactIndexUI::ShowUI();
+	ContactIndexUI::ShowUI();
 }
 
 void mainwindow::btnProductsClicked(){innerNavigation->removeAll();innerNavigation->addButton(inNavContacts);}
 void mainwindow::btnAccountingClicked(){;}
 void mainwindow::btnReportsClicked(){;}
 void mainwindow::innerNavClicked(){
-	  QPushButton* sender = (QPushButton*) this->sender();
-	  if(!sender)
-		  return;
-	  if(sender->objectName() == "inNavContacts")
-		  ContactIndexUI::ShowUI();
-	  else  if(sender->objectName() == "inNavcontactPersones")
-		  ContactPersonIndexUI::ShowUI();
-	  else  if(sender->objectName() == "inNavcontactType")
-		  ContactTypeIndexUI::ShowUI();
+	QPushButton* sender = (QPushButton*) this->sender();
+	if(!sender)
+		return;
+	if(sender->objectName() == "inNavContacts")
+		ContactIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavcontactPersones")
+		ContactPersonIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavcontactType")
+		ContactTypeIndexUI::ShowUI();
 
 
 }
 
 void mainwindow::resizeEvent(QResizeEvent * event){
 
-	this->updateSize();
-	//QWidget::resizeEvent(event);
+
+	if(this->currentDisplay != 0)
+		if(currentDisplay->objectName().contains("Index")){
+			QList<QTableView *> tabel = currentDisplay->findChildren<QTableView *>();
+			foreach(QTableView * child, tabel)
+			{
+				if(child != 0){
+					child->setMinimumWidth(event->size().width() - this->navigation->width() - 50);
+					child->setMinimumHeight(event->size().height() - inNavContacts->height() - 100);
+				}
+			}
+
+		}
 	event->accept();
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: user.cpp
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -62,11 +62,11 @@ QString query =
 "Password VARCHAR(40) NOT NULL, "
 "LastLogin VARCHAR(40) NOT NULL, "
 "EmployeeID INT NOT NULL, "
-"FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),"
+"FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)  ON DELETE CASCADE,"
 "active VARCHAR(1) NOT NULL, "
 "lastIP VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL )" ;
+"EditedOn VARCHAR(40) NOT NULL)" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

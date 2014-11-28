@@ -9,6 +9,7 @@
 RemovebtnWidgets::RemovebtnWidgets(QWidget *parent,QWidget* widget) :
 	QWidget(parent)
 {
+	this->setObjectName("RemovebtnWidgets");
 	layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 
@@ -18,7 +19,7 @@ RemovebtnWidgets::RemovebtnWidgets(QWidget *parent,QWidget* widget) :
 	remove->setMaximumWidth(20);
 	remove->setMaximumHeight(20);
 	remove->setScaledContents(true);
-
+	remove->setParent(this);
 	layout->addWidget(remove,0,Qt::AlignTop);
 	if(widget != 0){
 	layout->addWidget(widget,0,Qt::AlignRight);

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccount.cpp
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -83,14 +83,14 @@ QString query =
 "BIC VARCHAR(40) NOT NULL, "
 "ZipCode VARCHAR(40) NOT NULL, "
 "CurrencyID INT NOT NULL, "
-"FOREIGN KEY (CurrencyID) REFERENCES Currency(CurrencyID),"
+"FOREIGN KEY (CurrencyID) REFERENCES Currency(CurrencyID)  ON DELETE CASCADE,"
 "ContactID INT NOT NULL, "
-"FOREIGN KEY (ContactID) REFERENCES Contact(ContactID),"
+"FOREIGN KEY (ContactID) REFERENCES Contact(ContactID)  ON DELETE CASCADE,"
 "CountryID INT NOT NULL, "
-"FOREIGN KEY (CountryID) REFERENCES Country(CountryID),"
+"FOREIGN KEY (CountryID) REFERENCES Country(CountryID)  ON DELETE CASCADE,"
 "BankCountryCode VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL )" ;
+"EditedOn VARCHAR(40) NOT NULL)" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

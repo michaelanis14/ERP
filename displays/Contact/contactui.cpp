@@ -1,6 +1,6 @@
 ﻿/**************************************************************************
 **   File: contactui.cpp
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -129,7 +129,7 @@ BankAccounts.append(bankaccountui);
 RemovebtnWidgets* rmbankaccount = new RemovebtnWidgets(0,bankaccountui);
 QObject::connect(rmbankaccount, SIGNAL(removePressed(QWidget*)), this, SLOT(removeBankAccount(QWidget*)));
 block5Layout->addRow("BankAccount"+QString::number(BankAccounts.count()),rmbankaccount);
-mainwindow::GetMainDisplay()->updateSize();
+//mainwindow::GetMainDisplay()->updateSize();
 }
 void ContactUI::addBankAccount(BankAccount* BankAccount){
 BankAccountUI* bankaccountui = new BankAccountUI();
@@ -146,13 +146,9 @@ void ContactUI::removeBankAccount(QWidget* widget){
 if(BankAccounts.count()  > 0){
 BankAccountUI* bankaccountui = (BankAccountUI*) widget;
 BankAccounts.removeOne(bankaccountui);
-block5Layout->boxLayout->removeWidget(bankaccountui);
-bankaccountui->setHidden(true);
-delete bankaccountui;
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block5Layout->boxLayout->removeWidget(sender);
-sender->setHidden(true);
-mainwindow::GetMainDisplay()->updateSize();
+block5Layout->removeRow(sender);
+//mainwindow::GetMainDisplay()->updateSize();
 }
 }
 void ContactUI::fill(Contact* contact){
@@ -199,23 +195,12 @@ email->setText("");
 email2->setText("");
 website->setText("");
 taxnumber->setText("");
-QList<BankAccountUI *> Widgets = this->findChildren<BankAccountUI *>();
-foreach(BankAccountUI * child, Widgets)
-{
-	if(child->parent() != 0)
-	 child->parent()->de();
-	BankAccounts.clear();
-
-//delete child;
-}
 QList<RemovebtnWidgets *> RWidgets = this->findChildren<RemovebtnWidgets *>();
 foreach(RemovebtnWidgets * child, RWidgets)
 {
-
-delete child;
+if(child->parent()->parent()->parent() != 0)
+((ERPFormBlock*)child->parent()->parent())->removeRow(child);
 }
-
-
 this->contact = new Contact();
 }
 void ContactUI::selectContact(){

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountindexui.h
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,5 +43,7 @@ private slots:
  void removeRow(); 
  void editRow(); 
  void onSelectionChanged();
+protected:
+void showEvent(QShowEvent * event);
 };
 #endif

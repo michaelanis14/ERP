@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.cpp
-**   Created on: Tue Nov 25 00:34:00 EET 2014
+**   Created on: Wed Nov 26 16:22:56 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -40,7 +40,7 @@ QString query =
 "PRIMARY KEY (ContactTypeID),"
 "Description VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL )" ;
+"EditedOn VARCHAR(40) NOT NULL)" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
