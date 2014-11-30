@@ -13,9 +13,9 @@ class Barcode : public QWidget
 {
 	Q_OBJECT
 public:
-	Barcode(QWidget *parent = 0);
+	explicit Barcode(QWidget *parent = 0,QString barcode = "");
 	void draw(QPainter *painter);
-
+	QString barcode;
 	protected:
 		void paintEvent(QPaintEvent *event);
 

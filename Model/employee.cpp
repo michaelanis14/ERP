@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employee.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -91,12 +91,13 @@ return new Employee();
  }
 
 QList<Employee*> Employee::GetAll() {
-	Employee::GetInstance()->employees.clear();
+	QList<Employee*> employees =   QList<Employee*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Employee"));
 	while (query.next()) {
-		Employee::GetInstance()->employees.append(new Employee(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+employees.append(new Employee(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-	return Employee::GetInstance()->employees;
+qSort(employees);
+	return employees;
 }
 
 Employee* Employee::Get(int id) {
@@ -150,35 +151,30 @@ return list;
 
 QList<QString> Employee::GetStringList() {
 	QList<QString> list;
-	int count =Employee::GetInstance()->employees.count();
-	if( count < 2){
-		Employee::GetAll();
+	QList<Employee*> employees =   QList<Employee*>();
+employees = GetAll();
+	for(int i = 0; i <employees.count(); i++){
+		list.append(employees[i]->Name);
 	}
-	for(int i = 0; i < count; i++){
-		list.append(Employee::GetInstance()->employees[i]->Name);
-	}
+	qSort(list);
 	return list;
 }
 
 QHash<int,QString> Employee::GetHashList() {
 	QHash<int,QString> list;
-	int count =Employee::GetInstance()->employees.count();
-	if( count < 2){
-		Employee::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		list.insert(Employee::GetInstance()->employees[i]->EmployeeID,Employee::GetInstance()->employees[i]->Name);
+	QList<Employee*> employees =   QList<Employee*>();
+employees = GetAll();
+	for(int i = 0; i <employees.count(); i++){
+		list.insert(employees[i]->EmployeeID,employees[i]->Name);
 	}
 	return list;
 }
 
 int Employee::GetIndex(QString name) {
-	int count =Employee::GetInstance()->employees.count();
-	if( count < 2){
-		Employee::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		if(Employee::GetInstance()->employees[i]->Name == name){
+	QList<Employee*> employees =   QList<Employee*>();
+employees = GetAll();
+	for(int i = 0; i <employees.count(); i++){
+		if(employees[i]->Name == name){
 			return i;
 		}
 	}

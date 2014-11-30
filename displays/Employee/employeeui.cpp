@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employeeui.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@ EmployeeUI::EmployeeUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 employee = new Employee();
-flowLayout = new FlowLayout(formPanel);
+flowLayout = new FlowLayout(this);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QPushButton* save = new QPushButton("Save");
@@ -28,6 +28,8 @@ QPushButton* save = new QPushButton("Save");
  this->controllers->addControllerButton(clear);  
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block0Layout->setMinimumWidth(330);
 name = new QLineEdit();
 QStringList* list = new QStringList(Employee::GetStringList());
 QCompleter *completer = new QCompleter(*list);

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employee.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -20,7 +20,6 @@ public:
 	QString Name;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<Employee*> employees;
 	static bool Init();
 	bool save();
 	bool remove();
@@ -42,9 +41,9 @@ public:
 
 private:
 	Employee(int EmployeeID,QString Name,QString CreatedOn,QString EditedOn);	static Employee* p_instance;
-	bool setName(int EmployeeID, const QString &name);
-	bool setCreatedOn(int EmployeeID, const QString &createdon);
-	bool setEditedOn(int EmployeeID, const QString &editedon);
+	bool setName(int EmployeeID, const QString &Name);
+	bool setCreatedOn(int EmployeeID, const QString &CreatedOn);
+	bool setEditedOn(int EmployeeID, const QString &EditedOn);
 
 };
 #endif

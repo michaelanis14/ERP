@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -91,12 +91,13 @@ return new Unit();
  }
 
 QList<Unit*> Unit::GetAll() {
-	Unit::GetInstance()->units.clear();
+	QList<Unit*> units =   QList<Unit*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit"));
 	while (query.next()) {
-		Unit::GetInstance()->units.append(new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+units.append(new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-	return Unit::GetInstance()->units;
+qSort(units);
+	return units;
 }
 
 Unit* Unit::Get(int id) {
@@ -150,35 +151,30 @@ return list;
 
 QList<QString> Unit::GetStringList() {
 	QList<QString> list;
-	int count =Unit::GetInstance()->units.count();
-	if( count < 2){
-		Unit::GetAll();
+	QList<Unit*> units =   QList<Unit*>();
+units = GetAll();
+	for(int i = 0; i <units.count(); i++){
+		list.append(units[i]->Description);
 	}
-	for(int i = 0; i < count; i++){
-		list.append(Unit::GetInstance()->units[i]->Description);
-	}
+	qSort(list);
 	return list;
 }
 
 QHash<int,QString> Unit::GetHashList() {
 	QHash<int,QString> list;
-	int count =Unit::GetInstance()->units.count();
-	if( count < 2){
-		Unit::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		list.insert(Unit::GetInstance()->units[i]->UnitID,Unit::GetInstance()->units[i]->Description);
+	QList<Unit*> units =   QList<Unit*>();
+units = GetAll();
+	for(int i = 0; i <units.count(); i++){
+		list.insert(units[i]->UnitID,units[i]->Description);
 	}
 	return list;
 }
 
 int Unit::GetIndex(QString name) {
-	int count =Unit::GetInstance()->units.count();
-	if( count < 2){
-		Unit::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		if(Unit::GetInstance()->units[i]->Description == name){
+	QList<Unit*> units =   QList<Unit*>();
+units = GetAll();
+	for(int i = 0; i <units.count(); i++){
+		if(units[i]->Description == name){
 			return i;
 		}
 	}

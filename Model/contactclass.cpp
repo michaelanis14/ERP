@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclass.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -91,12 +91,13 @@ return new ContactClass();
  }
 
 QList<ContactClass*> ContactClass::GetAll() {
-	ContactClass::GetInstance()->contactclasss.clear();
+	QList<ContactClass*> contactclasss =   QList<ContactClass*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactClass"));
 	while (query.next()) {
-		ContactClass::GetInstance()->contactclasss.append(new ContactClass(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+contactclasss.append(new ContactClass(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-	return ContactClass::GetInstance()->contactclasss;
+qSort(contactclasss);
+	return contactclasss;
 }
 
 ContactClass* ContactClass::Get(int id) {
@@ -150,35 +151,30 @@ return list;
 
 QList<QString> ContactClass::GetStringList() {
 	QList<QString> list;
-	int count =ContactClass::GetInstance()->contactclasss.count();
-	if( count < 2){
-		ContactClass::GetAll();
+	QList<ContactClass*> contactclasss =   QList<ContactClass*>();
+contactclasss = GetAll();
+	for(int i = 0; i <contactclasss.count(); i++){
+		list.append(contactclasss[i]->Description);
 	}
-	for(int i = 0; i < count; i++){
-		list.append(ContactClass::GetInstance()->contactclasss[i]->Description);
-	}
+	qSort(list);
 	return list;
 }
 
 QHash<int,QString> ContactClass::GetHashList() {
 	QHash<int,QString> list;
-	int count =ContactClass::GetInstance()->contactclasss.count();
-	if( count < 2){
-		ContactClass::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		list.insert(ContactClass::GetInstance()->contactclasss[i]->ContactClassID,ContactClass::GetInstance()->contactclasss[i]->Description);
+	QList<ContactClass*> contactclasss =   QList<ContactClass*>();
+contactclasss = GetAll();
+	for(int i = 0; i <contactclasss.count(); i++){
+		list.insert(contactclasss[i]->ContactClassID,contactclasss[i]->Description);
 	}
 	return list;
 }
 
 int ContactClass::GetIndex(QString name) {
-	int count =ContactClass::GetInstance()->contactclasss.count();
-	if( count < 2){
-		ContactClass::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		if(ContactClass::GetInstance()->contactclasss[i]->Description == name){
+	QList<ContactClass*> contactclasss =   QList<ContactClass*>();
+contactclasss = GetAll();
+	for(int i = 0; i <contactclasss.count(); i++){
+		if(contactclasss[i]->Description == name){
 			return i;
 		}
 	}

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -91,12 +91,13 @@ return new Country();
  }
 
 QList<Country*> Country::GetAll() {
-	Country::GetInstance()->countrys.clear();
+	QList<Country*> countrys =   QList<Country*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Country"));
 	while (query.next()) {
-		Country::GetInstance()->countrys.append(new Country(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+countrys.append(new Country(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-	return Country::GetInstance()->countrys;
+qSort(countrys);
+	return countrys;
 }
 
 Country* Country::Get(int id) {
@@ -150,35 +151,30 @@ return list;
 
 QList<QString> Country::GetStringList() {
 	QList<QString> list;
-	int count =Country::GetInstance()->countrys.count();
-	if( count < 2){
-		Country::GetAll();
+	QList<Country*> countrys =   QList<Country*>();
+countrys = GetAll();
+	for(int i = 0; i <countrys.count(); i++){
+		list.append(countrys[i]->Name);
 	}
-	for(int i = 0; i < count; i++){
-		list.append(Country::GetInstance()->countrys[i]->Name);
-	}
+	qSort(list);
 	return list;
 }
 
 QHash<int,QString> Country::GetHashList() {
 	QHash<int,QString> list;
-	int count =Country::GetInstance()->countrys.count();
-	if( count < 2){
-		Country::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		list.insert(Country::GetInstance()->countrys[i]->CountryID,Country::GetInstance()->countrys[i]->Name);
+	QList<Country*> countrys =   QList<Country*>();
+countrys = GetAll();
+	for(int i = 0; i <countrys.count(); i++){
+		list.insert(countrys[i]->CountryID,countrys[i]->Name);
 	}
 	return list;
 }
 
 int Country::GetIndex(QString name) {
-	int count =Country::GetInstance()->countrys.count();
-	if( count < 2){
-		Country::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		if(Country::GetInstance()->countrys[i]->Name == name){
+	QList<Country*> countrys =   QList<Country*>();
+countrys = GetAll();
+	for(int i = 0; i <countrys.count(); i++){
+		if(countrys[i]->Name == name){
 			return i;
 		}
 	}

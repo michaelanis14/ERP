@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactindexui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,14 +11,16 @@
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
 #include "../../Model/contact.h"
-#include "../../Model/contact.h"
 #include "../../Model/contacttype.h"
 #include "../../Model/contactclass.h"
 #include "../../Model/country.h"
 #include "../../Model/contactstatus.h"
 #include "../../Model/employee.h"
 
+#include "../ContactTelephone/contacttelephoneui.h"
+#include "../ContactEmail/contactemailui.h"
 #include "../BankAccount/bankaccountui.h"
+#include "../ContactFieldData/contactfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>

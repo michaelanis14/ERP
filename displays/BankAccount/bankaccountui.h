@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,9 +15,9 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/bankaccount.h"
 #include "../../Model/bankaccount.h"
+#include "../../Model/country.h"
 #include "../../Model/currency.h"
 #include "../../Model/contact.h"
-#include "../../Model/country.h"
 
 
 #include <QWidget>
@@ -35,17 +35,15 @@ public:
 	static BankAccountUI* GetUI();
 	ERPFormBlock* block0Layout;
 	QLineEdit*name;
-	QLineEdit*bankaddress;
+	ERPComboBox*country;
 	QLineEdit*bankcode;
-	QLineEdit*accountname;
+	QLineEdit*bankaddress;
 	QLineEdit*accountnumber;
+	QLineEdit*accountowner;
 	QLineEdit*iban;
 	QLineEdit*bic;
-	QLineEdit*zipcode;
 	ERPComboBox*currency;
 	ERPComboBox*contact;
-	ERPComboBox*country;
-	QLineEdit*bankcountrycode;
 	void fill(BankAccount* bankaccount);
 BankAccount* bankaccount;
 private:

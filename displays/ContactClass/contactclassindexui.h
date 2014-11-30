@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclassindexui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,7 +10,6 @@
 #include "../../erpdisplay.h"
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
-#include "../../Model/contactclass.h"
 #include "../../Model/contactclass.h"
 
 

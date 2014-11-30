@@ -17,6 +17,7 @@ public:
 	explicit ERPComboBox(QWidget *parent = 0);
 	void addItems(QHash<int,QString> items);
 	int getKey();
+	bool addedItems;
 
 private:
 	QHash<int,QString>  items;

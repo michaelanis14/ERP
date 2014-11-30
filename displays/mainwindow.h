@@ -23,7 +23,6 @@ public:
 	static QDateTime lastEvent;
 	QLabel* label;
 	QLabel *lblContacts;
-	void updateSize();
 	class NavigationButtons* navigation;
 	class HNavigationButtons* innerNavigation;
 	class QToolButton* btnHome;
@@ -32,10 +31,16 @@ public:
 	class QToolButton* btnAccounting;
 	class QToolButton* btnReports;
 
-
+//Contacts
 	class QPushButton* inNavContacts;
 	class QPushButton* inNavcontactPersones;
 	class QPushButton* inNavcontactType;
+//Products
+	class QPushButton* inNavProducts;
+	class QPushButton* inNavService;
+	class QPushButton* inNavStoreHouse;
+	class QPushButton* inNavPurchase;
+	class QPushButton* inNavDeliveryOrder;
 private:
 	static mainwindow* p_instance;
 	class ERPDisplay* currentDisplay;

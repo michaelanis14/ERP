@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -17,6 +17,9 @@
 #include "../../Model/contactperson.h"
 #include "../../Model/contact.h"
 
+#include "../ContactPersonTelephone/contactpersontelephoneui.h"
+#include "../ContactPersonEmail/contactpersonemailui.h"
+#include "../ContactPersonFieldData/contactpersonfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -32,25 +35,33 @@ public:
 	static void ShowUI();
 	static ContactPersonUI* GetUI();
 	ERPFormBlock* block0Layout;
-	QLineEdit*personalsalut;
-	QLineEdit*titleprefix;
+	ERPFormBlock* block1Layout;
+	ERPFormBlock* block2Layout;
+	ERPFormBlock* block3Layout;
+	QList<ContactPersonTelephoneUI*> ContactPersonTelephones;
+	QList<ContactPersonEmailUI*> ContactPersonEmails;
+	QList<ContactPersonFieldDataUI*> ContactPersonFieldDatas;
+	ERPComboBox*contact;
+	QLineEdit*title;
 	QLineEdit*name;
 	QLineEdit*lastname;
 	QLineEdit*position;
 	QLineEdit*birthdate;
-	QLineEdit*contactpersonenumber;
-	QLineEdit*email;
-	QLineEdit*phonenum;
-	QLineEdit*phonenum2;
-	QLineEdit*mobile;
-	QLineEdit*fax;
-	QCheckBox* active;
-	ERPComboBox*contact;
+	QLineEdit*number;
 	void fill(ContactPerson* contactperson);
 ContactPerson* contactperson;
 private:
 	static ERPDisplay* p_instance;
 private slots:
+	void addContactPersonTelephone();
+	void addContactPersonTelephone(ContactPersonTelephone* ContactPersonTelephone);
+	void removeContactPersonTelephone(QWidget* widget);
+	void addContactPersonEmail();
+	void addContactPersonEmail(ContactPersonEmail* ContactPersonEmail);
+	void removeContactPersonEmail(QWidget* widget);
+	void addContactPersonFieldData();
+	void addContactPersonFieldData(ContactPersonFieldData* ContactPersonFieldData);
+	void removeContactPersonFieldData(QWidget* widget);
 	void selectContactPerson();
 	void cancel();
 	void clear();

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -91,12 +91,13 @@ return new ContactType();
  }
 
 QList<ContactType*> ContactType::GetAll() {
-	ContactType::GetInstance()->contacttypes.clear();
+	QList<ContactType*> contacttypes =   QList<ContactType*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactType"));
 	while (query.next()) {
-		ContactType::GetInstance()->contacttypes.append(new ContactType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+contacttypes.append(new ContactType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-	return ContactType::GetInstance()->contacttypes;
+qSort(contacttypes);
+	return contacttypes;
 }
 
 ContactType* ContactType::Get(int id) {
@@ -150,35 +151,30 @@ return list;
 
 QList<QString> ContactType::GetStringList() {
 	QList<QString> list;
-	int count =ContactType::GetInstance()->contacttypes.count();
-	if( count < 2){
-		ContactType::GetAll();
+	QList<ContactType*> contacttypes =   QList<ContactType*>();
+contacttypes = GetAll();
+	for(int i = 0; i <contacttypes.count(); i++){
+		list.append(contacttypes[i]->Description);
 	}
-	for(int i = 0; i < count; i++){
-		list.append(ContactType::GetInstance()->contacttypes[i]->Description);
-	}
+	qSort(list);
 	return list;
 }
 
 QHash<int,QString> ContactType::GetHashList() {
 	QHash<int,QString> list;
-	int count =ContactType::GetInstance()->contacttypes.count();
-	if( count < 2){
-		ContactType::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		list.insert(ContactType::GetInstance()->contacttypes[i]->ContactTypeID,ContactType::GetInstance()->contacttypes[i]->Description);
+	QList<ContactType*> contacttypes =   QList<ContactType*>();
+contacttypes = GetAll();
+	for(int i = 0; i <contacttypes.count(); i++){
+		list.insert(contacttypes[i]->ContactTypeID,contacttypes[i]->Description);
 	}
 	return list;
 }
 
 int ContactType::GetIndex(QString name) {
-	int count =ContactType::GetInstance()->contacttypes.count();
-	if( count < 2){
-		ContactType::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		if(ContactType::GetInstance()->contacttypes[i]->Description == name){
+	QList<ContactType*> contacttypes =   QList<ContactType*>();
+contacttypes = GetAll();
+	for(int i = 0; i <contacttypes.count(); i++){
+		if(contacttypes[i]->Description == name){
 			return i;
 		}
 	}

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -20,7 +20,6 @@ public:
 	QString Name;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<Country*> countrys;
 	static bool Init();
 	bool save();
 	bool remove();
@@ -42,9 +41,9 @@ public:
 
 private:
 	Country(int CountryID,QString Name,QString CreatedOn,QString EditedOn);	static Country* p_instance;
-	bool setName(int CountryID, const QString &name);
-	bool setCreatedOn(int CountryID, const QString &createdon);
-	bool setEditedOn(int CountryID, const QString &editedon);
+	bool setName(int CountryID, const QString &Name);
+	bool setCreatedOn(int CountryID, const QString &CreatedOn);
+	bool setEditedOn(int CountryID, const QString &EditedOn);
 
 };
 #endif

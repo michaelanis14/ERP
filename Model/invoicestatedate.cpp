@@ -1,0 +1,322 @@
+/**************************************************************************
+**   File: invoicestatedate.cpp
+**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Author: Michael Bishara
+**   Copyright: SphinxSolutions.
+**************************************************************************/
+#include "invoicestatedate.h"
+#include "erpmodel.h"
+
+InvoiceStateDate::InvoiceStateDate()
+ : QSqlRelationalTableModel(){
+
+this->InvoiceStateDateID = 0 ;
+this->Title = "";
+this->InvoiceID = 0 ;
+this->InvoiceStateID = 0 ;
+this->Date = "";
+this->CreatedOn = "";
+this->EditedOn = "";
+this->setTable("InvoiceStateDate");
+this->setEditStrategy(QSqlTableModel::OnManualSubmit);
+this->setRelation(2, QSqlRelation("Invoice", "InvoiceID", "Title"));
+this->setRelation(3, QSqlRelation("InvoiceState", "InvoiceStateID", "Description"));
+}
+InvoiceStateDate::InvoiceStateDate(int InvoiceStateDateID,QString Title,int InvoiceID,int InvoiceStateID,QString Date,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+this->InvoiceStateDateID = InvoiceStateDateID ;
+this->Title = Title ;
+this->InvoiceID = InvoiceID ;
+this->InvoiceStateID = InvoiceStateID ;
+this->Date = Date ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
+}
+
+InvoiceStateDate::InvoiceStateDate(QString Title,int InvoiceID,int InvoiceStateID,QString Date,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+this->InvoiceStateDateID = 0 ;
+this->Title = Title ;
+this->InvoiceID = InvoiceID ;
+this->InvoiceStateID = InvoiceStateID ;
+this->Date = Date ;
+this->CreatedOn = CreatedOn ;
+this->EditedOn = EditedOn ;
+}
+
+bool InvoiceStateDate::Init()
+{
+
+QString table = "InvoiceStateDate";
+QString query =
+"(InvoiceStateDateID INT NOT NULL AUTO_INCREMENT, "
+"PRIMARY KEY (InvoiceStateDateID),"
+"Title VARCHAR(40) NOT NULL, "
+"InvoiceID INT NOT NULL, "
+"FOREIGN KEY (InvoiceID) REFERENCES Invoice(InvoiceID)  ON DELETE CASCADE,"
+"InvoiceStateID INT NOT NULL, "
+"FOREIGN KEY (InvoiceStateID) REFERENCES InvoiceState(InvoiceStateID)  ON DELETE CASCADE,"
+"Date VARCHAR(40) NOT NULL, "
+"CreatedOn VARCHAR(40) NOT NULL, "
+"EditedOn VARCHAR(40) NOT NULL)" ;
+
+ErpModel::GetInstance()->createTable(table,query);
+return true;
+}
+InvoiceStateDate* InvoiceStateDate::p_instance = 0;
+InvoiceStateDate* InvoiceStateDate::GetInstance() {
+	if (p_instance == 0) {
+		p_instance = new InvoiceStateDate();
+		InvoiceStateDate::GetAll();
+	}
+return p_instance;
+}
+bool InvoiceStateDate::save() {
+this->EditedOn = QDateTime::currentDateTime().toString();
+if(InvoiceStateDateID== 0) {
+this->CreatedOn = QDateTime::currentDateTime().toString();
+ErpModel::GetInstance()->qeryExec("INSERT INTO InvoiceStateDate (Title,InvoiceID,InvoiceStateID,Date,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Title)+"','"+QString::number(this->InvoiceID)+"','"+QString::number(this->InvoiceStateID)+"','"+QString(this->Date)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+}else {
+ErpModel::GetInstance()->qeryExec("UPDATE InvoiceStateDate SET "	"Title = '"+QString(this->Title)+"',"+"InvoiceID = '"+QString::number(this->InvoiceID)+"',"+"InvoiceStateID = '"+QString::number(this->InvoiceStateID)+"',"+"Date = '"+QString(this->Date)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE InvoiceStateDateID ='"+QString::number(this->InvoiceStateDateID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  InvoiceStateDateID FROM InvoiceStateDate WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
+while (query.next()) { 
+ if(query.value(0).toInt() != 0){ 
+ this->InvoiceStateDateID = query.value(0).toInt();	
+ } 
+ }
+return true;
+}
+
+bool InvoiceStateDate::remove() {
+if(InvoiceStateDateID!= 0) {
+(ErpModel::GetInstance()->qeryExec("DELETE FROM InvoiceStateDate WHERE InvoiceStateDateID ="+QString::number(this->InvoiceStateDateID)+""));
+return true;
+ }
+return false;
+}
+
+InvoiceStateDate* InvoiceStateDate::get() {
+if(InvoiceStateDateID!= 0) {
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceStateDate"
+"WHERE InvoiceStateDateID ='"+QString::number(this->InvoiceStateDateID)+"'"));
+while (query.next()) {
+return new InvoiceStateDate(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString());
+ }
+
+}
+return new InvoiceStateDate();
+ }
+
+QList<InvoiceStateDate*> InvoiceStateDate::GetAll() {
+	QList<InvoiceStateDate*> invoicestatedates =   QList<InvoiceStateDate*>();
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceStateDate"));
+	while (query.next()) {
+invoicestatedates.append(new InvoiceStateDate(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString()));
+	}
+qSort(invoicestatedates);
+	return invoicestatedates;
+}
+
+InvoiceStateDate* InvoiceStateDate::Get(int id) {
+InvoiceStateDate* invoicestatedate = new InvoiceStateDate();
+if(id != 0) {
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceStateDate WHERE InvoiceStateDateID = '"+QString::number(id)+"'"));
+while (query.next()) {
+invoicestatedate = new InvoiceStateDate(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString());
+ }
+
+}
+return invoicestatedate;
+}
+
+InvoiceStateDate* InvoiceStateDate::get(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
+ if(data(primaryKeyIndex).toInt() != 0) 
+ return Get(data(primaryKeyIndex).toInt());
+else return new InvoiceStateDate();
+}
+
+InvoiceStateDate* InvoiceStateDate::Get(QString name) {
+InvoiceStateDate* invoicestatedate = new InvoiceStateDate();
+if(name != NULL) {
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceStateDate WHERE Title = '"+name+"'"));
+while (query.next()) {
+invoicestatedate = new InvoiceStateDate(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString());
+
+ }
+
+}
+return invoicestatedate;
+ }
+
+QList<InvoiceStateDate*> InvoiceStateDate::Search(QString keyword) {
+QList<InvoiceStateDate*>list;
+if(keyword != NULL) {
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceStateDate"
+"WHERE" 
+"Title LIKE '%"+keyword+"%'"
+"OR Date LIKE '%"+keyword+"%'"
+"OR CreatedOn LIKE '%"+keyword+"%'"
+"OR EditedOn LIKE '%"+keyword+"%'"
+));
+while (query.next()) {
+list.append(new InvoiceStateDate(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString()));
+ }
+
+}
+return list;
+ }
+
+QList<QString> InvoiceStateDate::GetStringList() {
+	QList<QString> list;
+	QList<InvoiceStateDate*> invoicestatedates =   QList<InvoiceStateDate*>();
+invoicestatedates = GetAll();
+	for(int i = 0; i <invoicestatedates.count(); i++){
+		list.append(invoicestatedates[i]->Title);
+	}
+	qSort(list);
+	return list;
+}
+
+QHash<int,QString> InvoiceStateDate::GetHashList() {
+	QHash<int,QString> list;
+	QList<InvoiceStateDate*> invoicestatedates =   QList<InvoiceStateDate*>();
+invoicestatedates = GetAll();
+	for(int i = 0; i <invoicestatedates.count(); i++){
+		list.insert(invoicestatedates[i]->InvoiceStateDateID,invoicestatedates[i]->Title);
+	}
+	return list;
+}
+
+int InvoiceStateDate::GetIndex(QString name) {
+	QList<InvoiceStateDate*> invoicestatedates =   QList<InvoiceStateDate*>();
+invoicestatedates = GetAll();
+	for(int i = 0; i <invoicestatedates.count(); i++){
+		if(invoicestatedates[i]->Title == name){
+			return i;
+		}
+	}
+	return 0;
+}
+
+QList<InvoiceStateDate*> InvoiceStateDate::QuerySelect(QString select) {
+QList<InvoiceStateDate*>list;
+if(select != NULL) {
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceStateDate WHERE "+select+"" ));
+while (query.next()) {
+list.append(new InvoiceStateDate(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString()));
+ }
+
+}
+return list;
+ }
+
+Qt::ItemFlags InvoiceStateDate::flags(const QModelIndex &index) const {
+Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
+flags ^= Qt::ItemIsEditable;
+if (
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6)
+flags |= Qt::ItemIsEditable;
+return flags;
+}
+
+bool InvoiceStateDate::setData(const QModelIndex &index, const QVariant &value, int /* role */) {
+	if (index.column() < 1)
+		return false;
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+int id = data(primaryKeyIndex).toInt();
+bool ok = true;
+if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
+if (index.column() == 1)
+ok = setTitle(id, value.toString());
+else if (index.column() == 2)
+ok = setInvoiceID(id, value.toString());
+else if (index.column() == 3)
+ok = setInvoiceStateID(id, value.toString());
+else if (index.column() == 4)
+ok = setDate(id, value.toString());
+else if (index.column() == 5)
+ok = setCreatedOn(id, value.toString());
+else if (index.column() == 6)
+ok = setEditedOn(id, value.toString());
+refresh();
+}
+return ok;
+}
+
+bool InvoiceStateDate::remove(const QModelIndex &index) {
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+bool ok = true;
+this->InvoiceStateDateID = data(primaryKeyIndex).toInt();
+ok = this->remove();
+refresh();
+return ok;
+}
+
+void InvoiceStateDate::refresh() {
+if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
+qDebug() <<"Couldn't open DataBase at Refresh() InvoiceStateDate!";
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Title"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Invoice"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Invoice State"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Date"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(6, Qt::Horizontal, QObject::tr("Edited On"));
+	this->select();
+//	if(ErpModel::GetInstance()->db.isOpen())
+//		ErpModel::GetInstance()->db.close();
+}
+bool InvoiceStateDate::setTitle(int InvoiceStateDateID, const QString &Title) {
+QSqlQuery query;
+query.prepare("update InvoiceStateDate set Title = ? where InvoiceStateDateID = ?");
+query.addBindValue(Title);
+query.addBindValue(InvoiceStateDateID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool InvoiceStateDate::setInvoiceID(int InvoiceStateDateID, const QString &InvoiceID) {
+QSqlQuery query;
+query.prepare("update InvoiceStateDate set InvoiceID = ? where InvoiceStateDateID = ?");
+query.addBindValue(InvoiceID);
+query.addBindValue(InvoiceStateDateID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool InvoiceStateDate::setInvoiceStateID(int InvoiceStateDateID, const QString &InvoiceStateID) {
+QSqlQuery query;
+query.prepare("update InvoiceStateDate set InvoiceStateID = ? where InvoiceStateDateID = ?");
+query.addBindValue(InvoiceStateID);
+query.addBindValue(InvoiceStateDateID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool InvoiceStateDate::setDate(int InvoiceStateDateID, const QString &Date) {
+QSqlQuery query;
+query.prepare("update InvoiceStateDate set Date = ? where InvoiceStateDateID = ?");
+query.addBindValue(Date);
+query.addBindValue(InvoiceStateDateID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool InvoiceStateDate::setCreatedOn(int InvoiceStateDateID, const QString &CreatedOn) {
+QSqlQuery query;
+query.prepare("update InvoiceStateDate set CreatedOn = ? where InvoiceStateDateID = ?");
+query.addBindValue(CreatedOn);
+query.addBindValue(InvoiceStateDateID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool InvoiceStateDate::setEditedOn(int InvoiceStateDateID, const QString &EditedOn) {
+QSqlQuery query;
+query.prepare("update InvoiceStateDate set EditedOn = ? where InvoiceStateDateID = ?");
+query.addBindValue(EditedOn);
+query.addBindValue(InvoiceStateDateID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+

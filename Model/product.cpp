@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,71 +12,60 @@ Product::Product()
 
 this->ProductID = 0 ;
 this->Name = "";
-this->SellingPrice = 0 ;
-this->NetPrice = 0 ;
-this->TradeMargine = 0 ;
-this->Description = "";
-this->Barcode = "";
-this->CriticalAmount = 0 ;
-this->ProductNumber = "";
-this->MoreInfo = "";
-this->BarcodeOnly = 0 ;
-this->isComposite = 0 ;
-this->SpecialTaxDescription = "";
-this->SpecialTaxValue = 0 ;
-this->TaxID = 0 ;
-this->UnitID = 0 ;
-this->generateBarcode = 0 ;
+this->Image = "";
 this->ShortDescription = "";
+this->UnitID = 0 ;
+this->ProductIsAComposite = 0 ;
+this->SellingPrice = 0 ;
+this->NetCoast = 0 ;
+this->TradeMarginRate = 0 ;
+this->TaxID = 0 ;
+this->information = "";
+this->Barcode = "";
+this->ProductCategoryID = 0 ;
+this->CriticalAmount = 0 ;
 this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("Product");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(14, QSqlRelation("Tax", "TaxID", "Description"));
-this->setRelation(15, QSqlRelation("Unit", "UnitID", "Description"));
+this->setRelation(4, QSqlRelation("Unit", "UnitID", "Description"));
+this->setRelation(9, QSqlRelation("Tax", "TaxID", "Title"));
+this->setRelation(12, QSqlRelation("ProductCategory", "ProductCategoryID", "Description"));
 }
-Product::Product(int ProductID,QString Name,double SellingPrice,double NetPrice,double TradeMargine,QString Description,QString Barcode,double CriticalAmount,QString ProductNumber,QString MoreInfo,bool BarcodeOnly,bool isComposite,QString SpecialTaxDescription,double SpecialTaxValue,int TaxID,int UnitID,bool generateBarcode,QString ShortDescription,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Product::Product(int ProductID,QString Name,QString Image,QString ShortDescription,int UnitID,bool ProductIsAComposite,double SellingPrice,double NetCoast,double TradeMarginRate,int TaxID,QString information,QString Barcode,int ProductCategoryID,double CriticalAmount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ProductID = ProductID ;
 this->Name = Name ;
-this->SellingPrice = SellingPrice ;
-this->NetPrice = NetPrice ;
-this->TradeMargine = TradeMargine ;
-this->Description = Description ;
-this->Barcode = Barcode ;
-this->CriticalAmount = CriticalAmount ;
-this->ProductNumber = ProductNumber ;
-this->MoreInfo = MoreInfo ;
-this->BarcodeOnly = BarcodeOnly ;
-this->isComposite = isComposite ;
-this->SpecialTaxDescription = SpecialTaxDescription ;
-this->SpecialTaxValue = SpecialTaxValue ;
-this->TaxID = TaxID ;
-this->UnitID = UnitID ;
-this->generateBarcode = generateBarcode ;
+this->Image = Image ;
 this->ShortDescription = ShortDescription ;
+this->UnitID = UnitID ;
+this->ProductIsAComposite = ProductIsAComposite ;
+this->SellingPrice = SellingPrice ;
+this->NetCoast = NetCoast ;
+this->TradeMarginRate = TradeMarginRate ;
+this->TaxID = TaxID ;
+this->information = information ;
+this->Barcode = Barcode ;
+this->ProductCategoryID = ProductCategoryID ;
+this->CriticalAmount = CriticalAmount ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-Product::Product(QString Name,double SellingPrice,double NetPrice,double TradeMargine,QString Description,QString Barcode,double CriticalAmount,QString ProductNumber,QString MoreInfo,bool BarcodeOnly,bool isComposite,QString SpecialTaxDescription,double SpecialTaxValue,int TaxID,int UnitID,bool generateBarcode,QString ShortDescription,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Product::Product(QString Name,QString Image,QString ShortDescription,int UnitID,bool ProductIsAComposite,double SellingPrice,double NetCoast,double TradeMarginRate,int TaxID,QString information,QString Barcode,int ProductCategoryID,double CriticalAmount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ProductID = 0 ;
 this->Name = Name ;
-this->SellingPrice = SellingPrice ;
-this->NetPrice = NetPrice ;
-this->TradeMargine = TradeMargine ;
-this->Description = Description ;
-this->Barcode = Barcode ;
-this->CriticalAmount = CriticalAmount ;
-this->ProductNumber = ProductNumber ;
-this->MoreInfo = MoreInfo ;
-this->BarcodeOnly = BarcodeOnly ;
-this->isComposite = isComposite ;
-this->SpecialTaxDescription = SpecialTaxDescription ;
-this->SpecialTaxValue = SpecialTaxValue ;
-this->TaxID = TaxID ;
-this->UnitID = UnitID ;
-this->generateBarcode = generateBarcode ;
+this->Image = Image ;
 this->ShortDescription = ShortDescription ;
+this->UnitID = UnitID ;
+this->ProductIsAComposite = ProductIsAComposite ;
+this->SellingPrice = SellingPrice ;
+this->NetCoast = NetCoast ;
+this->TradeMarginRate = TradeMarginRate ;
+this->TaxID = TaxID ;
+this->information = information ;
+this->Barcode = Barcode ;
+this->ProductCategoryID = ProductCategoryID ;
+this->CriticalAmount = CriticalAmount ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
@@ -89,24 +78,21 @@ QString query =
 "(ProductID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (ProductID),"
 "Name VARCHAR(40) NOT NULL, "
-"SellingPrice DECIMAL(6,2) NOT NULL, "
-"NetPrice DECIMAL(6,2) NOT NULL, "
-"TradeMargine DECIMAL(6,2) NOT NULL, "
-"Description VARCHAR(40) NOT NULL, "
-"Barcode VARCHAR(40) NOT NULL, "
-"CriticalAmount DECIMAL(6,2) NOT NULL, "
-"ProductNumber VARCHAR(40) NOT NULL, "
-"MoreInfo VARCHAR(40) NOT NULL, "
-"BarcodeOnly VARCHAR(1) NOT NULL, "
-"isComposite VARCHAR(1) NOT NULL, "
-"SpecialTaxDescription VARCHAR(40) NOT NULL, "
-"SpecialTaxValue DECIMAL(6,2) NOT NULL, "
-"TaxID INT NOT NULL, "
-"FOREIGN KEY (TaxID) REFERENCES Tax(TaxID)  ON DELETE CASCADE,"
+"Image VARCHAR(40) NOT NULL, "
+"ShortDescription VARCHAR(40) NOT NULL, "
 "UnitID INT NOT NULL, "
 "FOREIGN KEY (UnitID) REFERENCES Unit(UnitID)  ON DELETE CASCADE,"
-"generateBarcode VARCHAR(1) NOT NULL, "
-"ShortDescription VARCHAR(40) NOT NULL, "
+"ProductIsAComposite VARCHAR(1) NOT NULL, "
+"SellingPrice DECIMAL(6,2) NOT NULL, "
+"NetCoast DECIMAL(6,2) NOT NULL, "
+"TradeMarginRate DECIMAL(6,2) NOT NULL, "
+"TaxID INT NOT NULL, "
+"FOREIGN KEY (TaxID) REFERENCES Tax(TaxID)  ON DELETE CASCADE,"
+"information VARCHAR(40) NOT NULL, "
+"Barcode VARCHAR(40) NOT NULL, "
+"ProductCategoryID INT NOT NULL, "
+"FOREIGN KEY (ProductCategoryID) REFERENCES ProductCategory(ProductCategoryID)  ON DELETE CASCADE,"
+"CriticalAmount DECIMAL(6,2) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL)" ;
 
@@ -125,10 +111,10 @@ bool Product::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(ProductID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO Product (Name,SellingPrice,NetPrice,TradeMargine,Description,Barcode,CriticalAmount,ProductNumber,MoreInfo,BarcodeOnly,isComposite,SpecialTaxDescription,SpecialTaxValue,TaxID,UnitID,generateBarcode,ShortDescription,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Name)+"','"+QString::number(this->SellingPrice)+"','"+QString::number(this->NetPrice)+"','"+QString::number(this->TradeMargine)+"','"+QString(this->Description)+"','"+QString(this->Barcode)+"','"+QString::number(this->CriticalAmount)+"','"+QString(this->ProductNumber)+"','"+QString(this->MoreInfo)+"','"+QString::number(this->BarcodeOnly)+"','"+QString::number(this->isComposite)+"','"+QString(this->SpecialTaxDescription)+"','"+QString::number(this->SpecialTaxValue)+"','"+QString::number(this->TaxID)+"','"+QString::number(this->UnitID)+"','"+QString::number(this->generateBarcode)+"','"+QString(this->ShortDescription)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO Product (Name,Image,ShortDescription,UnitID,ProductIsAComposite,SellingPrice,NetCoast,TradeMarginRate,TaxID,information,Barcode,ProductCategoryID,CriticalAmount,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Name)+"','"+QString(this->Image)+"','"+QString(this->ShortDescription)+"','"+QString::number(this->UnitID)+"','"+QString::number(this->ProductIsAComposite)+"','"+QString::number(this->SellingPrice)+"','"+QString::number(this->NetCoast)+"','"+QString::number(this->TradeMarginRate)+"','"+QString::number(this->TaxID)+"','"+QString(this->information)+"','"+QString(this->Barcode)+"','"+QString::number(this->ProductCategoryID)+"','"+QString::number(this->CriticalAmount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Product SET "	"Name = '"+QString(this->Name)+"',"+"SellingPrice = '"+QString::number(this->SellingPrice)+"',"+"NetPrice = '"+QString::number(this->NetPrice)+"',"+"TradeMargine = '"+QString::number(this->TradeMargine)+"',"+"Description = '"+QString(this->Description)+"',"+"Barcode = '"+QString(this->Barcode)+"',"+"CriticalAmount = '"+QString::number(this->CriticalAmount)+"',"+"ProductNumber = '"+QString(this->ProductNumber)+"',"+"MoreInfo = '"+QString(this->MoreInfo)+"',"+"BarcodeOnly = '"+QString::number(this->BarcodeOnly)+"',"+"isComposite = '"+QString::number(this->isComposite)+"',"+"SpecialTaxDescription = '"+QString(this->SpecialTaxDescription)+"',"+"SpecialTaxValue = '"+QString::number(this->SpecialTaxValue)+"',"+"TaxID = '"+QString::number(this->TaxID)+"',"+"UnitID = '"+QString::number(this->UnitID)+"',"+"generateBarcode = '"+QString::number(this->generateBarcode)+"',"+"ShortDescription = '"+QString(this->ShortDescription)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductID ='"+QString::number(this->ProductID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Product SET "	"Name = '"+QString(this->Name)+"',"+"Image = '"+QString(this->Image)+"',"+"ShortDescription = '"+QString(this->ShortDescription)+"',"+"UnitID = '"+QString::number(this->UnitID)+"',"+"ProductIsAComposite = '"+QString::number(this->ProductIsAComposite)+"',"+"SellingPrice = '"+QString::number(this->SellingPrice)+"',"+"NetCoast = '"+QString::number(this->NetCoast)+"',"+"TradeMarginRate = '"+QString::number(this->TradeMarginRate)+"',"+"TaxID = '"+QString::number(this->TaxID)+"',"+"information = '"+QString(this->information)+"',"+"Barcode = '"+QString(this->Barcode)+"',"+"ProductCategoryID = '"+QString::number(this->ProductCategoryID)+"',"+"CriticalAmount = '"+QString::number(this->CriticalAmount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductID ='"+QString::number(this->ProductID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProductID FROM Product WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
@@ -151,7 +137,7 @@ if(ProductID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Product"
 "WHERE ProductID ='"+QString::number(this->ProductID)+"'"));
 while (query.next()) {
-return new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString());
+return new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toString(),query.value(15).toString());
  }
 
 }
@@ -159,12 +145,13 @@ return new Product();
  }
 
 QList<Product*> Product::GetAll() {
-	Product::GetInstance()->products.clear();
+	QList<Product*> products =   QList<Product*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product"));
 	while (query.next()) {
-		Product::GetInstance()->products.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString()));
+products.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toString(),query.value(15).toString()));
 	}
-	return Product::GetInstance()->products;
+qSort(products);
+	return products;
 }
 
 Product* Product::Get(int id) {
@@ -172,8 +159,9 @@ Product* product = new Product();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Product WHERE ProductID = '"+QString::number(id)+"'"));
 while (query.next()) {
-product = new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString());
+product = new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toString(),query.value(15).toString());
  }
+product->productfielddatas = ProductFieldData::QuerySelect("ProductID = " + QString::number(id));
 
 }
 return product;
@@ -191,9 +179,10 @@ Product* product = new Product();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product WHERE Name = '"+name+"'"));
 while (query.next()) {
-product = new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString());
+product = new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toString(),query.value(15).toString());
 
  }
+product->productfielddatas = ProductFieldData::QuerySelect("ProductID = " +QString::number(product->ProductID));
 
 }
 return product;
@@ -205,17 +194,15 @@ if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product"
 "WHERE" 
 "Name LIKE '%"+keyword+"%'"
-"OR Description LIKE '%"+keyword+"%'"
-"OR Barcode LIKE '%"+keyword+"%'"
-"OR ProductNumber LIKE '%"+keyword+"%'"
-"OR MoreInfo LIKE '%"+keyword+"%'"
-"OR SpecialTaxDescription LIKE '%"+keyword+"%'"
+"OR Image LIKE '%"+keyword+"%'"
 "OR ShortDescription LIKE '%"+keyword+"%'"
+"OR information LIKE '%"+keyword+"%'"
+"OR Barcode LIKE '%"+keyword+"%'"
 "OR CreatedOn LIKE '%"+keyword+"%'"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString()));
+list.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toString(),query.value(15).toString()));
  }
 
 }
@@ -224,35 +211,30 @@ return list;
 
 QList<QString> Product::GetStringList() {
 	QList<QString> list;
-	int count =Product::GetInstance()->products.count();
-	if( count < 2){
-		Product::GetAll();
+	QList<Product*> products =   QList<Product*>();
+products = GetAll();
+	for(int i = 0; i <products.count(); i++){
+		list.append(products[i]->Name);
 	}
-	for(int i = 0; i < count; i++){
-		list.append(Product::GetInstance()->products[i]->Name);
-	}
+	qSort(list);
 	return list;
 }
 
 QHash<int,QString> Product::GetHashList() {
 	QHash<int,QString> list;
-	int count =Product::GetInstance()->products.count();
-	if( count < 2){
-		Product::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		list.insert(Product::GetInstance()->products[i]->ProductID,Product::GetInstance()->products[i]->Name);
+	QList<Product*> products =   QList<Product*>();
+products = GetAll();
+	for(int i = 0; i <products.count(); i++){
+		list.insert(products[i]->ProductID,products[i]->Name);
 	}
 	return list;
 }
 
 int Product::GetIndex(QString name) {
-	int count =Product::GetInstance()->products.count();
-	if( count < 2){
-		Product::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		if(Product::GetInstance()->products[i]->Name == name){
+	QList<Product*> products =   QList<Product*>();
+products = GetAll();
+	for(int i = 0; i <products.count(); i++){
+		if(products[i]->Name == name){
 			return i;
 		}
 	}
@@ -264,7 +246,7 @@ QList<Product*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product WHERE "+select+"" ));
 while (query.next()) {
-list.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toString(),query.value(18).toString(),query.value(19).toString()));
+list.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toString(),query.value(15).toString()));
  }
 
 }
@@ -275,7 +257,7 @@ Qt::ItemFlags Product::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13 || index.column() == 14 || index.column() == 15 || index.column() == 16 || index.column() == 17 || index.column() == 18 || index.column() == 19)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13 || index.column() == 15 || index.column() == 16)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -290,40 +272,32 @@ if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString(
 if (index.column() == 1)
 ok = setName(id, value.toString());
 else if (index.column() == 2)
-ok = setSellingPrice(id, value.toString());
+ok = setImage(id, value.toString());
 else if (index.column() == 3)
-ok = setNetPrice(id, value.toString());
-else if (index.column() == 4)
-ok = setTradeMargine(id, value.toString());
-else if (index.column() == 5)
-ok = setDescription(id, value.toString());
-else if (index.column() == 6)
-ok = setBarcode(id, value.toString());
-else if (index.column() == 7)
-ok = setCriticalAmount(id, value.toString());
-else if (index.column() == 8)
-ok = setProductNumber(id, value.toString());
-else if (index.column() == 9)
-ok = setMoreInfo(id, value.toString());
-else if (index.column() == 10)
-ok = setBarcodeOnly(id, value.toString());
-else if (index.column() == 11)
-ok = setisComposite(id, value.toString());
-else if (index.column() == 12)
-ok = setSpecialTaxDescription(id, value.toString());
-else if (index.column() == 13)
-ok = setSpecialTaxValue(id, value.toString());
-else if (index.column() == 14)
-ok = setTaxID(id, value.toString());
-else if (index.column() == 15)
-ok = setUnitID(id, value.toString());
-else if (index.column() == 16)
-ok = setgenerateBarcode(id, value.toString());
-else if (index.column() == 17)
 ok = setShortDescription(id, value.toString());
-else if (index.column() == 18)
+else if (index.column() == 4)
+ok = setUnitID(id, value.toString());
+else if (index.column() == 5)
+ok = setProductIsAComposite(id, value.toString());
+else if (index.column() == 6)
+ok = setSellingPrice(id, value.toString());
+else if (index.column() == 7)
+ok = setNetCoast(id, value.toString());
+else if (index.column() == 8)
+ok = setTradeMarginRate(id, value.toString());
+else if (index.column() == 9)
+ok = setTaxID(id, value.toString());
+else if (index.column() == 10)
+ok = setinformation(id, value.toString());
+else if (index.column() == 11)
+ok = setBarcode(id, value.toString());
+else if (index.column() == 12)
+ok = setProductCategoryID(id, value.toString());
+else if (index.column() == 13)
+ok = setCriticalAmount(id, value.toString());
+else if (index.column() == 15)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 19)
+else if (index.column() == 16)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -343,24 +317,20 @@ void Product::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() Product!";
 this->setHeaderData(1, Qt::Horizontal, QObject::tr("Name"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Selling Price"));
-this->setHeaderData(3, Qt::Horizontal, QObject::tr("Net Price"));
-this->setHeaderData(4, Qt::Horizontal, QObject::tr("Trade Margine"));
-this->setHeaderData(5, Qt::Horizontal, QObject::tr("Description"));
-this->setHeaderData(6, Qt::Horizontal, QObject::tr("Barcode"));
-this->setHeaderData(7, Qt::Horizontal, QObject::tr("Critical Amount"));
-this->setHeaderData(8, Qt::Horizontal, QObject::tr("Product Number"));
-this->setHeaderData(9, Qt::Horizontal, QObject::tr("More Info"));
-this->setHeaderData(10, Qt::Horizontal, QObject::tr("Barcode Only"));
-this->setHeaderData(11, Qt::Horizontal, QObject::tr("isComposite"));
-this->setHeaderData(12, Qt::Horizontal, QObject::tr("Special Tax Description"));
-this->setHeaderData(13, Qt::Horizontal, QObject::tr("Special Tax Value"));
-this->setHeaderData(14, Qt::Horizontal, QObject::tr("Tax"));
-this->setHeaderData(15, Qt::Horizontal, QObject::tr("Unit"));
-this->setHeaderData(16, Qt::Horizontal, QObject::tr("generateBarcode"));
-this->setHeaderData(17, Qt::Horizontal, QObject::tr("Short Description"));
-this->setHeaderData(18, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(19, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Image"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Short Description"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Unit"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("Product Is A Composite"));
+this->setHeaderData(6, Qt::Horizontal, QObject::tr("Selling Price"));
+this->setHeaderData(7, Qt::Horizontal, QObject::tr("Net Coast"));
+this->setHeaderData(8, Qt::Horizontal, QObject::tr("Trade Margin Rate"));
+this->setHeaderData(9, Qt::Horizontal, QObject::tr("Tax"));
+this->setHeaderData(10, Qt::Horizontal, QObject::tr("information"));
+this->setHeaderData(11, Qt::Horizontal, QObject::tr("Barcode"));
+this->setHeaderData(12, Qt::Horizontal, QObject::tr("Product Category"));
+this->setHeaderData(13, Qt::Horizontal, QObject::tr("Critical Amount"));
+this->setHeaderData(15, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(16, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
@@ -374,118 +344,19 @@ if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
-bool Product::setSellingPrice(int ProductID, const QString &SellingPrice) {
+bool Product::setImage(int ProductID, const QString &Image) {
 QSqlQuery query;
-query.prepare("update Product set SellingPrice = ? where ProductID = ?");
-query.addBindValue(SellingPrice);
+query.prepare("update Product set Image = ? where ProductID = ?");
+query.addBindValue(Image);
 query.addBindValue(ProductID);
 if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
-bool Product::setNetPrice(int ProductID, const QString &NetPrice) {
+bool Product::setShortDescription(int ProductID, const QString &ShortDescription) {
 QSqlQuery query;
-query.prepare("update Product set NetPrice = ? where ProductID = ?");
-query.addBindValue(NetPrice);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setTradeMargine(int ProductID, const QString &TradeMargine) {
-QSqlQuery query;
-query.prepare("update Product set TradeMargine = ? where ProductID = ?");
-query.addBindValue(TradeMargine);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setDescription(int ProductID, const QString &Description) {
-QSqlQuery query;
-query.prepare("update Product set Description = ? where ProductID = ?");
-query.addBindValue(Description);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setBarcode(int ProductID, const QString &Barcode) {
-QSqlQuery query;
-query.prepare("update Product set Barcode = ? where ProductID = ?");
-query.addBindValue(Barcode);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setCriticalAmount(int ProductID, const QString &CriticalAmount) {
-QSqlQuery query;
-query.prepare("update Product set CriticalAmount = ? where ProductID = ?");
-query.addBindValue(CriticalAmount);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setProductNumber(int ProductID, const QString &ProductNumber) {
-QSqlQuery query;
-query.prepare("update Product set ProductNumber = ? where ProductID = ?");
-query.addBindValue(ProductNumber);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setMoreInfo(int ProductID, const QString &MoreInfo) {
-QSqlQuery query;
-query.prepare("update Product set MoreInfo = ? where ProductID = ?");
-query.addBindValue(MoreInfo);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setBarcodeOnly(int ProductID, const QString &BarcodeOnly) {
-QSqlQuery query;
-query.prepare("update Product set BarcodeOnly = ? where ProductID = ?");
-query.addBindValue(BarcodeOnly);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setisComposite(int ProductID, const QString &isComposite) {
-QSqlQuery query;
-query.prepare("update Product set isComposite = ? where ProductID = ?");
-query.addBindValue(isComposite);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setSpecialTaxDescription(int ProductID, const QString &SpecialTaxDescription) {
-QSqlQuery query;
-query.prepare("update Product set SpecialTaxDescription = ? where ProductID = ?");
-query.addBindValue(SpecialTaxDescription);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setSpecialTaxValue(int ProductID, const QString &SpecialTaxValue) {
-QSqlQuery query;
-query.prepare("update Product set SpecialTaxValue = ? where ProductID = ?");
-query.addBindValue(SpecialTaxValue);
-query.addBindValue(ProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Product::setTaxID(int ProductID, const QString &TaxID) {
-QSqlQuery query;
-query.prepare("update Product set TaxID = ? where ProductID = ?");
-query.addBindValue(TaxID);
+query.prepare("update Product set ShortDescription = ? where ProductID = ?");
+query.addBindValue(ShortDescription);
 query.addBindValue(ProductID);
 if( !query.exec() )
 qDebug() << query.lastError().text();
@@ -500,19 +371,82 @@ if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
-bool Product::setgenerateBarcode(int ProductID, const QString &generateBarcode) {
+bool Product::setProductIsAComposite(int ProductID, const QString &ProductIsAComposite) {
 QSqlQuery query;
-query.prepare("update Product set generateBarcode = ? where ProductID = ?");
-query.addBindValue(generateBarcode);
+query.prepare("update Product set ProductIsAComposite = ? where ProductID = ?");
+query.addBindValue(ProductIsAComposite);
 query.addBindValue(ProductID);
 if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
-bool Product::setShortDescription(int ProductID, const QString &ShortDescription) {
+bool Product::setSellingPrice(int ProductID, const QString &SellingPrice) {
 QSqlQuery query;
-query.prepare("update Product set ShortDescription = ? where ProductID = ?");
-query.addBindValue(ShortDescription);
+query.prepare("update Product set SellingPrice = ? where ProductID = ?");
+query.addBindValue(SellingPrice);
+query.addBindValue(ProductID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Product::setNetCoast(int ProductID, const QString &NetCoast) {
+QSqlQuery query;
+query.prepare("update Product set NetCoast = ? where ProductID = ?");
+query.addBindValue(NetCoast);
+query.addBindValue(ProductID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Product::setTradeMarginRate(int ProductID, const QString &TradeMarginRate) {
+QSqlQuery query;
+query.prepare("update Product set TradeMarginRate = ? where ProductID = ?");
+query.addBindValue(TradeMarginRate);
+query.addBindValue(ProductID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Product::setTaxID(int ProductID, const QString &TaxID) {
+QSqlQuery query;
+query.prepare("update Product set TaxID = ? where ProductID = ?");
+query.addBindValue(TaxID);
+query.addBindValue(ProductID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Product::setinformation(int ProductID, const QString &information) {
+QSqlQuery query;
+query.prepare("update Product set information = ? where ProductID = ?");
+query.addBindValue(information);
+query.addBindValue(ProductID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Product::setBarcode(int ProductID, const QString &Barcode) {
+QSqlQuery query;
+query.prepare("update Product set Barcode = ? where ProductID = ?");
+query.addBindValue(Barcode);
+query.addBindValue(ProductID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Product::setProductCategoryID(int ProductID, const QString &ProductCategoryID) {
+QSqlQuery query;
+query.prepare("update Product set ProductCategoryID = ? where ProductID = ?");
+query.addBindValue(ProductCategoryID);
+query.addBindValue(ProductID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Product::setCriticalAmount(int ProductID, const QString &CriticalAmount) {
+QSqlQuery query;
+query.prepare("update Product set CriticalAmount = ? where ProductID = ?");
+query.addBindValue(CriticalAmount);
 query.addBindValue(ProductID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

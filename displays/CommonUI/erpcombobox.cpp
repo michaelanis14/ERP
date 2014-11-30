@@ -15,8 +15,12 @@ ERPComboBox::ERPComboBox(QWidget *parent) :
 	this->setEditable(true);
 	this->setInsertPolicy(QComboBox::NoInsert);
 	this->setAutoCompletion(true);
+	this->items = QHash<int,QString>();
+	this->addedItems = false;
 }
 void ERPComboBox::addItems(QHash<int,QString> items){
+
+	this->addedItems = true;
 	this->items = items;
 	QList<QString> list;
 	QHashIterator<int, QString> i(items);
@@ -29,7 +33,7 @@ void ERPComboBox::addItems(QHash<int,QString> items){
 
 void ERPComboBox::focusOutEvent(QFocusEvent *e)
 {
-
+if(this->addedItems){
 	QRegExp re("\\d*");
 	if(this->currentText()==""){
 		//qDebug() <<"EMP";
@@ -57,7 +61,7 @@ void ERPComboBox::focusOutEvent(QFocusEvent *e)
 
 	this->clearFocus();
 	this->clearMask();
-
+}
 	QWidget::focusOutEvent(e);
 
 }
@@ -65,6 +69,7 @@ void ERPComboBox::focusOutEvent(QFocusEvent *e)
 
 int ERPComboBox::getKey(){
 	int j = 0;
+if(this->addedItems){
 	QHashIterator<int, QString> i(items);
 	while (i.hasNext()) {
 		 i.next();
@@ -72,6 +77,8 @@ int ERPComboBox::getKey(){
 			return i.key();
 		j++;
 	}
+}
+
 	return 0;
 }
 

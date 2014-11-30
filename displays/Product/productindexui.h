@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productindexui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,10 +11,11 @@
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
 #include "../../Model/product.h"
-#include "../../Model/product.h"
-#include "../../Model/tax.h"
 #include "../../Model/unit.h"
+#include "../../Model/tax.h"
+#include "../../Model/productcategory.h"
 
+#include "../ProductFieldData/productfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>

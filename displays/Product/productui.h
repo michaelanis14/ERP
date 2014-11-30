@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,11 +13,14 @@
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
 #include "../CommonUI/RemovebtnWidgets.h"
+#include "../CommonUI/barcode.h"
 #include "../../Model/product.h"
 #include "../../Model/product.h"
-#include "../../Model/tax.h"
 #include "../../Model/unit.h"
+#include "../../Model/tax.h"
+#include "../../Model/productcategory.h"
 
+#include "../ProductFieldData/productfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -33,31 +36,37 @@ public:
 	static void ShowUI();
 	static ProductUI* GetUI();
 	ERPFormBlock* block0Layout;
+	ERPFormBlock* block1Layout;
+	ERPFormBlock* block2Layout;
+	QList<ProductFieldDataUI*> ProductFieldDatas;
 	QLineEdit*name;
-	QLineEdit*sellingprice;
-	QLineEdit*netprice;
-	QLineEdit*trademargine;
-	QLineEdit*description;
-	QLineEdit*barcode;
-	QLineEdit*criticalamount;
-	QLineEdit*productnumber;
-	QLineEdit*moreinfo;
-	QCheckBox* barcodeonly;
-	QCheckBox* iscomposite;
-	QLineEdit*specialtaxdescription;
-	QLineEdit*specialtaxvalue;
-	ERPComboBox*tax;
-	ERPComboBox*unit;
-	QCheckBox* generatebarcode;
+	QLineEdit*image;
 	QLineEdit*shortdescription;
+	ERPComboBox*unit;
+	QCheckBox* productisacomposite;
+	QLineEdit*sellingprice;
+	QLineEdit*netcoast;
+	QLineEdit*trademarginrate;
+	ERPComboBox*tax;
+	QLineEdit*information;
+	QLineEdit*barcode;
+	Barcode* barcodeDisplay;
+	QPushButton* generatebarcode;
+	ERPComboBox*productcategory;
+	QLineEdit*criticalamount;
 	void fill(Product* product);
 Product* product;
 private:
 	static ERPDisplay* p_instance;
 private slots:
+	void addProductFieldData();
+	void addProductFieldData(ProductFieldData* ProductFieldData);
+	void removeProductFieldData(QWidget* widget);
 	void selectProduct();
 	void cancel();
 	void clear();
+	void generateBarcode();
+	void barcodeChanged(QString barcode);
 public slots:
 	bool save();
 };

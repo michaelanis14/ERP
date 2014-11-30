@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -20,7 +20,6 @@ public:
 	QString Description;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<ContactType*> contacttypes;
 	static bool Init();
 	bool save();
 	bool remove();
@@ -42,9 +41,9 @@ public:
 
 private:
 	ContactType(int ContactTypeID,QString Description,QString CreatedOn,QString EditedOn);	static ContactType* p_instance;
-	bool setDescription(int ContactTypeID, const QString &description);
-	bool setCreatedOn(int ContactTypeID, const QString &createdon);
-	bool setEditedOn(int ContactTypeID, const QString &editedon);
+	bool setDescription(int ContactTypeID, const QString &Description);
+	bool setCreatedOn(int ContactTypeID, const QString &CreatedOn);
+	bool setEditedOn(int ContactTypeID, const QString &EditedOn);
 
 };
 #endif

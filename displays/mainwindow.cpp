@@ -9,6 +9,13 @@
 #include "displays/ContactType/contacttypeindexui.h"
 #include "displays/Contact/contactindexui.h"
 #include "displays/BankAccount/bankaccountui.h"
+#include "displays/Product/productindexui.h"
+#include "displays/Store/storeindexui.h"
+#include "displays/Purchase/purchaseindexui.h"
+#include "displays/DeliveryOrder/deliveryorderindexui.h"
+#include "displays/Service/serviceindexui.h"
+
+
 /**
 * A class.
 * The Main Window class it holds the application default styling setup,
@@ -55,11 +62,11 @@ mainwindow::mainwindow()
 
 				// make QCheckBox bigger
 				//"QCheckBox { width: 26px; height: 26px; } "
-				"QCheckBox::indicator { width: 38px; height: 38px; } "
-				"QCheckBox::indicator:unchecked { image: url(:/icons/checkbox/checkbox_unchecked.png); } "
-				"QCheckBox::indicator:checked { image: url(:/icons/checkbox/checkbox_checked.png); } "
-				"QCheckBox::indicator:focus { background-image: url(:/icons/checkbox/checkbox_unchecked_focus.png); } "
-				"QCheckBox::indicator:disabled { background-image: url(:/icons/checkbox/checkbox_disabled.png); } "
+				//"QCheckBox::indicator { width: 38px; height: 38px; } "
+				//"QCheckBox::indicator:unchecked { image: url(:/icons/checkbox/checkbox_unchecked.png); } "
+				//"QCheckBox::indicator:checked { image: url(:/icons/checkbox/checkbox_checked.png); } "
+				//"QCheckBox::indicator:focus { background-image: url(:/icons/checkbox/checkbox_unchecked_focus.png); } "
+				//"QCheckBox::indicator:disabled { background-image: url(:/icons/checkbox/checkbox_disabled.png); } "
 				""
 				"QLineEdit {"
 				//"background-color: gray;"
@@ -139,16 +146,30 @@ mainwindow::mainwindow()
 
 
 
-
+//Contacts
 	inNavContacts = new QPushButton(icon1,"Contacts");
 	inNavContacts->setObjectName("inNavContacts");
 	connect(this->inNavContacts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 	inNavcontactPersones = new QPushButton(icon1,"ContactPersone");
 	inNavcontactPersones->setObjectName("inNavcontactPersones");
 	connect(this->inNavcontactPersones, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-	inNavcontactType = new QPushButton(icon1,"Contact Type");
-	inNavcontactType->setObjectName("inNavcontactType");
-	connect(this->inNavcontactType, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
+//Products
+	inNavProducts = new QPushButton(icon1,"Products");
+	inNavProducts->setObjectName("inNavProducts");
+	connect(this->inNavProducts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavService = new QPushButton(icon1,"Service");
+	inNavService->setObjectName("inNavService");
+	connect(this->inNavService, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavStoreHouse = new QPushButton(icon1,"Store House");
+	inNavStoreHouse->setObjectName("inNavStoreHouse");
+	connect(this->inNavStoreHouse, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavPurchase = new QPushButton(icon1,"Purchase");
+	inNavPurchase->setObjectName("inNavPurchase");
+	connect(this->inNavPurchase, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavDeliveryOrder = new QPushButton(icon1,"Delivery Order");
+	inNavDeliveryOrder->setObjectName("inNavDeliveryOrder");
+	connect(this->inNavDeliveryOrder, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
 
 }
@@ -187,7 +208,7 @@ void mainwindow::ShowDisplay(ERPDisplay * display) {
 	//p_instance->mainLayout->addLayout(p_instance->boxLayout,1,1,-1,-1);
 
 	p_instance->currentDisplay = display;
-	p_instance->updateSize();
+
 	//p_instance->currentDisplay->blockSignals(false);
 	display->show();
 	display->setFocus();
@@ -239,27 +260,7 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 
 }
 
-void mainwindow::updateSize(){
-	int height = this->height();
-	//int width = 0;
-	if(p_instance != 0 &&p_instance->currentDisplay != 0){
 
-		if(p_instance->currentDisplay->flowLayout != 0){
-
-			for(int i = 0; i < p_instance->currentDisplay->flowLayout->itemList.count(); i++){
-				height += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().height();
-				//	width += p_instance->currentDisplay->flowLayout->itemList.at(i)->geometry().width();
-
-
-			}
-			p_instance->currentDisplay->repaint();
-		}
-		//this->repaint();
-		//	qDebug() <<this->width()- this->navigation->width() <<this->width() <<this->navigation->width();
-		p_instance->currentDisplay->formPanel->setGeometry(0,0,(this->width()- this->navigation->width()),height);
-
-	}
-}
 void mainwindow::btnHomeClicked() {
 	innerNavigation->removeAll();
 	qDebug() << "wassup";
@@ -269,12 +270,20 @@ void mainwindow::btnContactsClicked(){
 	innerNavigation->removeAll();
 	innerNavigation->addButton(inNavContacts);
 	innerNavigation->addButton(inNavcontactPersones);
-	innerNavigation->addButton(inNavcontactType);
+//	innerNavigation->addButton(inNavcontactType);
 
 	ContactIndexUI::ShowUI();
 }
 
-void mainwindow::btnProductsClicked(){innerNavigation->removeAll();innerNavigation->addButton(inNavContacts);}
+void mainwindow::btnProductsClicked(){
+	innerNavigation->removeAll();
+	innerNavigation->addButton(inNavProducts);
+	innerNavigation->addButton(inNavService);
+	innerNavigation->addButton(inNavStoreHouse);
+	innerNavigation->addButton(inNavPurchase);
+	innerNavigation->addButton(inNavDeliveryOrder);
+	ProductIndexUI::ShowUI();
+}
 void mainwindow::btnAccountingClicked(){;}
 void mainwindow::btnReportsClicked(){;}
 void mainwindow::innerNavClicked(){
@@ -287,6 +296,17 @@ void mainwindow::innerNavClicked(){
 		ContactPersonIndexUI::ShowUI();
 	else  if(sender->objectName() == "inNavcontactType")
 		ContactTypeIndexUI::ShowUI();
+//Product
+	else  if(sender->objectName() == "inNavProducts")
+		ProductIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavService")
+		ServiceIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavStoreHouse")
+		StoreIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavPurchase")
+		PurchaseIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavDeliveryOrder")
+		DeliveryOrderIndexUI::ShowUI();
 
 
 }

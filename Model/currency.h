@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currency.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -20,7 +20,6 @@ public:
 	QString Description;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<Currency*> currencys;
 	static bool Init();
 	bool save();
 	bool remove();
@@ -42,9 +41,9 @@ public:
 
 private:
 	Currency(int CurrencyID,QString Description,QString CreatedOn,QString EditedOn);	static Currency* p_instance;
-	bool setDescription(int CurrencyID, const QString &description);
-	bool setCreatedOn(int CurrencyID, const QString &createdon);
-	bool setEditedOn(int CurrencyID, const QString &editedon);
+	bool setDescription(int CurrencyID, const QString &Description);
+	bool setCreatedOn(int CurrencyID, const QString &CreatedOn);
+	bool setEditedOn(int CurrencyID, const QString &EditedOn);
 
 };
 #endif

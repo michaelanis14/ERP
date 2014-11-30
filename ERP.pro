@@ -1,17 +1,17 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Sun Nov 16 16:19:26 EET 2014
+#   Created on: Sat Nov 29 13:58:37 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
 
-QT   += core gui widgets sql
+QT       += core gui widgets sql
 QTPLUGIN += qsqlmysql
 
-
+#ifdef __APPLE__
 INCLUDEPATH =/usr/local/mysql-5.6.20-osx10.8-x86_64/include
 QMAKE_MAC_SDK = macosx10.9
-
+#endif
 
 TARGET = ERP
 TEMPLATE = app
@@ -23,105 +23,295 @@ SOURCES += main.cpp \
 	displays/CommonUI/flowlayout.cpp  \
 	displays/CommonUI/erpformblock.cpp  \
 	displays/CommonUI/addremovebuttons.cpp  \
+	displays/CommonUI/HNavigationButtons.cpp  \
+	displays/CommonUI/navigationButtons.cpp  \
+	displays/CommonUI/RemovebtnWidgets.cpp  \
 	Model/erpmodel.cpp \
+	Model/company.cpp \
+	Model/tax.cpp \
+	Model/employee.cpp \
 	Model/contact.cpp \
-	Model/contactclass.cpp \
+	Model/contacttelephone.cpp \
+	Model/contactemail.cpp \
 	Model/bankaccount.cpp \
-	Model/contactperson.cpp \
-	Model/contactstatus.cpp \
+	Model/contactclass.cpp \
 	Model/contacttype.cpp \
 	Model/country.cpp \
 	Model/currency.cpp \
-	Model/employee.cpp \
-	Model/product.cpp \
-	Model/tax.cpp \
+	Model/contactstatus.cpp \
+	Model/fieldtype.cpp \
+	Model/contactfield.cpp \
+	Model/contactfielddata.cpp \
+	Model/contactpersonfield.cpp \
+	Model/contactpersonfielddata.cpp \
+	Model/contactperson.cpp \
+	Model/contactpersontelephone.cpp \
+	Model/contactpersonemail.cpp \
+	Model/project.cpp \
 	Model/unit.cpp \
-	Model/user.cpp \
+	Model/productcategory.cpp \
+	Model/productfield.cpp \
+	Model/productfielddata.cpp \
+	Model/product.cpp \
+	Model/service.cpp \
+	Model/store.cpp \
+	Model/purchasestatus.cpp \
+	Model/purchase.cpp \
+	Model/purchaseproduct.cpp \
+	Model/purchasefreeline.cpp \
+	Model/deliveryorderstatus.cpp \
+	Model/deliveryorder.cpp \
+	Model/deliveryorderstoreproduct.cpp \
+	Model/deliveryorderservice.cpp \
+	Model/deliveryorderfreeline.cpp \
+	Model/invoiceperiod.cpp \
+	Model/invoiceyear.cpp \
+	Model/invoicestate.cpp \
+	Model/invoicestatedate.cpp \
+	Model/invoice.cpp \
+	Model/invoicefreeline.cpp \
+	Model/paymenttype.cpp \
+	Model/payment.cpp \
+	displays/Company/companyindexui.cpp \
+	displays/Company/companyui.cpp \
+	displays/Tax/taxindexui.cpp \
+	displays/Tax/taxui.cpp \
+	displays/Employee/employeeindexui.cpp \
+	displays/Employee/employeeui.cpp \
 	displays/Contact/contactindexui.cpp \
 	displays/Contact/contactui.cpp \
-	displays/ContactClass/contactclassindexui.cpp \
-	displays/ContactClass/contactclassui.cpp \
+	displays/ContactTelephone/contacttelephoneindexui.cpp \
+	displays/ContactTelephone/contacttelephoneui.cpp \
+	displays/ContactEmail/contactemailindexui.cpp \
+	displays/ContactEmail/contactemailui.cpp \
 	displays/BankAccount/bankaccountindexui.cpp \
 	displays/BankAccount/bankaccountui.cpp \
-	displays/ContactPerson/contactpersonindexui.cpp \
-	displays/ContactPerson/contactpersonui.cpp \
-	displays/ContactStatus/contactstatusindexui.cpp \
-	displays/ContactStatus/contactstatusui.cpp \
+	displays/ContactClass/contactclassindexui.cpp \
+	displays/ContactClass/contactclassui.cpp \
 	displays/ContactType/contacttypeindexui.cpp \
 	displays/ContactType/contacttypeui.cpp \
 	displays/Country/countryindexui.cpp \
 	displays/Country/countryui.cpp \
 	displays/Currency/currencyindexui.cpp \
 	displays/Currency/currencyui.cpp \
-	displays/Employee/employeeindexui.cpp \
-	displays/Employee/employeeui.cpp \
-	displays/Product/productindexui.cpp \
-	displays/Product/productui.cpp \
-	displays/Tax/taxindexui.cpp \
-	displays/Tax/taxui.cpp \
+	displays/ContactStatus/contactstatusindexui.cpp \
+	displays/ContactStatus/contactstatusui.cpp \
+	displays/FieldType/fieldtypeindexui.cpp \
+	displays/FieldType/fieldtypeui.cpp \
+	displays/ContactField/contactfieldindexui.cpp \
+	displays/ContactField/contactfieldui.cpp \
+	displays/ContactFieldData/contactfielddataindexui.cpp \
+	displays/ContactFieldData/contactfielddataui.cpp \
+	displays/ContactPersonField/contactpersonfieldindexui.cpp \
+	displays/ContactPersonField/contactpersonfieldui.cpp \
+	displays/ContactPersonFieldData/contactpersonfielddataindexui.cpp \
+	displays/ContactPersonFieldData/contactpersonfielddataui.cpp \
+	displays/ContactPerson/contactpersonindexui.cpp \
+	displays/ContactPerson/contactpersonui.cpp \
+	displays/ContactPersonTelephone/contactpersontelephoneindexui.cpp \
+	displays/ContactPersonTelephone/contactpersontelephoneui.cpp \
+	displays/ContactPersonEmail/contactpersonemailindexui.cpp \
+	displays/ContactPersonEmail/contactpersonemailui.cpp \
+	displays/Project/projectindexui.cpp \
+	displays/Project/projectui.cpp \
 	displays/Unit/unitindexui.cpp \
 	displays/Unit/unitui.cpp \
-	displays/User/userindexui.cpp \
-	displays/User/userui.cpp \
-    displays/CommonUI/navigationButtons.cpp \
-    displays/CommonUI/HNavigationButtons.cpp \
-    displays/CommonUI/ean13.cpp \
+	displays/ProductCategory/productcategoryindexui.cpp \
+	displays/ProductCategory/productcategoryui.cpp \
+	displays/ProductField/productfieldindexui.cpp \
+	displays/ProductField/productfieldui.cpp \
+	displays/ProductFieldData/productfielddataindexui.cpp \
+	displays/ProductFieldData/productfielddataui.cpp \
+	displays/Product/productindexui.cpp \
+	displays/Product/productui.cpp \
+	displays/Service/serviceindexui.cpp \
+	displays/Service/serviceui.cpp \
+	displays/Store/storeindexui.cpp \
+	displays/Store/storeui.cpp \
+	displays/PurchaseStatus/purchasestatusindexui.cpp \
+	displays/PurchaseStatus/purchasestatusui.cpp \
+	displays/Purchase/purchaseindexui.cpp \
+	displays/Purchase/purchaseui.cpp \
+	displays/PurchaseProduct/purchaseproductindexui.cpp \
+	displays/PurchaseProduct/purchaseproductui.cpp \
+	displays/PurchaseFreeLine/purchasefreelineindexui.cpp \
+	displays/PurchaseFreeLine/purchasefreelineui.cpp \
+	displays/DeliveryOrderStatus/deliveryorderstatusindexui.cpp \
+	displays/DeliveryOrderStatus/deliveryorderstatusui.cpp \
+	displays/DeliveryOrder/deliveryorderindexui.cpp \
+	displays/DeliveryOrder/deliveryorderui.cpp \
+	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductindexui.cpp \
+	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductui.cpp \
+	displays/DeliveryOrderService/deliveryorderserviceindexui.cpp \
+	displays/DeliveryOrderService/deliveryorderserviceui.cpp \
+	displays/DeliveryOrderFreeline/deliveryorderfreelineindexui.cpp \
+	displays/DeliveryOrderFreeline/deliveryorderfreelineui.cpp \
+	displays/InvoicePeriod/invoiceperiodindexui.cpp \
+	displays/InvoicePeriod/invoiceperiodui.cpp \
+	displays/InvoiceYear/invoiceyearindexui.cpp \
+	displays/InvoiceYear/invoiceyearui.cpp \
+	displays/InvoiceState/invoicestateindexui.cpp \
+	displays/InvoiceState/invoicestateui.cpp \
+	displays/InvoiceStateDate/invoicestatedateindexui.cpp \
+	displays/InvoiceStateDate/invoicestatedateui.cpp \
+	displays/Invoice/invoiceindexui.cpp \
+	displays/Invoice/invoiceui.cpp \
+	displays/InvoiceFreeline/invoicefreelineindexui.cpp \
+	displays/InvoiceFreeline/invoicefreelineui.cpp \
+	displays/PaymentType/paymenttypeindexui.cpp \
+	displays/PaymentType/paymenttypeui.cpp \
+	displays/Payment/paymentindexui.cpp \
+	displays/Payment/paymentui.cpp \
     displays/CommonUI/barcode.cpp \
-    displays/CommonUI/LineEditValidator.cpp \
-    displays/CommonUI/RemovebtnWidgets.cpp
+    displays/CommonUI/ean13.cpp
 
 HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/erpcombobox.h \
 	displays/CommonUI/flowlayout.h  \
 	displays/CommonUI/erpformblock.h  \
 	displays/CommonUI/addremovebuttons.h  \
+	displays/CommonUI/HNavigationButtons.h  \
+	displays/CommonUI/navigationButtons.h  \
+	displays/CommonUI/RemovebtnWidgets.h  \
 	Model/erpmodel.h \
+	Model/company.h \
+	Model/tax.h \
+	Model/employee.h \
 	Model/contact.h \
-	Model/contactclass.h \
+	Model/contacttelephone.h \
+	Model/contactemail.h \
 	Model/bankaccount.h \
-	Model/contactperson.h \
-	Model/contactstatus.h \
+	Model/contactclass.h \
 	Model/contacttype.h \
 	Model/country.h \
 	Model/currency.h \
-	Model/employee.h \
-	Model/product.h \
-	Model/tax.h \
+	Model/contactstatus.h \
+	Model/fieldtype.h \
+	Model/contactfield.h \
+	Model/contactfielddata.h \
+	Model/contactpersonfield.h \
+	Model/contactpersonfielddata.h \
+	Model/contactperson.h \
+	Model/contactpersontelephone.h \
+	Model/contactpersonemail.h \
+	Model/project.h \
 	Model/unit.h \
-	Model/user.h \
+	Model/productcategory.h \
+	Model/productfield.h \
+	Model/productfielddata.h \
+	Model/product.h \
+	Model/service.h \
+	Model/store.h \
+	Model/purchasestatus.h \
+	Model/purchase.h \
+	Model/purchaseproduct.h \
+	Model/purchasefreeline.h \
+	Model/deliveryorderstatus.h \
+	Model/deliveryorder.h \
+	Model/deliveryorderstoreproduct.h \
+	Model/deliveryorderservice.h \
+	Model/deliveryorderfreeline.h \
+	Model/invoiceperiod.h \
+	Model/invoiceyear.h \
+	Model/invoicestate.h \
+	Model/invoicestatedate.h \
+	Model/invoice.h \
+	Model/invoicefreeline.h \
+	Model/paymenttype.h \
+	Model/payment.h \
+	displays/Company/companyindexui.h \
+	displays/Company/companyui.h \
+	displays/Tax/taxindexui.h \
+	displays/Tax/taxui.h \
+	displays/Employee/employeeindexui.h \
+	displays/Employee/employeeui.h \
 	displays/Contact/contactindexui.h \
 	displays/Contact/contactui.h \
-	displays/ContactClass/contactclassindexui.h \
-	displays/ContactClass/contactclassui.h \
+	displays/ContactTelephone/contacttelephoneindexui.h \
+	displays/ContactTelephone/contacttelephoneui.h \
+	displays/ContactEmail/contactemailindexui.h \
+	displays/ContactEmail/contactemailui.h \
 	displays/BankAccount/bankaccountindexui.h \
 	displays/BankAccount/bankaccountui.h \
-	displays/ContactPerson/contactpersonindexui.h \
-	displays/ContactPerson/contactpersonui.h \
-	displays/ContactStatus/contactstatusindexui.h \
-	displays/ContactStatus/contactstatusui.h \
+	displays/ContactClass/contactclassindexui.h \
+	displays/ContactClass/contactclassui.h \
 	displays/ContactType/contacttypeindexui.h \
 	displays/ContactType/contacttypeui.h \
 	displays/Country/countryindexui.h \
 	displays/Country/countryui.h \
 	displays/Currency/currencyindexui.h \
 	displays/Currency/currencyui.h \
-	displays/Employee/employeeindexui.h \
-	displays/Employee/employeeui.h \
-	displays/Product/productindexui.h \
-	displays/Product/productui.h \
-	displays/Tax/taxindexui.h \
-	displays/Tax/taxui.h \
+	displays/ContactStatus/contactstatusindexui.h \
+	displays/ContactStatus/contactstatusui.h \
+	displays/FieldType/fieldtypeindexui.h \
+	displays/FieldType/fieldtypeui.h \
+	displays/ContactField/contactfieldindexui.h \
+	displays/ContactField/contactfieldui.h \
+	displays/ContactFieldData/contactfielddataindexui.h \
+	displays/ContactFieldData/contactfielddataui.h \
+	displays/ContactPersonField/contactpersonfieldindexui.h \
+	displays/ContactPersonField/contactpersonfieldui.h \
+	displays/ContactPersonFieldData/contactpersonfielddataindexui.h \
+	displays/ContactPersonFieldData/contactpersonfielddataui.h \
+	displays/ContactPerson/contactpersonindexui.h \
+	displays/ContactPerson/contactpersonui.h \
+	displays/ContactPersonTelephone/contactpersontelephoneindexui.h \
+	displays/ContactPersonTelephone/contactpersontelephoneui.h \
+	displays/ContactPersonEmail/contactpersonemailindexui.h \
+	displays/ContactPersonEmail/contactpersonemailui.h \
+	displays/Project/projectindexui.h \
+	displays/Project/projectui.h \
 	displays/Unit/unitindexui.h \
 	displays/Unit/unitui.h \
-	displays/User/userindexui.h \
-	displays/User/userui.h \
-    displays/CommonUI/navigationButtons.h \
-    displays/CommonUI/HNavigationButtons.h \
-    displays/CommonUI/ean13.h \
+	displays/ProductCategory/productcategoryindexui.h \
+	displays/ProductCategory/productcategoryui.h \
+	displays/ProductField/productfieldindexui.h \
+	displays/ProductField/productfieldui.h \
+	displays/ProductFieldData/productfielddataindexui.h \
+	displays/ProductFieldData/productfielddataui.h \
+	displays/Product/productindexui.h \
+	displays/Product/productui.h \
+	displays/Service/serviceindexui.h \
+	displays/Service/serviceui.h \
+	displays/Store/storeindexui.h \
+	displays/Store/storeui.h \
+	displays/PurchaseStatus/purchasestatusindexui.h \
+	displays/PurchaseStatus/purchasestatusui.h \
+	displays/Purchase/purchaseindexui.h \
+	displays/Purchase/purchaseui.h \
+	displays/PurchaseProduct/purchaseproductindexui.h \
+	displays/PurchaseProduct/purchaseproductui.h \
+	displays/PurchaseFreeLine/purchasefreelineindexui.h \
+	displays/PurchaseFreeLine/purchasefreelineui.h \
+	displays/DeliveryOrderStatus/deliveryorderstatusindexui.h \
+	displays/DeliveryOrderStatus/deliveryorderstatusui.h \
+	displays/DeliveryOrder/deliveryorderindexui.h \
+	displays/DeliveryOrder/deliveryorderui.h \
+	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductindexui.h \
+	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductui.h \
+	displays/DeliveryOrderService/deliveryorderserviceindexui.h \
+	displays/DeliveryOrderService/deliveryorderserviceui.h \
+	displays/DeliveryOrderFreeline/deliveryorderfreelineindexui.h \
+	displays/DeliveryOrderFreeline/deliveryorderfreelineui.h \
+	displays/InvoicePeriod/invoiceperiodindexui.h \
+	displays/InvoicePeriod/invoiceperiodui.h \
+	displays/InvoiceYear/invoiceyearindexui.h \
+	displays/InvoiceYear/invoiceyearui.h \
+	displays/InvoiceState/invoicestateindexui.h \
+	displays/InvoiceState/invoicestateui.h \
+	displays/InvoiceStateDate/invoicestatedateindexui.h \
+	displays/InvoiceStateDate/invoicestatedateui.h \
+	displays/Invoice/invoiceindexui.h \
+	displays/Invoice/invoiceui.h \
+	displays/InvoiceFreeline/invoicefreelineindexui.h \
+	displays/InvoiceFreeline/invoicefreelineui.h \
+	displays/PaymentType/paymenttypeindexui.h \
+	displays/PaymentType/paymenttypeui.h \
+	displays/Payment/paymentindexui.h \
+	displays/Payment/paymentui.h \ 
     displays/CommonUI/barcode.h \
-    displays/CommonUI/LineEditValidator.h \
-    displays/CommonUI/RemovebtnWidgets.h
+    displays/CommonUI/ean13.h
 
 FORMS	+= mainwindow.ui
 
-RESOURCES += Resources.qrc
+RESOURCES +=Resources.qrc

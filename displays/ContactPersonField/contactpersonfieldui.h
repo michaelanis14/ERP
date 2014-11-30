@@ -1,0 +1,49 @@
+/**************************************************************************
+**   File: contactpersonfieldui.h
+**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Author: Michael Bishara
+**   Copyright: SphinxSolutions.
+**************************************************************************/
+
+#ifndef CONTACTPERSONFIELDUI_H
+#define CONTACTPERSONFIELDUI_H
+#include "../../erpdisplay.h"
+#include "contactpersonfieldindexui.h"
+#include "../CommonUI/erpformblock.h"
+#include "../CommonUI/erpcombobox.h"
+#include "../CommonUI/addremovebuttons.h"
+#include "../CommonUI/RemovebtnWidgets.h"
+#include "../../Model/contactpersonfield.h"
+#include "../../Model/contactpersonfield.h"
+#include "../../Model/fieldtype.h"
+
+
+#include <QWidget>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QCompleter>
+#include <QMessageBox>
+class ContactPersonFieldUI : public ERPDisplay
+{
+	Q_OBJECT
+public:
+	explicit ContactPersonFieldUI(QWidget *parent = 0);
+	static void ShowUI();
+	static ContactPersonFieldUI* GetUI();
+	ERPFormBlock* block0Layout;
+	ERPComboBox*fieldtype;
+	QLineEdit*description;
+	QCheckBox* defaults;
+	void fill(ContactPersonField* contactpersonfield);
+ContactPersonField* contactpersonfield;
+private:
+	static ERPDisplay* p_instance;
+private slots:
+	void selectContactPersonField();
+	void cancel();
+	void clear();
+public slots:
+	bool save();
+};
+#endif

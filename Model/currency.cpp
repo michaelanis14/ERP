@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currency.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -91,12 +91,13 @@ return new Currency();
  }
 
 QList<Currency*> Currency::GetAll() {
-	Currency::GetInstance()->currencys.clear();
+	QList<Currency*> currencys =   QList<Currency*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency"));
 	while (query.next()) {
-		Currency::GetInstance()->currencys.append(new Currency(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
+currencys.append(new Currency(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-	return Currency::GetInstance()->currencys;
+qSort(currencys);
+	return currencys;
 }
 
 Currency* Currency::Get(int id) {
@@ -150,35 +151,30 @@ return list;
 
 QList<QString> Currency::GetStringList() {
 	QList<QString> list;
-	int count =Currency::GetInstance()->currencys.count();
-	if( count < 2){
-		Currency::GetAll();
+	QList<Currency*> currencys =   QList<Currency*>();
+currencys = GetAll();
+	for(int i = 0; i <currencys.count(); i++){
+		list.append(currencys[i]->Description);
 	}
-	for(int i = 0; i < count; i++){
-		list.append(Currency::GetInstance()->currencys[i]->Description);
-	}
+	qSort(list);
 	return list;
 }
 
 QHash<int,QString> Currency::GetHashList() {
 	QHash<int,QString> list;
-	int count =Currency::GetInstance()->currencys.count();
-	if( count < 2){
-		Currency::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		list.insert(Currency::GetInstance()->currencys[i]->CurrencyID,Currency::GetInstance()->currencys[i]->Description);
+	QList<Currency*> currencys =   QList<Currency*>();
+currencys = GetAll();
+	for(int i = 0; i <currencys.count(); i++){
+		list.insert(currencys[i]->CurrencyID,currencys[i]->Description);
 	}
 	return list;
 }
 
 int Currency::GetIndex(QString name) {
-	int count =Currency::GetInstance()->currencys.count();
-	if( count < 2){
-		Currency::GetAll();
-	}
-	for(int i = 0; i < count; i++){
-		if(Currency::GetInstance()->currencys[i]->Description == name){
+	QList<Currency*> currencys =   QList<Currency*>();
+currencys = GetAll();
+	for(int i = 0; i <currencys.count(); i++){
+		if(currencys[i]->Description == name){
 			return i;
 		}
 	}

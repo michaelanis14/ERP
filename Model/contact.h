@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,41 +10,37 @@
 #include <QSqlRelationalTableModel>
 #include <QSqlError>
 #include <QtGui>
+#include "contacttelephone.h"
+#include "contactemail.h"
 #include "bankaccount.h"
+#include "contactfielddata.h"
 
 class Contact  : public QSqlRelationalTableModel
 {
 	Q_OBJECT
 public:
 	Contact();
-	Contact(QString PersonalSalutation,QString Salutation,QString Name,QString LastName,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int ContactNumber,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,bool Active,int EmployeeID,QString PhoneNum,QString PhoneNum2,QString Fax,QString Mobile,QString Email,QString Email2,QString webSite,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
-	QString PersonalSalutation;
+	Contact(QString Salutation,QString Name,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
 	QString Salutation;
 	QString Name;
-	QString LastName;
 	QString BirthdateOrDateOfFoundation;
 	int ContactTypeID;
 	int ContactClassID;
-	int ContactNumber;
+	int Number;
 	QString Address;
 	QString PostalCode;
 	QString City;
 	int CountryID;
 	int ContactStatusID;
-	bool Active;
 	int EmployeeID;
-	QString PhoneNum;
-	QString PhoneNum2;
-	QString Fax;
-	QString Mobile;
-	QString Email;
-	QString Email2;
-	QString webSite;
+	QString Website;
 	QString TaxNumber;
+	QList<ContactTelephone*> contacttelephones;
+	QList<ContactEmail*> contactemails;
 	QList<BankAccount*> bankaccounts;
+	QList<ContactFieldData*> contactfielddatas;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<Contact*> contacts;
 	static bool Init();
 	bool save();
 	bool remove();
@@ -65,32 +61,23 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Contact(int ContactID,QString PersonalSalutation,QString Salutation,QString Name,QString LastName,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int ContactNumber,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,bool Active,int EmployeeID,QString PhoneNum,QString PhoneNum2,QString Fax,QString Mobile,QString Email,QString Email2,QString webSite,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
-	bool setPersonalSalutation(int ContactID, const QString &personalsalutation);
-	bool setSalutation(int ContactID, const QString &salutation);
-	bool setName(int ContactID, const QString &name);
-	bool setLastName(int ContactID, const QString &lastname);
-	bool setBirthdateOrDateOfFoundation(int ContactID, const QString &birthdateordateoffoundation);
-	bool setContactTypeID(int ContactID, const QString &contacttypeid);
-	bool setContactClassID(int ContactID, const QString &contactclassid);
-	bool setContactNumber(int ContactID, const QString &contactnumber);
-	bool setAddress(int ContactID, const QString &address);
-	bool setPostalCode(int ContactID, const QString &postalcode);
-	bool setCity(int ContactID, const QString &city);
-	bool setCountryID(int ContactID, const QString &countryid);
-	bool setContactStatusID(int ContactID, const QString &contactstatusid);
-	bool setActive(int ContactID, const QString &active);
-	bool setEmployeeID(int ContactID, const QString &employeeid);
-	bool setPhoneNum(int ContactID, const QString &phonenum);
-	bool setPhoneNum2(int ContactID, const QString &phonenum2);
-	bool setFax(int ContactID, const QString &fax);
-	bool setMobile(int ContactID, const QString &mobile);
-	bool setEmail(int ContactID, const QString &email);
-	bool setEmail2(int ContactID, const QString &email2);
-	bool setwebSite(int ContactID, const QString &website);
-	bool setTaxNumber(int ContactID, const QString &taxnumber);
-	bool setCreatedOn(int ContactID, const QString &createdon);
-	bool setEditedOn(int ContactID, const QString &editedon);
+	Contact(int ContactID,QString Salutation,QString Name,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
+	bool setSalutation(int ContactID, const QString &Salutation);
+	bool setName(int ContactID, const QString &Name);
+	bool setBirthdateOrDateOfFoundation(int ContactID, const QString &BirthdateOrDateOfFoundation);
+	bool setContactTypeID(int ContactID, const QString &ContactTypeID);
+	bool setContactClassID(int ContactID, const QString &ContactClassID);
+	bool setNumber(int ContactID, const QString &Number);
+	bool setAddress(int ContactID, const QString &Address);
+	bool setPostalCode(int ContactID, const QString &PostalCode);
+	bool setCity(int ContactID, const QString &City);
+	bool setCountryID(int ContactID, const QString &CountryID);
+	bool setContactStatusID(int ContactID, const QString &ContactStatusID);
+	bool setEmployeeID(int ContactID, const QString &EmployeeID);
+	bool setWebsite(int ContactID, const QString &Website);
+	bool setTaxNumber(int ContactID, const QString &TaxNumber);
+	bool setCreatedOn(int ContactID, const QString &CreatedOn);
+	bool setEditedOn(int ContactID, const QString &EditedOn);
 
 };
 #endif

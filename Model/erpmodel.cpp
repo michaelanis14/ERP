@@ -5,15 +5,51 @@
 **************************************/
 
 #include "erpmodel.h"
-#include "user.h"
-#include "contacttype.h"
-#include "contactclass.h"
-#include "contactstatus.h"
+#include "company.h"
+#include "tax.h"
 #include "employee.h"
 #include "contact.h"
-#include "contactperson.h"
+#include "contacttelephone.h"
+#include "contactemail.h"
+#include "bankaccount.h"
+#include "contactclass.h"
+#include "contacttype.h"
 #include "country.h"
 #include "currency.h"
+#include "contactstatus.h"
+#include "fieldtype.h"
+#include "contactfield.h"
+#include "contactfielddata.h"
+#include "contactpersonfield.h"
+#include "contactpersonfielddata.h"
+#include "contactperson.h"
+#include "contactpersontelephone.h"
+#include "contactpersonemail.h"
+#include "project.h"
+#include "unit.h"
+#include "productcategory.h"
+#include "productfield.h"
+#include "productfielddata.h"
+#include "product.h"
+#include "service.h"
+#include "store.h"
+#include "purchasestatus.h"
+#include "purchase.h"
+#include "purchaseproduct.h"
+#include "purchasefreeline.h"
+#include "deliveryorderstatus.h"
+#include "deliveryorder.h"
+#include "deliveryorderstoreproduct.h"
+#include "deliveryorderservice.h"
+#include "deliveryorderfreeline.h"
+#include "invoiceperiod.h"
+#include "invoiceyear.h"
+#include "invoicestate.h"
+#include "invoicestatedate.h"
+#include "invoice.h"
+#include "invoicefreeline.h"
+#include "paymenttype.h"
+#include "payment.h"
 
 #include <QSql>
 #include <QSqlDatabase>
@@ -139,12 +175,13 @@ bool ErpModel::init(){
 		Employee* employee = new Employee("Mwzaf"+QString::number(Employee::GetAll().count()),"","");
 		employee->save();
 	}
-	User::Init();
+	Contact::Init();
+	/*	User::Init();
 	if(User::GetAll().count() < 2){
 		User* user = new User("User"+QString::number(User::GetAll().count()),"username","password","5/5/5",1,1,"192.168.1.1","","");
 		user->save();
 	}
-	Contact::Init();
+
 	if(Contact::GetAll().count() < 5){
 	Contact* cont = new Contact("7abibi","Mr.","Abaaas"+QString::number(Contact::GetAll().count()),"AbnAbaas","5/5/5",1,1,1,"AA","na"
 									,"na",1,1,1,1,"na","na","na","na","na","na","na","na"
@@ -152,6 +189,7 @@ bool ErpModel::init(){
 		cont->save();
 
 	}
+	*/
 	Currency::Init();
 	if(Currency::GetAll().count() < 4){
 		Currency* curr = new Currency("USD","","");
@@ -163,11 +201,76 @@ bool ErpModel::init(){
 		curr = new Currency("YNN","","");
 		curr->save();
 
-
-
 	}
+	Company::Init();
+	Tax::Init();
+	if(Tax::GetAll().count() < 4){
+		Tax *tax = new Tax("0","","");
+		tax->save();
+		tax = new Tax("10","","");
+		tax->save();
+		tax = new Tax("12","","");
+		tax->save();
+		tax = new Tax("20","","");
+		tax->save();
+	}
+	Employee::Init();
+	Contact::Init();
+	ContactTelephone::Init();
+	ContactEmail::Init();
 	BankAccount::Init();
+	ContactClass::Init();
+	ContactType::Init();
+	Country::Init();
+	Currency::Init();
+	ContactStatus::Init();
+	FieldType::Init();
+	ContactField::Init();
+	ContactFieldData::Init();
+	ContactPersonField::Init();
+	ContactPersonFieldData::Init();
 	ContactPerson::Init();
+	ContactPersonTelephone::Init();
+	ContactPersonEmail::Init();
+	Project::Init();
+	Unit::Init();
+	if(Unit::GetAll().count() < 5){
+		QList<QString> units;
+		units << "Allowance" <<"Piece" << "Hour" << "Kilo" << "Meter" << "Liter" << "Millimeter" << "Gram" <<"ton" <<"kilometer"<<"Rollen"<<"LFM"<<"m²"<<"m³"<<"Box"<<"Ballen"<<"Rolle"<<"Sheet"<<"Palette"<<"VE";
+				 for(int i = 0;i < units.count(); i++){
+			Unit* un = new Unit(units.at(i),"","");
+			un->save();
+		}
+	}
+	ProductCategory::Init();
+	Product::Init();
+	ProductField::Init();
+	ProductFieldData::Init();
+
+	Service::Init();
+	Store::Init();
+	if(Store::GetAll().count() < 1){
+		Store *store = new Store("WareHouse","","10001","Cairo",1,"","");
+		store->save();
+	}
+	PurchaseStatus::Init();
+	Purchase::Init();
+	PurchaseProduct::Init();
+	PurchaseFreeLine::Init();
+	DeliveryOrderStatus::Init();
+	DeliveryOrder::Init();
+	DeliveryOrderStoreProduct::Init();
+	DeliveryOrderService::Init();
+	DeliveryOrderFreeline::Init();
+	InvoicePeriod::Init();
+	InvoiceYear::Init();
+	InvoiceState::Init();
+	Invoice::Init();
+	InvoiceStateDate::Init();
+
+	InvoiceFreeline::Init();
+	PaymentType::Init();
+	Payment::Init();
 
 
 	return true;

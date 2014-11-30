@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@ ContactPersonUI::ContactPersonUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 contactperson = new ContactPerson();
-flowLayout = new FlowLayout(formPanel);
+flowLayout = new FlowLayout(this);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
@@ -29,10 +29,13 @@ QPushButton* save = new QPushButton("Save");
  this->controllers->addControllerButton(clear);  
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
-personalsalut = new QLineEdit();
-block0Layout->addRow("Personal Salut",personalsalut);
-titleprefix = new QLineEdit();
-block0Layout->addRow("Title Prefix",titleprefix);
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block0Layout->setMinimumWidth(330);
+contact = new ERPComboBox();
+contact->addItems(Contact::GetHashList());
+block0Layout->addRow("Contact",contact);
+title = new QLineEdit();
+block0Layout->addRow("Title",title);
 name = new QLineEdit();
 QStringList* list = new QStringList(ContactPerson::GetStringList());
 QCompleter *completer = new QCompleter(*list);
@@ -46,25 +49,37 @@ position = new QLineEdit();
 block0Layout->addRow("Position",position);
 birthdate = new QLineEdit();
 block0Layout->addRow("Birthdate",birthdate);
-contactpersonenumber = new QLineEdit();
-contactpersonenumber->setValidator( intValidator );
-block0Layout->addRow("Contact Persone Number",contactpersonenumber);
-email = new QLineEdit();
-block0Layout->addRow("Email",email);
-phonenum = new QLineEdit();
-block0Layout->addRow("Phone Num",phonenum);
-phonenum2 = new QLineEdit();
-block0Layout->addRow("Phone Num2",phonenum2);
-mobile = new QLineEdit();
-block0Layout->addRow("Mobile",mobile);
-fax = new QLineEdit();
-block0Layout->addRow("Fax",fax);
-active = new QCheckBox();
-block0Layout->addRow("active",active);
-contact = new ERPComboBox();
-contact->addItems(Contact::GetHashList());
-block0Layout->addRow("Contact",contact);
+number = new QLineEdit();
+number->setValidator( intValidator );
+block0Layout->addRow("Number",number);
 flowLayout->addWidget(block0Layout);
+
+block1Layout = new ERPFormBlock;
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block1Layout->setMinimumWidth(330);
+AddRemoveButtons* addremoveContactPersonTelephoneButtons = new AddRemoveButtons();
+block1Layout->addRow("ContactPersonTelephones",addremoveContactPersonTelephoneButtons);
+QObject::connect(addremoveContactPersonTelephoneButtons, SIGNAL(addPressed()), this, SLOT(addContactPersonTelephone()));
+
+flowLayout->addWidget(block1Layout);
+
+block2Layout = new ERPFormBlock;
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block2Layout->setMinimumWidth(330);
+AddRemoveButtons* addremoveContactPersonEmailButtons = new AddRemoveButtons();
+block2Layout->addRow("ContactPersonEmails",addremoveContactPersonEmailButtons);
+QObject::connect(addremoveContactPersonEmailButtons, SIGNAL(addPressed()), this, SLOT(addContactPersonEmail()));
+
+flowLayout->addWidget(block2Layout);
+
+block3Layout = new ERPFormBlock;
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block3Layout->setMinimumWidth(330);
+AddRemoveButtons* addremoveContactPersonFieldDataButtons = new AddRemoveButtons();
+block3Layout->addRow("ContactPersonFieldDatas",addremoveContactPersonFieldDataButtons);
+QObject::connect(addremoveContactPersonFieldDataButtons, SIGNAL(addPressed()), this, SLOT(addContactPersonFieldData()));
+
+flowLayout->addWidget(block3Layout);
 
 }
 ERPDisplay* ContactPersonUI::p_instance = 0;
@@ -80,43 +95,125 @@ ContactPersonUI*ContactPersonUI::GetUI(){
 	} 
 	return (ContactPersonUI*) p_instance; 
 }
+void ContactPersonUI::addContactPersonTelephone(){ 
+ContactPersonTelephoneUI* contactpersontelephoneui = new ContactPersonTelephoneUI();
+contactpersontelephoneui->block0Layout->removeRow(contactpersontelephoneui->contactperson);
+contactpersontelephoneui->controllers->setFixedHeight(0);
+ContactPersonTelephones.append(contactpersontelephoneui);
+RemovebtnWidgets* rmcontactpersontelephone = new RemovebtnWidgets(0,contactpersontelephoneui);
+QObject::connect(rmcontactpersontelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonTelephone(QWidget*)));
+block1Layout->addRow("ContactPersonTelephone"+QString::number(ContactPersonTelephones.count()),rmcontactpersontelephone);
+}
+void ContactPersonUI::addContactPersonTelephone(ContactPersonTelephone* ContactPersonTelephone){ 
+ContactPersonTelephoneUI* contactpersontelephoneui = new ContactPersonTelephoneUI();
+contactpersontelephoneui->block0Layout->removeRow(contactpersontelephoneui->contactperson);
+contactpersontelephoneui->controllers->setFixedHeight(0);
+contactpersontelephoneui->fill(ContactPersonTelephone);
+ContactPersonTelephones.append(contactpersontelephoneui);
+RemovebtnWidgets* rmcontactpersontelephone = new RemovebtnWidgets(0,contactpersontelephoneui);
+QObject::connect(rmcontactpersontelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonTelephone(QWidget*)));
+block1Layout->addRow("ContactPersonTelephone"+QString::number(ContactPersonTelephones.count()),rmcontactpersontelephone);
+}
+void ContactPersonUI::removeContactPersonTelephone(QWidget* widget){ 
+if(ContactPersonTelephones.count()  > 0){
+ContactPersonTelephoneUI* contactpersontelephoneui = (ContactPersonTelephoneUI*) widget;
+ContactPersonTelephones.removeOne(contactpersontelephoneui);
+RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
+block1Layout->removeRow(sender);
+}
+}
+void ContactPersonUI::addContactPersonEmail(){ 
+ContactPersonEmailUI* contactpersonemailui = new ContactPersonEmailUI();
+contactpersonemailui->block0Layout->removeRow(contactpersonemailui->contactperson);
+contactpersonemailui->controllers->setFixedHeight(0);
+ContactPersonEmails.append(contactpersonemailui);
+RemovebtnWidgets* rmcontactpersonemail = new RemovebtnWidgets(0,contactpersonemailui);
+QObject::connect(rmcontactpersonemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonEmail(QWidget*)));
+block2Layout->addRow("ContactPersonEmail"+QString::number(ContactPersonEmails.count()),rmcontactpersonemail);
+}
+void ContactPersonUI::addContactPersonEmail(ContactPersonEmail* ContactPersonEmail){ 
+ContactPersonEmailUI* contactpersonemailui = new ContactPersonEmailUI();
+contactpersonemailui->block0Layout->removeRow(contactpersonemailui->contactperson);
+contactpersonemailui->controllers->setFixedHeight(0);
+contactpersonemailui->fill(ContactPersonEmail);
+ContactPersonEmails.append(contactpersonemailui);
+RemovebtnWidgets* rmcontactpersonemail = new RemovebtnWidgets(0,contactpersonemailui);
+QObject::connect(rmcontactpersonemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonEmail(QWidget*)));
+block2Layout->addRow("ContactPersonEmail"+QString::number(ContactPersonEmails.count()),rmcontactpersonemail);
+}
+void ContactPersonUI::removeContactPersonEmail(QWidget* widget){ 
+if(ContactPersonEmails.count()  > 0){
+ContactPersonEmailUI* contactpersonemailui = (ContactPersonEmailUI*) widget;
+ContactPersonEmails.removeOne(contactpersonemailui);
+RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
+block2Layout->removeRow(sender);
+}
+}
+void ContactPersonUI::addContactPersonFieldData(){ 
+ContactPersonFieldDataUI* contactpersonfielddataui = new ContactPersonFieldDataUI();
+contactpersonfielddataui->block0Layout->removeRow(contactpersonfielddataui->contactperson);
+contactpersonfielddataui->controllers->setFixedHeight(0);
+ContactPersonFieldDatas.append(contactpersonfielddataui);
+RemovebtnWidgets* rmcontactpersonfielddata = new RemovebtnWidgets(0,contactpersonfielddataui);
+QObject::connect(rmcontactpersonfielddata, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonFieldData(QWidget*)));
+block3Layout->addRow("ContactPersonFieldData"+QString::number(ContactPersonFieldDatas.count()),rmcontactpersonfielddata);
+}
+void ContactPersonUI::addContactPersonFieldData(ContactPersonFieldData* ContactPersonFieldData){ 
+ContactPersonFieldDataUI* contactpersonfielddataui = new ContactPersonFieldDataUI();
+contactpersonfielddataui->block0Layout->removeRow(contactpersonfielddataui->contactperson);
+contactpersonfielddataui->controllers->setFixedHeight(0);
+contactpersonfielddataui->fill(ContactPersonFieldData);
+ContactPersonFieldDatas.append(contactpersonfielddataui);
+RemovebtnWidgets* rmcontactpersonfielddata = new RemovebtnWidgets(0,contactpersonfielddataui);
+QObject::connect(rmcontactpersonfielddata, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonFieldData(QWidget*)));
+block3Layout->addRow("ContactPersonFieldData"+QString::number(ContactPersonFieldDatas.count()),rmcontactpersonfielddata);
+}
+void ContactPersonUI::removeContactPersonFieldData(QWidget* widget){ 
+if(ContactPersonFieldDatas.count()  > 0){
+ContactPersonFieldDataUI* contactpersonfielddataui = (ContactPersonFieldDataUI*) widget;
+ContactPersonFieldDatas.removeOne(contactpersonfielddataui);
+RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
+block3Layout->removeRow(sender);
+}
+}
 void ContactPersonUI::fill(ContactPerson* contactperson){ 
 clear();
 this->contactperson = contactperson;
-personalsalut->setText(contactperson->PersonalSalut);
-titleprefix->setText(contactperson->TitlePrefix);
+title->setText(contactperson->Title);
 name->setText(contactperson->Name);
 lastname->setText(contactperson->LastName);
 position->setText(contactperson->Position);
 birthdate->setText(contactperson->Birthdate);
-contactpersonenumber->setText(QString::number(contactperson->ContactPersoneNumber));
-email->setText(contactperson->Email);
-phonenum->setText(contactperson->PhoneNum);
-phonenum2->setText(contactperson->PhoneNum2);
-mobile->setText(contactperson->Mobile);
-fax->setText(contactperson->Fax);
-active->setChecked(contactperson->active);
+number->setText(QString::number(contactperson->Number));
+foreach(ContactPersonTelephone* contactpersontelephone, contactperson->contactpersontelephones) {
+addContactPersonTelephone(contactpersontelephone);
+}
+foreach(ContactPersonEmail* contactpersonemail, contactperson->contactpersonemails) {
+addContactPersonEmail(contactpersonemail);
+}
+foreach(ContactPersonFieldData* contactpersonfielddata, contactperson->contactpersonfielddatas) {
+addContactPersonFieldData(contactpersonfielddata);
+}
 } 
 void ContactPersonUI::clear(){ 
 delete this->contactperson;
-personalsalut->setText("");
-titleprefix->setText("");
+title->setText("");
 lastname->setText("");
 position->setText("");
 birthdate->setText("");
-contactpersonenumber->setText("");
-email->setText("");
-phonenum->setText("");
-phonenum2->setText("");
-mobile->setText("");
-fax->setText("");
-active->setChecked(false);
+number->setText("");
+QList<RemovebtnWidgets *> RWidgets = this->findChildren<RemovebtnWidgets *>();
+foreach(RemovebtnWidgets * child, RWidgets)
+{
+if(child->parent()->parent()->parent() != 0)
+((ERPFormBlock*)child->parent()->parent())->removeRow(child);
+}
 this->contactperson = new ContactPerson();
 } 
 void ContactPersonUI::selectContactPerson(){ 
-if(ContactPerson::GetStringList().contains(name->text()))
+if(ContactPerson::GetStringList().contains(title->text()))
 {
-ContactPerson* con = ContactPerson::Get(name->text());
+ContactPerson* con = ContactPerson::Get(title->text());
 if(this->contactperson->ContactPersonID != con->ContactPersonID){
 fill(con);
 }
@@ -127,35 +224,22 @@ clear();
 bool ContactPersonUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(personalsalut->text().trimmed().isEmpty()){
+if(contactperson->ContactID == 0) 
+contactperson->ContactID = contact->getKey();
+if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Personal Salut Can't be Empty! \n";
-personalsalut->setObjectName("error");
-personalsalut->style()->unpolish(personalsalut);
-personalsalut->style()->polish(personalsalut);
-personalsalut->update();
+errorString += "Title Can't be Empty! \n";
+title->setObjectName("error");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
 }
 else { 
-personalsalut->setObjectName("personalsalut");
-personalsalut->style()->unpolish(personalsalut);
-personalsalut->style()->polish(personalsalut);
-personalsalut->update();
-contactperson->PersonalSalut = personalsalut->text().trimmed();
-}
-if(titleprefix->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Prefix Can't be Empty! \n";
-titleprefix->setObjectName("error");
-titleprefix->style()->unpolish(titleprefix);
-titleprefix->style()->polish(titleprefix);
-titleprefix->update();
-}
-else { 
-titleprefix->setObjectName("titleprefix");
-titleprefix->style()->unpolish(titleprefix);
-titleprefix->style()->polish(titleprefix);
-titleprefix->update();
-contactperson->TitlePrefix = titleprefix->text().trimmed();
+title->setObjectName("title");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+contactperson->Title = title->text().trimmed();
 }
 if(name->text().trimmed().isEmpty()){
 errors = true;
@@ -217,101 +301,110 @@ birthdate->style()->polish(birthdate);
 birthdate->update();
 contactperson->Birthdate = birthdate->text().trimmed();
 }
-if(contactpersonenumber->text().trimmed().isEmpty()){
+if(number->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Contact Persone Number Can't be Empty! \n";
-contactpersonenumber->setObjectName("error");
-contactpersonenumber->style()->unpolish(contactpersonenumber);
-contactpersonenumber->style()->polish(contactpersonenumber);
-contactpersonenumber->update();
+errorString += "Number Can't be Empty! \n";
+number->setObjectName("error");
+number->style()->unpolish(number);
+number->style()->polish(number);
+number->update();
 }
 else { 
-contactpersonenumber->setObjectName("contactpersonenumber");
-contactpersonenumber->style()->unpolish(contactpersonenumber);
-contactpersonenumber->style()->polish(contactpersonenumber);
-contactpersonenumber->update();
-contactperson->ContactPersoneNumber = contactpersonenumber->text().trimmed().toInt();
+number->setObjectName("number");
+number->style()->unpolish(number);
+number->style()->polish(number);
+number->update();
+contactperson->Number = number->text().trimmed().toInt();
 }
-if(email->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Email Can't be Empty! \n";
-email->setObjectName("error");
-email->style()->unpolish(email);
-email->style()->polish(email);
-email->update();
-}
-else { 
-email->setObjectName("email");
-email->style()->unpolish(email);
-email->style()->polish(email);
-email->update();
-contactperson->Email = email->text().trimmed();
-}
-if(phonenum->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Phone Num Can't be Empty! \n";
-phonenum->setObjectName("error");
-phonenum->style()->unpolish(phonenum);
-phonenum->style()->polish(phonenum);
-phonenum->update();
-}
-else { 
-phonenum->setObjectName("phonenum");
-phonenum->style()->unpolish(phonenum);
-phonenum->style()->polish(phonenum);
-phonenum->update();
-contactperson->PhoneNum = phonenum->text().trimmed();
-}
-if(phonenum2->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Phone Num2 Can't be Empty! \n";
-phonenum2->setObjectName("error");
-phonenum2->style()->unpolish(phonenum2);
-phonenum2->style()->polish(phonenum2);
-phonenum2->update();
-}
-else { 
-phonenum2->setObjectName("phonenum2");
-phonenum2->style()->unpolish(phonenum2);
-phonenum2->style()->polish(phonenum2);
-phonenum2->update();
-contactperson->PhoneNum2 = phonenum2->text().trimmed();
-}
-if(mobile->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Mobile Can't be Empty! \n";
-mobile->setObjectName("error");
-mobile->style()->unpolish(mobile);
-mobile->style()->polish(mobile);
-mobile->update();
-}
-else { 
-mobile->setObjectName("mobile");
-mobile->style()->unpolish(mobile);
-mobile->style()->polish(mobile);
-mobile->update();
-contactperson->Mobile = mobile->text().trimmed();
-}
-if(fax->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Fax Can't be Empty! \n";
-fax->setObjectName("error");
-fax->style()->unpolish(fax);
-fax->style()->polish(fax);
-fax->update();
-}
-else { 
-fax->setObjectName("fax");
-fax->style()->unpolish(fax);
-fax->style()->polish(fax);
-fax->update();
-contactperson->Fax = fax->text().trimmed();
-}
-contactperson->active = active->text().trimmed().toInt();
-if(contactperson->ContactID == 0) 
-contactperson->ContactID = contact->getKey();
+for(int j = 0; j < ContactPersonTelephones.length(); j++){
+ContactPersonTelephones.at(j)->description->setObjectName("description");
+ContactPersonTelephones.at(j)->description->style()->unpolish(ContactPersonTelephones.at(j)->description);
+ContactPersonTelephones.at(j)->description->style()->polish(ContactPersonTelephones.at(j)->description);
+ContactPersonTelephones.at(j)->description->update();
+for(int w = 0; w < ContactPersonTelephones.length(); w++){
+if(ContactPersonTelephones.at(j) != ContactPersonTelephones.at(w))
+if(ContactPersonTelephones.at(j)->description->text() == ContactPersonTelephones.at(w)->description->text()){
+errors = true; 
+ errorString += "ContactPersonTelephone has the same description \n";
+ContactPersonTelephones.at(j)->description->setObjectName("error");
+ContactPersonTelephones.at(j)->description->style()->unpolish(ContactPersonTelephones.at(j)->description);
+ContactPersonTelephones.at(j)->description->style()->polish(ContactPersonTelephones.at(j)->description);
+ContactPersonTelephones.at(j)->description->update();
+}}}
+for(int j = 0; j < ContactPersonEmails.length(); j++){
+ContactPersonEmails.at(j)->description->setObjectName("description");
+ContactPersonEmails.at(j)->description->style()->unpolish(ContactPersonEmails.at(j)->description);
+ContactPersonEmails.at(j)->description->style()->polish(ContactPersonEmails.at(j)->description);
+ContactPersonEmails.at(j)->description->update();
+for(int w = 0; w < ContactPersonEmails.length(); w++){
+if(ContactPersonEmails.at(j) != ContactPersonEmails.at(w))
+if(ContactPersonEmails.at(j)->description->text() == ContactPersonEmails.at(w)->description->text()){
+errors = true; 
+ errorString += "ContactPersonEmail has the same description \n";
+ContactPersonEmails.at(j)->description->setObjectName("error");
+ContactPersonEmails.at(j)->description->style()->unpolish(ContactPersonEmails.at(j)->description);
+ContactPersonEmails.at(j)->description->style()->polish(ContactPersonEmails.at(j)->description);
+ContactPersonEmails.at(j)->description->update();
+}}}
+for(int j = 0; j < ContactPersonFieldDatas.length(); j++){
+ContactPersonFieldDatas.at(j)->value->setObjectName("value");
+ContactPersonFieldDatas.at(j)->value->style()->unpolish(ContactPersonFieldDatas.at(j)->value);
+ContactPersonFieldDatas.at(j)->value->style()->polish(ContactPersonFieldDatas.at(j)->value);
+ContactPersonFieldDatas.at(j)->value->update();
+for(int w = 0; w < ContactPersonFieldDatas.length(); w++){
+if(ContactPersonFieldDatas.at(j) != ContactPersonFieldDatas.at(w))
+if(ContactPersonFieldDatas.at(j)->value->text() == ContactPersonFieldDatas.at(w)->value->text()){
+errors = true; 
+ errorString += "ContactPersonFieldData has the same value \n";
+ContactPersonFieldDatas.at(j)->value->setObjectName("error");
+ContactPersonFieldDatas.at(j)->value->style()->unpolish(ContactPersonFieldDatas.at(j)->value);
+ContactPersonFieldDatas.at(j)->value->style()->polish(ContactPersonFieldDatas.at(j)->value);
+ContactPersonFieldDatas.at(j)->value->update();
+}}}
 if(!errors) {
 contactperson->save();
+for(int i = 0; i < ContactPersonTelephones.length(); i++){
+ContactPersonTelephones.at(i)->contactpersontelephone->ContactPersonID= contactperson->ContactPersonID;
+if(!ContactPersonTelephones.at(i)->save()){ 
+ errors = true; 
+ break; } 
+}
+for(int i = 0; i < contactperson->contactpersontelephones.length(); i++){
+bool flag = false;
+for(int j = 0; j < ContactPersonTelephones.length(); j++){
+if(contactperson->contactpersontelephones.at(i)->ContactPersonTelephoneID == ContactPersonTelephones.at(j)->contactpersontelephone->ContactPersonTelephoneID){
+flag = true;}}
+if(!flag){
+contactperson->contactpersontelephones.at(i)->remove();}
+}
+for(int i = 0; i < ContactPersonEmails.length(); i++){
+ContactPersonEmails.at(i)->contactpersonemail->ContactPersonID= contactperson->ContactPersonID;
+if(!ContactPersonEmails.at(i)->save()){ 
+ errors = true; 
+ break; } 
+}
+for(int i = 0; i < contactperson->contactpersonemails.length(); i++){
+bool flag = false;
+for(int j = 0; j < ContactPersonEmails.length(); j++){
+if(contactperson->contactpersonemails.at(i)->ContactPersonEmailID == ContactPersonEmails.at(j)->contactpersonemail->ContactPersonEmailID){
+flag = true;}}
+if(!flag){
+contactperson->contactpersonemails.at(i)->remove();}
+}
+for(int i = 0; i < ContactPersonFieldDatas.length(); i++){
+ContactPersonFieldDatas.at(i)->contactpersonfielddata->ContactPersonID= contactperson->ContactPersonID;
+if(!ContactPersonFieldDatas.at(i)->save()){ 
+ errors = true; 
+ break; } 
+}
+for(int i = 0; i < contactperson->contactpersonfielddatas.length(); i++){
+bool flag = false;
+for(int j = 0; j < ContactPersonFieldDatas.length(); j++){
+if(contactperson->contactpersonfielddatas.at(i)->ContactPersonFieldDataID == ContactPersonFieldDatas.at(j)->contactpersonfielddata->ContactPersonFieldDataID){
+flag = true;}}
+if(!flag){
+contactperson->contactpersonfielddatas.at(i)->remove();}
+}
 if(!errors){
 ContactPersonIndexUI::ShowUI();
 return true;}

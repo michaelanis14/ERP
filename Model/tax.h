@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,12 +16,10 @@ class Tax  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Tax();
-	Tax(double Ratio,QString Description,QString CreatedOn,QString EditedOn);	int TaxID;
-	double Ratio;
-	QString Description;
+	Tax(QString Title,QString CreatedOn,QString EditedOn);	int TaxID;
+	QString Title;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<Tax*> taxs;
 	static bool Init();
 	bool save();
 	bool remove();
@@ -42,11 +40,10 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Tax(int TaxID,double Ratio,QString Description,QString CreatedOn,QString EditedOn);	static Tax* p_instance;
-	bool setRatio(int TaxID, const QString &ratio);
-	bool setDescription(int TaxID, const QString &description);
-	bool setCreatedOn(int TaxID, const QString &createdon);
-	bool setEditedOn(int TaxID, const QString &editedon);
+	Tax(int TaxID,QString Title,QString CreatedOn,QString EditedOn);	static Tax* p_instance;
+	bool setTitle(int TaxID, const QString &Title);
+	bool setCreatedOn(int TaxID, const QString &CreatedOn);
+	bool setEditedOn(int TaxID, const QString &EditedOn);
 
 };
 #endif

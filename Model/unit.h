@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -20,7 +20,6 @@ public:
 	QString Description;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<Unit*> units;
 	static bool Init();
 	bool save();
 	bool remove();
@@ -42,9 +41,9 @@ public:
 
 private:
 	Unit(int UnitID,QString Description,QString CreatedOn,QString EditedOn);	static Unit* p_instance;
-	bool setDescription(int UnitID, const QString &description);
-	bool setCreatedOn(int UnitID, const QString &createdon);
-	bool setEditedOn(int UnitID, const QString &editedon);
+	bool setDescription(int UnitID, const QString &Description);
+	bool setCreatedOn(int UnitID, const QString &CreatedOn);
+	bool setEditedOn(int UnitID, const QString &EditedOn);
 
 };
 #endif

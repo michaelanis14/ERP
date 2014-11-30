@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:07 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,7 +21,10 @@
 #include "../../Model/contactstatus.h"
 #include "../../Model/employee.h"
 
+#include "../ContactTelephone/contacttelephoneui.h"
+#include "../ContactEmail/contactemailui.h"
 #include "../BankAccount/bankaccountui.h"
+#include "../ContactFieldData/contactfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -42,28 +45,24 @@ public:
 	ERPFormBlock* block3Layout;
 	ERPFormBlock* block4Layout;
 	ERPFormBlock* block5Layout;
+	ERPFormBlock* block6Layout;
+	ERPFormBlock* block7Layout;
+	QList<ContactTelephoneUI*> ContactTelephones;
+	QList<ContactEmailUI*> ContactEmails;
 	QList<BankAccountUI*> BankAccounts;
-	QLineEdit*personalsalutation;
+	QList<ContactFieldDataUI*> ContactFieldDatas;
 	QLineEdit*salutation;
 	QLineEdit*name;
-	QLineEdit*lastname;
 	QLineEdit*birthdateordateoffoundation;
 	ERPComboBox*contacttype;
 	ERPComboBox*contactclass;
-	QLineEdit*contactnumber;
+	QLineEdit*number;
 	QLineEdit*address;
 	QLineEdit*postalcode;
 	QLineEdit*city;
 	ERPComboBox*country;
 	ERPComboBox*contactstatus;
-	QCheckBox* active;
 	ERPComboBox*employee;
-	QLineEdit*phonenum;
-	QLineEdit*phonenum2;
-	QLineEdit*fax;
-	QLineEdit*mobile;
-	QLineEdit*email;
-	QLineEdit*email2;
 	QLineEdit*website;
 	QLineEdit*taxnumber;
 	void fill(Contact* contact);
@@ -71,9 +70,18 @@ Contact* contact;
 private:
 	static ERPDisplay* p_instance;
 private slots:
+	void addContactTelephone();
+	void addContactTelephone(ContactTelephone* ContactTelephone);
+	void removeContactTelephone(QWidget* widget);
+	void addContactEmail();
+	void addContactEmail(ContactEmail* ContactEmail);
+	void removeContactEmail(QWidget* widget);
 	void addBankAccount();
 	void addBankAccount(BankAccount* BankAccount);
 	void removeBankAccount(QWidget* widget);
+	void addContactFieldData();
+	void addContactFieldData(ContactFieldData* ContactFieldData);
+	void removeContactFieldData(QWidget* widget);
 	void selectContact();
 	void cancel();
 	void clear();

@@ -1,0 +1,48 @@
+/**************************************************************************
+**   File: deliveryorderstoreproductindexui.h
+**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Author: Michael Bishara
+**   Copyright: SphinxSolutions.
+**************************************************************************/
+
+#ifndef DELIVERYORDERSTOREPRODUCTINDEXUI_H
+#define DELIVERYORDERSTOREPRODUCTINDEXUI_H
+#include "../../erpdisplay.h"
+#include "../CommonUI/erpformblock.h"
+#include "../CommonUI/erpcombobox.h"
+#include "../../Model/deliveryorderstoreproduct.h"
+#include "../../Model/deliveryorder.h"
+#include "../../Model/store.h"
+#include "../../Model/product.h"
+
+
+#include <QWidget>
+#include <QLineEdit>
+#include <QTableView>
+#include <QPushButton>
+#include <QtSql>
+#include <QSqlRelationalDelegate>
+#include <QSqlRelationalTableModel>
+class DeliveryOrderStoreProductIndexUI : public ERPDisplay
+{
+	Q_OBJECT
+public:
+	explicit DeliveryOrderStoreProductIndexUI(QWidget *parent = 0);
+	static void ShowUI();
+	static DeliveryOrderStoreProductIndexUI* GetUI();
+QTableView *tabel; 
+ DeliveryOrderStoreProduct *model; 
+ QPushButton* add; 
+ QPushButton* remove; 
+ QPushButton* edit;
+private:
+	static ERPDisplay* p_instance;
+private slots:
+	void addRow(); 
+ void removeRow(); 
+ void editRow(); 
+ void onSelectionChanged();
+protected:
+void showEvent(QShowEvent * event);
+};
+#endif

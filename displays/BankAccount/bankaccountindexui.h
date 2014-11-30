@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountindexui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,10 +11,9 @@
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
 #include "../../Model/bankaccount.h"
-#include "../../Model/bankaccount.h"
+#include "../../Model/country.h"
 #include "../../Model/currency.h"
 #include "../../Model/contact.h"
-#include "../../Model/country.h"
 
 
 #include <QWidget>

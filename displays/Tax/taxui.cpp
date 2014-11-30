@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxui.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Nov 30 23:37:06 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,10 +12,9 @@ TaxUI::TaxUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 tax = new Tax();
-flowLayout = new FlowLayout(formPanel);
+flowLayout = new FlowLayout(this);
 flowLayout->setContentsMargins(0,0,0,0);
 
-QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
 QPushButton* save = new QPushButton("Save");
  QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
  save->setObjectName("save");
@@ -29,11 +28,10 @@ QPushButton* save = new QPushButton("Save");
  this->controllers->addControllerButton(clear);  
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
-ratio = new QLineEdit();
-ratio->setValidator( doubleValidator );
-block0Layout->addRow("Ratio",ratio);
-description = new QLineEdit();
-block0Layout->addRow("Description",description);
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block0Layout->setMinimumWidth(330);
+title = new QLineEdit();
+block0Layout->addRow("Title",title);
 flowLayout->addWidget(block0Layout);
 
 }
@@ -53,19 +51,17 @@ TaxUI*TaxUI::GetUI(){
 void TaxUI::fill(Tax* tax){ 
 clear();
 this->tax = tax;
-ratio->setText(QString::number(tax->Ratio));
-description->setText(tax->Description);
+title->setText(tax->Title);
 } 
 void TaxUI::clear(){ 
 delete this->tax;
-ratio->setText("");
-description->setText("");
+title->setText("");
 this->tax = new Tax();
 } 
 void TaxUI::selectTax(){ 
-if(Tax::GetStringList().contains(description->text()))
+if(Tax::GetStringList().contains(title->text()))
 {
-Tax* con = Tax::Get(description->text());
+Tax* con = Tax::Get(title->text());
 if(this->tax->TaxID != con->TaxID){
 fill(con);
 }
@@ -76,35 +72,20 @@ clear();
 bool TaxUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(ratio->text().trimmed().isEmpty()){
+if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Ratio Can't be Empty! \n";
-ratio->setObjectName("error");
-ratio->style()->unpolish(ratio);
-ratio->style()->polish(ratio);
-ratio->update();
+errorString += "Title Can't be Empty! \n";
+title->setObjectName("error");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
 }
 else { 
-ratio->setObjectName("ratio");
-ratio->style()->unpolish(ratio);
-ratio->style()->polish(ratio);
-ratio->update();
-tax->Ratio = ratio->text().trimmed().toDouble();
-}
-if(description->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Description Can't be Empty! \n";
-description->setObjectName("error");
-description->style()->unpolish(description);
-description->style()->polish(description);
-description->update();
-}
-else { 
-description->setObjectName("description");
-description->style()->unpolish(description);
-description->style()->polish(description);
-description->update();
-tax->Description = description->text().trimmed();
+title->setObjectName("title");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+tax->Title = title->text().trimmed();
 }
 if(!errors) {
 tax->save();

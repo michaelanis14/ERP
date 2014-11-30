@@ -7,20 +7,26 @@
 #include "erpformblock.h"
 #include <QPushButton>
 #include <QLabel>
+#include <qDebug>
 
 ERPFormBlock::ERPFormBlock(QWidget *parent) :
 	QWidget(parent)
 {
 
 	this->setObjectName("ERPFormBlock");
+	this->setContentsMargins(0,0,0,0);
 
 	baseWidget= new QWidget();
 	baseWidget->setObjectName("baseWidget");
+	baseWidget->setContentsMargins(0,0,0,0);
+
 	boxLayout = new QVBoxLayout(this);
+	boxLayout->setContentsMargins(0,0,0,0);
+
 	formLayout = new QFormLayout(baseWidget);
 
 	formLayout->setObjectName("formPanel");
-	this->setContentsMargins(0,0,0,0);
+	//formLayout->setContentsMargins(0,0,0,0);
 
 	//	formLayout->setContentsMargins(5,2,5,2);
 	//	formLayout->setRowWrapPolicy(QFormLayout::WrapLongRows);
@@ -28,7 +34,9 @@ ERPFormBlock::ERPFormBlock(QWidget *parent) :
 	formLayout->setLabelAlignment(Qt::AlignLeft);
 	//this->setAutoFillBackground(true);
 	formLayout->setRowWrapPolicy(QFormLayout::WrapAllRows);
-	//this->setMinimumWidth(190);
+	//this->setFixedWidth(300);
+
+	//this->setMaximumWidth(450);
 	//this->setMinimumHeight(190);
 	//formLayout->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
 	this->baseWidget->setHidden(true);
@@ -39,6 +47,8 @@ ERPFormBlock::ERPFormBlock(QWidget *parent) :
 }
 
 void ERPFormBlock::addRow(const QString &labelText, QWidget *field){
+	field->setMinimumWidth((this->width()/2));
+
 	field->setParent(this);
 	formLayout->addRow(labelText,field);
 	this->baseWidget->setHidden(false);
@@ -65,5 +75,6 @@ void ERPFormBlock::removeRow(QWidget* field){
 void ERPFormBlock::addWidget(QWidget *widget){
 
 	boxLayout->addWidget(widget);
+	//this->repaint();
 	//boxLayout->addStretch(1);
 }
