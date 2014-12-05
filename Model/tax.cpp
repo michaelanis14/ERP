@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -96,7 +96,7 @@ QList<Tax*> Tax::GetAll() {
 	while (query.next()) {
 taxs.append(new Tax(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qSort(taxs);
+qStableSort(taxs.begin(),taxs.end());
 	return taxs;
 }
 
@@ -156,7 +156,7 @@ taxs = GetAll();
 	for(int i = 0; i <taxs.count(); i++){
 		list.append(taxs[i]->Title);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

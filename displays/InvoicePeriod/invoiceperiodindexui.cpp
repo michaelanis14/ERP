@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceperiodindexui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,13 +21,8 @@ model = new InvoicePeriod();
 	if(!ErpModel::GetInstance()->db.open()) 
 	qDebug() <<"Couldn't open databaseee!";
 ERPFormBlock* block0Layout = new ERPFormBlock; 
- tabel = new QTableView(); 
- tabel->setModel(model); 
- tabel->setItemDelegate(new QSqlRelationalDelegate(tabel)); 
- tabel->hideColumn(0); // don't show the ID 
- tabel->setSortingEnabled(true); 
- tabel->setSelectionBehavior(QAbstractItemView::SelectRows); 
- tabel->setSelectionMode(QAbstractItemView::SingleSelection); 
+ tabel = new ERPTableView(); 
+ tabel->tabel->setModel(model); 
  block0Layout->addRow("",tabel); 
  flowLayout->addWidget(block0Layout); 
   add = new QPushButton("Add"); 
@@ -41,17 +36,16 @@ ERPFormBlock* block0Layout = new ERPFormBlock;
  edit->setObjectName("edit"); 
  edit->setEnabled(false); 
  remove->setEnabled(false); 
- QObject::connect(tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &InvoicePeriodIndexUI::onSelectionChanged);
+ QObject::connect(tabel->tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &InvoicePeriodIndexUI::onSelectionChanged);
 this->controllers->addControllerButton(add); 
  this->controllers->addControllerButton(edit);  
  this->controllers->addControllerButton(remove);
 }
 ERPDisplay* InvoicePeriodIndexUI::p_instance = 0;
 void InvoicePeriodIndexUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new InvoicePeriodIndexUI(mainwindow::GetMainDisplay());
-	} 
- InvoicePeriodIndexUI::GetUI()->model->refresh();	
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new InvoicePeriodIndexUI(mainwindow::GetMainDisplay()); 	
  mainwindow::ShowDisplay(p_instance); 
 }
 InvoicePeriodIndexUI*InvoicePeriodIndexUI::GetUI(){ 
@@ -66,13 +60,13 @@ void InvoicePeriodIndexUI::addRow(){
  }
 void InvoicePeriodIndexUI::editRow(){ 
  InvoicePeriodUI::ShowUI(); 
- InvoicePeriodUI::GetUI()->fill(model->get(tabel->selectionModel()->selectedRows().last())); 
+ InvoicePeriodUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 
  }
 void InvoicePeriodIndexUI::removeRow(){ 
- model->remove(tabel->selectionModel()->selectedRows().last()); 
+ model->remove(tabel->tabel->selectionModel()->selectedRows().last()); 
  }
 void InvoicePeriodIndexUI::onSelectionChanged(){ 
- int e = tabel->selectionModel()->selectedRows().count(); 
+ int e = tabel->tabel->selectionModel()->selectedRows().count(); 
  remove->setEnabled(e); 
  edit->setEnabled(e); 
  }

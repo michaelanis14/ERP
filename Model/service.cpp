@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: service.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -122,7 +122,7 @@ QList<Service*> Service::GetAll() {
 	while (query.next()) {
 services.append(new Service(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
 	}
-qSort(services);
+qStableSort(services.begin(),services.end());
 	return services;
 }
 
@@ -184,7 +184,7 @@ services = GetAll();
 	for(int i = 0; i <services.count(); i++){
 		list.append(services[i]->Name);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

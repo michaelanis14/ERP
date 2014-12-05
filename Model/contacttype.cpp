@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -96,7 +96,7 @@ QList<ContactType*> ContactType::GetAll() {
 	while (query.next()) {
 contacttypes.append(new ContactType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qSort(contacttypes);
+qStableSort(contacttypes.begin(),contacttypes.end());
 	return contacttypes;
 }
 
@@ -156,7 +156,7 @@ contacttypes = GetAll();
 	for(int i = 0; i <contacttypes.count(); i++){
 		list.append(contacttypes[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

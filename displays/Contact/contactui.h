@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,6 +32,7 @@
 #include <QPushButton>
 #include <QCompleter>
 #include <QMessageBox>
+#include <QDateEdit>
 class ContactUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -53,7 +54,7 @@ public:
 	QList<ContactFieldDataUI*> ContactFieldDatas;
 	QLineEdit*salutation;
 	QLineEdit*name;
-	QLineEdit*birthdateordateoffoundation;
+	QDateEdit*birthdateordateoffoundation;
 	ERPComboBox*contacttype;
 	ERPComboBox*contactclass;
 	QLineEdit*number;

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -96,7 +96,7 @@ QList<Country*> Country::GetAll() {
 	while (query.next()) {
 countrys.append(new Country(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qSort(countrys);
+qStableSort(countrys.begin(),countrys.end());
 	return countrys;
 }
 
@@ -156,7 +156,7 @@ countrys = GetAll();
 	for(int i = 0; i <countrys.count(); i++){
 		list.append(countrys[i]->Name);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfielddataindexui.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,6 +10,7 @@
 #include "../../erpdisplay.h"
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
+#include "../CommonUI/erptableview.h"
 #include "../../Model/productfielddata.h"
 #include "../../Model/product.h"
 #include "../../Model/productfield.h"
@@ -17,7 +18,6 @@
 
 #include <QWidget>
 #include <QLineEdit>
-#include <QTableView>
 #include <QPushButton>
 #include <QtSql>
 #include <QSqlRelationalDelegate>
@@ -29,7 +29,7 @@ public:
 	explicit ProductFieldDataIndexUI(QWidget *parent = 0);
 	static void ShowUI();
 	static ProductFieldDataIndexUI* GetUI();
-QTableView *tabel; 
+ERPTableView *tabel; 
  ProductFieldData *model; 
  QPushButton* add; 
  QPushButton* remove; 

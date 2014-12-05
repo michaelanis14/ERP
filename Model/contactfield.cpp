@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfield.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -106,7 +106,7 @@ QList<ContactField*> ContactField::GetAll() {
 	while (query.next()) {
 contactfields.append(new ContactField(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qSort(contactfields);
+qStableSort(contactfields.begin(),contactfields.end());
 	return contactfields;
 }
 
@@ -166,7 +166,7 @@ contactfields = GetAll();
 	for(int i = 0; i <contactfields.count(); i++){
 		list.append(contactfields[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

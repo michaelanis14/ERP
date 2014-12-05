@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: payment.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -116,7 +116,7 @@ QList<Payment*> Payment::GetAll() {
 	while (query.next()) {
 payments.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
 	}
-qSort(payments);
+qStableSort(payments.begin(),payments.end());
 	return payments;
 }
 
@@ -177,7 +177,7 @@ payments = GetAll();
 	for(int i = 0; i <payments.count(); i++){
 		list.append(payments[i]->Title);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

@@ -41,6 +41,7 @@ public:
 	class QPushButton* inNavStoreHouse;
 	class QPushButton* inNavPurchase;
 	class QPushButton* inNavDeliveryOrder;
+	class QPushButton* inNavStoreStatus;
 private:
 	static mainwindow* p_instance;
 	class ERPDisplay* currentDisplay;

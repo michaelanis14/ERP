@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchaseui.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,9 +15,8 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/purchase.h"
 #include "../../Model/purchase.h"
-#include "../../Model/store.h"
 
-#include "../PurchaseProduct/purchaseproductui.h"
+#include "../PurchaseStoreProduct/purchasestoreproductui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -25,6 +24,7 @@
 #include <QPushButton>
 #include <QCompleter>
 #include <QMessageBox>
+#include <QDateEdit>
 class PurchaseUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -33,19 +33,18 @@ public:
 	static void ShowUI();
 	static PurchaseUI* GetUI();
 	ERPFormBlock* block0Layout;
-	QList<PurchaseProductUI*> PurchaseProducts;
+	QList<PurchaseStoreProductUI*> PurchaseStoreProducts;
 	QLineEdit*title;
-	ERPComboBox*store;
-	QLineEdit*creationdate;
-	QLineEdit*deliverydate;
+	QDateEdit*creationdate;
+	QDateEdit*deliverydate;
 	void fill(Purchase* purchase);
 Purchase* purchase;
 private:
 	static ERPDisplay* p_instance;
 private slots:
-	void addPurchaseProduct();
-	void addPurchaseProduct(PurchaseProduct* PurchaseProduct);
-	void removePurchaseProduct(QWidget* widget);
+	void addPurchaseStoreProduct();
+	void addPurchaseStoreProduct(PurchaseStoreProduct* PurchaseStoreProduct);
+	void removePurchaseStoreProduct(QWidget* widget);
 	void selectPurchase();
 	void cancel();
 	void clear();

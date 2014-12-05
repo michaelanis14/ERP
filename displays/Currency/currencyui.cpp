@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currencyui.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,10 +37,10 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* CurrencyUI::p_instance = 0;
 void CurrencyUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new CurrencyUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new CurrencyUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 CurrencyUI*CurrencyUI::GetUI(){ 
  	if (p_instance == 0) { 

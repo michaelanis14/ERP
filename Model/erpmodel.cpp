@@ -35,7 +35,7 @@
 #include "store.h"
 #include "purchasestatus.h"
 #include "purchase.h"
-#include "purchaseproduct.h"
+#include "purchasestoreproduct.h"
 #include "purchasefreeline.h"
 #include "deliveryorderstatus.h"
 #include "deliveryorder.h"
@@ -166,7 +166,7 @@ bool ErpModel::init(){
 		QList<QString> countries;
 		countries <<"Afghanistan"<<"Albania"<<"Algeria"<<"American Samoa"<<"Andorra"<<"Angola"<<"Anguilla"<<"Antigua and Barbuda"<<"Argentina"<<"Armenia"<<"Aruba"<<"Australia"<<"Austria"<<"Azerbaijan"<<"Bahamas"<<"Bahrain"<<"Bangladesh"<<"Barbados"<<"Belarus"<<"Belgium"<<"Belize"<<"Benin"<<"Bermuda"<<"Bhutan"<<"Bolivia"<<"Bosnia-Herzegovina"<<"Botswana"<<"Bouvet Island"<<"Brazil"<<"Brunei"<<"Bulgaria"<<"Burkina Faso"<<"Burundi"<<"Cambodia"<<"Cameroon"<<"Canada"<<"Cape Verde"<<"Cayman Islands"<<"Central African Republic"<<"Chad"<<"Chile"<<"China"<<"Christmas Island"<<"Cocos (Keeling) Islands"<<"Colombia"<<"Comoros"<<"Congo<< Democratic Republic of the (Zaire)"<<"Congo<< Republic of"<<"Cook Islands"<<"Costa Rica"<<"Croatia"<<"Cuba"<<"Cyprus"<<"Czech Republic"<<"Denmark"<<"Djibouti"<<"Dominica"<<"Dominican Republic"<<"Ecuador"<<"Egypt"<<"El Salvador"<<"Equatorial Guinea"<<"Eritrea"<<"Estonia"<<"Ethiopia"<<"Falkland Islands"<<"Faroe Islands"<<"Fiji"<<"Finland"<<"France"<<"French Guiana"<<"Gabon"<<"Gambia"<<"Georgia"<<"Germany"<<"Ghana"<<"Gibraltar"<<"Greece"<<"Greenland"<<"Grenada"<<"Guadeloupe (French)"<<"Guam (USA)"<<"Guatemala"<<"Guinea"<<"Guinea Bissau"<<"Guyana"<<"Haiti"<<"Holy See"<<"Honduras"<<"Hong Kong"<<"Hungary"<<"Iceland"<<"India"<<"Indonesia"<<"Iran"<<"Iraq"<<"Ireland"<<"Israel"<<"Italy"<<"Ivory Coast (Cote D`Ivoire)"<<"Jamaica"<<"Japan"<<"Jordan"<<"Kazakhstan"<<"Kenya"<<"Kiribati"<<"Kuwait"<<"Kyrgyzstan"<<"Laos"<<"Latvia"<<"Lebanon"<<"Lesotho"<<"Liberia"<<"Libya"<<"Liechtenstein"<<"Lithuania"<<"Luxembourg"<<"Macau"<<"Macedonia"<<"Madagascar"<<"Malawi"<<"Malaysia"<<"Maldives"<<"Mali"<<"Malta"<<"Marshall Islands"<<"Martinique (French)"<<"Mauritania"<<"Mauritius"<<"Mayotte"<<"Mexico"<<"Micronesia"<<"Moldova"<<"Monaco"<<"Mongolia"<<"Montenegro"<<"Montserrat"<<"Morocco"<<"Mozambique"<<"Myanmar"<<"Namibia"<<"Nauru"<<"Nepal"<<"Netherlands"<<"Netherlands Antilles"<<"New Caledonia (French)"<<"New Zealand"<<"Nicaragua"<<"Niger"<<"Nigeria"<<"Niue"<<"Norfolk Island"<<"North Korea"<<"Northern Mariana Islands"<<"Norway"<<"Oman"<<"Pakistan"<<"Palau"<<"Palestine"<<"Panama"<<"Papua New Guinea"<<"Paraguay"<<"Peru"<<"Philippines"<<"Pitcairn Island"<<"Poland"<<"Polynesia (French)"<<"Portugal"<<"Puerto Rico"<<"Qatar"<<"Reunion"<<"Romania"<<"Russia"<<"Rwanda"<<"Saint Helena"<<"Saint Kitts and Nevis"<<"Saint Lucia"<<"Saint Pierre and Miquelon"<<"Saint Vincent and Grenadines"<<"Samoa"<<"San Marino"<<"Sao Tome and Principe"<<"Saudi Arabia"<<"Senegal"<<"Serbia"<<"Seychelles"<<"Sierra Leone"<<"Singapore"<<"Slovakia"<<"Slovenia"<<"Solomon Islands"<<"Somalia"<<"South Africa"<<"South Georgia and South Sandwich Islands"<<"South Korea"<<"South Sudan"<<"Spain"<<"Sri Lanka"<<"Sudan"<<"Suriname"<<"Svalbard and Jan Mayen Islands"<<"Swaziland"<<"Sweden"<<"Switzerland"<<"Syria"<<"Taiwan"<<"Tajikistan"<<"Tanzania"<<"Thailand"<<"Timor-Leste (East Timor)"<<"Togo"<<"Tokelau"<<"Tonga"<<"Trinidad and Tobago"<<"Tunisia"<<"Turkey"<<"Turkmenistan"<<"Turks and Caicos Islands"<<"Tuvalu"<<"Uganda"<<"Ukraine"<<"United Arab Emirates"<<"United Kingdom"<<"United States"<<"Uruguay"<<"Uzbekistan"<<"Vanuatu"<<"Venezuela"<<"Vietnam"<<"Virgin Islands"<<"Wallis and Futuna Islands"<<"Yemen"<<"Zambia"<<"Zimbabwe";
 		for(int i = 0;i < countries.count(); i++){
-			Country* country = new Country(countries.at(i),"","");
+			Country* country = new Country(countries.at(i).trimmed(),"","");
 			country->save();
 		}
 	}
@@ -227,9 +227,10 @@ bool ErpModel::init(){
 	FieldType::Init();
 	ContactField::Init();
 	ContactFieldData::Init();
+	ContactPerson::Init();
 	ContactPersonField::Init();
 	ContactPersonFieldData::Init();
-	ContactPerson::Init();
+
 	ContactPersonTelephone::Init();
 	ContactPersonEmail::Init();
 	Project::Init();
@@ -243,6 +244,10 @@ bool ErpModel::init(){
 		}
 	}
 	ProductCategory::Init();
+	if(ProductCategory::GetAll().count() < 1){
+		ProductCategory *poriductCat = new ProductCategory("General","","");
+		poriductCat->save();
+	}
 	Product::Init();
 	ProductField::Init();
 	ProductFieldData::Init();
@@ -255,9 +260,17 @@ bool ErpModel::init(){
 	}
 	PurchaseStatus::Init();
 	Purchase::Init();
-	PurchaseProduct::Init();
+	PurchaseStoreProduct::Init();
 	PurchaseFreeLine::Init();
 	DeliveryOrderStatus::Init();
+	if(DeliveryOrderStatus::GetAll().count() < 3){
+		DeliveryOrderStatus *deliveryOrderStatus = new DeliveryOrderStatus("In progress","","");
+		deliveryOrderStatus->save();
+		deliveryOrderStatus = new DeliveryOrderStatus("Delivered","","");
+		deliveryOrderStatus->save();
+		deliveryOrderStatus = new DeliveryOrderStatus("Canceled","","");
+		deliveryOrderStatus->save();
+	}
 	DeliveryOrder::Init();
 	DeliveryOrderStoreProduct::Init();
 	DeliveryOrderService::Init();

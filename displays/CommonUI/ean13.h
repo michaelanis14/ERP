@@ -21,7 +21,7 @@ public slots:
 	void setBarcode(const QString &code);
 
 private:
-	QRectF *codeRect;				// bounds of this device
+//	QRectF *codeRect;				// bounds of this device
 
 	QStringList LCode;
 	QStringList GCode;

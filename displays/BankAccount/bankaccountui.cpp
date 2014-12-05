@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -63,10 +63,10 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* BankAccountUI::p_instance = 0;
 void BankAccountUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new BankAccountUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new BankAccountUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 BankAccountUI*BankAccountUI::GetUI(){ 
  	if (p_instance == 0) { 

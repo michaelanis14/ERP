@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedateui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -38,17 +38,19 @@ block0Layout->addRow("Invoice",invoice);
 invoicestate = new ERPComboBox();
 invoicestate->addItems(InvoiceState::GetHashList());
 block0Layout->addRow("Invoice State",invoicestate);
-date = new QLineEdit();
+date = new QDateEdit(QDate::currentDate());
+date->setCalendarPopup(true);
+date->setDisplayFormat("ddd dd/MM/yyyy");
 block0Layout->addRow("Date",date);
 flowLayout->addWidget(block0Layout);
 
 }
 ERPDisplay* InvoiceStateDateUI::p_instance = 0;
 void InvoiceStateDateUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new InvoiceStateDateUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new InvoiceStateDateUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 InvoiceStateDateUI*InvoiceStateDateUI::GetUI(){ 
  	if (p_instance == 0) { 
@@ -60,12 +62,12 @@ void InvoiceStateDateUI::fill(InvoiceStateDate* invoicestatedate){
 clear();
 this->invoicestatedate = invoicestatedate;
 title->setText(invoicestatedate->Title);
-date->setText(invoicestatedate->Date);
+date->setDate(QDate::fromString(invoicestatedate->Date));
 } 
 void InvoiceStateDateUI::clear(){ 
 delete this->invoicestatedate;
 title->setText("");
-date->setText("");
+date->setDate(QDate::currentDate());
 this->invoicestatedate = new InvoiceStateDate();
 } 
 void InvoiceStateDateUI::selectInvoiceStateDate(){ 

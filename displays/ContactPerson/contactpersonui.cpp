@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@ ContactPersonUI::ContactPersonUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 contactperson = new ContactPerson();
-flowLayout = new FlowLayout(this);
+flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QIntValidator *intValidator = new QIntValidator ( 0, 1000000);
@@ -47,7 +47,9 @@ lastname = new QLineEdit();
 block0Layout->addRow("Last Name",lastname);
 position = new QLineEdit();
 block0Layout->addRow("Position",position);
-birthdate = new QLineEdit();
+birthdate = new QDateEdit(QDate::currentDate());
+birthdate->setCalendarPopup(true);
+birthdate->setDisplayFormat("ddd dd/MM/yyyy");
 block0Layout->addRow("Birthdate",birthdate);
 number = new QLineEdit();
 number->setValidator( intValidator );
@@ -84,10 +86,10 @@ flowLayout->addWidget(block3Layout);
 }
 ERPDisplay* ContactPersonUI::p_instance = 0;
 void ContactPersonUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new ContactPersonUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new ContactPersonUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 ContactPersonUI*ContactPersonUI::GetUI(){ 
  	if (p_instance == 0) { 
@@ -183,7 +185,7 @@ title->setText(contactperson->Title);
 name->setText(contactperson->Name);
 lastname->setText(contactperson->LastName);
 position->setText(contactperson->Position);
-birthdate->setText(contactperson->Birthdate);
+birthdate->setDate(QDate::fromString(contactperson->Birthdate));
 number->setText(QString::number(contactperson->Number));
 foreach(ContactPersonTelephone* contactpersontelephone, contactperson->contactpersontelephones) {
 addContactPersonTelephone(contactpersontelephone);
@@ -197,10 +199,13 @@ addContactPersonFieldData(contactpersonfielddata);
 } 
 void ContactPersonUI::clear(){ 
 delete this->contactperson;
+this->ContactPersonTelephones.clear();
+this->ContactPersonEmails.clear();
+this->ContactPersonFieldDatas.clear();
 title->setText("");
 lastname->setText("");
 position->setText("");
-birthdate->setText("");
+birthdate->setDate(QDate::currentDate());
 number->setText("");
 QList<RemovebtnWidgets *> RWidgets = this->findChildren<RemovebtnWidgets *>();
 foreach(RemovebtnWidgets * child, RWidgets)

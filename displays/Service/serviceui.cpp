@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: serviceui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@ ServiceUI::ServiceUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 service = new Service();
-flowLayout = new FlowLayout(this);
+flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QDoubleValidator* doubleValidator = new QDoubleValidator(0,99.0, 2);
@@ -61,10 +61,10 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* ServiceUI::p_instance = 0;
 void ServiceUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new ServiceUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new ServiceUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 ServiceUI*ServiceUI::GetUI(){ 
  	if (p_instance == 0) { 

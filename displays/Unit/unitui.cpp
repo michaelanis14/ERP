@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unitui.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,10 +37,10 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* UnitUI::p_instance = 0;
 void UnitUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new UnitUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new UnitUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 UnitUI*UnitUI::GetUI(){ 
  	if (p_instance == 0) { 

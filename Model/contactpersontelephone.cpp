@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersontelephone.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -107,7 +107,7 @@ QList<ContactPersonTelephone*> ContactPersonTelephone::GetAll() {
 	while (query.next()) {
 contactpersontelephones.append(new ContactPersonTelephone(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qSort(contactpersontelephones);
+qStableSort(contactpersontelephones.begin(),contactpersontelephones.end());
 	return contactpersontelephones;
 }
 
@@ -167,7 +167,7 @@ contactpersontelephones = GetAll();
 	for(int i = 0; i <contactpersontelephones.count(); i++){
 		list.append(contactpersontelephones[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

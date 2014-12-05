@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -27,6 +27,7 @@
 #include <QPushButton>
 #include <QCompleter>
 #include <QMessageBox>
+#include <QDateEdit>
 class ContactPersonUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -46,7 +47,7 @@ public:
 	QLineEdit*name;
 	QLineEdit*lastname;
 	QLineEdit*position;
-	QLineEdit*birthdate;
+	QDateEdit*birthdate;
 	QLineEdit*number;
 	void fill(ContactPerson* contactperson);
 ContactPerson* contactperson;

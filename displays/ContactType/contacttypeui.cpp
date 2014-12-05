@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttypeui.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,10 +37,10 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* ContactTypeUI::p_instance = 0;
 void ContactTypeUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new ContactTypeUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new ContactTypeUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 ContactTypeUI*ContactTypeUI::GetUI(){ 
  	if (p_instance == 0) { 

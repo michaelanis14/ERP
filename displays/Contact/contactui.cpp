@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: contactui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -25,11 +25,11 @@ QPushButton* save = new QPushButton("Save");
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- this->controllers->addControllerButton(save);
- this->controllers->addControllerButton(clear);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 salutation = new QLineEdit();
 block0Layout->addRow("Salutation",salutation);
@@ -40,12 +40,14 @@ completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectContact()));
 block0Layout->addRow("Name",name);
-birthdateordateoffoundation = new QLineEdit();
+birthdateordateoffoundation = new QDateEdit(QDate::currentDate());
+birthdateordateoffoundation->setCalendarPopup(true);
+birthdateordateoffoundation->setDisplayFormat("ddd dd/MM/yyyy");
 block0Layout->addRow("Birthdate Or Date Of Foundation",birthdateordateoffoundation);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block1Layout->setMinimumWidth(330);
 contacttype = new ERPComboBox();
 contacttype->addItems(ContactType::GetHashList());
@@ -59,7 +61,7 @@ block1Layout->addRow("Number",number);
 flowLayout->addWidget(block1Layout);
 
 block2Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block2Layout->setMinimumWidth(330);
 address = new QLineEdit();
 block2Layout->addRow("Address",address);
@@ -73,7 +75,7 @@ block2Layout->addRow("Country",country);
 flowLayout->addWidget(block2Layout);
 
 block3Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block3Layout->setMinimumWidth(330);
 contactstatus = new ERPComboBox();
 contactstatus->addItems(ContactStatus::GetHashList());
@@ -88,7 +90,7 @@ block3Layout->addRow("Tax Number",taxnumber);
 flowLayout->addWidget(block3Layout);
 
 block4Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block4Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveContactTelephoneButtons = new AddRemoveButtons();
 block4Layout->addRow("ContactTelephones",addremoveContactTelephoneButtons);
@@ -97,7 +99,7 @@ QObject::connect(addremoveContactTelephoneButtons, SIGNAL(addPressed()), this, S
 flowLayout->addWidget(block4Layout);
 
 block5Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block5Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveContactEmailButtons = new AddRemoveButtons();
 block5Layout->addRow("ContactEmails",addremoveContactEmailButtons);
@@ -106,7 +108,7 @@ QObject::connect(addremoveContactEmailButtons, SIGNAL(addPressed()), this, SLOT(
 flowLayout->addWidget(block5Layout);
 
 block6Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block6Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveBankAccountButtons = new AddRemoveButtons();
 block6Layout->addRow("BankAccounts",addremoveBankAccountButtons);
@@ -115,7 +117,7 @@ QObject::connect(addremoveBankAccountButtons, SIGNAL(addPressed()), this, SLOT(a
 flowLayout->addWidget(block6Layout);
 
 block7Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block7Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveContactFieldDataButtons = new AddRemoveButtons();
 block7Layout->addRow("ContactFieldDatas",addremoveContactFieldDataButtons);
@@ -125,19 +127,19 @@ flowLayout->addWidget(block7Layout);
 
 }
 ERPDisplay* ContactUI::p_instance = 0;
-void ContactUI::ShowUI() {
-	if (p_instance == 0) {
-		p_instance = new ContactUI(mainwindow::GetMainDisplay());
-	}
-	mainwindow::ShowDisplay(p_instance);
+void ContactUI::ShowUI() { 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new ContactUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
-ContactUI*ContactUI::GetUI(){
-	if (p_instance == 0) {
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
-	}
-	return (ContactUI*) p_instance;
+ContactUI*ContactUI::GetUI(){ 
+ 	if (p_instance == 0) { 
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
+	} 
+	return (ContactUI*) p_instance; 
 }
-void ContactUI::addContactTelephone(){
+void ContactUI::addContactTelephone(){ 
 ContactTelephoneUI* contacttelephoneui = new ContactTelephoneUI();
 contacttelephoneui->block0Layout->removeRow(contacttelephoneui->contact);
 contacttelephoneui->controllers->setFixedHeight(0);
@@ -146,7 +148,7 @@ RemovebtnWidgets* rmcontacttelephone = new RemovebtnWidgets(0,contacttelephoneui
 QObject::connect(rmcontacttelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactTelephone(QWidget*)));
 block4Layout->addRow("ContactTelephone"+QString::number(ContactTelephones.count()),rmcontacttelephone);
 }
-void ContactUI::addContactTelephone(ContactTelephone* ContactTelephone){
+void ContactUI::addContactTelephone(ContactTelephone* ContactTelephone){ 
 ContactTelephoneUI* contacttelephoneui = new ContactTelephoneUI();
 contacttelephoneui->block0Layout->removeRow(contacttelephoneui->contact);
 contacttelephoneui->controllers->setFixedHeight(0);
@@ -156,7 +158,7 @@ RemovebtnWidgets* rmcontacttelephone = new RemovebtnWidgets(0,contacttelephoneui
 QObject::connect(rmcontacttelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactTelephone(QWidget*)));
 block4Layout->addRow("ContactTelephone"+QString::number(ContactTelephones.count()),rmcontacttelephone);
 }
-void ContactUI::removeContactTelephone(QWidget* widget){
+void ContactUI::removeContactTelephone(QWidget* widget){ 
 if(ContactTelephones.count()  > 0){
 ContactTelephoneUI* contacttelephoneui = (ContactTelephoneUI*) widget;
 ContactTelephones.removeOne(contacttelephoneui);
@@ -164,7 +166,7 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block4Layout->removeRow(sender);
 }
 }
-void ContactUI::addContactEmail(){
+void ContactUI::addContactEmail(){ 
 ContactEmailUI* contactemailui = new ContactEmailUI();
 contactemailui->block0Layout->removeRow(contactemailui->contact);
 contactemailui->controllers->setFixedHeight(0);
@@ -173,7 +175,7 @@ RemovebtnWidgets* rmcontactemail = new RemovebtnWidgets(0,contactemailui);
 QObject::connect(rmcontactemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactEmail(QWidget*)));
 block5Layout->addRow("ContactEmail"+QString::number(ContactEmails.count()),rmcontactemail);
 }
-void ContactUI::addContactEmail(ContactEmail* ContactEmail){
+void ContactUI::addContactEmail(ContactEmail* ContactEmail){ 
 ContactEmailUI* contactemailui = new ContactEmailUI();
 contactemailui->block0Layout->removeRow(contactemailui->contact);
 contactemailui->controllers->setFixedHeight(0);
@@ -183,7 +185,7 @@ RemovebtnWidgets* rmcontactemail = new RemovebtnWidgets(0,contactemailui);
 QObject::connect(rmcontactemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactEmail(QWidget*)));
 block5Layout->addRow("ContactEmail"+QString::number(ContactEmails.count()),rmcontactemail);
 }
-void ContactUI::removeContactEmail(QWidget* widget){
+void ContactUI::removeContactEmail(QWidget* widget){ 
 if(ContactEmails.count()  > 0){
 ContactEmailUI* contactemailui = (ContactEmailUI*) widget;
 ContactEmails.removeOne(contactemailui);
@@ -191,7 +193,7 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block5Layout->removeRow(sender);
 }
 }
-void ContactUI::addBankAccount(){
+void ContactUI::addBankAccount(){ 
 BankAccountUI* bankaccountui = new BankAccountUI();
 bankaccountui->block0Layout->removeRow(bankaccountui->contact);
 bankaccountui->controllers->setFixedHeight(0);
@@ -200,7 +202,7 @@ RemovebtnWidgets* rmbankaccount = new RemovebtnWidgets(0,bankaccountui);
 QObject::connect(rmbankaccount, SIGNAL(removePressed(QWidget*)), this, SLOT(removeBankAccount(QWidget*)));
 block6Layout->addRow("BankAccount"+QString::number(BankAccounts.count()),rmbankaccount);
 }
-void ContactUI::addBankAccount(BankAccount* BankAccount){
+void ContactUI::addBankAccount(BankAccount* BankAccount){ 
 BankAccountUI* bankaccountui = new BankAccountUI();
 bankaccountui->block0Layout->removeRow(bankaccountui->contact);
 bankaccountui->controllers->setFixedHeight(0);
@@ -210,7 +212,7 @@ RemovebtnWidgets* rmbankaccount = new RemovebtnWidgets(0,bankaccountui);
 QObject::connect(rmbankaccount, SIGNAL(removePressed(QWidget*)), this, SLOT(removeBankAccount(QWidget*)));
 block6Layout->addRow("BankAccount"+QString::number(BankAccounts.count()),rmbankaccount);
 }
-void ContactUI::removeBankAccount(QWidget* widget){
+void ContactUI::removeBankAccount(QWidget* widget){ 
 if(BankAccounts.count()  > 0){
 BankAccountUI* bankaccountui = (BankAccountUI*) widget;
 BankAccounts.removeOne(bankaccountui);
@@ -218,7 +220,7 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block6Layout->removeRow(sender);
 }
 }
-void ContactUI::addContactFieldData(){
+void ContactUI::addContactFieldData(){ 
 ContactFieldDataUI* contactfielddataui = new ContactFieldDataUI();
 contactfielddataui->block0Layout->removeRow(contactfielddataui->contact);
 contactfielddataui->controllers->setFixedHeight(0);
@@ -227,7 +229,7 @@ RemovebtnWidgets* rmcontactfielddata = new RemovebtnWidgets(0,contactfielddataui
 QObject::connect(rmcontactfielddata, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactFieldData(QWidget*)));
 block7Layout->addRow("ContactFieldData"+QString::number(ContactFieldDatas.count()),rmcontactfielddata);
 }
-void ContactUI::addContactFieldData(ContactFieldData* ContactFieldData){
+void ContactUI::addContactFieldData(ContactFieldData* ContactFieldData){ 
 ContactFieldDataUI* contactfielddataui = new ContactFieldDataUI();
 contactfielddataui->block0Layout->removeRow(contactfielddataui->contact);
 contactfielddataui->controllers->setFixedHeight(0);
@@ -237,7 +239,7 @@ RemovebtnWidgets* rmcontactfielddata = new RemovebtnWidgets(0,contactfielddataui
 QObject::connect(rmcontactfielddata, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactFieldData(QWidget*)));
 block7Layout->addRow("ContactFieldData"+QString::number(ContactFieldDatas.count()),rmcontactfielddata);
 }
-void ContactUI::removeContactFieldData(QWidget* widget){
+void ContactUI::removeContactFieldData(QWidget* widget){ 
 if(ContactFieldDatas.count()  > 0){
 ContactFieldDataUI* contactfielddataui = (ContactFieldDataUI*) widget;
 ContactFieldDatas.removeOne(contactfielddataui);
@@ -245,12 +247,12 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block7Layout->removeRow(sender);
 }
 }
-void ContactUI::fill(Contact* contact){
+void ContactUI::fill(Contact* contact){ 
 clear();
 this->contact = contact;
 salutation->setText(contact->Salutation);
 name->setText(contact->Name);
-birthdateordateoffoundation->setText(contact->BirthdateOrDateOfFoundation);
+birthdateordateoffoundation->setDate(QDate::fromString(contact->BirthdateOrDateOfFoundation));
 number->setText(QString::number(contact->Number));
 address->setText(contact->Address);
 postalcode->setText(contact->PostalCode);
@@ -269,11 +271,15 @@ addBankAccount(bankaccount);
 foreach(ContactFieldData* contactfielddata, contact->contactfielddatas) {
 addContactFieldData(contactfielddata);
 }
-}
-void ContactUI::clear(){
+} 
+void ContactUI::clear(){ 
 delete this->contact;
+this->ContactTelephones.clear();
+this->ContactEmails.clear();
+this->BankAccounts.clear();
+this->ContactFieldDatas.clear();
 salutation->setText("");
-birthdateordateoffoundation->setText("");
+birthdateordateoffoundation->setDate(QDate::currentDate());
 number->setText("");
 address->setText("");
 postalcode->setText("");
@@ -287,8 +293,8 @@ if(child->parent()->parent()->parent() != 0)
 ((ERPFormBlock*)child->parent()->parent())->removeRow(child);
 }
 this->contact = new Contact();
-}
-void ContactUI::selectContact(){
+} 
+void ContactUI::selectContact(){ 
 if(Contact::GetStringList().contains(name->text()))
 {
 Contact* con = Contact::Get(name->text());
@@ -299,7 +305,7 @@ fill(con);
 else if(contact->ContactID != 0)
 clear();
 }
-bool ContactUI::save(){
+bool ContactUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(salutation->text().trimmed().isEmpty()){
@@ -310,7 +316,7 @@ salutation->style()->unpolish(salutation);
 salutation->style()->polish(salutation);
 salutation->update();
 }
-else {
+else { 
 salutation->setObjectName("salutation");
 salutation->style()->unpolish(salutation);
 salutation->style()->polish(salutation);
@@ -325,7 +331,7 @@ name->style()->unpolish(name);
 name->style()->polish(name);
 name->update();
 }
-else {
+else { 
 name->setObjectName("name");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -340,16 +346,16 @@ birthdateordateoffoundation->style()->unpolish(birthdateordateoffoundation);
 birthdateordateoffoundation->style()->polish(birthdateordateoffoundation);
 birthdateordateoffoundation->update();
 }
-else {
+else { 
 birthdateordateoffoundation->setObjectName("birthdateordateoffoundation");
 birthdateordateoffoundation->style()->unpolish(birthdateordateoffoundation);
 birthdateordateoffoundation->style()->polish(birthdateordateoffoundation);
 birthdateordateoffoundation->update();
 contact->BirthdateOrDateOfFoundation = birthdateordateoffoundation->text().trimmed();
 }
-if(contact->ContactTypeID == 0)
+if(contact->ContactTypeID == 0) 
 contact->ContactTypeID = contacttype->getKey();
-if(contact->ContactClassID == 0)
+if(contact->ContactClassID == 0) 
 contact->ContactClassID = contactclass->getKey();
 if(number->text().trimmed().isEmpty()){
 errors = true;
@@ -359,7 +365,7 @@ number->style()->unpolish(number);
 number->style()->polish(number);
 number->update();
 }
-else {
+else { 
 number->setObjectName("number");
 number->style()->unpolish(number);
 number->style()->polish(number);
@@ -374,7 +380,7 @@ address->style()->unpolish(address);
 address->style()->polish(address);
 address->update();
 }
-else {
+else { 
 address->setObjectName("address");
 address->style()->unpolish(address);
 address->style()->polish(address);
@@ -389,7 +395,7 @@ postalcode->style()->unpolish(postalcode);
 postalcode->style()->polish(postalcode);
 postalcode->update();
 }
-else {
+else { 
 postalcode->setObjectName("postalcode");
 postalcode->style()->unpolish(postalcode);
 postalcode->style()->polish(postalcode);
@@ -404,18 +410,18 @@ city->style()->unpolish(city);
 city->style()->polish(city);
 city->update();
 }
-else {
+else { 
 city->setObjectName("city");
 city->style()->unpolish(city);
 city->style()->polish(city);
 city->update();
 contact->City = city->text().trimmed();
 }
-if(contact->CountryID == 0)
+if(contact->CountryID == 0) 
 contact->CountryID = country->getKey();
-if(contact->ContactStatusID == 0)
+if(contact->ContactStatusID == 0) 
 contact->ContactStatusID = contactstatus->getKey();
-if(contact->EmployeeID == 0)
+if(contact->EmployeeID == 0) 
 contact->EmployeeID = employee->getKey();
 if(website->text().trimmed().isEmpty()){
 errors = true;
@@ -425,7 +431,7 @@ website->style()->unpolish(website);
 website->style()->polish(website);
 website->update();
 }
-else {
+else { 
 website->setObjectName("website");
 website->style()->unpolish(website);
 website->style()->polish(website);
@@ -440,7 +446,7 @@ taxnumber->style()->unpolish(taxnumber);
 taxnumber->style()->polish(taxnumber);
 taxnumber->update();
 }
-else {
+else { 
 taxnumber->setObjectName("taxnumber");
 taxnumber->style()->unpolish(taxnumber);
 taxnumber->style()->polish(taxnumber);
@@ -455,7 +461,7 @@ ContactTelephones.at(j)->description->update();
 for(int w = 0; w < ContactTelephones.length(); w++){
 if(ContactTelephones.at(j) != ContactTelephones.at(w))
 if(ContactTelephones.at(j)->description->text() == ContactTelephones.at(w)->description->text()){
-errors = true;
+errors = true; 
  errorString += "ContactTelephone has the same description \n";
 ContactTelephones.at(j)->description->setObjectName("error");
 ContactTelephones.at(j)->description->style()->unpolish(ContactTelephones.at(j)->description);
@@ -470,7 +476,7 @@ ContactEmails.at(j)->description->update();
 for(int w = 0; w < ContactEmails.length(); w++){
 if(ContactEmails.at(j) != ContactEmails.at(w))
 if(ContactEmails.at(j)->description->text() == ContactEmails.at(w)->description->text()){
-errors = true;
+errors = true; 
  errorString += "ContactEmail has the same description \n";
 ContactEmails.at(j)->description->setObjectName("error");
 ContactEmails.at(j)->description->style()->unpolish(ContactEmails.at(j)->description);
@@ -485,7 +491,7 @@ BankAccounts.at(j)->name->update();
 for(int w = 0; w < BankAccounts.length(); w++){
 if(BankAccounts.at(j) != BankAccounts.at(w))
 if(BankAccounts.at(j)->name->text() == BankAccounts.at(w)->name->text()){
-errors = true;
+errors = true; 
  errorString += "BankAccount has the same name \n";
 BankAccounts.at(j)->name->setObjectName("error");
 BankAccounts.at(j)->name->style()->unpolish(BankAccounts.at(j)->name);
@@ -500,7 +506,7 @@ ContactFieldDatas.at(j)->value->update();
 for(int w = 0; w < ContactFieldDatas.length(); w++){
 if(ContactFieldDatas.at(j) != ContactFieldDatas.at(w))
 if(ContactFieldDatas.at(j)->value->text() == ContactFieldDatas.at(w)->value->text()){
-errors = true;
+errors = true; 
  errorString += "ContactFieldData has the same value \n";
 ContactFieldDatas.at(j)->value->setObjectName("error");
 ContactFieldDatas.at(j)->value->style()->unpolish(ContactFieldDatas.at(j)->value);
@@ -511,9 +517,9 @@ if(!errors) {
 contact->save();
 for(int i = 0; i < ContactTelephones.length(); i++){
 ContactTelephones.at(i)->contacttelephone->ContactID= contact->ContactID;
-if(!ContactTelephones.at(i)->save()){
- errors = true;
- break; }
+if(!ContactTelephones.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < contact->contacttelephones.length(); i++){
 bool flag = false;
@@ -525,9 +531,9 @@ contact->contacttelephones.at(i)->remove();}
 }
 for(int i = 0; i < ContactEmails.length(); i++){
 ContactEmails.at(i)->contactemail->ContactID= contact->ContactID;
-if(!ContactEmails.at(i)->save()){
- errors = true;
- break; }
+if(!ContactEmails.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < contact->contactemails.length(); i++){
 bool flag = false;
@@ -539,9 +545,9 @@ contact->contactemails.at(i)->remove();}
 }
 for(int i = 0; i < BankAccounts.length(); i++){
 BankAccounts.at(i)->bankaccount->ContactID= contact->ContactID;
-if(!BankAccounts.at(i)->save()){
- errors = true;
- break; }
+if(!BankAccounts.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < contact->bankaccounts.length(); i++){
 bool flag = false;
@@ -553,9 +559,9 @@ contact->bankaccounts.at(i)->remove();}
 }
 for(int i = 0; i < ContactFieldDatas.length(); i++){
 ContactFieldDatas.at(i)->contactfielddata->ContactID= contact->ContactID;
-if(!ContactFieldDatas.at(i)->save()){
- errors = true;
- break; }
+if(!ContactFieldDatas.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < contact->contactfielddatas.length(); i++){
 bool flag = false;
@@ -571,9 +577,9 @@ return true;}
 else return false;
 }
 else{ QMessageBox::warning(this, "Contact",errorString.trimmed());
-return false;
+return false; 
  }
 }
-void ContactUI::cancel(){
+void ContactUI::cancel(){ 
 ContactIndexUI::ShowUI();
 }

@@ -34,6 +34,7 @@ void ERPComboBox::addItems(QHash<int,QString> items){
 void ERPComboBox::focusOutEvent(QFocusEvent *e)
 {
 if(this->addedItems){
+
 	QRegExp re("\\d*");
 	if(this->currentText()==""){
 		//qDebug() <<"EMP";

@@ -1,11 +1,11 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Sat Nov 29 13:58:37 EET 2014
+#   Created on: Mon Dec 01 18:33:03 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
 
-QT       += core gui widgets sql
+QT       += core gui widgets sql printsupport
 QTPLUGIN += qsqlmysql
 
 #ifdef __APPLE__
@@ -26,6 +26,8 @@ SOURCES += main.cpp \
 	displays/CommonUI/HNavigationButtons.cpp  \
 	displays/CommonUI/navigationButtons.cpp  \
 	displays/CommonUI/RemovebtnWidgets.cpp  \
+	displays/CommonUI/barcode.cpp  \
+	displays/CommonUI/ean13.cpp  \
 	Model/erpmodel.cpp \
 	Model/company.cpp \
 	Model/tax.cpp \
@@ -50,14 +52,14 @@ SOURCES += main.cpp \
 	Model/project.cpp \
 	Model/unit.cpp \
 	Model/productcategory.cpp \
+	Model/product.cpp \
 	Model/productfield.cpp \
 	Model/productfielddata.cpp \
-	Model/product.cpp \
 	Model/service.cpp \
 	Model/store.cpp \
 	Model/purchasestatus.cpp \
 	Model/purchase.cpp \
-	Model/purchaseproduct.cpp \
+	Model/purchasestoreproduct.cpp \
 	Model/purchasefreeline.cpp \
 	Model/deliveryorderstatus.cpp \
 	Model/deliveryorder.cpp \
@@ -67,8 +69,8 @@ SOURCES += main.cpp \
 	Model/invoiceperiod.cpp \
 	Model/invoiceyear.cpp \
 	Model/invoicestate.cpp \
-	Model/invoicestatedate.cpp \
 	Model/invoice.cpp \
+	Model/invoicestatedate.cpp \
 	Model/invoicefreeline.cpp \
 	Model/paymenttype.cpp \
 	Model/payment.cpp \
@@ -118,12 +120,12 @@ SOURCES += main.cpp \
 	displays/Unit/unitui.cpp \
 	displays/ProductCategory/productcategoryindexui.cpp \
 	displays/ProductCategory/productcategoryui.cpp \
+	displays/Product/productindexui.cpp \
+	displays/Product/productui.cpp \
 	displays/ProductField/productfieldindexui.cpp \
 	displays/ProductField/productfieldui.cpp \
 	displays/ProductFieldData/productfielddataindexui.cpp \
 	displays/ProductFieldData/productfielddataui.cpp \
-	displays/Product/productindexui.cpp \
-	displays/Product/productui.cpp \
 	displays/Service/serviceindexui.cpp \
 	displays/Service/serviceui.cpp \
 	displays/Store/storeindexui.cpp \
@@ -132,8 +134,8 @@ SOURCES += main.cpp \
 	displays/PurchaseStatus/purchasestatusui.cpp \
 	displays/Purchase/purchaseindexui.cpp \
 	displays/Purchase/purchaseui.cpp \
-	displays/PurchaseProduct/purchaseproductindexui.cpp \
-	displays/PurchaseProduct/purchaseproductui.cpp \
+	displays/PurchaseStoreProduct/purchasestoreproductindexui.cpp \
+	displays/PurchaseStoreProduct/purchasestoreproductui.cpp \
 	displays/PurchaseFreeLine/purchasefreelineindexui.cpp \
 	displays/PurchaseFreeLine/purchasefreelineui.cpp \
 	displays/DeliveryOrderStatus/deliveryorderstatusindexui.cpp \
@@ -152,18 +154,19 @@ SOURCES += main.cpp \
 	displays/InvoiceYear/invoiceyearui.cpp \
 	displays/InvoiceState/invoicestateindexui.cpp \
 	displays/InvoiceState/invoicestateui.cpp \
-	displays/InvoiceStateDate/invoicestatedateindexui.cpp \
-	displays/InvoiceStateDate/invoicestatedateui.cpp \
 	displays/Invoice/invoiceindexui.cpp \
 	displays/Invoice/invoiceui.cpp \
+	displays/InvoiceStateDate/invoicestatedateindexui.cpp \
+	displays/InvoiceStateDate/invoicestatedateui.cpp \
 	displays/InvoiceFreeline/invoicefreelineindexui.cpp \
 	displays/InvoiceFreeline/invoicefreelineui.cpp \
 	displays/PaymentType/paymenttypeindexui.cpp \
 	displays/PaymentType/paymenttypeui.cpp \
 	displays/Payment/paymentindexui.cpp \
 	displays/Payment/paymentui.cpp \
-    displays/CommonUI/barcode.cpp \
-    displays/CommonUI/ean13.cpp
+	displays/Product/ProductStoreStateUI.cpp \
+    displays/CommonUI/printview.cpp \
+    displays/CommonUI/erptableview.cpp
 
 HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/erpcombobox.h \
@@ -173,6 +176,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/HNavigationButtons.h  \
 	displays/CommonUI/navigationButtons.h  \
 	displays/CommonUI/RemovebtnWidgets.h  \
+	displays/CommonUI/barcode.h  \
+	displays/CommonUI/ean13.h  \
 	Model/erpmodel.h \
 	Model/company.h \
 	Model/tax.h \
@@ -197,14 +202,14 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/project.h \
 	Model/unit.h \
 	Model/productcategory.h \
+	Model/product.h \
 	Model/productfield.h \
 	Model/productfielddata.h \
-	Model/product.h \
 	Model/service.h \
 	Model/store.h \
 	Model/purchasestatus.h \
 	Model/purchase.h \
-	Model/purchaseproduct.h \
+	Model/purchasestoreproduct.h \
 	Model/purchasefreeline.h \
 	Model/deliveryorderstatus.h \
 	Model/deliveryorder.h \
@@ -214,8 +219,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/invoiceperiod.h \
 	Model/invoiceyear.h \
 	Model/invoicestate.h \
-	Model/invoicestatedate.h \
 	Model/invoice.h \
+	Model/invoicestatedate.h \
 	Model/invoicefreeline.h \
 	Model/paymenttype.h \
 	Model/payment.h \
@@ -265,12 +270,12 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Unit/unitui.h \
 	displays/ProductCategory/productcategoryindexui.h \
 	displays/ProductCategory/productcategoryui.h \
+	displays/Product/productindexui.h \
+	displays/Product/productui.h \
 	displays/ProductField/productfieldindexui.h \
 	displays/ProductField/productfieldui.h \
 	displays/ProductFieldData/productfielddataindexui.h \
 	displays/ProductFieldData/productfielddataui.h \
-	displays/Product/productindexui.h \
-	displays/Product/productui.h \
 	displays/Service/serviceindexui.h \
 	displays/Service/serviceui.h \
 	displays/Store/storeindexui.h \
@@ -279,8 +284,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/PurchaseStatus/purchasestatusui.h \
 	displays/Purchase/purchaseindexui.h \
 	displays/Purchase/purchaseui.h \
-	displays/PurchaseProduct/purchaseproductindexui.h \
-	displays/PurchaseProduct/purchaseproductui.h \
+	displays/PurchaseStoreProduct/purchasestoreproductindexui.h \
+	displays/PurchaseStoreProduct/purchasestoreproductui.h \
 	displays/PurchaseFreeLine/purchasefreelineindexui.h \
 	displays/PurchaseFreeLine/purchasefreelineui.h \
 	displays/DeliveryOrderStatus/deliveryorderstatusindexui.h \
@@ -299,18 +304,19 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/InvoiceYear/invoiceyearui.h \
 	displays/InvoiceState/invoicestateindexui.h \
 	displays/InvoiceState/invoicestateui.h \
-	displays/InvoiceStateDate/invoicestatedateindexui.h \
-	displays/InvoiceStateDate/invoicestatedateui.h \
 	displays/Invoice/invoiceindexui.h \
 	displays/Invoice/invoiceui.h \
+	displays/InvoiceStateDate/invoicestatedateindexui.h \
+	displays/InvoiceStateDate/invoicestatedateui.h \
 	displays/InvoiceFreeline/invoicefreelineindexui.h \
 	displays/InvoiceFreeline/invoicefreelineui.h \
 	displays/PaymentType/paymenttypeindexui.h \
 	displays/PaymentType/paymenttypeui.h \
 	displays/Payment/paymentindexui.h \
-	displays/Payment/paymentui.h \ 
-    displays/CommonUI/barcode.h \
-    displays/CommonUI/ean13.h
+	displays/Payment/paymentui.h \
+	displays/Product/ProductStoreStateUI.h \
+    displays/CommonUI/printview.h \
+    displays/CommonUI/erptableview.h
 
 FORMS	+= mainwindow.ui
 

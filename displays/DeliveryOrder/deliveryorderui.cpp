@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: deliveryorderui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -25,11 +25,11 @@ QPushButton* save = new QPushButton("Save");
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- this->controllers->addControllerButton(save);
- this->controllers->addControllerButton(clear);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 title = new QLineEdit();
 block0Layout->addRow("Title",title);
@@ -42,16 +42,20 @@ block0Layout->addRow("Delivery Order Status",deliveryorderstatus);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetHashList());
 block0Layout->addRow("Contact",contact);
-creationdate = new QLineEdit();
+creationdate = new QDateEdit(QDate::currentDate());
+creationdate->setCalendarPopup(true);
+creationdate->setDisplayFormat("ddd dd/MM/yyyy");
 block0Layout->addRow("Creation Date",creationdate);
-deliverydate = new QLineEdit();
+deliverydate = new QDateEdit(QDate::currentDate());
+deliverydate->setCalendarPopup(true);
+deliverydate->setDisplayFormat("ddd dd/MM/yyyy");
 block0Layout->addRow("Delivery Date",deliverydate);
 note = new QLineEdit();
 block0Layout->addRow("Note",note);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block1Layout->setMinimumWidth(330);
 header = new QLineEdit();
 block1Layout->addRow("Header",header);
@@ -62,7 +66,7 @@ block1Layout->addRow("Delivery Address",deliveryaddress);
 flowLayout->addWidget(block1Layout);
 
 block2Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block2Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveDeliveryOrderStoreProductButtons = new AddRemoveButtons();
 block2Layout->addRow("DeliveryOrderStoreProducts",addremoveDeliveryOrderStoreProductButtons);
@@ -71,7 +75,7 @@ QObject::connect(addremoveDeliveryOrderStoreProductButtons, SIGNAL(addPressed())
 flowLayout->addWidget(block2Layout);
 
 block3Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block3Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveDeliveryOrderServiceButtons = new AddRemoveButtons();
 block3Layout->addRow("DeliveryOrderServices",addremoveDeliveryOrderServiceButtons);
@@ -80,7 +84,7 @@ QObject::connect(addremoveDeliveryOrderServiceButtons, SIGNAL(addPressed()), thi
 flowLayout->addWidget(block3Layout);
 
 block4Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block4Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveDeliveryOrderFreelineButtons = new AddRemoveButtons();
 block4Layout->addRow("DeliveryOrderFreelines",addremoveDeliveryOrderFreelineButtons);
@@ -90,19 +94,19 @@ flowLayout->addWidget(block4Layout);
 
 }
 ERPDisplay* DeliveryOrderUI::p_instance = 0;
-void DeliveryOrderUI::ShowUI() {
-	if (p_instance == 0) {
-		p_instance = new DeliveryOrderUI(mainwindow::GetMainDisplay());
-	}
-	mainwindow::ShowDisplay(p_instance);
+void DeliveryOrderUI::ShowUI() { 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new DeliveryOrderUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
-DeliveryOrderUI*DeliveryOrderUI::GetUI(){
-	if (p_instance == 0) {
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
-	}
-	return (DeliveryOrderUI*) p_instance;
+DeliveryOrderUI*DeliveryOrderUI::GetUI(){ 
+ 	if (p_instance == 0) { 
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
+	} 
+	return (DeliveryOrderUI*) p_instance; 
 }
-void DeliveryOrderUI::addDeliveryOrderStoreProduct(){
+void DeliveryOrderUI::addDeliveryOrderStoreProduct(){ 
 DeliveryOrderStoreProductUI* deliveryorderstoreproductui = new DeliveryOrderStoreProductUI();
 deliveryorderstoreproductui->block0Layout->removeRow(deliveryorderstoreproductui->deliveryorder);
 deliveryorderstoreproductui->controllers->setFixedHeight(0);
@@ -111,7 +115,7 @@ RemovebtnWidgets* rmdeliveryorderstoreproduct = new RemovebtnWidgets(0,deliveryo
 QObject::connect(rmdeliveryorderstoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderStoreProduct(QWidget*)));
 block2Layout->addRow("DeliveryOrderStoreProduct"+QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
 }
-void DeliveryOrderUI::addDeliveryOrderStoreProduct(DeliveryOrderStoreProduct* DeliveryOrderStoreProduct){
+void DeliveryOrderUI::addDeliveryOrderStoreProduct(DeliveryOrderStoreProduct* DeliveryOrderStoreProduct){ 
 DeliveryOrderStoreProductUI* deliveryorderstoreproductui = new DeliveryOrderStoreProductUI();
 deliveryorderstoreproductui->block0Layout->removeRow(deliveryorderstoreproductui->deliveryorder);
 deliveryorderstoreproductui->controllers->setFixedHeight(0);
@@ -121,7 +125,7 @@ RemovebtnWidgets* rmdeliveryorderstoreproduct = new RemovebtnWidgets(0,deliveryo
 QObject::connect(rmdeliveryorderstoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderStoreProduct(QWidget*)));
 block2Layout->addRow("DeliveryOrderStoreProduct"+QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
 }
-void DeliveryOrderUI::removeDeliveryOrderStoreProduct(QWidget* widget){
+void DeliveryOrderUI::removeDeliveryOrderStoreProduct(QWidget* widget){ 
 if(DeliveryOrderStoreProducts.count()  > 0){
 DeliveryOrderStoreProductUI* deliveryorderstoreproductui = (DeliveryOrderStoreProductUI*) widget;
 DeliveryOrderStoreProducts.removeOne(deliveryorderstoreproductui);
@@ -129,7 +133,7 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block2Layout->removeRow(sender);
 }
 }
-void DeliveryOrderUI::addDeliveryOrderService(){
+void DeliveryOrderUI::addDeliveryOrderService(){ 
 DeliveryOrderServiceUI* deliveryorderserviceui = new DeliveryOrderServiceUI();
 deliveryorderserviceui->block0Layout->removeRow(deliveryorderserviceui->deliveryorder);
 deliveryorderserviceui->controllers->setFixedHeight(0);
@@ -138,7 +142,7 @@ RemovebtnWidgets* rmdeliveryorderservice = new RemovebtnWidgets(0,deliveryorders
 QObject::connect(rmdeliveryorderservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderService(QWidget*)));
 block3Layout->addRow("DeliveryOrderService"+QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
 }
-void DeliveryOrderUI::addDeliveryOrderService(DeliveryOrderService* DeliveryOrderService){
+void DeliveryOrderUI::addDeliveryOrderService(DeliveryOrderService* DeliveryOrderService){ 
 DeliveryOrderServiceUI* deliveryorderserviceui = new DeliveryOrderServiceUI();
 deliveryorderserviceui->block0Layout->removeRow(deliveryorderserviceui->deliveryorder);
 deliveryorderserviceui->controllers->setFixedHeight(0);
@@ -148,7 +152,7 @@ RemovebtnWidgets* rmdeliveryorderservice = new RemovebtnWidgets(0,deliveryorders
 QObject::connect(rmdeliveryorderservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderService(QWidget*)));
 block3Layout->addRow("DeliveryOrderService"+QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
 }
-void DeliveryOrderUI::removeDeliveryOrderService(QWidget* widget){
+void DeliveryOrderUI::removeDeliveryOrderService(QWidget* widget){ 
 if(DeliveryOrderServices.count()  > 0){
 DeliveryOrderServiceUI* deliveryorderserviceui = (DeliveryOrderServiceUI*) widget;
 DeliveryOrderServices.removeOne(deliveryorderserviceui);
@@ -156,7 +160,7 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block3Layout->removeRow(sender);
 }
 }
-void DeliveryOrderUI::addDeliveryOrderFreeline(){
+void DeliveryOrderUI::addDeliveryOrderFreeline(){ 
 DeliveryOrderFreelineUI* deliveryorderfreelineui = new DeliveryOrderFreelineUI();
 deliveryorderfreelineui->block0Layout->removeRow(deliveryorderfreelineui->deliveryorder);
 deliveryorderfreelineui->controllers->setFixedHeight(0);
@@ -165,7 +169,7 @@ RemovebtnWidgets* rmdeliveryorderfreeline = new RemovebtnWidgets(0,deliveryorder
 QObject::connect(rmdeliveryorderfreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderFreeline(QWidget*)));
 block4Layout->addRow("DeliveryOrderFreeline"+QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
 }
-void DeliveryOrderUI::addDeliveryOrderFreeline(DeliveryOrderFreeline* DeliveryOrderFreeline){
+void DeliveryOrderUI::addDeliveryOrderFreeline(DeliveryOrderFreeline* DeliveryOrderFreeline){ 
 DeliveryOrderFreelineUI* deliveryorderfreelineui = new DeliveryOrderFreelineUI();
 deliveryorderfreelineui->block0Layout->removeRow(deliveryorderfreelineui->deliveryorder);
 deliveryorderfreelineui->controllers->setFixedHeight(0);
@@ -175,7 +179,7 @@ RemovebtnWidgets* rmdeliveryorderfreeline = new RemovebtnWidgets(0,deliveryorder
 QObject::connect(rmdeliveryorderfreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderFreeline(QWidget*)));
 block4Layout->addRow("DeliveryOrderFreeline"+QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
 }
-void DeliveryOrderUI::removeDeliveryOrderFreeline(QWidget* widget){
+void DeliveryOrderUI::removeDeliveryOrderFreeline(QWidget* widget){ 
 if(DeliveryOrderFreelines.count()  > 0){
 DeliveryOrderFreelineUI* deliveryorderfreelineui = (DeliveryOrderFreelineUI*) widget;
 DeliveryOrderFreelines.removeOne(deliveryorderfreelineui);
@@ -183,13 +187,13 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block4Layout->removeRow(sender);
 }
 }
-void DeliveryOrderUI::fill(DeliveryOrder* deliveryorder){
+void DeliveryOrderUI::fill(DeliveryOrder* deliveryorder){ 
 clear();
 this->deliveryorder = deliveryorder;
 title->setText(deliveryorder->Title);
 number->setText(QString::number(deliveryorder->Number));
-creationdate->setText(deliveryorder->CreationDate);
-deliverydate->setText(deliveryorder->DeliveryDate);
+creationdate->setDate(QDate::fromString(deliveryorder->CreationDate));
+deliverydate->setDate(QDate::fromString(deliveryorder->DeliveryDate));
 note->setText(deliveryorder->Note);
 header->setText(deliveryorder->Header);
 footer->setText(deliveryorder->Footer);
@@ -203,13 +207,16 @@ addDeliveryOrderService(deliveryorderservice);
 foreach(DeliveryOrderFreeline* deliveryorderfreeline, deliveryorder->deliveryorderfreelines) {
 addDeliveryOrderFreeline(deliveryorderfreeline);
 }
-}
-void DeliveryOrderUI::clear(){
+} 
+void DeliveryOrderUI::clear(){ 
 delete this->deliveryorder;
+this->DeliveryOrderStoreProducts.clear();
+this->DeliveryOrderServices.clear();
+this->DeliveryOrderFreelines.clear();
 title->setText("");
 number->setText("");
-creationdate->setText("");
-deliverydate->setText("");
+creationdate->setDate(QDate::currentDate());
+deliverydate->setDate(QDate::currentDate());
 note->setText("");
 header->setText("");
 footer->setText("");
@@ -221,8 +228,8 @@ if(child->parent()->parent()->parent() != 0)
 ((ERPFormBlock*)child->parent()->parent())->removeRow(child);
 }
 this->deliveryorder = new DeliveryOrder();
-}
-void DeliveryOrderUI::selectDeliveryOrder(){
+} 
+void DeliveryOrderUI::selectDeliveryOrder(){ 
 if(DeliveryOrder::GetStringList().contains(title->text()))
 {
 DeliveryOrder* con = DeliveryOrder::Get(title->text());
@@ -233,7 +240,7 @@ fill(con);
 else if(deliveryorder->DeliveryOrderID != 0)
 clear();
 }
-bool DeliveryOrderUI::save(){
+bool DeliveryOrderUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
@@ -244,7 +251,7 @@ title->style()->unpolish(title);
 title->style()->polish(title);
 title->update();
 }
-else {
+else { 
 title->setObjectName("title");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -259,16 +266,16 @@ number->style()->unpolish(number);
 number->style()->polish(number);
 number->update();
 }
-else {
+else { 
 number->setObjectName("number");
 number->style()->unpolish(number);
 number->style()->polish(number);
 number->update();
 deliveryorder->Number = number->text().trimmed().toInt();
 }
-if(deliveryorder->DeliveryOrderStatusID == 0)
+if(deliveryorder->DeliveryOrderStatusID == 0) 
 deliveryorder->DeliveryOrderStatusID = deliveryorderstatus->getKey();
-if(deliveryorder->ContactID == 0)
+if(deliveryorder->ContactID == 0) 
 deliveryorder->ContactID = contact->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
@@ -278,7 +285,7 @@ creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
 creationdate->update();
 }
-else {
+else { 
 creationdate->setObjectName("creationdate");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
@@ -293,7 +300,7 @@ deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
 deliverydate->update();
 }
-else {
+else { 
 deliverydate->setObjectName("deliverydate");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
@@ -308,7 +315,7 @@ note->style()->unpolish(note);
 note->style()->polish(note);
 note->update();
 }
-else {
+else { 
 note->setObjectName("note");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -323,7 +330,7 @@ header->style()->unpolish(header);
 header->style()->polish(header);
 header->update();
 }
-else {
+else { 
 header->setObjectName("header");
 header->style()->unpolish(header);
 header->style()->polish(header);
@@ -338,7 +345,7 @@ footer->style()->unpolish(footer);
 footer->style()->polish(footer);
 footer->update();
 }
-else {
+else { 
 footer->setObjectName("footer");
 footer->style()->unpolish(footer);
 footer->style()->polish(footer);
@@ -353,7 +360,7 @@ deliveryaddress->style()->unpolish(deliveryaddress);
 deliveryaddress->style()->polish(deliveryaddress);
 deliveryaddress->update();
 }
-else {
+else { 
 deliveryaddress->setObjectName("deliveryaddress");
 deliveryaddress->style()->unpolish(deliveryaddress);
 deliveryaddress->style()->polish(deliveryaddress);
@@ -368,7 +375,7 @@ DeliveryOrderStoreProducts.at(j)->title->update();
 for(int w = 0; w < DeliveryOrderStoreProducts.length(); w++){
 if(DeliveryOrderStoreProducts.at(j) != DeliveryOrderStoreProducts.at(w))
 if(DeliveryOrderStoreProducts.at(j)->title->text() == DeliveryOrderStoreProducts.at(w)->title->text()){
-errors = true;
+errors = true; 
  errorString += "DeliveryOrderStoreProduct has the same title \n";
 DeliveryOrderStoreProducts.at(j)->title->setObjectName("error");
 DeliveryOrderStoreProducts.at(j)->title->style()->unpolish(DeliveryOrderStoreProducts.at(j)->title);
@@ -383,7 +390,7 @@ DeliveryOrderServices.at(j)->title->update();
 for(int w = 0; w < DeliveryOrderServices.length(); w++){
 if(DeliveryOrderServices.at(j) != DeliveryOrderServices.at(w))
 if(DeliveryOrderServices.at(j)->title->text() == DeliveryOrderServices.at(w)->title->text()){
-errors = true;
+errors = true; 
  errorString += "DeliveryOrderService has the same title \n";
 DeliveryOrderServices.at(j)->title->setObjectName("error");
 DeliveryOrderServices.at(j)->title->style()->unpolish(DeliveryOrderServices.at(j)->title);
@@ -398,7 +405,7 @@ DeliveryOrderFreelines.at(j)->description->update();
 for(int w = 0; w < DeliveryOrderFreelines.length(); w++){
 if(DeliveryOrderFreelines.at(j) != DeliveryOrderFreelines.at(w))
 if(DeliveryOrderFreelines.at(j)->description->text() == DeliveryOrderFreelines.at(w)->description->text()){
-errors = true;
+errors = true; 
  errorString += "DeliveryOrderFreeline has the same description \n";
 DeliveryOrderFreelines.at(j)->description->setObjectName("error");
 DeliveryOrderFreelines.at(j)->description->style()->unpolish(DeliveryOrderFreelines.at(j)->description);
@@ -409,9 +416,9 @@ if(!errors) {
 deliveryorder->save();
 for(int i = 0; i < DeliveryOrderStoreProducts.length(); i++){
 DeliveryOrderStoreProducts.at(i)->deliveryorderstoreproduct->DeliveryOrderID= deliveryorder->DeliveryOrderID;
-if(!DeliveryOrderStoreProducts.at(i)->save()){
- errors = true;
- break; }
+if(!DeliveryOrderStoreProducts.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < deliveryorder->deliveryorderstoreproducts.length(); i++){
 bool flag = false;
@@ -423,9 +430,9 @@ deliveryorder->deliveryorderstoreproducts.at(i)->remove();}
 }
 for(int i = 0; i < DeliveryOrderServices.length(); i++){
 DeliveryOrderServices.at(i)->deliveryorderservice->DeliveryOrderID= deliveryorder->DeliveryOrderID;
-if(!DeliveryOrderServices.at(i)->save()){
- errors = true;
- break; }
+if(!DeliveryOrderServices.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < deliveryorder->deliveryorderservices.length(); i++){
 bool flag = false;
@@ -437,9 +444,9 @@ deliveryorder->deliveryorderservices.at(i)->remove();}
 }
 for(int i = 0; i < DeliveryOrderFreelines.length(); i++){
 DeliveryOrderFreelines.at(i)->deliveryorderfreeline->DeliveryOrderID= deliveryorder->DeliveryOrderID;
-if(!DeliveryOrderFreelines.at(i)->save()){
- errors = true;
- break; }
+if(!DeliveryOrderFreelines.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < deliveryorder->deliveryorderfreelines.length(); i++){
 bool flag = false;
@@ -455,9 +462,9 @@ return true;}
 else return false;
 }
 else{ QMessageBox::warning(this, "DeliveryOrder",errorString.trimmed());
-return false;
+return false; 
  }
 }
-void DeliveryOrderUI::cancel(){
+void DeliveryOrderUI::cancel(){ 
 DeliveryOrderIndexUI::ShowUI();
 }

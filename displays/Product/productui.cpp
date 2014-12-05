@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: productui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -25,11 +25,11 @@ QPushButton* save = new QPushButton("Save");
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- this->controllers->addControllerButton(save);
- this->controllers->addControllerButton(clear);
+ this->controllers->addControllerButton(save); 
+ this->controllers->addControllerButton(clear);  
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 name = new QLineEdit();
 QStringList* list = new QStringList(Product::GetStringList());
@@ -62,7 +62,7 @@ block0Layout->addRow("Tax",tax);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block1Layout->setMinimumWidth(330);
 information = new QLineEdit();
 block1Layout->addRow("information",information);
@@ -79,7 +79,7 @@ block1Layout->addRow("Critical Amount",criticalamount);
 flowLayout->addWidget(block1Layout);
 
 block2Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block2Layout->setMinimumWidth(330);
 AddRemoveButtons* addremoveProductFieldDataButtons = new AddRemoveButtons();
 block2Layout->addRow("ProductFieldDatas",addremoveProductFieldDataButtons);
@@ -89,19 +89,19 @@ flowLayout->addWidget(block2Layout);
 
 }
 ERPDisplay* ProductUI::p_instance = 0;
-void ProductUI::ShowUI() {
-	if (p_instance == 0) {
-		p_instance = new ProductUI(mainwindow::GetMainDisplay());
-	}
-	mainwindow::ShowDisplay(p_instance);
+void ProductUI::ShowUI() { 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new ProductUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
-ProductUI*ProductUI::GetUI(){
-	if (p_instance == 0) {
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
-	}
-	return (ProductUI*) p_instance;
+ProductUI*ProductUI::GetUI(){ 
+ 	if (p_instance == 0) { 
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
+	} 
+	return (ProductUI*) p_instance; 
 }
-void ProductUI::addProductFieldData(){
+void ProductUI::addProductFieldData(){ 
 ProductFieldDataUI* productfielddataui = new ProductFieldDataUI();
 productfielddataui->block0Layout->removeRow(productfielddataui->product);
 productfielddataui->controllers->setFixedHeight(0);
@@ -110,7 +110,7 @@ RemovebtnWidgets* rmproductfielddata = new RemovebtnWidgets(0,productfielddataui
 QObject::connect(rmproductfielddata, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProductFieldData(QWidget*)));
 block2Layout->addRow("ProductFieldData"+QString::number(ProductFieldDatas.count()),rmproductfielddata);
 }
-void ProductUI::addProductFieldData(ProductFieldData* ProductFieldData){
+void ProductUI::addProductFieldData(ProductFieldData* ProductFieldData){ 
 ProductFieldDataUI* productfielddataui = new ProductFieldDataUI();
 productfielddataui->block0Layout->removeRow(productfielddataui->product);
 productfielddataui->controllers->setFixedHeight(0);
@@ -120,7 +120,7 @@ RemovebtnWidgets* rmproductfielddata = new RemovebtnWidgets(0,productfielddataui
 QObject::connect(rmproductfielddata, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProductFieldData(QWidget*)));
 block2Layout->addRow("ProductFieldData"+QString::number(ProductFieldDatas.count()),rmproductfielddata);
 }
-void ProductUI::removeProductFieldData(QWidget* widget){
+void ProductUI::removeProductFieldData(QWidget* widget){ 
 if(ProductFieldDatas.count()  > 0){
 ProductFieldDataUI* productfielddataui = (ProductFieldDataUI*) widget;
 ProductFieldDatas.removeOne(productfielddataui);
@@ -128,7 +128,7 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block2Layout->removeRow(sender);
 }
 }
-void ProductUI::fill(Product* product){
+void ProductUI::fill(Product* product){ 
 clear();
 this->product = product;
 name->setText(product->Name);
@@ -144,9 +144,10 @@ criticalamount->setText(QString::number(product->CriticalAmount));
 foreach(ProductFieldData* productfielddata, product->productfielddatas) {
 addProductFieldData(productfielddata);
 }
-}
-void ProductUI::clear(){
+} 
+void ProductUI::clear(){ 
 delete this->product;
+this->ProductFieldDatas.clear();
 image->setText("");
 shortdescription->setText("");
 productisacomposite->setChecked(false);
@@ -163,8 +164,8 @@ if(child->parent()->parent()->parent() != 0)
 ((ERPFormBlock*)child->parent()->parent())->removeRow(child);
 }
 this->product = new Product();
-}
-void ProductUI::selectProduct(){
+} 
+void ProductUI::selectProduct(){ 
 if(Product::GetStringList().contains(name->text()))
 {
 Product* con = Product::Get(name->text());
@@ -177,7 +178,7 @@ clear();
 }
 void ProductUI::generateBarcode(){ QString number = ""; for(int i = 0; i < 13; i++)  number += QString::number(rand() % 10); barcode->setText(number); barcodeDisplay->barcode = number; barcodeDisplay->repaint(); }
 void ProductUI::barcodeChanged(QString barcode){ if(this->barcode->text().count() > 13) this->barcode->setText(this->barcode->text().remove(12,20)); barcodeDisplay->barcode = barcode; barcodeDisplay->repaint(); }
-bool ProductUI::save(){
+bool ProductUI::save(){ 
 bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
@@ -188,7 +189,7 @@ name->style()->unpolish(name);
 name->style()->polish(name);
 name->update();
 }
-else {
+else { 
 name->setObjectName("name");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -203,7 +204,7 @@ image->style()->unpolish(image);
 image->style()->polish(image);
 image->update();
 }
-else {
+else { 
 image->setObjectName("image");
 image->style()->unpolish(image);
 image->style()->polish(image);
@@ -218,14 +219,14 @@ shortdescription->style()->unpolish(shortdescription);
 shortdescription->style()->polish(shortdescription);
 shortdescription->update();
 }
-else {
+else { 
 shortdescription->setObjectName("shortdescription");
 shortdescription->style()->unpolish(shortdescription);
 shortdescription->style()->polish(shortdescription);
 shortdescription->update();
 product->ShortDescription = shortdescription->text().trimmed();
 }
-if(product->UnitID == 0)
+if(product->UnitID == 0) 
 product->UnitID = unit->getKey();
 product->ProductIsAComposite = productisacomposite->text().trimmed().toInt();
 if(sellingprice->text().trimmed().isEmpty()){
@@ -236,7 +237,7 @@ sellingprice->style()->unpolish(sellingprice);
 sellingprice->style()->polish(sellingprice);
 sellingprice->update();
 }
-else {
+else { 
 sellingprice->setObjectName("sellingprice");
 sellingprice->style()->unpolish(sellingprice);
 sellingprice->style()->polish(sellingprice);
@@ -251,7 +252,7 @@ netcoast->style()->unpolish(netcoast);
 netcoast->style()->polish(netcoast);
 netcoast->update();
 }
-else {
+else { 
 netcoast->setObjectName("netcoast");
 netcoast->style()->unpolish(netcoast);
 netcoast->style()->polish(netcoast);
@@ -266,14 +267,14 @@ trademarginrate->style()->unpolish(trademarginrate);
 trademarginrate->style()->polish(trademarginrate);
 trademarginrate->update();
 }
-else {
+else { 
 trademarginrate->setObjectName("trademarginrate");
 trademarginrate->style()->unpolish(trademarginrate);
 trademarginrate->style()->polish(trademarginrate);
 trademarginrate->update();
 product->TradeMarginRate = trademarginrate->text().trimmed().toDouble();
 }
-if(product->TaxID == 0)
+if(product->TaxID == 0) 
 product->TaxID = tax->getKey();
 if(information->text().trimmed().isEmpty()){
 errors = true;
@@ -283,7 +284,7 @@ information->style()->unpolish(information);
 information->style()->polish(information);
 information->update();
 }
-else {
+else { 
 information->setObjectName("information");
 information->style()->unpolish(information);
 information->style()->polish(information);
@@ -298,14 +299,14 @@ barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
 barcode->update();
 }
-else {
+else { 
 barcode->setObjectName("barcode");
 barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
 barcode->update();
 product->Barcode = barcode->text().trimmed();
 }
-if(product->ProductCategoryID == 0)
+if(product->ProductCategoryID == 0) 
 product->ProductCategoryID = productcategory->getKey();
 if(criticalamount->text().trimmed().isEmpty()){
 errors = true;
@@ -315,7 +316,7 @@ criticalamount->style()->unpolish(criticalamount);
 criticalamount->style()->polish(criticalamount);
 criticalamount->update();
 }
-else {
+else { 
 criticalamount->setObjectName("criticalamount");
 criticalamount->style()->unpolish(criticalamount);
 criticalamount->style()->polish(criticalamount);
@@ -330,7 +331,7 @@ ProductFieldDatas.at(j)->value->update();
 for(int w = 0; w < ProductFieldDatas.length(); w++){
 if(ProductFieldDatas.at(j) != ProductFieldDatas.at(w))
 if(ProductFieldDatas.at(j)->value->text() == ProductFieldDatas.at(w)->value->text()){
-errors = true;
+errors = true; 
  errorString += "ProductFieldData has the same value \n";
 ProductFieldDatas.at(j)->value->setObjectName("error");
 ProductFieldDatas.at(j)->value->style()->unpolish(ProductFieldDatas.at(j)->value);
@@ -341,9 +342,9 @@ if(!errors) {
 product->save();
 for(int i = 0; i < ProductFieldDatas.length(); i++){
 ProductFieldDatas.at(i)->productfielddata->ProductID= product->ProductID;
-if(!ProductFieldDatas.at(i)->save()){
- errors = true;
- break; }
+if(!ProductFieldDatas.at(i)->save()){ 
+ errors = true; 
+ break; } 
 }
 for(int i = 0; i < product->productfielddatas.length(); i++){
 bool flag = false;
@@ -359,9 +360,9 @@ return true;}
 else return false;
 }
 else{ QMessageBox::warning(this, "Product",errorString.trimmed());
-return false;
+return false; 
  }
 }
-void ProductUI::cancel(){
+void ProductUI::cancel(){ 
 ProductIndexUI::ShowUI();
 }

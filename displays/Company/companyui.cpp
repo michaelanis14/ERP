@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: companyui.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -46,10 +46,10 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* CompanyUI::p_instance = 0;
 void CompanyUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new CompanyUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new CompanyUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 CompanyUI*CompanyUI::GetUI(){ 
  	if (p_instance == 0) { 

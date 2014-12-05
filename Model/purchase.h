@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchase.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,19 +10,18 @@
 #include <QSqlRelationalTableModel>
 #include <QSqlError>
 #include <QtGui>
-#include "purchaseproduct.h"
+#include "purchasestoreproduct.h"
 
 class Purchase  : public QSqlRelationalTableModel
 {
 	Q_OBJECT
 public:
 	Purchase();
-	Purchase(QString Title,int StoreID,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	int PurchaseID;
+	Purchase(QString Title,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	int PurchaseID;
 	QString Title;
-	int StoreID;
 	QString CreationDate;
 	QString DeliveryDate;
-	QList<PurchaseProduct*> purchaseproducts;
+	QList<PurchaseStoreProduct*> purchasestoreproducts;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
@@ -45,9 +44,8 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Purchase(int PurchaseID,QString Title,int StoreID,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	static Purchase* p_instance;
+	Purchase(int PurchaseID,QString Title,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	static Purchase* p_instance;
 	bool setTitle(int PurchaseID, const QString &Title);
-	bool setStoreID(int PurchaseID, const QString &StoreID);
 	bool setCreationDate(int PurchaseID, const QString &CreationDate);
 	bool setDeliveryDate(int PurchaseID, const QString &DeliveryDate);
 	bool setCreatedOn(int PurchaseID, const QString &CreatedOn);

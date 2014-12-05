@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreeline.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -110,7 +110,7 @@ QList<DeliveryOrderFreeline*> DeliveryOrderFreeline::GetAll() {
 	while (query.next()) {
 deliveryorderfreelines.append(new DeliveryOrderFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
-qSort(deliveryorderfreelines);
+qStableSort(deliveryorderfreelines.begin(),deliveryorderfreelines.end());
 	return deliveryorderfreelines;
 }
 
@@ -170,7 +170,7 @@ deliveryorderfreelines = GetAll();
 	for(int i = 0; i <deliveryorderfreelines.count(); i++){
 		list.append(deliveryorderfreelines[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactemail.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -106,7 +106,7 @@ QList<ContactEmail*> ContactEmail::GetAll() {
 	while (query.next()) {
 contactemails.append(new ContactEmail(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qSort(contactemails);
+qStableSort(contactemails.begin(),contactemails.end());
 	return contactemails;
 }
 
@@ -167,7 +167,7 @@ contactemails = GetAll();
 	for(int i = 0; i <contactemails.count(); i++){
 		list.append(contactemails[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

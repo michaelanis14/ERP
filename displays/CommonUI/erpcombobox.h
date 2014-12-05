@@ -18,7 +18,6 @@ public:
 	void addItems(QHash<int,QString> items);
 	int getKey();
 	bool addedItems;
-
 private:
 	QHash<int,QString>  items;
 signals:

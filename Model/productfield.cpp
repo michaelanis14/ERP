@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfield.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -106,7 +106,7 @@ QList<ProductField*> ProductField::GetAll() {
 	while (query.next()) {
 productfields.append(new ProductField(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qSort(productfields);
+qStableSort(productfields.begin(),productfields.end());
 	return productfields;
 }
 
@@ -166,7 +166,7 @@ productfields = GetAll();
 	for(int i = 0; i <productfields.count(); i++){
 		list.append(productfields[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

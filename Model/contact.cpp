@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -158,7 +158,7 @@ QList<Contact*> Contact::GetAll() {
 	while (query.next()) {
 contacts.append(new Contact(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toString(),query.value(14).toString(),query.value(15).toString(),query.value(16).toString()));
 	}
-qSort(contacts);
+qStableSort(contacts.begin(),contacts.end());
 	return contacts;
 }
 
@@ -233,7 +233,7 @@ contacts = GetAll();
 	for(int i = 0; i <contacts.count(); i++){
 		list.append(contacts[i]->Name);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

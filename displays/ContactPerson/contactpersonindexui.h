@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonindexui.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,6 +10,7 @@
 #include "../../erpdisplay.h"
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
+#include "../CommonUI/erptableview.h"
 #include "../../Model/contactperson.h"
 #include "../../Model/contact.h"
 
@@ -19,7 +20,6 @@
 
 #include <QWidget>
 #include <QLineEdit>
-#include <QTableView>
 #include <QPushButton>
 #include <QtSql>
 #include <QSqlRelationalDelegate>
@@ -31,7 +31,7 @@ public:
 	explicit ContactPersonIndexUI(QWidget *parent = 0);
 	static void ShowUI();
 	static ContactPersonIndexUI* GetUI();
-QTableView *tabel; 
+ERPTableView *tabel; 
  ContactPerson *model; 
  QPushButton* add; 
  QPushButton* remove; 

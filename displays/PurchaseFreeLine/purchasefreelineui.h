@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreelineui.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -24,6 +24,7 @@
 #include <QPushButton>
 #include <QCompleter>
 #include <QMessageBox>
+#include <QDateEdit>
 class PurchaseFreeLineUI : public ERPDisplay
 {
 	Q_OBJECT

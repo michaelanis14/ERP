@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreeline.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -116,7 +116,7 @@ QList<InvoiceFreeline*> InvoiceFreeline::GetAll() {
 	while (query.next()) {
 invoicefreelines.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
 	}
-qSort(invoicefreelines);
+qStableSort(invoicefreelines.begin(),invoicefreelines.end());
 	return invoicefreelines;
 }
 
@@ -176,7 +176,7 @@ invoicefreelines = GetAll();
 	for(int i = 0; i <invoicefreelines.count(); i++){
 		list.append(invoicefreelines[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

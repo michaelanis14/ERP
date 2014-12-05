@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclass.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -96,7 +96,7 @@ QList<ContactClass*> ContactClass::GetAll() {
 	while (query.next()) {
 contactclasss.append(new ContactClass(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qSort(contactclasss);
+qStableSort(contactclasss.begin(),contactclasss.end());
 	return contactclasss;
 }
 
@@ -156,7 +156,7 @@ contactclasss = GetAll();
 	for(int i = 0; i <contactclasss.count(); i++){
 		list.append(contactclasss[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

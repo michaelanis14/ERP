@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactemailindexui.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,13 +21,8 @@ model = new ContactEmail();
 	if(!ErpModel::GetInstance()->db.open()) 
 	qDebug() <<"Couldn't open databaseee!";
 ERPFormBlock* block0Layout = new ERPFormBlock; 
- tabel = new QTableView(); 
- tabel->setModel(model); 
- tabel->setItemDelegate(new QSqlRelationalDelegate(tabel)); 
- tabel->hideColumn(0); // don't show the ID 
- tabel->setSortingEnabled(true); 
- tabel->setSelectionBehavior(QAbstractItemView::SelectRows); 
- tabel->setSelectionMode(QAbstractItemView::SingleSelection); 
+ tabel = new ERPTableView(); 
+ tabel->tabel->setModel(model); 
  block0Layout->addRow("",tabel); 
  flowLayout->addWidget(block0Layout); 
   add = new QPushButton("Add"); 
@@ -41,17 +36,16 @@ ERPFormBlock* block0Layout = new ERPFormBlock;
  edit->setObjectName("edit"); 
  edit->setEnabled(false); 
  remove->setEnabled(false); 
- QObject::connect(tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContactEmailIndexUI::onSelectionChanged);
+ QObject::connect(tabel->tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ContactEmailIndexUI::onSelectionChanged);
 this->controllers->addControllerButton(add); 
  this->controllers->addControllerButton(edit);  
  this->controllers->addControllerButton(remove);
 }
 ERPDisplay* ContactEmailIndexUI::p_instance = 0;
 void ContactEmailIndexUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new ContactEmailIndexUI(mainwindow::GetMainDisplay());
-	} 
- ContactEmailIndexUI::GetUI()->model->refresh();	
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new ContactEmailIndexUI(mainwindow::GetMainDisplay()); 	
  mainwindow::ShowDisplay(p_instance); 
 }
 ContactEmailIndexUI*ContactEmailIndexUI::GetUI(){ 
@@ -66,13 +60,13 @@ void ContactEmailIndexUI::addRow(){
  }
 void ContactEmailIndexUI::editRow(){ 
  ContactEmailUI::ShowUI(); 
- ContactEmailUI::GetUI()->fill(model->get(tabel->selectionModel()->selectedRows().last())); 
+ ContactEmailUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 
  }
 void ContactEmailIndexUI::removeRow(){ 
- model->remove(tabel->selectionModel()->selectedRows().last()); 
+ model->remove(tabel->tabel->selectionModel()->selectedRows().last()); 
  }
 void ContactEmailIndexUI::onSelectionChanged(){ 
- int e = tabel->selectionModel()->selectedRows().count(); 
+ int e = tabel->tabel->selectionModel()->selectedRows().count(); 
  remove->setEnabled(e); 
  edit->setEnabled(e); 
  }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -150,7 +150,7 @@ QList<Product*> Product::GetAll() {
 	while (query.next()) {
 products.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toString(),query.value(15).toString()));
 	}
-qSort(products);
+qStableSort(products.begin(),products.end());
 	return products;
 }
 
@@ -216,7 +216,7 @@ products = GetAll();
 	for(int i = 0; i <products.count(); i++){
 		list.append(products[i]->Name);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

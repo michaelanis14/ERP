@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceyearui.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,10 +37,10 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* InvoiceYearUI::p_instance = 0;
 void InvoiceYearUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new InvoiceYearUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new InvoiceYearUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 InvoiceYearUI*InvoiceYearUI::GetUI(){ 
  	if (p_instance == 0) { 

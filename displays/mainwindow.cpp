@@ -10,6 +10,7 @@
 #include "displays/Contact/contactindexui.h"
 #include "displays/BankAccount/bankaccountui.h"
 #include "displays/Product/productindexui.h"
+#include "displays/Product/ProductStoreStateUI.h"
 #include "displays/Store/storeindexui.h"
 #include "displays/Purchase/purchaseindexui.h"
 #include "displays/DeliveryOrder/deliveryorderindexui.h"
@@ -146,7 +147,7 @@ mainwindow::mainwindow()
 
 
 
-//Contacts
+	//Contacts
 	inNavContacts = new QPushButton(icon1,"Contacts");
 	inNavContacts->setObjectName("inNavContacts");
 	connect(this->inNavContacts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
@@ -154,7 +155,7 @@ mainwindow::mainwindow()
 	inNavcontactPersones->setObjectName("inNavcontactPersones");
 	connect(this->inNavcontactPersones, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
-//Products
+	//Products
 	inNavProducts = new QPushButton(icon1,"Products");
 	inNavProducts->setObjectName("inNavProducts");
 	connect(this->inNavProducts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
@@ -170,6 +171,10 @@ mainwindow::mainwindow()
 	inNavDeliveryOrder = new QPushButton(icon1,"Delivery Order");
 	inNavDeliveryOrder->setObjectName("inNavDeliveryOrder");
 	connect(this->inNavDeliveryOrder, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavStoreStatus = new QPushButton(icon1,"StoreStatus");
+	inNavStoreStatus->setObjectName("inNavStoreStatus");
+	connect(this->inNavStoreStatus, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
 
 
 }
@@ -270,7 +275,7 @@ void mainwindow::btnContactsClicked(){
 	innerNavigation->removeAll();
 	innerNavigation->addButton(inNavContacts);
 	innerNavigation->addButton(inNavcontactPersones);
-//	innerNavigation->addButton(inNavcontactType);
+	//	innerNavigation->addButton(inNavcontactType);
 
 	ContactIndexUI::ShowUI();
 }
@@ -282,6 +287,7 @@ void mainwindow::btnProductsClicked(){
 	innerNavigation->addButton(inNavStoreHouse);
 	innerNavigation->addButton(inNavPurchase);
 	innerNavigation->addButton(inNavDeliveryOrder);
+	innerNavigation->addButton(inNavStoreStatus);
 	ProductIndexUI::ShowUI();
 }
 void mainwindow::btnAccountingClicked(){;}
@@ -296,7 +302,7 @@ void mainwindow::innerNavClicked(){
 		ContactPersonIndexUI::ShowUI();
 	else  if(sender->objectName() == "inNavcontactType")
 		ContactTypeIndexUI::ShowUI();
-//Product
+	//Product
 	else  if(sender->objectName() == "inNavProducts")
 		ProductIndexUI::ShowUI();
 	else  if(sender->objectName() == "inNavService")
@@ -307,6 +313,8 @@ void mainwindow::innerNavClicked(){
 		PurchaseIndexUI::ShowUI();
 	else  if(sender->objectName() == "inNavDeliveryOrder")
 		DeliveryOrderIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavStoreStatus")
+		ProductStoreStateUI::ShowUI();
 
 
 }

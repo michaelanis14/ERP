@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currencyindexui.h
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,12 +10,12 @@
 #include "../../erpdisplay.h"
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
+#include "../CommonUI/erptableview.h"
 #include "../../Model/currency.h"
 
 
 #include <QWidget>
 #include <QLineEdit>
-#include <QTableView>
 #include <QPushButton>
 #include <QtSql>
 #include <QSqlRelationalDelegate>
@@ -27,7 +27,7 @@ public:
 	explicit CurrencyIndexUI(QWidget *parent = 0);
 	static void ShowUI();
 	static CurrencyIndexUI* GetUI();
-QTableView *tabel; 
+ERPTableView *tabel; 
  Currency *model; 
  QPushButton* add; 
  QPushButton* remove; 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: fieldtype.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -96,7 +96,7 @@ QList<FieldType*> FieldType::GetAll() {
 	while (query.next()) {
 fieldtypes.append(new FieldType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qSort(fieldtypes);
+qStableSort(fieldtypes.begin(),fieldtypes.end());
 	return fieldtypes;
 }
 
@@ -156,7 +156,7 @@ fieldtypes = GetAll();
 	for(int i = 0; i <fieldtypes.count(); i++){
 		list.append(fieldtypes[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

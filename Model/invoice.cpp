@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoice.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -142,7 +142,7 @@ QList<Invoice*> Invoice::GetAll() {
 	while (query.next()) {
 invoices.append(new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString()));
 	}
-qSort(invoices);
+qStableSort(invoices.begin(),invoices.end());
 	return invoices;
 }
 
@@ -213,7 +213,7 @@ invoices = GetAll();
 	for(int i = 0; i <invoices.count(); i++){
 		list.append(invoices[i]->Title);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

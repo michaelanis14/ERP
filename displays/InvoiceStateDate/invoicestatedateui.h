@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedateui.h
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -25,6 +25,7 @@
 #include <QPushButton>
 #include <QCompleter>
 #include <QMessageBox>
+#include <QDateEdit>
 class InvoiceStateDateUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -36,7 +37,7 @@ public:
 	QLineEdit*title;
 	ERPComboBox*invoice;
 	ERPComboBox*invoicestate;
-	QLineEdit*date;
+	QDateEdit*date;
 	void fill(InvoiceStateDate* invoicestatedate);
 InvoiceStateDate* invoicestatedate;
 private:

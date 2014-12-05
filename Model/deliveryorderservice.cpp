@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderservice.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -112,7 +112,7 @@ QList<DeliveryOrderService*> DeliveryOrderService::GetAll() {
 	while (query.next()) {
 deliveryorderservices.append(new DeliveryOrderService(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
-qSort(deliveryorderservices);
+qStableSort(deliveryorderservices.begin(),deliveryorderservices.end());
 	return deliveryorderservices;
 }
 
@@ -172,7 +172,7 @@ deliveryorderservices = GetAll();
 	for(int i = 0; i <deliveryorderservices.count(); i++){
 		list.append(deliveryorderservices[i]->Title);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

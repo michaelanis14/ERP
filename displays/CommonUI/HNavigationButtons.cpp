@@ -13,8 +13,8 @@ HNavigationButtons::HNavigationButtons(QWidget *parent) :
 
 	font = NULL;
 	layout = new QHBoxLayout(this);
-	layout->setContentsMargins(0,0,0,0);
-	this->setContentsMargins(0,0,0,0);
+	layout->setContentsMargins(2,0,2,0);
+	this->setContentsMargins(0,0,1,0);
 }
 
 void HNavigationButtons::addButton(QPushButton* pushButton) {

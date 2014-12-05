@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreeline.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -110,7 +110,7 @@ QList<PurchaseFreeLine*> PurchaseFreeLine::GetAll() {
 	while (query.next()) {
 purchasefreelines.append(new PurchaseFreeLine(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
-qSort(purchasefreelines);
+qStableSort(purchasefreelines.begin(),purchasefreelines.end());
 	return purchasefreelines;
 }
 
@@ -170,7 +170,7 @@ purchasefreelines = GetAll();
 	for(int i = 0; i <purchasefreelines.count(); i++){
 		list.append(purchasefreelines[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

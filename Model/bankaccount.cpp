@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccount.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -138,7 +138,7 @@ QList<BankAccount*> BankAccount::GetAll() {
 	while (query.next()) {
 bankaccounts.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString()));
 	}
-qSort(bankaccounts);
+qStableSort(bankaccounts.begin(),bankaccounts.end());
 	return bankaccounts;
 }
 
@@ -204,7 +204,7 @@ bankaccounts = GetAll();
 	for(int i = 0; i <bankaccounts.count(); i++){
 		list.append(bankaccounts[i]->Name);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employee.cpp
-**   Created on: Sun Nov 30 23:37:06 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -96,7 +96,7 @@ QList<Employee*> Employee::GetAll() {
 	while (query.next()) {
 employees.append(new Employee(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qSort(employees);
+qStableSort(employees.begin(),employees.end());
 	return employees;
 }
 
@@ -156,7 +156,7 @@ employees = GetAll();
 	for(int i = 0; i <employees.count(); i++){
 		list.append(employees[i]->Name);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 

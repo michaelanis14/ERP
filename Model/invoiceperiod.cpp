@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceperiod.cpp
-**   Created on: Sun Nov 30 23:37:07 EET 2014
+**   Created on: Fri Dec 05 14:22:26 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -96,7 +96,7 @@ QList<InvoicePeriod*> InvoicePeriod::GetAll() {
 	while (query.next()) {
 invoiceperiods.append(new InvoicePeriod(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qSort(invoiceperiods);
+qStableSort(invoiceperiods.begin(),invoiceperiods.end());
 	return invoiceperiods;
 }
 
@@ -156,7 +156,7 @@ invoiceperiods = GetAll();
 	for(int i = 0; i <invoiceperiods.count(); i++){
 		list.append(invoiceperiods[i]->Description);
 	}
-	qSort(list);
+qStableSort(list.begin(),list.end());
 	return list;
 }
 
