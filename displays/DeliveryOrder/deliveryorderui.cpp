@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -230,9 +230,9 @@ if(child->parent()->parent()->parent() != 0)
 this->deliveryorder = new DeliveryOrder();
 } 
 void DeliveryOrderUI::selectDeliveryOrder(){ 
-if(DeliveryOrder::GetStringList().contains(title->text()))
+if(DeliveryOrder::GetStringList().contains(this->deliveryorder->Title))
 {
-DeliveryOrder* con = DeliveryOrder::Get(title->text());
+DeliveryOrder* con = DeliveryOrder::Get(this->deliveryorder->Title);
 if(this->deliveryorder->DeliveryOrderID != con->DeliveryOrderID){
 fill(con);
 }
@@ -367,36 +367,6 @@ deliveryaddress->style()->polish(deliveryaddress);
 deliveryaddress->update();
 deliveryorder->DeliveryAddress = deliveryaddress->text().trimmed();
 }
-for(int j = 0; j < DeliveryOrderStoreProducts.length(); j++){
-DeliveryOrderStoreProducts.at(j)->title->setObjectName("title");
-DeliveryOrderStoreProducts.at(j)->title->style()->unpolish(DeliveryOrderStoreProducts.at(j)->title);
-DeliveryOrderStoreProducts.at(j)->title->style()->polish(DeliveryOrderStoreProducts.at(j)->title);
-DeliveryOrderStoreProducts.at(j)->title->update();
-for(int w = 0; w < DeliveryOrderStoreProducts.length(); w++){
-if(DeliveryOrderStoreProducts.at(j) != DeliveryOrderStoreProducts.at(w))
-if(DeliveryOrderStoreProducts.at(j)->title->text() == DeliveryOrderStoreProducts.at(w)->title->text()){
-errors = true; 
- errorString += "DeliveryOrderStoreProduct has the same title \n";
-DeliveryOrderStoreProducts.at(j)->title->setObjectName("error");
-DeliveryOrderStoreProducts.at(j)->title->style()->unpolish(DeliveryOrderStoreProducts.at(j)->title);
-DeliveryOrderStoreProducts.at(j)->title->style()->polish(DeliveryOrderStoreProducts.at(j)->title);
-DeliveryOrderStoreProducts.at(j)->title->update();
-}}}
-for(int j = 0; j < DeliveryOrderServices.length(); j++){
-DeliveryOrderServices.at(j)->title->setObjectName("title");
-DeliveryOrderServices.at(j)->title->style()->unpolish(DeliveryOrderServices.at(j)->title);
-DeliveryOrderServices.at(j)->title->style()->polish(DeliveryOrderServices.at(j)->title);
-DeliveryOrderServices.at(j)->title->update();
-for(int w = 0; w < DeliveryOrderServices.length(); w++){
-if(DeliveryOrderServices.at(j) != DeliveryOrderServices.at(w))
-if(DeliveryOrderServices.at(j)->title->text() == DeliveryOrderServices.at(w)->title->text()){
-errors = true; 
- errorString += "DeliveryOrderService has the same title \n";
-DeliveryOrderServices.at(j)->title->setObjectName("error");
-DeliveryOrderServices.at(j)->title->style()->unpolish(DeliveryOrderServices.at(j)->title);
-DeliveryOrderServices.at(j)->title->style()->polish(DeliveryOrderServices.at(j)->title);
-DeliveryOrderServices.at(j)->title->update();
-}}}
 for(int j = 0; j < DeliveryOrderFreelines.length(); j++){
 DeliveryOrderFreelines.at(j)->description->setObjectName("description");
 DeliveryOrderFreelines.at(j)->description->style()->unpolish(DeliveryOrderFreelines.at(j)->description);

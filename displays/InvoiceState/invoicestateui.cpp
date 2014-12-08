@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestateui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->invoicestate = new InvoiceState();
 } 
 void InvoiceStateUI::selectInvoiceState(){ 
-if(InvoiceState::GetStringList().contains(description->text()))
+if(InvoiceState::GetStringList().contains(this->invoicestate->Description))
 {
-InvoiceState* con = InvoiceState::Get(description->text());
+InvoiceState* con = InvoiceState::Get(this->invoicestate->Description);
 if(this->invoicestate->InvoiceStateID != con->InvoiceStateID){
 fill(con);
 }

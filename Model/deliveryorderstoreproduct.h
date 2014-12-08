@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstoreproduct.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,8 +16,7 @@ class DeliveryOrderStoreProduct  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	DeliveryOrderStoreProduct();
-	DeliveryOrderStoreProduct(QString Title,int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	int DeliveryOrderStoreProductID;
-	QString Title;
+	DeliveryOrderStoreProduct(int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	int DeliveryOrderStoreProductID;
 	int DeliveryOrderID;
 	int StoreID;
 	int ProductID;
@@ -44,8 +43,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	DeliveryOrderStoreProduct(int DeliveryOrderStoreProductID,QString Title,int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	static DeliveryOrderStoreProduct* p_instance;
-	bool setTitle(int DeliveryOrderStoreProductID, const QString &Title);
+	DeliveryOrderStoreProduct(int DeliveryOrderStoreProductID,int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	static DeliveryOrderStoreProduct* p_instance;
 	bool setDeliveryOrderID(int DeliveryOrderStoreProductID, const QString &DeliveryOrderID);
 	bool setStoreID(int DeliveryOrderStoreProductID, const QString &StoreID);
 	bool setProductID(int DeliveryOrderStoreProductID, const QString &ProductID);

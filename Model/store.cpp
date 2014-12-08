@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: store.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -52,13 +52,14 @@ QString query =
 "(StoreID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (StoreID),"
 "Name VARCHAR(40) NOT NULL, "
+" KEY(Name),"
 "Address VARCHAR(40) NOT NULL, "
 "PostalCode VARCHAR(40) NOT NULL, "
 "City VARCHAR(40) NOT NULL, "
 "CountryID INT NOT NULL, "
 "FOREIGN KEY (CountryID) REFERENCES Country(CountryID)  ON DELETE CASCADE,"
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

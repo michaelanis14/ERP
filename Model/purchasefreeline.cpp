@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreeline.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,6 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("PurchaseFreeLine");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(1, QSqlRelation("Purchase", "PurchaseID", "Title"));
 }
 PurchaseFreeLine::PurchaseFreeLine(int PurchaseFreeLineID,int PurchaseID,QString Description,double Amount,double Price,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->PurchaseFreeLineID = PurchaseFreeLineID ;
@@ -49,12 +48,13 @@ QString query =
 "(PurchaseFreeLineID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (PurchaseFreeLineID),"
 "PurchaseID INT NOT NULL, "
+" KEY(PurchaseID),"
 "FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID)  ON DELETE CASCADE,"
 "Description VARCHAR(40) NOT NULL, "
 "Amount DECIMAL(6,2) NOT NULL, "
 "Price DECIMAL(6,2) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -75,7 +75,7 @@ ErpModel::GetInstance()->qeryExec("INSERT INTO PurchaseFreeLine (PurchaseID,Desc
 "VALUES ('" +QString::number(this->PurchaseID)+"','"+QString(this->Description)+"','"+QString::number(this->Amount)+"','"+QString::number(this->Price)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
 ErpModel::GetInstance()->qeryExec("UPDATE PurchaseFreeLine SET "	"PurchaseID = '"+QString::number(this->PurchaseID)+"',"+"Description = '"+QString(this->Description)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"Price = '"+QString::number(this->Price)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE PurchaseFreeLineID ='"+QString::number(this->PurchaseFreeLineID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  PurchaseFreeLineID FROM PurchaseFreeLine WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  PurchaseFreeLineID FROM PurchaseFreeLine WHERE PurchaseID = "+QString::number(PurchaseID)+" AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->PurchaseFreeLineID = query.value(0).toInt();	
@@ -136,7 +136,7 @@ else return new PurchaseFreeLine();
 PurchaseFreeLine* PurchaseFreeLine::Get(QString name) {
 PurchaseFreeLine* purchasefreeline = new PurchaseFreeLine();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseFreeLine WHERE Description = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseFreeLine WHERE PurchaseID = QString::number("+name+")"));
 while (query.next()) {
 purchasefreeline = new PurchaseFreeLine(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
 
@@ -179,7 +179,7 @@ QHash<int,QString> PurchaseFreeLine::GetHashList() {
 	QList<PurchaseFreeLine*> purchasefreelines =   QList<PurchaseFreeLine*>();
 purchasefreelines = GetAll();
 	for(int i = 0; i <purchasefreelines.count(); i++){
-		list.insert(purchasefreelines[i]->PurchaseFreeLineID,purchasefreelines[i]->Description);
+		list.insert(purchasefreelines[i]->PurchaseFreeLineID,QString::number(purchasefreelines[i]->PurchaseID));
 	}
 	return list;
 }
@@ -188,7 +188,7 @@ int PurchaseFreeLine::GetIndex(QString name) {
 	QList<PurchaseFreeLine*> purchasefreelines =   QList<PurchaseFreeLine*>();
 purchasefreelines = GetAll();
 	for(int i = 0; i <purchasefreelines.count(); i++){
-		if(purchasefreelines[i]->Description == name){
+		if(purchasefreelines[i]->PurchaseID == name.toInt()){
 			return i;
 		}
 	}

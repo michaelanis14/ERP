@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclassui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->contactclass = new ContactClass();
 } 
 void ContactClassUI::selectContactClass(){ 
-if(ContactClass::GetStringList().contains(description->text()))
+if(ContactClass::GetStringList().contains(this->contactclass->Description))
 {
-ContactClass* con = ContactClass::Get(description->text());
+ContactClass* con = ContactClass::Get(this->contactclass->Description);
 if(this->contactclass->ContactClassID != con->ContactClassID){
 fill(con);
 }

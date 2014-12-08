@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: companyindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ CompanyIndexUI*CompanyIndexUI::GetUI(){
 	return (CompanyIndexUI*) p_instance; 
 }
 void CompanyIndexUI::addRow(){ 
- CompanyUI::ShowUI(); 
- CompanyUI::GetUI()->fill(new Company()); 
- }
+ CompanyUI::ShowUI();}
 void CompanyIndexUI::editRow(){ 
  CompanyUI::ShowUI(); 
  CompanyUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

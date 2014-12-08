@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreelineindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ InvoiceFreelineIndexUI*InvoiceFreelineIndexUI::GetUI(){
 	return (InvoiceFreelineIndexUI*) p_instance; 
 }
 void InvoiceFreelineIndexUI::addRow(){ 
- InvoiceFreelineUI::ShowUI(); 
- InvoiceFreelineUI::GetUI()->fill(new InvoiceFreeline()); 
- }
+ InvoiceFreelineUI::ShowUI();}
 void InvoiceFreelineIndexUI::editRow(){ 
  InvoiceFreelineUI::ShowUI(); 
  InvoiceFreelineUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

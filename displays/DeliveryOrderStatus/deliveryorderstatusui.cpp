@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstatusui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->deliveryorderstatus = new DeliveryOrderStatus();
 } 
 void DeliveryOrderStatusUI::selectDeliveryOrderStatus(){ 
-if(DeliveryOrderStatus::GetStringList().contains(description->text()))
+if(DeliveryOrderStatus::GetStringList().contains(this->deliveryorderstatus->Description))
 {
-DeliveryOrderStatus* con = DeliveryOrderStatus::Get(description->text());
+DeliveryOrderStatus* con = DeliveryOrderStatus::Get(this->deliveryorderstatus->Description);
 if(this->deliveryorderstatus->DeliveryOrderStatusID != con->DeliveryOrderStatusID){
 fill(con);
 }

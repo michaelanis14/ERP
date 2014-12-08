@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderserviceindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ DeliveryOrderServiceIndexUI*DeliveryOrderServiceIndexUI::GetUI(){
 	return (DeliveryOrderServiceIndexUI*) p_instance; 
 }
 void DeliveryOrderServiceIndexUI::addRow(){ 
- DeliveryOrderServiceUI::ShowUI(); 
- DeliveryOrderServiceUI::GetUI()->fill(new DeliveryOrderService()); 
- }
+ DeliveryOrderServiceUI::ShowUI();}
 void DeliveryOrderServiceIndexUI::editRow(){ 
  DeliveryOrderServiceUI::ShowUI(); 
  DeliveryOrderServiceUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

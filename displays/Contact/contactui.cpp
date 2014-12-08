@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,8 +31,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-salutation = new QLineEdit();
-block0Layout->addRow("Salutation",salutation);
 name = new QLineEdit();
 QStringList* list = new QStringList(Contact::GetStringList());
 QCompleter *completer = new QCompleter(*list);
@@ -40,6 +38,8 @@ completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectContact()));
 block0Layout->addRow("Name",name);
+salutation = new QLineEdit();
+block0Layout->addRow("Salutation",salutation);
 birthdateordateoffoundation = new QDateEdit(QDate::currentDate());
 birthdateordateoffoundation->setCalendarPopup(true);
 birthdateordateoffoundation->setDisplayFormat("ddd dd/MM/yyyy");
@@ -250,8 +250,8 @@ block7Layout->removeRow(sender);
 void ContactUI::fill(Contact* contact){ 
 clear();
 this->contact = contact;
-salutation->setText(contact->Salutation);
 name->setText(contact->Name);
+salutation->setText(contact->Salutation);
 birthdateordateoffoundation->setDate(QDate::fromString(contact->BirthdateOrDateOfFoundation));
 number->setText(QString::number(contact->Number));
 address->setText(contact->Address);
@@ -295,9 +295,9 @@ if(child->parent()->parent()->parent() != 0)
 this->contact = new Contact();
 } 
 void ContactUI::selectContact(){ 
-if(Contact::GetStringList().contains(name->text()))
+if(Contact::GetStringList().contains(this->contact->Name))
 {
-Contact* con = Contact::Get(name->text());
+Contact* con = Contact::Get(this->contact->Name);
 if(this->contact->ContactID != con->ContactID){
 fill(con);
 }
@@ -308,21 +308,6 @@ clear();
 bool ContactUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(salutation->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Salutation Can't be Empty! \n";
-salutation->setObjectName("error");
-salutation->style()->unpolish(salutation);
-salutation->style()->polish(salutation);
-salutation->update();
-}
-else { 
-salutation->setObjectName("salutation");
-salutation->style()->unpolish(salutation);
-salutation->style()->polish(salutation);
-salutation->update();
-contact->Salutation = salutation->text().trimmed();
-}
 if(name->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Name Can't be Empty! \n";
@@ -337,6 +322,21 @@ name->style()->unpolish(name);
 name->style()->polish(name);
 name->update();
 contact->Name = name->text().trimmed();
+}
+if(salutation->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Salutation Can't be Empty! \n";
+salutation->setObjectName("error");
+salutation->style()->unpolish(salutation);
+salutation->style()->polish(salutation);
+salutation->update();
+}
+else { 
+salutation->setObjectName("salutation");
+salutation->style()->unpolish(salutation);
+salutation->style()->polish(salutation);
+salutation->update();
+contact->Salutation = salutation->text().trimmed();
 }
 if(birthdateordateoffoundation->text().trimmed().isEmpty()){
 errors = true;

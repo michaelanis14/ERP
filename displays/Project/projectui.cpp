@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ title->setText("");
 this->project = new Project();
 } 
 void ProjectUI::selectProject(){ 
-if(Project::GetStringList().contains(title->text()))
+if(Project::GetStringList().contains(this->project->Title))
 {
-Project* con = Project::Get(title->text());
+Project* con = Project::Get(this->project->Title);
 if(this->project->ProjectID != con->ProjectID){
 fill(con);
 }

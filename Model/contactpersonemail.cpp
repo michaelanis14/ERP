@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonemail.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -47,11 +47,12 @@ QString query =
 "(ContactPersonEmailID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (ContactPersonEmailID),"
 "Description VARCHAR(40) NOT NULL, "
+" KEY(Description),"
 "Email VARCHAR(40) NOT NULL, "
 "ContactPersonID INT NOT NULL, "
 "FOREIGN KEY (ContactPersonID) REFERENCES ContactPerson(ContactPersonID)  ON DELETE CASCADE,"
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

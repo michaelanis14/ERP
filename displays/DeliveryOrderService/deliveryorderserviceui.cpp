@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderserviceui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,8 +31,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 deliveryorder = new ERPComboBox();
 deliveryorder->addItems(DeliveryOrder::GetHashList());
 block0Layout->addRow("Delivery Order",deliveryorder);
@@ -61,19 +59,17 @@ DeliveryOrderServiceUI*DeliveryOrderServiceUI::GetUI(){
 void DeliveryOrderServiceUI::fill(DeliveryOrderService* deliveryorderservice){ 
 clear();
 this->deliveryorderservice = deliveryorderservice;
-title->setText(deliveryorderservice->Title);
 amount->setText(QString::number(deliveryorderservice->Amount));
 } 
 void DeliveryOrderServiceUI::clear(){ 
 delete this->deliveryorderservice;
-title->setText("");
 amount->setText("");
 this->deliveryorderservice = new DeliveryOrderService();
 } 
 void DeliveryOrderServiceUI::selectDeliveryOrderService(){ 
-if(DeliveryOrderService::GetStringList().contains(title->text()))
+if(DeliveryOrderService::GetStringList().contains(QString::number(this->deliveryorderservice->DeliveryOrderID)))
 {
-DeliveryOrderService* con = DeliveryOrderService::Get(title->text());
+DeliveryOrderService* con = DeliveryOrderService::Get(QString::number(this->deliveryorderservice->DeliveryOrderID));
 if(this->deliveryorderservice->DeliveryOrderServiceID != con->DeliveryOrderServiceID){
 fill(con);
 }
@@ -84,21 +80,6 @@ clear();
 bool DeliveryOrderServiceUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Can't be Empty! \n";
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-deliveryorderservice->Title = title->text().trimmed();
-}
 if(deliveryorderservice->DeliveryOrderID == 0) 
 deliveryorderservice->DeliveryOrderID = deliveryorder->getKey();
 if(deliveryorderservice->ServiceID == 0) 

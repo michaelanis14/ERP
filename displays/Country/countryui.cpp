@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: countryui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -63,9 +63,9 @@ delete this->country;
 this->country = new Country();
 } 
 void CountryUI::selectCountry(){ 
-if(Country::GetStringList().contains(name->text()))
+if(Country::GetStringList().contains(this->country->Name))
 {
-Country* con = Country::Get(name->text());
+Country* con = Country::Get(this->country->Name);
 if(this->country->CountryID != con->CountryID){
 fill(con);
 }

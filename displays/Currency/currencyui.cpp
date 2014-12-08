@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currencyui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->currency = new Currency();
 } 
 void CurrencyUI::selectCurrency(){ 
-if(Currency::GetStringList().contains(description->text()))
+if(Currency::GetStringList().contains(this->currency->Description))
 {
-Currency* con = Currency::Get(description->text());
+Currency* con = Currency::Get(this->currency->Description);
 if(this->currency->CurrencyID != con->CurrencyID){
 fill(con);
 }

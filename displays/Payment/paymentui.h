@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentui.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -35,7 +35,6 @@ public:
 	static PaymentUI* GetUI();
 	ERPFormBlock* block0Layout;
 	ERPComboBox*invoice;
-	QLineEdit*title;
 	QLineEdit*totalamount;
 	QLineEdit*comment;
 	ERPComboBox*paymenttype;

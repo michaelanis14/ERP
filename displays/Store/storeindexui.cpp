@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: storeindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ StoreIndexUI*StoreIndexUI::GetUI(){
 	return (StoreIndexUI*) p_instance; 
 }
 void StoreIndexUI::addRow(){ 
- StoreUI::ShowUI(); 
- StoreUI::GetUI()->fill(new Store()); 
- }
+ StoreUI::ShowUI();}
 void StoreIndexUI::editRow(){ 
  StoreUI::ShowUI(); 
  StoreUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

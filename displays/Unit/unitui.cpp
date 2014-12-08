@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unitui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->unit = new Unit();
 } 
 void UnitUI::selectUnit(){ 
-if(Unit::GetStringList().contains(description->text()))
+if(Unit::GetStringList().contains(this->unit->Description))
 {
-Unit* con = Unit::Get(description->text());
+Unit* con = Unit::Get(this->unit->Description);
 if(this->unit->UnitID != con->UnitID){
 fill(con);
 }

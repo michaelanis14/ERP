@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproductui.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -36,7 +36,6 @@ public:
 	static void ShowUI();
 	static PurchaseStoreProductUI* GetUI();
 	ERPFormBlock* block0Layout;
-	QLineEdit*title;
 	ERPComboBox*store;
 	ERPComboBox*purchase;
 	ERPComboBox*contact;

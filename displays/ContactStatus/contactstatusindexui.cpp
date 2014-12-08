@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactstatusindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ ContactStatusIndexUI*ContactStatusIndexUI::GetUI(){
 	return (ContactStatusIndexUI*) p_instance; 
 }
 void ContactStatusIndexUI::addRow(){ 
- ContactStatusUI::ShowUI(); 
- ContactStatusUI::GetUI()->fill(new ContactStatus()); 
- }
+ ContactStatusUI::ShowUI();}
 void ContactStatusIndexUI::editRow(){ 
  ContactStatusUI::ShowUI(); 
  ContactStatusUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

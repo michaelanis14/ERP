@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,8 +11,8 @@ Contact::Contact()
  : QSqlRelationalTableModel(){
 
 this->ContactID = 0 ;
-this->Salutation = "";
 this->Name = "";
+this->Salutation = "";
 this->BirthdateOrDateOfFoundation = "";
 this->ContactTypeID = 0 ;
 this->ContactClassID = 0 ;
@@ -35,10 +35,10 @@ this->setRelation(10, QSqlRelation("Country", "CountryID", "Name"));
 this->setRelation(11, QSqlRelation("ContactStatus", "ContactStatusID", "Description"));
 this->setRelation(12, QSqlRelation("Employee", "EmployeeID", "Name"));
 }
-Contact::Contact(int ContactID,QString Salutation,QString Name,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Contact::Contact(int ContactID,QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ContactID = ContactID ;
-this->Salutation = Salutation ;
 this->Name = Name ;
+this->Salutation = Salutation ;
 this->BirthdateOrDateOfFoundation = BirthdateOrDateOfFoundation ;
 this->ContactTypeID = ContactTypeID ;
 this->ContactClassID = ContactClassID ;
@@ -55,10 +55,10 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-Contact::Contact(QString Salutation,QString Name,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Contact::Contact(QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ContactID = 0 ;
-this->Salutation = Salutation ;
 this->Name = Name ;
+this->Salutation = Salutation ;
 this->BirthdateOrDateOfFoundation = BirthdateOrDateOfFoundation ;
 this->ContactTypeID = ContactTypeID ;
 this->ContactClassID = ContactClassID ;
@@ -82,8 +82,9 @@ QString table = "Contact";
 QString query =
 "(ContactID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (ContactID),"
-"Salutation VARCHAR(40) NOT NULL, "
 "Name VARCHAR(40) NOT NULL, "
+" KEY(Name),"
+"Salutation VARCHAR(40) NOT NULL, "
 "BirthdateOrDateOfFoundation VARCHAR(40) NOT NULL, "
 "ContactTypeID INT NOT NULL, "
 "FOREIGN KEY (ContactTypeID) REFERENCES ContactType(ContactTypeID)  ON DELETE CASCADE,"
@@ -102,7 +103,7 @@ QString query =
 "Website VARCHAR(40) NOT NULL, "
 "TaxNumber VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -119,10 +120,10 @@ bool Contact::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(ContactID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO Contact (Salutation,Name,BirthdateOrDateOfFoundation,ContactTypeID,ContactClassID,Number,Address,PostalCode,City,CountryID,ContactStatusID,EmployeeID,Website,TaxNumber,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Salutation)+"','"+QString(this->Name)+"','"+QString(this->BirthdateOrDateOfFoundation)+"','"+QString::number(this->ContactTypeID)+"','"+QString::number(this->ContactClassID)+"','"+QString::number(this->Number)+"','"+QString(this->Address)+"','"+QString(this->PostalCode)+"','"+QString(this->City)+"','"+QString::number(this->CountryID)+"','"+QString::number(this->ContactStatusID)+"','"+QString::number(this->EmployeeID)+"','"+QString(this->Website)+"','"+QString(this->TaxNumber)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO Contact (Name,Salutation,BirthdateOrDateOfFoundation,ContactTypeID,ContactClassID,Number,Address,PostalCode,City,CountryID,ContactStatusID,EmployeeID,Website,TaxNumber,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Name)+"','"+QString(this->Salutation)+"','"+QString(this->BirthdateOrDateOfFoundation)+"','"+QString::number(this->ContactTypeID)+"','"+QString::number(this->ContactClassID)+"','"+QString::number(this->Number)+"','"+QString(this->Address)+"','"+QString(this->PostalCode)+"','"+QString(this->City)+"','"+QString::number(this->CountryID)+"','"+QString::number(this->ContactStatusID)+"','"+QString::number(this->EmployeeID)+"','"+QString(this->Website)+"','"+QString(this->TaxNumber)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Contact SET "	"Salutation = '"+QString(this->Salutation)+"',"+"Name = '"+QString(this->Name)+"',"+"BirthdateOrDateOfFoundation = '"+QString(this->BirthdateOrDateOfFoundation)+"',"+"ContactTypeID = '"+QString::number(this->ContactTypeID)+"',"+"ContactClassID = '"+QString::number(this->ContactClassID)+"',"+"Number = '"+QString::number(this->Number)+"',"+"Address = '"+QString(this->Address)+"',"+"PostalCode = '"+QString(this->PostalCode)+"',"+"City = '"+QString(this->City)+"',"+"CountryID = '"+QString::number(this->CountryID)+"',"+"ContactStatusID = '"+QString::number(this->ContactStatusID)+"',"+"EmployeeID = '"+QString::number(this->EmployeeID)+"',"+"Website = '"+QString(this->Website)+"',"+"TaxNumber = '"+QString(this->TaxNumber)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactID ='"+QString::number(this->ContactID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Contact SET "	"Name = '"+QString(this->Name)+"',"+"Salutation = '"+QString(this->Salutation)+"',"+"BirthdateOrDateOfFoundation = '"+QString(this->BirthdateOrDateOfFoundation)+"',"+"ContactTypeID = '"+QString::number(this->ContactTypeID)+"',"+"ContactClassID = '"+QString::number(this->ContactClassID)+"',"+"Number = '"+QString::number(this->Number)+"',"+"Address = '"+QString(this->Address)+"',"+"PostalCode = '"+QString(this->PostalCode)+"',"+"City = '"+QString(this->City)+"',"+"CountryID = '"+QString::number(this->CountryID)+"',"+"ContactStatusID = '"+QString::number(this->ContactStatusID)+"',"+"EmployeeID = '"+QString::number(this->EmployeeID)+"',"+"Website = '"+QString(this->Website)+"',"+"TaxNumber = '"+QString(this->TaxNumber)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactID ='"+QString::number(this->ContactID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactID FROM Contact WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
@@ -207,8 +208,8 @@ QList<Contact*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact"
 "WHERE" 
-"Salutation LIKE '%"+keyword+"%'"
-"OR Name LIKE '%"+keyword+"%'"
+"Name LIKE '%"+keyword+"%'"
+"OR Salutation LIKE '%"+keyword+"%'"
 "OR BirthdateOrDateOfFoundation LIKE '%"+keyword+"%'"
 "OR Address LIKE '%"+keyword+"%'"
 "OR PostalCode LIKE '%"+keyword+"%'"
@@ -287,9 +288,9 @@ int id = data(primaryKeyIndex).toInt();
 bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
-ok = setSalutation(id, value.toString());
-else if (index.column() == 2)
 ok = setName(id, value.toString());
+else if (index.column() == 2)
+ok = setSalutation(id, value.toString());
 else if (index.column() == 3)
 ok = setBirthdateOrDateOfFoundation(id, value.toString());
 else if (index.column() == 4)
@@ -335,8 +336,8 @@ return ok;
 void Contact::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() Contact!";
-this->setHeaderData(1, Qt::Horizontal, QObject::tr("Salutation"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Name"));
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Name"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Salutation"));
 this->setHeaderData(3, Qt::Horizontal, QObject::tr("Birthdate Or Date Of Foundation"));
 this->setHeaderData(4, Qt::Horizontal, QObject::tr("Contact Type"));
 this->setHeaderData(5, Qt::Horizontal, QObject::tr("Contact Class"));
@@ -355,19 +356,19 @@ this->setHeaderData(20, Qt::Horizontal, QObject::tr("Edited On"));
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
 }
-bool Contact::setSalutation(int ContactID, const QString &Salutation) {
+bool Contact::setName(int ContactID, const QString &Name) {
 QSqlQuery query;
-query.prepare("update Contact set Salutation = ? where ContactID = ?");
-query.addBindValue(Salutation);
+query.prepare("update Contact set Name = ? where ContactID = ?");
+query.addBindValue(Name);
 query.addBindValue(ContactID);
 if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
-bool Contact::setName(int ContactID, const QString &Name) {
+bool Contact::setSalutation(int ContactID, const QString &Salutation) {
 QSqlQuery query;
-query.prepare("update Contact set Name = ? where ContactID = ?");
-query.addBindValue(Name);
+query.prepare("update Contact set Salutation = ? where ContactID = ?");
+query.addBindValue(Salutation);
 query.addBindValue(ContactID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

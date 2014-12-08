@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: companyui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -71,9 +71,9 @@ footer->setText("");
 this->company = new Company();
 } 
 void CompanyUI::selectCompany(){ 
-if(Company::GetStringList().contains(name->text()))
+if(Company::GetStringList().contains(this->company->Name))
 {
-Company* con = Company::Get(name->text());
+Company* con = Company::Get(this->company->Name);
 if(this->company->CompanyID != con->CompanyID){
 fill(con);
 }

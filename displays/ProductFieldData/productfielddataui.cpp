@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfielddataui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -65,9 +65,9 @@ value->setText("");
 this->productfielddata = new ProductFieldData();
 } 
 void ProductFieldDataUI::selectProductFieldData(){ 
-if(ProductFieldData::GetStringList().contains(value->text()))
+if(ProductFieldData::GetStringList().contains(QString::number(this->productfielddata->ProductID)))
 {
-ProductFieldData* con = ProductFieldData::Get(value->text());
+ProductFieldData* con = ProductFieldData::Get(QString::number(this->productfielddata->ProductID));
 if(this->productfielddata->ProductFieldDataID != con->ProductFieldDataID){
 fill(con);
 }

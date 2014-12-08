@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedateindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ InvoiceStateDateIndexUI*InvoiceStateDateIndexUI::GetUI(){
 	return (InvoiceStateDateIndexUI*) p_instance; 
 }
 void InvoiceStateDateIndexUI::addRow(){ 
- InvoiceStateDateUI::ShowUI(); 
- InvoiceStateDateUI::GetUI()->fill(new InvoiceStateDate()); 
- }
+ InvoiceStateDateUI::ShowUI();}
 void InvoiceStateDateIndexUI::editRow(){ 
  InvoiceStateDateUI::ShowUI(); 
  InvoiceStateDateUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

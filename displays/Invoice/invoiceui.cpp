@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,8 +31,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 creationdate = new QDateEdit(QDate::currentDate());
 creationdate->setCalendarPopup(true);
 creationdate->setDisplayFormat("ddd dd/MM/yyyy");
@@ -176,7 +174,6 @@ block0Layout->removeRow(sender);
 void InvoiceUI::fill(Invoice* invoice){ 
 clear();
 this->invoice = invoice;
-title->setText(invoice->Title);
 creationdate->setDate(QDate::fromString(invoice->CreationDate));
 enddate->setDate(QDate::fromString(invoice->EndDate));
 duedate->setDate(QDate::fromString(invoice->DueDate));
@@ -199,7 +196,6 @@ delete this->invoice;
 this->InvoiceStateDates.clear();
 this->InvoiceFreelines.clear();
 this->Payments.clear();
-title->setText("");
 creationdate->setDate(QDate::currentDate());
 enddate->setDate(QDate::currentDate());
 duedate->setDate(QDate::currentDate());
@@ -216,9 +212,9 @@ if(child->parent()->parent()->parent() != 0)
 this->invoice = new Invoice();
 } 
 void InvoiceUI::selectInvoice(){ 
-if(Invoice::GetStringList().contains(title->text()))
+if(Invoice::GetStringList().contains(this->invoice->CreationDate))
 {
-Invoice* con = Invoice::Get(title->text());
+Invoice* con = Invoice::Get(this->invoice->CreationDate);
 if(this->invoice->InvoiceID != con->InvoiceID){
 fill(con);
 }
@@ -229,21 +225,6 @@ clear();
 bool InvoiceUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Can't be Empty! \n";
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-invoice->Title = title->text().trimmed();
-}
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Creation Date Can't be Empty! \n";
@@ -325,21 +306,6 @@ allowance->style()->polish(allowance);
 allowance->update();
 invoice->Allowance = allowance->text().trimmed().toDouble();
 }
-for(int j = 0; j < InvoiceStateDates.length(); j++){
-InvoiceStateDates.at(j)->title->setObjectName("title");
-InvoiceStateDates.at(j)->title->style()->unpolish(InvoiceStateDates.at(j)->title);
-InvoiceStateDates.at(j)->title->style()->polish(InvoiceStateDates.at(j)->title);
-InvoiceStateDates.at(j)->title->update();
-for(int w = 0; w < InvoiceStateDates.length(); w++){
-if(InvoiceStateDates.at(j) != InvoiceStateDates.at(w))
-if(InvoiceStateDates.at(j)->title->text() == InvoiceStateDates.at(w)->title->text()){
-errors = true; 
- errorString += "InvoiceStateDate has the same title \n";
-InvoiceStateDates.at(j)->title->setObjectName("error");
-InvoiceStateDates.at(j)->title->style()->unpolish(InvoiceStateDates.at(j)->title);
-InvoiceStateDates.at(j)->title->style()->polish(InvoiceStateDates.at(j)->title);
-InvoiceStateDates.at(j)->title->update();
-}}}
 for(int j = 0; j < InvoiceFreelines.length(); j++){
 InvoiceFreelines.at(j)->description->setObjectName("description");
 InvoiceFreelines.at(j)->description->style()->unpolish(InvoiceFreelines.at(j)->description);
@@ -354,21 +320,6 @@ InvoiceFreelines.at(j)->description->setObjectName("error");
 InvoiceFreelines.at(j)->description->style()->unpolish(InvoiceFreelines.at(j)->description);
 InvoiceFreelines.at(j)->description->style()->polish(InvoiceFreelines.at(j)->description);
 InvoiceFreelines.at(j)->description->update();
-}}}
-for(int j = 0; j < Payments.length(); j++){
-Payments.at(j)->title->setObjectName("title");
-Payments.at(j)->title->style()->unpolish(Payments.at(j)->title);
-Payments.at(j)->title->style()->polish(Payments.at(j)->title);
-Payments.at(j)->title->update();
-for(int w = 0; w < Payments.length(); w++){
-if(Payments.at(j) != Payments.at(w))
-if(Payments.at(j)->title->text() == Payments.at(w)->title->text()){
-errors = true; 
- errorString += "Payment has the same title \n";
-Payments.at(j)->title->setObjectName("error");
-Payments.at(j)->title->style()->unpolish(Payments.at(j)->title);
-Payments.at(j)->title->style()->polish(Payments.at(j)->title);
-Payments.at(j)->title->update();
 }}}
 if(header->text().trimmed().isEmpty()){
 errors = true;

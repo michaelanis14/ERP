@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -20,9 +20,9 @@ class Contact  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Contact();
-	Contact(QString Salutation,QString Name,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
-	QString Salutation;
+	Contact(QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
 	QString Name;
+	QString Salutation;
 	QString BirthdateOrDateOfFoundation;
 	int ContactTypeID;
 	int ContactClassID;
@@ -61,9 +61,9 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Contact(int ContactID,QString Salutation,QString Name,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
-	bool setSalutation(int ContactID, const QString &Salutation);
+	Contact(int ContactID,QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
 	bool setName(int ContactID, const QString &Name);
+	bool setSalutation(int ContactID, const QString &Salutation);
 	bool setBirthdateOrDateOfFoundation(int ContactID, const QString &BirthdateOrDateOfFoundation);
 	bool setContactTypeID(int ContactID, const QString &ContactTypeID);
 	bool setContactClassID(int ContactID, const QString &ContactClassID);

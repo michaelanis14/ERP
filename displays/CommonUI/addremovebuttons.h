@@ -9,7 +9,7 @@
 
 #include <QtGui/QtGui>
 #include <QWidget>
-#include <QLabel>
+#include <QPushButton>
 #include <QHBoxLayout>
 
 class AddRemoveButtons : public QWidget
@@ -20,11 +20,13 @@ public:
 
 private:
 	QHBoxLayout *layout;
-	QLabel* add;
-	QLabel* remove;
+	QPushButton* add;
 protected:
-	void mousePressEvent(QMouseEvent *event);
-	void mouseReleaseEvent(QMouseEvent *event);
+
+
+public slots:
+	void addPress();
+
 signals:
 	void addPressed();
 	void removePressed();

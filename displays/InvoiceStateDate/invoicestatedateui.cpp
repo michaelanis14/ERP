@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedateui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -30,8 +30,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 invoice = new ERPComboBox();
 invoice->addItems(Invoice::GetHashList());
 block0Layout->addRow("Invoice",invoice);
@@ -61,19 +59,17 @@ InvoiceStateDateUI*InvoiceStateDateUI::GetUI(){
 void InvoiceStateDateUI::fill(InvoiceStateDate* invoicestatedate){ 
 clear();
 this->invoicestatedate = invoicestatedate;
-title->setText(invoicestatedate->Title);
 date->setDate(QDate::fromString(invoicestatedate->Date));
 } 
 void InvoiceStateDateUI::clear(){ 
 delete this->invoicestatedate;
-title->setText("");
 date->setDate(QDate::currentDate());
 this->invoicestatedate = new InvoiceStateDate();
 } 
 void InvoiceStateDateUI::selectInvoiceStateDate(){ 
-if(InvoiceStateDate::GetStringList().contains(title->text()))
+if(InvoiceStateDate::GetStringList().contains(QString::number(this->invoicestatedate->InvoiceID)))
 {
-InvoiceStateDate* con = InvoiceStateDate::Get(title->text());
+InvoiceStateDate* con = InvoiceStateDate::Get(QString::number(this->invoicestatedate->InvoiceID));
 if(this->invoicestatedate->InvoiceStateDateID != con->InvoiceStateDateID){
 fill(con);
 }
@@ -84,21 +80,6 @@ clear();
 bool InvoiceStateDateUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Can't be Empty! \n";
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-invoicestatedate->Title = title->text().trimmed();
-}
 if(invoicestatedate->InvoiceID == 0) 
 invoicestatedate->InvoiceID = invoice->getKey();
 if(invoicestatedate->InvoiceStateID == 0) 

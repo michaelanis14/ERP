@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchaseui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -30,8 +30,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 creationdate = new QDateEdit(QDate::currentDate());
 creationdate->setCalendarPopup(true);
 creationdate->setDisplayFormat("ddd dd/MM/yyyy");
@@ -90,7 +88,6 @@ block0Layout->removeRow(sender);
 void PurchaseUI::fill(Purchase* purchase){ 
 clear();
 this->purchase = purchase;
-title->setText(purchase->Title);
 creationdate->setDate(QDate::fromString(purchase->CreationDate));
 deliverydate->setDate(QDate::fromString(purchase->DeliveryDate));
 foreach(PurchaseStoreProduct* purchasestoreproduct, purchase->purchasestoreproducts) {
@@ -100,7 +97,6 @@ addPurchaseStoreProduct(purchasestoreproduct);
 void PurchaseUI::clear(){ 
 delete this->purchase;
 this->PurchaseStoreProducts.clear();
-title->setText("");
 creationdate->setDate(QDate::currentDate());
 deliverydate->setDate(QDate::currentDate());
 QList<RemovebtnWidgets *> RWidgets = this->findChildren<RemovebtnWidgets *>();
@@ -112,9 +108,9 @@ if(child->parent()->parent()->parent() != 0)
 this->purchase = new Purchase();
 } 
 void PurchaseUI::selectPurchase(){ 
-if(Purchase::GetStringList().contains(title->text()))
+if(Purchase::GetStringList().contains(this->purchase->CreationDate))
 {
-Purchase* con = Purchase::Get(title->text());
+Purchase* con = Purchase::Get(this->purchase->CreationDate);
 if(this->purchase->PurchaseID != con->PurchaseID){
 fill(con);
 }
@@ -125,21 +121,6 @@ clear();
 bool PurchaseUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Can't be Empty! \n";
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-purchase->Title = title->text().trimmed();
-}
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Creation Date Can't be Empty! \n";
@@ -170,21 +151,6 @@ deliverydate->style()->polish(deliverydate);
 deliverydate->update();
 purchase->DeliveryDate = deliverydate->text().trimmed();
 }
-for(int j = 0; j < PurchaseStoreProducts.length(); j++){
-PurchaseStoreProducts.at(j)->title->setObjectName("title");
-PurchaseStoreProducts.at(j)->title->style()->unpolish(PurchaseStoreProducts.at(j)->title);
-PurchaseStoreProducts.at(j)->title->style()->polish(PurchaseStoreProducts.at(j)->title);
-PurchaseStoreProducts.at(j)->title->update();
-for(int w = 0; w < PurchaseStoreProducts.length(); w++){
-if(PurchaseStoreProducts.at(j) != PurchaseStoreProducts.at(w))
-if(PurchaseStoreProducts.at(j)->title->text() == PurchaseStoreProducts.at(w)->title->text()){
-errors = true; 
- errorString += "PurchaseStoreProduct has the same title \n";
-PurchaseStoreProducts.at(j)->title->setObjectName("error");
-PurchaseStoreProducts.at(j)->title->style()->unpolish(PurchaseStoreProducts.at(j)->title);
-PurchaseStoreProducts.at(j)->title->style()->polish(PurchaseStoreProducts.at(j)->title);
-PurchaseStoreProducts.at(j)->title->update();
-}}}
 if(!errors) {
 purchase->save();
 for(int i = 0; i < PurchaseStoreProducts.length(); i++){

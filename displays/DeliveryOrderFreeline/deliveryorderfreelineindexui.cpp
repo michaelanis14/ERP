@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreelineindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ DeliveryOrderFreelineIndexUI*DeliveryOrderFreelineIndexUI::GetUI(){
 	return (DeliveryOrderFreelineIndexUI*) p_instance; 
 }
 void DeliveryOrderFreelineIndexUI::addRow(){ 
- DeliveryOrderFreelineUI::ShowUI(); 
- DeliveryOrderFreelineUI::GetUI()->fill(new DeliveryOrderFreeline()); 
- }
+ DeliveryOrderFreelineUI::ShowUI();}
 void DeliveryOrderFreelineIndexUI::editRow(){ 
  DeliveryOrderFreelineUI::ShowUI(); 
  DeliveryOrderFreelineUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

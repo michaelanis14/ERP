@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currencyindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ CurrencyIndexUI*CurrencyIndexUI::GetUI(){
 	return (CurrencyIndexUI*) p_instance; 
 }
 void CurrencyIndexUI::addRow(){ 
- CurrencyUI::ShowUI(); 
- CurrencyUI::GetUI()->fill(new Currency()); 
- }
+ CurrencyUI::ShowUI();}
 void CurrencyIndexUI::editRow(){ 
  CurrencyUI::ShowUI(); 
  CurrencyUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

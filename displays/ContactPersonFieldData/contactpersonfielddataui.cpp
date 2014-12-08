@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonfielddataui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -65,9 +65,9 @@ value->setText("");
 this->contactpersonfielddata = new ContactPersonFieldData();
 } 
 void ContactPersonFieldDataUI::selectContactPersonFieldData(){ 
-if(ContactPersonFieldData::GetStringList().contains(value->text()))
+if(ContactPersonFieldData::GetStringList().contains(QString::number(this->contactpersonfielddata->ContactPersonID)))
 {
-ContactPersonFieldData* con = ContactPersonFieldData::Get(value->text());
+ContactPersonFieldData* con = ContactPersonFieldData::Get(QString::number(this->contactpersonfielddata->ContactPersonID));
 if(this->contactpersonfielddata->ContactPersonFieldDataID != con->ContactPersonFieldDataID){
 fill(con);
 }

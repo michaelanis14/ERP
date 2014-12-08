@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreeline.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,8 +11,8 @@ InvoiceFreeline::InvoiceFreeline()
  : QSqlRelationalTableModel(){
 
 this->InvoiceFreelineID = 0 ;
-this->InvoiceID = 0 ;
 this->Description = "";
+this->InvoiceID = 0 ;
 this->Price = 0 ;
 this->TaxID = 0 ;
 this->Amount = 0 ;
@@ -20,13 +20,12 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("InvoiceFreeline");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(1, QSqlRelation("Invoice", "InvoiceID", "Title"));
 this->setRelation(4, QSqlRelation("Tax", "TaxID", "Title"));
 }
-InvoiceFreeline::InvoiceFreeline(int InvoiceFreelineID,int InvoiceID,QString Description,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+InvoiceFreeline::InvoiceFreeline(int InvoiceFreelineID,QString Description,int InvoiceID,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->InvoiceFreelineID = InvoiceFreelineID ;
-this->InvoiceID = InvoiceID ;
 this->Description = Description ;
+this->InvoiceID = InvoiceID ;
 this->Price = Price ;
 this->TaxID = TaxID ;
 this->Amount = Amount ;
@@ -34,10 +33,10 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-InvoiceFreeline::InvoiceFreeline(int InvoiceID,QString Description,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+InvoiceFreeline::InvoiceFreeline(QString Description,int InvoiceID,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->InvoiceFreelineID = 0 ;
-this->InvoiceID = InvoiceID ;
 this->Description = Description ;
+this->InvoiceID = InvoiceID ;
 this->Price = Price ;
 this->TaxID = TaxID ;
 this->Amount = Amount ;
@@ -52,15 +51,16 @@ QString table = "InvoiceFreeline";
 QString query =
 "(InvoiceFreelineID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (InvoiceFreelineID),"
+"Description VARCHAR(40) NOT NULL, "
+" KEY(Description),"
 "InvoiceID INT NOT NULL, "
 "FOREIGN KEY (InvoiceID) REFERENCES Invoice(InvoiceID)  ON DELETE CASCADE,"
-"Description VARCHAR(40) NOT NULL, "
 "Price DECIMAL(6,2) NOT NULL, "
 "TaxID INT NOT NULL, "
 "FOREIGN KEY (TaxID) REFERENCES Tax(TaxID)  ON DELETE CASCADE,"
 "Amount DECIMAL(6,2) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -77,10 +77,10 @@ bool InvoiceFreeline::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(InvoiceFreelineID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO InvoiceFreeline (InvoiceID,Description,Price,TaxID,Amount,CreatedOn,EditedOn)"
-"VALUES ('" +QString::number(this->InvoiceID)+"','"+QString(this->Description)+"','"+QString::number(this->Price)+"','"+QString::number(this->TaxID)+"','"+QString::number(this->Amount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO InvoiceFreeline (Description,InvoiceID,Price,TaxID,Amount,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Description)+"','"+QString::number(this->InvoiceID)+"','"+QString::number(this->Price)+"','"+QString::number(this->TaxID)+"','"+QString::number(this->Amount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE InvoiceFreeline SET "	"InvoiceID = '"+QString::number(this->InvoiceID)+"',"+"Description = '"+QString(this->Description)+"',"+"Price = '"+QString::number(this->Price)+"',"+"TaxID = '"+QString::number(this->TaxID)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE InvoiceFreelineID ='"+QString::number(this->InvoiceFreelineID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE InvoiceFreeline SET "	"Description = '"+QString(this->Description)+"',"+"InvoiceID = '"+QString::number(this->InvoiceID)+"',"+"Price = '"+QString::number(this->Price)+"',"+"TaxID = '"+QString::number(this->TaxID)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE InvoiceFreelineID ='"+QString::number(this->InvoiceFreelineID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  InvoiceFreelineID FROM InvoiceFreeline WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
@@ -103,7 +103,7 @@ if(InvoiceFreelineID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceFreeline"
 "WHERE InvoiceFreelineID ='"+QString::number(this->InvoiceFreelineID)+"'"));
 while (query.next()) {
-return new InvoiceFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+return new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
  }
 
 }
@@ -114,7 +114,7 @@ QList<InvoiceFreeline*> InvoiceFreeline::GetAll() {
 	QList<InvoiceFreeline*> invoicefreelines =   QList<InvoiceFreeline*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceFreeline"));
 	while (query.next()) {
-invoicefreelines.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+invoicefreelines.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
 	}
 qStableSort(invoicefreelines.begin(),invoicefreelines.end());
 	return invoicefreelines;
@@ -125,7 +125,7 @@ InvoiceFreeline* invoicefreeline = new InvoiceFreeline();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceFreeline WHERE InvoiceFreelineID = '"+QString::number(id)+"'"));
 while (query.next()) {
-invoicefreeline = new InvoiceFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+invoicefreeline = new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
  }
 
 }
@@ -144,7 +144,7 @@ InvoiceFreeline* invoicefreeline = new InvoiceFreeline();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceFreeline WHERE Description = '"+name+"'"));
 while (query.next()) {
-invoicefreeline = new InvoiceFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+invoicefreeline = new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
 
  }
 
@@ -162,7 +162,7 @@ QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceFree
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+list.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
  }
 
 }
@@ -206,7 +206,7 @@ QList<InvoiceFreeline*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceFreeline WHERE "+select+"" ));
 while (query.next()) {
-list.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+list.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
  }
 
 }
@@ -230,9 +230,9 @@ int id = data(primaryKeyIndex).toInt();
 bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
-ok = setInvoiceID(id, value.toString());
-else if (index.column() == 2)
 ok = setDescription(id, value.toString());
+else if (index.column() == 2)
+ok = setInvoiceID(id, value.toString());
 else if (index.column() == 3)
 ok = setPrice(id, value.toString());
 else if (index.column() == 4)
@@ -260,8 +260,8 @@ return ok;
 void InvoiceFreeline::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() InvoiceFreeline!";
-this->setHeaderData(1, Qt::Horizontal, QObject::tr("Invoice"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Description"));
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Description"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Invoice"));
 this->setHeaderData(3, Qt::Horizontal, QObject::tr("Price"));
 this->setHeaderData(4, Qt::Horizontal, QObject::tr("Tax"));
 this->setHeaderData(5, Qt::Horizontal, QObject::tr("Amount"));
@@ -271,19 +271,19 @@ this->setHeaderData(7, Qt::Horizontal, QObject::tr("Edited On"));
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
 }
-bool InvoiceFreeline::setInvoiceID(int InvoiceFreelineID, const QString &InvoiceID) {
+bool InvoiceFreeline::setDescription(int InvoiceFreelineID, const QString &Description) {
 QSqlQuery query;
-query.prepare("update InvoiceFreeline set InvoiceID = ? where InvoiceFreelineID = ?");
-query.addBindValue(InvoiceID);
+query.prepare("update InvoiceFreeline set Description = ? where InvoiceFreelineID = ?");
+query.addBindValue(Description);
 query.addBindValue(InvoiceFreelineID);
 if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
-bool InvoiceFreeline::setDescription(int InvoiceFreelineID, const QString &Description) {
+bool InvoiceFreeline::setInvoiceID(int InvoiceFreelineID, const QString &InvoiceID) {
 QSqlQuery query;
-query.prepare("update InvoiceFreeline set Description = ? where InvoiceFreelineID = ?");
-query.addBindValue(Description);
+query.prepare("update InvoiceFreeline set InvoiceID = ? where InvoiceFreelineID = ?");
+query.addBindValue(InvoiceID);
 query.addBindValue(InvoiceFreelineID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorder.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -68,6 +68,7 @@ QString query =
 "(DeliveryOrderID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (DeliveryOrderID),"
 "Title VARCHAR(40) NOT NULL, "
+" KEY(Title),"
 "Number INT NOT NULL, "
 "DeliveryOrderStatusID INT NOT NULL, "
 "FOREIGN KEY (DeliveryOrderStatusID) REFERENCES DeliveryOrderStatus(DeliveryOrderStatusID)  ON DELETE CASCADE,"
@@ -80,7 +81,7 @@ QString query =
 "Footer VARCHAR(40) NOT NULL, "
 "DeliveryAddress VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

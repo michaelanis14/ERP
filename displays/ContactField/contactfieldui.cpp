@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfieldui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -30,11 +30,11 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
+description = new QLineEdit();
+block0Layout->addRow("Description",description);
 fieldtype = new ERPComboBox();
 fieldtype->addItems(FieldType::GetHashList());
 block0Layout->addRow("Field Type",fieldtype);
-description = new QLineEdit();
-block0Layout->addRow("Description",description);
 defaults = new QCheckBox();
 block0Layout->addRow("Defaults",defaults);
 flowLayout->addWidget(block0Layout);
@@ -66,9 +66,9 @@ defaults->setChecked(false);
 this->contactfield = new ContactField();
 } 
 void ContactFieldUI::selectContactField(){ 
-if(ContactField::GetStringList().contains(description->text()))
+if(ContactField::GetStringList().contains(this->contactfield->Description))
 {
-ContactField* con = ContactField::Get(description->text());
+ContactField* con = ContactField::Get(this->contactfield->Description);
 if(this->contactfield->ContactFieldID != con->ContactFieldID){
 fill(con);
 }
@@ -79,8 +79,6 @@ clear();
 bool ContactFieldUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(contactfield->FieldTypeID == 0) 
-contactfield->FieldTypeID = fieldtype->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Description Can't be Empty! \n";
@@ -96,6 +94,8 @@ description->style()->polish(description);
 description->update();
 contactfield->Description = description->text().trimmed();
 }
+if(contactfield->FieldTypeID == 0) 
+contactfield->FieldTypeID = fieldtype->getKey();
 contactfield->Defaults = defaults->text().trimmed().toInt();
 if(!errors) {
 contactfield->save();

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproductui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,8 +31,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 store = new ERPComboBox();
 store->addItems(Store::GetHashList());
 block0Layout->addRow("Store",store);
@@ -67,19 +65,17 @@ PurchaseStoreProductUI*PurchaseStoreProductUI::GetUI(){
 void PurchaseStoreProductUI::fill(PurchaseStoreProduct* purchasestoreproduct){ 
 clear();
 this->purchasestoreproduct = purchasestoreproduct;
-title->setText(purchasestoreproduct->Title);
 amount->setText(QString::number(purchasestoreproduct->Amount));
 } 
 void PurchaseStoreProductUI::clear(){ 
 delete this->purchasestoreproduct;
-title->setText("");
 amount->setText("");
 this->purchasestoreproduct = new PurchaseStoreProduct();
 } 
 void PurchaseStoreProductUI::selectPurchaseStoreProduct(){ 
-if(PurchaseStoreProduct::GetStringList().contains(title->text()))
+if(PurchaseStoreProduct::GetStringList().contains(QString::number(this->purchasestoreproduct->StoreID)))
 {
-PurchaseStoreProduct* con = PurchaseStoreProduct::Get(title->text());
+PurchaseStoreProduct* con = PurchaseStoreProduct::Get(QString::number(this->purchasestoreproduct->StoreID));
 if(this->purchasestoreproduct->PurchaseStoreProductID != con->PurchaseStoreProductID){
 fill(con);
 }
@@ -90,21 +86,6 @@ clear();
 bool PurchaseStoreProductUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Can't be Empty! \n";
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-purchasestoreproduct->Title = title->text().trimmed();
-}
 if(purchasestoreproduct->StoreID == 0) 
 purchasestoreproduct->StoreID = store->getKey();
 if(purchasestoreproduct->PurchaseID == 0) 

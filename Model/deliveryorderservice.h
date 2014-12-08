@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderservice.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,8 +16,7 @@ class DeliveryOrderService  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	DeliveryOrderService();
-	DeliveryOrderService(QString Title,int DeliveryOrderID,int ServiceID,double Amount,QString CreatedOn,QString EditedOn);	int DeliveryOrderServiceID;
-	QString Title;
+	DeliveryOrderService(int DeliveryOrderID,int ServiceID,double Amount,QString CreatedOn,QString EditedOn);	int DeliveryOrderServiceID;
 	int DeliveryOrderID;
 	int ServiceID;
 	double Amount;
@@ -43,8 +42,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	DeliveryOrderService(int DeliveryOrderServiceID,QString Title,int DeliveryOrderID,int ServiceID,double Amount,QString CreatedOn,QString EditedOn);	static DeliveryOrderService* p_instance;
-	bool setTitle(int DeliveryOrderServiceID, const QString &Title);
+	DeliveryOrderService(int DeliveryOrderServiceID,int DeliveryOrderID,int ServiceID,double Amount,QString CreatedOn,QString EditedOn);	static DeliveryOrderService* p_instance;
 	bool setDeliveryOrderID(int DeliveryOrderServiceID, const QString &DeliveryOrderID);
 	bool setServiceID(int DeliveryOrderServiceID, const QString &ServiceID);
 	bool setAmount(int DeliveryOrderServiceID, const QString &Amount);

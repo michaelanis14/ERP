@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceyearui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->invoiceyear = new InvoiceYear();
 } 
 void InvoiceYearUI::selectInvoiceYear(){ 
-if(InvoiceYear::GetStringList().contains(description->text()))
+if(InvoiceYear::GetStringList().contains(this->invoiceyear->Description))
 {
-InvoiceYear* con = InvoiceYear::Get(description->text());
+InvoiceYear* con = InvoiceYear::Get(this->invoiceyear->Description);
 if(this->invoiceyear->InvoiceYearID != con->InvoiceYearID){
 fill(con);
 }

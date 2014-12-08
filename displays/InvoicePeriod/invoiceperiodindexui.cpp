@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceperiodindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ InvoicePeriodIndexUI*InvoicePeriodIndexUI::GetUI(){
 	return (InvoicePeriodIndexUI*) p_instance; 
 }
 void InvoicePeriodIndexUI::addRow(){ 
- InvoicePeriodUI::ShowUI(); 
- InvoicePeriodUI::GetUI()->fill(new InvoicePeriod()); 
- }
+ InvoicePeriodUI::ShowUI();}
 void InvoicePeriodIndexUI::editRow(){ 
  InvoicePeriodUI::ShowUI(); 
  InvoicePeriodUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonfield.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,9 +16,9 @@ class ContactPersonField  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	ContactPersonField();
-	ContactPersonField(int FieldTypeID,QString Description,bool Defaults,QString CreatedOn,QString EditedOn);	int ContactPersonFieldID;
-	int FieldTypeID;
+	ContactPersonField(QString Description,int FieldTypeID,bool Defaults,QString CreatedOn,QString EditedOn);	int ContactPersonFieldID;
 	QString Description;
+	int FieldTypeID;
 	bool Defaults;
 	QString CreatedOn;
 	QString EditedOn;
@@ -42,9 +42,9 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	ContactPersonField(int ContactPersonFieldID,int FieldTypeID,QString Description,bool Defaults,QString CreatedOn,QString EditedOn);	static ContactPersonField* p_instance;
-	bool setFieldTypeID(int ContactPersonFieldID, const QString &FieldTypeID);
+	ContactPersonField(int ContactPersonFieldID,QString Description,int FieldTypeID,bool Defaults,QString CreatedOn,QString EditedOn);	static ContactPersonField* p_instance;
 	bool setDescription(int ContactPersonFieldID, const QString &Description);
+	bool setFieldTypeID(int ContactPersonFieldID, const QString &FieldTypeID);
 	bool setDefaults(int ContactPersonFieldID, const QString &Defaults);
 	bool setCreatedOn(int ContactPersonFieldID, const QString &CreatedOn);
 	bool setEditedOn(int ContactPersonFieldID, const QString &EditedOn);

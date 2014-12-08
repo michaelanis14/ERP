@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: payment.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,6 @@ Payment::Payment()
 
 this->PaymentID = 0 ;
 this->InvoiceID = 0 ;
-this->Title = "";
 this->TotalAmount = 0 ;
 this->Comment = "";
 this->PaymentTypeID = 0 ;
@@ -20,13 +19,11 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("Payment");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(1, QSqlRelation("Invoice", "InvoiceID", "Title"));
-this->setRelation(5, QSqlRelation("PaymentType", "PaymentTypeID", "Description"));
+this->setRelation(4, QSqlRelation("PaymentType", "PaymentTypeID", "Description"));
 }
-Payment::Payment(int PaymentID,int InvoiceID,QString Title,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Payment::Payment(int PaymentID,int InvoiceID,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->PaymentID = PaymentID ;
 this->InvoiceID = InvoiceID ;
-this->Title = Title ;
 this->TotalAmount = TotalAmount ;
 this->Comment = Comment ;
 this->PaymentTypeID = PaymentTypeID ;
@@ -34,10 +31,9 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-Payment::Payment(int InvoiceID,QString Title,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Payment::Payment(int InvoiceID,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->PaymentID = 0 ;
 this->InvoiceID = InvoiceID ;
-this->Title = Title ;
 this->TotalAmount = TotalAmount ;
 this->Comment = Comment ;
 this->PaymentTypeID = PaymentTypeID ;
@@ -53,14 +49,14 @@ QString query =
 "(PaymentID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (PaymentID),"
 "InvoiceID INT NOT NULL, "
+" KEY(InvoiceID),"
 "FOREIGN KEY (InvoiceID) REFERENCES Invoice(InvoiceID)  ON DELETE CASCADE,"
-"Title VARCHAR(40) NOT NULL, "
 "TotalAmount DECIMAL(6,2) NOT NULL, "
 "Comment VARCHAR(40) NOT NULL, "
 "PaymentTypeID INT NOT NULL, "
 "FOREIGN KEY (PaymentTypeID) REFERENCES PaymentType(PaymentTypeID)  ON DELETE CASCADE,"
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -77,11 +73,11 @@ bool Payment::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(PaymentID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO Payment (InvoiceID,Title,TotalAmount,Comment,PaymentTypeID,CreatedOn,EditedOn)"
-"VALUES ('" +QString::number(this->InvoiceID)+"','"+QString(this->Title)+"','"+QString::number(this->TotalAmount)+"','"+QString(this->Comment)+"','"+QString::number(this->PaymentTypeID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO Payment (InvoiceID,TotalAmount,Comment,PaymentTypeID,CreatedOn,EditedOn)"
+"VALUES ('" +QString::number(this->InvoiceID)+"','"+QString::number(this->TotalAmount)+"','"+QString(this->Comment)+"','"+QString::number(this->PaymentTypeID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Payment SET "	"InvoiceID = '"+QString::number(this->InvoiceID)+"',"+"Title = '"+QString(this->Title)+"',"+"TotalAmount = '"+QString::number(this->TotalAmount)+"',"+"Comment = '"+QString(this->Comment)+"',"+"PaymentTypeID = '"+QString::number(this->PaymentTypeID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE PaymentID ='"+QString::number(this->PaymentID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  PaymentID FROM Payment WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ErpModel::GetInstance()->qeryExec("UPDATE Payment SET "	"InvoiceID = '"+QString::number(this->InvoiceID)+"',"+"TotalAmount = '"+QString::number(this->TotalAmount)+"',"+"Comment = '"+QString(this->Comment)+"',"+"PaymentTypeID = '"+QString::number(this->PaymentTypeID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE PaymentID ='"+QString::number(this->PaymentID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  PaymentID FROM Payment WHERE InvoiceID = "+QString::number(InvoiceID)+" AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->PaymentID = query.value(0).toInt();	
@@ -103,7 +99,7 @@ if(PaymentID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Payment"
 "WHERE PaymentID ='"+QString::number(this->PaymentID)+"'"));
 while (query.next()) {
-return new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+return new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
  }
 
 }
@@ -114,7 +110,7 @@ QList<Payment*> Payment::GetAll() {
 	QList<Payment*> payments =   QList<Payment*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Payment"));
 	while (query.next()) {
-payments.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+payments.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
 qStableSort(payments.begin(),payments.end());
 	return payments;
@@ -125,7 +121,7 @@ Payment* payment = new Payment();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Payment WHERE PaymentID = '"+QString::number(id)+"'"));
 while (query.next()) {
-payment = new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+payment = new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
  }
 
 }
@@ -142,9 +138,9 @@ else return new Payment();
 Payment* Payment::Get(QString name) {
 Payment* payment = new Payment();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Payment WHERE Title = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Payment WHERE InvoiceID = QString::number("+name+")"));
 while (query.next()) {
-payment = new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+payment = new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
 
  }
 
@@ -157,13 +153,12 @@ QList<Payment*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Payment"
 "WHERE" 
-"Title LIKE '%"+keyword+"%'"
-"OR Comment LIKE '%"+keyword+"%'"
+"Comment LIKE '%"+keyword+"%'"
 "OR CreatedOn LIKE '%"+keyword+"%'"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+list.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
  }
 
 }
@@ -175,7 +170,6 @@ QList<QString> Payment::GetStringList() {
 	QList<Payment*> payments =   QList<Payment*>();
 payments = GetAll();
 	for(int i = 0; i <payments.count(); i++){
-		list.append(payments[i]->Title);
 	}
 qStableSort(list.begin(),list.end());
 	return list;
@@ -186,7 +180,7 @@ QHash<int,QString> Payment::GetHashList() {
 	QList<Payment*> payments =   QList<Payment*>();
 payments = GetAll();
 	for(int i = 0; i <payments.count(); i++){
-		list.insert(payments[i]->PaymentID,payments[i]->Title);
+		list.insert(payments[i]->PaymentID,QString::number(payments[i]->InvoiceID));
 	}
 	return list;
 }
@@ -195,7 +189,7 @@ int Payment::GetIndex(QString name) {
 	QList<Payment*> payments =   QList<Payment*>();
 payments = GetAll();
 	for(int i = 0; i <payments.count(); i++){
-		if(payments[i]->Title == name){
+		if(payments[i]->InvoiceID == name.toInt()){
 			return i;
 		}
 	}
@@ -207,7 +201,7 @@ QList<Payment*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Payment WHERE "+select+"" ));
 while (query.next()) {
-list.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+list.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
  }
 
 }
@@ -218,7 +212,7 @@ Qt::ItemFlags Payment::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -233,16 +227,14 @@ if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString(
 if (index.column() == 1)
 ok = setInvoiceID(id, value.toString());
 else if (index.column() == 2)
-ok = setTitle(id, value.toString());
-else if (index.column() == 3)
 ok = setTotalAmount(id, value.toString());
-else if (index.column() == 4)
+else if (index.column() == 3)
 ok = setComment(id, value.toString());
-else if (index.column() == 5)
+else if (index.column() == 4)
 ok = setPaymentTypeID(id, value.toString());
-else if (index.column() == 6)
+else if (index.column() == 5)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 7)
+else if (index.column() == 6)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -262,12 +254,11 @@ void Payment::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() Payment!";
 this->setHeaderData(1, Qt::Horizontal, QObject::tr("Invoice"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Title"));
-this->setHeaderData(3, Qt::Horizontal, QObject::tr("Total Amount"));
-this->setHeaderData(4, Qt::Horizontal, QObject::tr("Comment"));
-this->setHeaderData(5, Qt::Horizontal, QObject::tr("Payment Type"));
-this->setHeaderData(6, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(7, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Total Amount"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Comment"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Payment Type"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(6, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
@@ -276,15 +267,6 @@ bool Payment::setInvoiceID(int PaymentID, const QString &InvoiceID) {
 QSqlQuery query;
 query.prepare("update Payment set InvoiceID = ? where PaymentID = ?");
 query.addBindValue(InvoiceID);
-query.addBindValue(PaymentID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Payment::setTitle(int PaymentID, const QString &Title) {
-QSqlQuery query;
-query.prepare("update Payment set Title = ? where PaymentID = ?");
-query.addBindValue(Title);
 query.addBindValue(PaymentID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

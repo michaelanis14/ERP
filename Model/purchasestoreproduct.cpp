@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproduct.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,7 +11,6 @@ PurchaseStoreProduct::PurchaseStoreProduct()
  : QSqlRelationalTableModel(){
 
 this->PurchaseStoreProductID = 0 ;
-this->Title = "";
 this->StoreID = 0 ;
 this->PurchaseID = 0 ;
 this->ContactID = 0 ;
@@ -21,14 +20,12 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("PurchaseStoreProduct");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(2, QSqlRelation("Store", "StoreID", "Name"));
-this->setRelation(3, QSqlRelation("Purchase", "PurchaseID", "Title"));
-this->setRelation(4, QSqlRelation("Contact", "ContactID", "Name"));
-this->setRelation(5, QSqlRelation("Product", "ProductID", "Name"));
+this->setRelation(1, QSqlRelation("Store", "StoreID", "Name"));
+this->setRelation(3, QSqlRelation("Contact", "ContactID", "Name"));
+this->setRelation(4, QSqlRelation("Product", "ProductID", "Name"));
 }
-PurchaseStoreProduct::PurchaseStoreProduct(int PurchaseStoreProductID,QString Title,int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+PurchaseStoreProduct::PurchaseStoreProduct(int PurchaseStoreProductID,int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->PurchaseStoreProductID = PurchaseStoreProductID ;
-this->Title = Title ;
 this->StoreID = StoreID ;
 this->PurchaseID = PurchaseID ;
 this->ContactID = ContactID ;
@@ -38,9 +35,8 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-PurchaseStoreProduct::PurchaseStoreProduct(QString Title,int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+PurchaseStoreProduct::PurchaseStoreProduct(int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->PurchaseStoreProductID = 0 ;
-this->Title = Title ;
 this->StoreID = StoreID ;
 this->PurchaseID = PurchaseID ;
 this->ContactID = ContactID ;
@@ -57,8 +53,8 @@ QString table = "PurchaseStoreProduct";
 QString query =
 "(PurchaseStoreProductID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (PurchaseStoreProductID),"
-"Title VARCHAR(40) NOT NULL, "
 "StoreID INT NOT NULL, "
+" KEY(StoreID),"
 "FOREIGN KEY (StoreID) REFERENCES Store(StoreID)  ON DELETE CASCADE,"
 "PurchaseID INT NOT NULL, "
 "FOREIGN KEY (PurchaseID) REFERENCES Purchase(PurchaseID)  ON DELETE CASCADE,"
@@ -68,7 +64,7 @@ QString query =
 "FOREIGN KEY (ProductID) REFERENCES Product(ProductID)  ON DELETE CASCADE,"
 "Amount DECIMAL(6,2) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -85,11 +81,11 @@ bool PurchaseStoreProduct::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(PurchaseStoreProductID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO PurchaseStoreProduct (Title,StoreID,PurchaseID,ContactID,ProductID,Amount,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Title)+"','"+QString::number(this->StoreID)+"','"+QString::number(this->PurchaseID)+"','"+QString::number(this->ContactID)+"','"+QString::number(this->ProductID)+"','"+QString::number(this->Amount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO PurchaseStoreProduct (StoreID,PurchaseID,ContactID,ProductID,Amount,CreatedOn,EditedOn)"
+"VALUES ('" +QString::number(this->StoreID)+"','"+QString::number(this->PurchaseID)+"','"+QString::number(this->ContactID)+"','"+QString::number(this->ProductID)+"','"+QString::number(this->Amount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE PurchaseStoreProduct SET "	"Title = '"+QString(this->Title)+"',"+"StoreID = '"+QString::number(this->StoreID)+"',"+"PurchaseID = '"+QString::number(this->PurchaseID)+"',"+"ContactID = '"+QString::number(this->ContactID)+"',"+"ProductID = '"+QString::number(this->ProductID)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE PurchaseStoreProductID ='"+QString::number(this->PurchaseStoreProductID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  PurchaseStoreProductID FROM PurchaseStoreProduct WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ErpModel::GetInstance()->qeryExec("UPDATE PurchaseStoreProduct SET "	"StoreID = '"+QString::number(this->StoreID)+"',"+"PurchaseID = '"+QString::number(this->PurchaseID)+"',"+"ContactID = '"+QString::number(this->ContactID)+"',"+"ProductID = '"+QString::number(this->ProductID)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE PurchaseStoreProductID ='"+QString::number(this->PurchaseStoreProductID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  PurchaseStoreProductID FROM PurchaseStoreProduct WHERE StoreID = "+QString::number(StoreID)+" AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->PurchaseStoreProductID = query.value(0).toInt();	
@@ -111,7 +107,7 @@ if(PurchaseStoreProductID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PurchaseStoreProduct"
 "WHERE PurchaseStoreProductID ='"+QString::number(this->PurchaseStoreProductID)+"'"));
 while (query.next()) {
-return new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString());
+return new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
  }
 
 }
@@ -122,7 +118,7 @@ QList<PurchaseStoreProduct*> PurchaseStoreProduct::GetAll() {
 	QList<PurchaseStoreProduct*> purchasestoreproducts =   QList<PurchaseStoreProduct*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStoreProduct"));
 	while (query.next()) {
-purchasestoreproducts.append(new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString()));
+purchasestoreproducts.append(new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
 	}
 qStableSort(purchasestoreproducts.begin(),purchasestoreproducts.end());
 	return purchasestoreproducts;
@@ -133,7 +129,7 @@ PurchaseStoreProduct* purchasestoreproduct = new PurchaseStoreProduct();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PurchaseStoreProduct WHERE PurchaseStoreProductID = '"+QString::number(id)+"'"));
 while (query.next()) {
-purchasestoreproduct = new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString());
+purchasestoreproduct = new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
  }
 
 }
@@ -150,9 +146,9 @@ else return new PurchaseStoreProduct();
 PurchaseStoreProduct* PurchaseStoreProduct::Get(QString name) {
 PurchaseStoreProduct* purchasestoreproduct = new PurchaseStoreProduct();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStoreProduct WHERE Title = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStoreProduct WHERE StoreID = QString::number("+name+")"));
 while (query.next()) {
-purchasestoreproduct = new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString());
+purchasestoreproduct = new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
 
  }
 
@@ -165,12 +161,11 @@ QList<PurchaseStoreProduct*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStoreProduct"
 "WHERE" 
-"Title LIKE '%"+keyword+"%'"
-"OR CreatedOn LIKE '%"+keyword+"%'"
+"CreatedOn LIKE '%"+keyword+"%'"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString()));
+list.append(new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
  }
 
 }
@@ -182,7 +177,6 @@ QList<QString> PurchaseStoreProduct::GetStringList() {
 	QList<PurchaseStoreProduct*> purchasestoreproducts =   QList<PurchaseStoreProduct*>();
 purchasestoreproducts = GetAll();
 	for(int i = 0; i <purchasestoreproducts.count(); i++){
-		list.append(purchasestoreproducts[i]->Title);
 	}
 qStableSort(list.begin(),list.end());
 	return list;
@@ -193,7 +187,7 @@ QHash<int,QString> PurchaseStoreProduct::GetHashList() {
 	QList<PurchaseStoreProduct*> purchasestoreproducts =   QList<PurchaseStoreProduct*>();
 purchasestoreproducts = GetAll();
 	for(int i = 0; i <purchasestoreproducts.count(); i++){
-		list.insert(purchasestoreproducts[i]->PurchaseStoreProductID,purchasestoreproducts[i]->Title);
+		list.insert(purchasestoreproducts[i]->PurchaseStoreProductID,QString::number(purchasestoreproducts[i]->StoreID));
 	}
 	return list;
 }
@@ -202,7 +196,7 @@ int PurchaseStoreProduct::GetIndex(QString name) {
 	QList<PurchaseStoreProduct*> purchasestoreproducts =   QList<PurchaseStoreProduct*>();
 purchasestoreproducts = GetAll();
 	for(int i = 0; i <purchasestoreproducts.count(); i++){
-		if(purchasestoreproducts[i]->Title == name){
+		if(purchasestoreproducts[i]->StoreID == name.toInt()){
 			return i;
 		}
 	}
@@ -214,7 +208,7 @@ QList<PurchaseStoreProduct*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStoreProduct WHERE "+select+"" ));
 while (query.next()) {
-list.append(new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString()));
+list.append(new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
  }
 
 }
@@ -225,7 +219,7 @@ Qt::ItemFlags PurchaseStoreProduct::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -238,20 +232,18 @@ int id = data(primaryKeyIndex).toInt();
 bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
-ok = setTitle(id, value.toString());
-else if (index.column() == 2)
 ok = setStoreID(id, value.toString());
-else if (index.column() == 3)
+else if (index.column() == 2)
 ok = setPurchaseID(id, value.toString());
-else if (index.column() == 4)
+else if (index.column() == 3)
 ok = setContactID(id, value.toString());
-else if (index.column() == 5)
+else if (index.column() == 4)
 ok = setProductID(id, value.toString());
-else if (index.column() == 6)
+else if (index.column() == 5)
 ok = setAmount(id, value.toString());
-else if (index.column() == 7)
+else if (index.column() == 6)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 8)
+else if (index.column() == 7)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -270,26 +262,16 @@ return ok;
 void PurchaseStoreProduct::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() PurchaseStoreProduct!";
-this->setHeaderData(1, Qt::Horizontal, QObject::tr("Title"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Store"));
-this->setHeaderData(3, Qt::Horizontal, QObject::tr("Purchase"));
-this->setHeaderData(4, Qt::Horizontal, QObject::tr("Contact"));
-this->setHeaderData(5, Qt::Horizontal, QObject::tr("Product"));
-this->setHeaderData(6, Qt::Horizontal, QObject::tr("Amount"));
-this->setHeaderData(7, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(8, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Store"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Purchase"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Contact"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Product"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("Amount"));
+this->setHeaderData(6, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(7, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
-}
-bool PurchaseStoreProduct::setTitle(int PurchaseStoreProductID, const QString &Title) {
-QSqlQuery query;
-query.prepare("update PurchaseStoreProduct set Title = ? where PurchaseStoreProductID = ?");
-query.addBindValue(Title);
-query.addBindValue(PurchaseStoreProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
 }
 bool PurchaseStoreProduct::setStoreID(int PurchaseStoreProductID, const QString &StoreID) {
 QSqlQuery query;

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoice.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,8 +19,7 @@ class Invoice  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Invoice();
-	Invoice(QString Title,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	int InvoiceID;
-	QString Title;
+	Invoice(QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	int InvoiceID;
 	QString CreationDate;
 	QString EndDate;
 	int InvoicePeriodID;
@@ -56,8 +55,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Invoice(int InvoiceID,QString Title,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	static Invoice* p_instance;
-	bool setTitle(int InvoiceID, const QString &Title);
+	Invoice(int InvoiceID,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	static Invoice* p_instance;
 	bool setCreationDate(int InvoiceID, const QString &CreationDate);
 	bool setEndDate(int InvoiceID, const QString &EndDate);
 	bool setInvoicePeriodID(int InvoiceID, const QString &InvoicePeriodID);

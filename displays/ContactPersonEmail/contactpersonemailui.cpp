@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonemailui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -66,9 +66,9 @@ email->setText("");
 this->contactpersonemail = new ContactPersonEmail();
 } 
 void ContactPersonEmailUI::selectContactPersonEmail(){ 
-if(ContactPersonEmail::GetStringList().contains(description->text()))
+if(ContactPersonEmail::GetStringList().contains(this->contactpersonemail->Description))
 {
-ContactPersonEmail* con = ContactPersonEmail::Get(description->text());
+ContactPersonEmail* con = ContactPersonEmail::Get(this->contactpersonemail->Description);
 if(this->contactpersonemail->ContactPersonEmailID != con->ContactPersonEmailID){
 fill(con);
 }

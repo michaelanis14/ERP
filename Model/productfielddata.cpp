@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfielddata.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -47,12 +47,13 @@ QString query =
 "(ProductFieldDataID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (ProductFieldDataID),"
 "ProductID INT NOT NULL, "
+" KEY(ProductID),"
 "FOREIGN KEY (ProductID) REFERENCES Product(ProductID)  ON DELETE CASCADE,"
 "ProductFieldID INT NOT NULL, "
 "FOREIGN KEY (ProductFieldID) REFERENCES ProductField(ProductFieldID)  ON DELETE CASCADE,"
 "Value VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -73,7 +74,7 @@ ErpModel::GetInstance()->qeryExec("INSERT INTO ProductFieldData (ProductID,Produ
 "VALUES ('" +QString::number(this->ProductID)+"','"+QString::number(this->ProductFieldID)+"','"+QString(this->Value)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
 ErpModel::GetInstance()->qeryExec("UPDATE ProductFieldData SET "	"ProductID = '"+QString::number(this->ProductID)+"',"+"ProductFieldID = '"+QString::number(this->ProductFieldID)+"',"+"Value = '"+QString(this->Value)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductFieldDataID ='"+QString::number(this->ProductFieldDataID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProductFieldDataID FROM ProductFieldData WHERE Value = '"+Value+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProductFieldDataID FROM ProductFieldData WHERE ProductID = "+QString::number(ProductID)+" AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->ProductFieldDataID = query.value(0).toInt();	
@@ -134,7 +135,7 @@ else return new ProductFieldData();
 ProductFieldData* ProductFieldData::Get(QString name) {
 ProductFieldData* productfielddata = new ProductFieldData();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductFieldData WHERE Value = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductFieldData WHERE ProductID = QString::number("+name+")"));
 while (query.next()) {
 productfielddata = new ProductFieldData(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString());
 
@@ -177,7 +178,7 @@ QHash<int,QString> ProductFieldData::GetHashList() {
 	QList<ProductFieldData*> productfielddatas =   QList<ProductFieldData*>();
 productfielddatas = GetAll();
 	for(int i = 0; i <productfielddatas.count(); i++){
-		list.insert(productfielddatas[i]->ProductFieldDataID,productfielddatas[i]->Value);
+		list.insert(productfielddatas[i]->ProductFieldDataID,QString::number(productfielddatas[i]->ProductID));
 	}
 	return list;
 }
@@ -186,7 +187,7 @@ int ProductFieldData::GetIndex(QString name) {
 	QList<ProductFieldData*> productfielddatas =   QList<ProductFieldData*>();
 productfielddatas = GetAll();
 	for(int i = 0; i <productfielddatas.count(); i++){
-		if(productfielddatas[i]->Value == name){
+		if(productfielddatas[i]->ProductID == name.toInt()){
 			return i;
 		}
 	}

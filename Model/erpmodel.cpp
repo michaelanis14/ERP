@@ -62,9 +62,26 @@ ErpModel::ErpModel()
 	db = QSqlDatabase::addDatabase("QMYSQL");
 	db.setConnectOptions();
 	db.setHostName("localhost");
-	db.setDatabaseName("testqt");
+	//db.setDatabaseName("testqt");
 	db.setUserName("root");
 	//       db.setPassword("root");
+
+
+	if (!db.isValid()){
+		qDebug() << db.lastError().text();
+		return;
+	}
+
+	db.open();
+	QString query = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'testqt'";
+	QSqlQuery q = db.exec(query);
+
+	if (q.size() == 0){
+		db.exec("CREATE SCHEMA `testqt` DEFAULT CHARACTER SET utf8 ;");
+		qDebug() << db.lastError().text();
+		db.setDatabaseName("testqt");
+	}else
+		db.setDatabaseName("testqt");
 
 
 }
@@ -96,6 +113,10 @@ QSqlQuery ErpModel::qeryExec(QString q){
 		return query;
 	}
 	else    {
+		if(db.lastError().text().contains("Unknown database")){
+			QMessageBox::warning(0,"BataBase Issue","Create the Database:");
+
+		}
 		QMessageBox::warning(0,"BataBase Issue","Something went Wrong:" + db.lastError().text());
 		QSqlQuery query;
 		return query;
@@ -175,21 +196,19 @@ bool ErpModel::init(){
 		Employee* employee = new Employee("Mwzaf"+QString::number(Employee::GetAll().count()),"","");
 		employee->save();
 	}
-	Contact::Init();
+
 	/*	User::Init();
 	if(User::GetAll().count() < 2){
 		User* user = new User("User"+QString::number(User::GetAll().count()),"username","password","5/5/5",1,1,"192.168.1.1","","");
 		user->save();
-	}
+	}*/
 
-	if(Contact::GetAll().count() < 5){
-	Contact* cont = new Contact("7abibi","Mr.","Abaaas"+QString::number(Contact::GetAll().count()),"AbnAbaas","5/5/5",1,1,1,"AA","na"
-									,"na",1,1,1,1,"na","na","na","na","na","na","na","na"
-									"na","na","nnna");
+	Contact::Init();
+	for(int i = 0; i < 0; i++){
+		Contact* cont = new Contact("Mr.","Contact"+QString::number(Contact::GetAll().count()),"5/5/5",1,1,Contact::GetAll().count(),"AA","na","na",1,1,1,"na","na","na","na");
 		cont->save();
-
 	}
-	*/
+
 	Currency::Init();
 	if(Currency::GetAll().count() < 4){
 		Currency* curr = new Currency("USD","","");
@@ -238,7 +257,7 @@ bool ErpModel::init(){
 	if(Unit::GetAll().count() < 5){
 		QList<QString> units;
 		units << "Allowance" <<"Piece" << "Hour" << "Kilo" << "Meter" << "Liter" << "Millimeter" << "Gram" <<"ton" <<"kilometer"<<"Rollen"<<"LFM"<<"m²"<<"m³"<<"Box"<<"Ballen"<<"Rolle"<<"Sheet"<<"Palette"<<"VE";
-				 for(int i = 0;i < units.count(); i++){
+		for(int i = 0;i < units.count(); i++){
 			Unit* un = new Unit(units.at(i),"","");
 			un->save();
 		}
@@ -249,6 +268,10 @@ bool ErpModel::init(){
 		poriductCat->save();
 	}
 	Product::Init();
+	for(int i = 0; i < 0; i++){
+		Product* product = new Product("Product"+QString::number(Product::GetAll().count()),"ShortDescription",1,10,8,90,1,"information","98989898009",1,0,"date","date");
+		product->save();
+	}
 	ProductField::Init();
 	ProductFieldData::Init();
 

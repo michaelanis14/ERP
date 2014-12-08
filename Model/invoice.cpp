@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoice.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,7 +11,6 @@ Invoice::Invoice()
  : QSqlRelationalTableModel(){
 
 this->InvoiceID = 0 ;
-this->Title = "";
 this->CreationDate = "";
 this->EndDate = "";
 this->InvoicePeriodID = 0 ;
@@ -26,13 +25,12 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("Invoice");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(4, QSqlRelation("InvoicePeriod", "InvoicePeriodID", "Description"));
-this->setRelation(5, QSqlRelation("InvoiceYear", "InvoiceYearID", "Description"));
-this->setRelation(6, QSqlRelation("Project", "ProjectID", "Title"));
+this->setRelation(3, QSqlRelation("InvoicePeriod", "InvoicePeriodID", "Description"));
+this->setRelation(4, QSqlRelation("InvoiceYear", "InvoiceYearID", "Description"));
+this->setRelation(5, QSqlRelation("Project", "ProjectID", "Title"));
 }
-Invoice::Invoice(int InvoiceID,QString Title,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Invoice::Invoice(int InvoiceID,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->InvoiceID = InvoiceID ;
-this->Title = Title ;
 this->CreationDate = CreationDate ;
 this->EndDate = EndDate ;
 this->InvoicePeriodID = InvoicePeriodID ;
@@ -47,9 +45,8 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-Invoice::Invoice(QString Title,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Invoice::Invoice(QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->InvoiceID = 0 ;
-this->Title = Title ;
 this->CreationDate = CreationDate ;
 this->EndDate = EndDate ;
 this->InvoicePeriodID = InvoicePeriodID ;
@@ -71,8 +68,8 @@ QString table = "Invoice";
 QString query =
 "(InvoiceID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (InvoiceID),"
-"Title VARCHAR(40) NOT NULL, "
 "CreationDate VARCHAR(40) NOT NULL, "
+" KEY(CreationDate),"
 "EndDate VARCHAR(40) NOT NULL, "
 "InvoicePeriodID INT NOT NULL, "
 "FOREIGN KEY (InvoicePeriodID) REFERENCES InvoicePeriod(InvoicePeriodID)  ON DELETE CASCADE,"
@@ -86,7 +83,7 @@ QString query =
 "Header VARCHAR(40) NOT NULL, "
 "Footer VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -103,11 +100,11 @@ bool Invoice::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(InvoiceID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO Invoice (Title,CreationDate,EndDate,InvoicePeriodID,InvoiceYearID,ProjectID,DueDate,discount,Allowance,Header,Footer,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Title)+"','"+QString(this->CreationDate)+"','"+QString(this->EndDate)+"','"+QString::number(this->InvoicePeriodID)+"','"+QString::number(this->InvoiceYearID)+"','"+QString::number(this->ProjectID)+"','"+QString(this->DueDate)+"','"+QString::number(this->discount)+"','"+QString::number(this->Allowance)+"','"+QString(this->Header)+"','"+QString(this->Footer)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO Invoice (CreationDate,EndDate,InvoicePeriodID,InvoiceYearID,ProjectID,DueDate,discount,Allowance,Header,Footer,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->CreationDate)+"','"+QString(this->EndDate)+"','"+QString::number(this->InvoicePeriodID)+"','"+QString::number(this->InvoiceYearID)+"','"+QString::number(this->ProjectID)+"','"+QString(this->DueDate)+"','"+QString::number(this->discount)+"','"+QString::number(this->Allowance)+"','"+QString(this->Header)+"','"+QString(this->Footer)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Invoice SET "	"Title = '"+QString(this->Title)+"',"+"CreationDate = '"+QString(this->CreationDate)+"',"+"EndDate = '"+QString(this->EndDate)+"',"+"InvoicePeriodID = '"+QString::number(this->InvoicePeriodID)+"',"+"InvoiceYearID = '"+QString::number(this->InvoiceYearID)+"',"+"ProjectID = '"+QString::number(this->ProjectID)+"',"+"DueDate = '"+QString(this->DueDate)+"',"+"discount = '"+QString::number(this->discount)+"',"+"Allowance = '"+QString::number(this->Allowance)+"',"+"Header = '"+QString(this->Header)+"',"+"Footer = '"+QString(this->Footer)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE InvoiceID ='"+QString::number(this->InvoiceID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  InvoiceID FROM Invoice WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ErpModel::GetInstance()->qeryExec("UPDATE Invoice SET "	"CreationDate = '"+QString(this->CreationDate)+"',"+"EndDate = '"+QString(this->EndDate)+"',"+"InvoicePeriodID = '"+QString::number(this->InvoicePeriodID)+"',"+"InvoiceYearID = '"+QString::number(this->InvoiceYearID)+"',"+"ProjectID = '"+QString::number(this->ProjectID)+"',"+"DueDate = '"+QString(this->DueDate)+"',"+"discount = '"+QString::number(this->discount)+"',"+"Allowance = '"+QString::number(this->Allowance)+"',"+"Header = '"+QString(this->Header)+"',"+"Footer = '"+QString(this->Footer)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE InvoiceID ='"+QString::number(this->InvoiceID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  InvoiceID FROM Invoice WHERE CreationDate = '"+CreationDate+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->InvoiceID = query.value(0).toInt();	
@@ -129,7 +126,7 @@ if(InvoiceID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Invoice"
 "WHERE InvoiceID ='"+QString::number(this->InvoiceID)+"'"));
 while (query.next()) {
-return new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString());
+return new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString());
  }
 
 }
@@ -140,7 +137,7 @@ QList<Invoice*> Invoice::GetAll() {
 	QList<Invoice*> invoices =   QList<Invoice*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Invoice"));
 	while (query.next()) {
-invoices.append(new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString()));
+invoices.append(new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString()));
 	}
 qStableSort(invoices.begin(),invoices.end());
 	return invoices;
@@ -151,7 +148,7 @@ Invoice* invoice = new Invoice();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Invoice WHERE InvoiceID = '"+QString::number(id)+"'"));
 while (query.next()) {
-invoice = new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString());
+invoice = new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString());
  }
 invoice->invoicestatedates = InvoiceStateDate::QuerySelect("InvoiceID = " + QString::number(id));
 invoice->invoicefreelines = InvoiceFreeline::QuerySelect("InvoiceID = " + QString::number(id));
@@ -171,9 +168,9 @@ else return new Invoice();
 Invoice* Invoice::Get(QString name) {
 Invoice* invoice = new Invoice();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Invoice WHERE Title = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Invoice WHERE CreationDate = '"+name+"'"));
 while (query.next()) {
-invoice = new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString());
+invoice = new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString());
 
  }
 invoice->invoicestatedates = InvoiceStateDate::QuerySelect("InvoiceID = " +QString::number(invoice->InvoiceID));
@@ -189,8 +186,7 @@ QList<Invoice*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Invoice"
 "WHERE" 
-"Title LIKE '%"+keyword+"%'"
-"OR CreationDate LIKE '%"+keyword+"%'"
+"CreationDate LIKE '%"+keyword+"%'"
 "OR EndDate LIKE '%"+keyword+"%'"
 "OR DueDate LIKE '%"+keyword+"%'"
 "OR Header LIKE '%"+keyword+"%'"
@@ -199,7 +195,7 @@ QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Invoice"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString()));
+list.append(new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString()));
  }
 
 }
@@ -211,7 +207,6 @@ QList<QString> Invoice::GetStringList() {
 	QList<Invoice*> invoices =   QList<Invoice*>();
 invoices = GetAll();
 	for(int i = 0; i <invoices.count(); i++){
-		list.append(invoices[i]->Title);
 	}
 qStableSort(list.begin(),list.end());
 	return list;
@@ -222,7 +217,7 @@ QHash<int,QString> Invoice::GetHashList() {
 	QList<Invoice*> invoices =   QList<Invoice*>();
 invoices = GetAll();
 	for(int i = 0; i <invoices.count(); i++){
-		list.insert(invoices[i]->InvoiceID,invoices[i]->Title);
+		list.insert(invoices[i]->InvoiceID,invoices[i]->CreationDate);
 	}
 	return list;
 }
@@ -231,7 +226,7 @@ int Invoice::GetIndex(QString name) {
 	QList<Invoice*> invoices =   QList<Invoice*>();
 invoices = GetAll();
 	for(int i = 0; i <invoices.count(); i++){
-		if(invoices[i]->Title == name){
+		if(invoices[i]->CreationDate == name){
 			return i;
 		}
 	}
@@ -243,7 +238,7 @@ QList<Invoice*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Invoice WHERE "+select+"" ));
 while (query.next()) {
-list.append(new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString()));
+list.append(new Invoice(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString()));
  }
 
 }
@@ -254,7 +249,7 @@ Qt::ItemFlags Invoice::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 13 || index.column() == 14 || index.column() == 15 || index.column() == 16)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 12 || index.column() == 13 || index.column() == 14 || index.column() == 15)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -267,30 +262,28 @@ int id = data(primaryKeyIndex).toInt();
 bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
-ok = setTitle(id, value.toString());
-else if (index.column() == 2)
 ok = setCreationDate(id, value.toString());
-else if (index.column() == 3)
+else if (index.column() == 2)
 ok = setEndDate(id, value.toString());
-else if (index.column() == 4)
+else if (index.column() == 3)
 ok = setInvoicePeriodID(id, value.toString());
-else if (index.column() == 5)
+else if (index.column() == 4)
 ok = setInvoiceYearID(id, value.toString());
-else if (index.column() == 6)
+else if (index.column() == 5)
 ok = setProjectID(id, value.toString());
-else if (index.column() == 7)
+else if (index.column() == 6)
 ok = setDueDate(id, value.toString());
-else if (index.column() == 8)
+else if (index.column() == 7)
 ok = setdiscount(id, value.toString());
-else if (index.column() == 9)
+else if (index.column() == 8)
 ok = setAllowance(id, value.toString());
-else if (index.column() == 13)
+else if (index.column() == 12)
 ok = setHeader(id, value.toString());
-else if (index.column() == 14)
+else if (index.column() == 13)
 ok = setFooter(id, value.toString());
-else if (index.column() == 15)
+else if (index.column() == 14)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 16)
+else if (index.column() == 15)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -309,31 +302,21 @@ return ok;
 void Invoice::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() Invoice!";
-this->setHeaderData(1, Qt::Horizontal, QObject::tr("Title"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Creation Date"));
-this->setHeaderData(3, Qt::Horizontal, QObject::tr("End Date"));
-this->setHeaderData(4, Qt::Horizontal, QObject::tr("Invoice Period"));
-this->setHeaderData(5, Qt::Horizontal, QObject::tr("Invoice Year"));
-this->setHeaderData(6, Qt::Horizontal, QObject::tr("Project"));
-this->setHeaderData(7, Qt::Horizontal, QObject::tr("Due Date"));
-this->setHeaderData(8, Qt::Horizontal, QObject::tr("discount"));
-this->setHeaderData(9, Qt::Horizontal, QObject::tr("Allowance"));
-this->setHeaderData(13, Qt::Horizontal, QObject::tr("Header"));
-this->setHeaderData(14, Qt::Horizontal, QObject::tr("Footer"));
-this->setHeaderData(15, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(16, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Creation Date"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("End Date"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Invoice Period"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Invoice Year"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("Project"));
+this->setHeaderData(6, Qt::Horizontal, QObject::tr("Due Date"));
+this->setHeaderData(7, Qt::Horizontal, QObject::tr("discount"));
+this->setHeaderData(8, Qt::Horizontal, QObject::tr("Allowance"));
+this->setHeaderData(12, Qt::Horizontal, QObject::tr("Header"));
+this->setHeaderData(13, Qt::Horizontal, QObject::tr("Footer"));
+this->setHeaderData(14, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(15, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
-}
-bool Invoice::setTitle(int InvoiceID, const QString &Title) {
-QSqlQuery query;
-query.prepare("update Invoice set Title = ? where InvoiceID = ?");
-query.addBindValue(Title);
-query.addBindValue(InvoiceID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
 }
 bool Invoice::setCreationDate(int InvoiceID, const QString &CreationDate) {
 QSqlQuery query;

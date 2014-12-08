@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstoreproductui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,8 +31,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 deliveryorder = new ERPComboBox();
 deliveryorder->addItems(DeliveryOrder::GetHashList());
 block0Layout->addRow("Delivery Order",deliveryorder);
@@ -64,19 +62,17 @@ DeliveryOrderStoreProductUI*DeliveryOrderStoreProductUI::GetUI(){
 void DeliveryOrderStoreProductUI::fill(DeliveryOrderStoreProduct* deliveryorderstoreproduct){ 
 clear();
 this->deliveryorderstoreproduct = deliveryorderstoreproduct;
-title->setText(deliveryorderstoreproduct->Title);
 amount->setText(QString::number(deliveryorderstoreproduct->Amount));
 } 
 void DeliveryOrderStoreProductUI::clear(){ 
 delete this->deliveryorderstoreproduct;
-title->setText("");
 amount->setText("");
 this->deliveryorderstoreproduct = new DeliveryOrderStoreProduct();
 } 
 void DeliveryOrderStoreProductUI::selectDeliveryOrderStoreProduct(){ 
-if(DeliveryOrderStoreProduct::GetStringList().contains(title->text()))
+if(DeliveryOrderStoreProduct::GetStringList().contains(QString::number(this->deliveryorderstoreproduct->DeliveryOrderID)))
 {
-DeliveryOrderStoreProduct* con = DeliveryOrderStoreProduct::Get(title->text());
+DeliveryOrderStoreProduct* con = DeliveryOrderStoreProduct::Get(QString::number(this->deliveryorderstoreproduct->DeliveryOrderID));
 if(this->deliveryorderstoreproduct->DeliveryOrderStoreProductID != con->DeliveryOrderStoreProductID){
 fill(con);
 }
@@ -87,21 +83,6 @@ clear();
 bool DeliveryOrderStoreProductUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Can't be Empty! \n";
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-deliveryorderstoreproduct->Title = title->text().trimmed();
-}
 if(deliveryorderstoreproduct->DeliveryOrderID == 0) 
 deliveryorderstoreproduct->DeliveryOrderID = deliveryorder->getKey();
 if(deliveryorderstoreproduct->StoreID == 0) 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -20,6 +20,7 @@
 #include "../../Model/tax.h"
 #include "../../Model/productcategory.h"
 
+#include "../ProductImage/productimageui.h"
 #include "../ProductFieldData/productfielddataui.h"
 
 #include <QWidget>
@@ -39,12 +40,11 @@ public:
 	ERPFormBlock* block0Layout;
 	ERPFormBlock* block1Layout;
 	ERPFormBlock* block2Layout;
+	QList<ProductImageUI*> ProductImages;
 	QList<ProductFieldDataUI*> ProductFieldDatas;
 	QLineEdit*name;
-	QLineEdit*image;
 	QLineEdit*shortdescription;
 	ERPComboBox*unit;
-	QCheckBox* productisacomposite;
 	QLineEdit*sellingprice;
 	QLineEdit*netcoast;
 	QLineEdit*trademarginrate;
@@ -60,6 +60,9 @@ Product* product;
 private:
 	static ERPDisplay* p_instance;
 private slots:
+	void addProductImage();
+	void addProductImage(ProductImage* ProductImage);
+	void removeProductImage(QWidget* widget);
 	void addProductFieldData();
 	void addProductFieldData(ProductFieldData* ProductFieldData);
 	void removeProductFieldData(QWidget* widget);

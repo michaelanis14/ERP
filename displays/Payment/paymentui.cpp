@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,8 +34,6 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
 invoice = new ERPComboBox();
 invoice->addItems(Invoice::GetHashList());
 block0Layout->addRow("Invoice",invoice);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 totalamount = new QLineEdit();
 totalamount->setValidator( doubleValidator );
 block0Layout->addRow("Total Amount",totalamount);
@@ -63,21 +61,19 @@ PaymentUI*PaymentUI::GetUI(){
 void PaymentUI::fill(Payment* payment){ 
 clear();
 this->payment = payment;
-title->setText(payment->Title);
 totalamount->setText(QString::number(payment->TotalAmount));
 comment->setText(payment->Comment);
 } 
 void PaymentUI::clear(){ 
 delete this->payment;
-title->setText("");
 totalamount->setText("");
 comment->setText("");
 this->payment = new Payment();
 } 
 void PaymentUI::selectPayment(){ 
-if(Payment::GetStringList().contains(title->text()))
+if(Payment::GetStringList().contains(QString::number(this->payment->InvoiceID)))
 {
-Payment* con = Payment::Get(title->text());
+Payment* con = Payment::Get(QString::number(this->payment->InvoiceID));
 if(this->payment->PaymentID != con->PaymentID){
 fill(con);
 }
@@ -90,21 +86,6 @@ bool errors = false;
 QString errorString =  "";
 if(payment->InvoiceID == 0) 
 payment->InvoiceID = invoice->getKey();
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Title Can't be Empty! \n";
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-payment->Title = title->text().trimmed();
-}
 if(totalamount->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Total Amount Can't be Empty! \n";

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,9 +19,9 @@ class ContactPerson  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	ContactPerson();
-	ContactPerson(int ContactID,QString Title,QString Name,QString LastName,QString Position,QString Birthdate,int Number,QString CreatedOn,QString EditedOn);	int ContactPersonID;
-	int ContactID;
+	ContactPerson(QString Title,int ContactID,QString Name,QString LastName,QString Position,QString Birthdate,int Number,QString CreatedOn,QString EditedOn);	int ContactPersonID;
 	QString Title;
+	int ContactID;
 	QString Name;
 	QString LastName;
 	QString Position;
@@ -52,9 +52,9 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	ContactPerson(int ContactPersonID,int ContactID,QString Title,QString Name,QString LastName,QString Position,QString Birthdate,int Number,QString CreatedOn,QString EditedOn);	static ContactPerson* p_instance;
-	bool setContactID(int ContactPersonID, const QString &ContactID);
+	ContactPerson(int ContactPersonID,QString Title,int ContactID,QString Name,QString LastName,QString Position,QString Birthdate,int Number,QString CreatedOn,QString EditedOn);	static ContactPerson* p_instance;
 	bool setTitle(int ContactPersonID, const QString &Title);
+	bool setContactID(int ContactPersonID, const QString &ContactID);
 	bool setName(int ContactPersonID, const QString &Name);
 	bool setLastName(int ContactPersonID, const QString &LastName);
 	bool setPosition(int ContactPersonID, const QString &Position);

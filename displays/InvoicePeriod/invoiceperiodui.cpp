@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceperiodui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->invoiceperiod = new InvoicePeriod();
 } 
 void InvoicePeriodUI::selectInvoicePeriod(){ 
-if(InvoicePeriod::GetStringList().contains(description->text()))
+if(InvoicePeriod::GetStringList().contains(this->invoiceperiod->Description))
 {
-InvoicePeriod* con = InvoicePeriod::Get(description->text());
+InvoicePeriod* con = InvoicePeriod::Get(this->invoiceperiod->Description);
 if(this->invoiceperiod->InvoicePeriodID != con->InvoicePeriodID){
 fill(con);
 }

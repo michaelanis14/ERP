@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: storeui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -78,9 +78,9 @@ city->setText("");
 this->store = new Store();
 } 
 void StoreUI::selectStore(){ 
-if(Store::GetStringList().contains(name->text()))
+if(Store::GetStringList().contains(this->store->Name))
 {
-Store* con = Store::Get(name->text());
+Store* con = Store::Get(this->store->Name);
 if(this->store->StoreID != con->StoreID){
 fill(con);
 }

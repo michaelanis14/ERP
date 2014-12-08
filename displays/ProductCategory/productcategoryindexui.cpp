@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productcategoryindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ ProductCategoryIndexUI*ProductCategoryIndexUI::GetUI(){
 	return (ProductCategoryIndexUI*) p_instance; 
 }
 void ProductCategoryIndexUI::addRow(){ 
- ProductCategoryUI::ShowUI(); 
- ProductCategoryUI::GetUI()->fill(new ProductCategory()); 
- }
+ ProductCategoryUI::ShowUI();}
 void ProductCategoryIndexUI::editRow(){ 
  ProductCategoryUI::ShowUI(); 
  ProductCategoryUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

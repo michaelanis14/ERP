@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreelineui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,11 +31,11 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
+description = new QLineEdit();
+block0Layout->addRow("Description",description);
 invoice = new ERPComboBox();
 invoice->addItems(Invoice::GetHashList());
 block0Layout->addRow("Invoice",invoice);
-description = new QLineEdit();
-block0Layout->addRow("Description",description);
 price = new QLineEdit();
 price->setValidator( doubleValidator );
 block0Layout->addRow("Price",price);
@@ -76,9 +76,9 @@ amount->setText("");
 this->invoicefreeline = new InvoiceFreeline();
 } 
 void InvoiceFreelineUI::selectInvoiceFreeline(){ 
-if(InvoiceFreeline::GetStringList().contains(description->text()))
+if(InvoiceFreeline::GetStringList().contains(this->invoicefreeline->Description))
 {
-InvoiceFreeline* con = InvoiceFreeline::Get(description->text());
+InvoiceFreeline* con = InvoiceFreeline::Get(this->invoicefreeline->Description);
 if(this->invoicefreeline->InvoiceFreelineID != con->InvoiceFreelineID){
 fill(con);
 }
@@ -89,8 +89,6 @@ clear();
 bool InvoiceFreelineUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(invoicefreeline->InvoiceID == 0) 
-invoicefreeline->InvoiceID = invoice->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Description Can't be Empty! \n";
@@ -106,6 +104,8 @@ description->style()->polish(description);
 description->update();
 invoicefreeline->Description = description->text().trimmed();
 }
+if(invoicefreeline->InvoiceID == 0) 
+invoicefreeline->InvoiceID = invoice->getKey();
 if(price->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Price Can't be Empty! \n";

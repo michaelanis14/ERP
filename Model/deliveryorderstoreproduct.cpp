@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstoreproduct.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,7 +11,6 @@ DeliveryOrderStoreProduct::DeliveryOrderStoreProduct()
  : QSqlRelationalTableModel(){
 
 this->DeliveryOrderStoreProductID = 0 ;
-this->Title = "";
 this->DeliveryOrderID = 0 ;
 this->StoreID = 0 ;
 this->ProductID = 0 ;
@@ -20,13 +19,12 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("DeliveryOrderStoreProduct");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(2, QSqlRelation("DeliveryOrder", "DeliveryOrderID", "Title"));
-this->setRelation(3, QSqlRelation("Store", "StoreID", "Name"));
-this->setRelation(4, QSqlRelation("Product", "ProductID", "Name"));
+this->setRelation(1, QSqlRelation("DeliveryOrder", "DeliveryOrderID", "Title"));
+this->setRelation(2, QSqlRelation("Store", "StoreID", "Name"));
+this->setRelation(3, QSqlRelation("Product", "ProductID", "Name"));
 }
-DeliveryOrderStoreProduct::DeliveryOrderStoreProduct(int DeliveryOrderStoreProductID,QString Title,int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+DeliveryOrderStoreProduct::DeliveryOrderStoreProduct(int DeliveryOrderStoreProductID,int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->DeliveryOrderStoreProductID = DeliveryOrderStoreProductID ;
-this->Title = Title ;
 this->DeliveryOrderID = DeliveryOrderID ;
 this->StoreID = StoreID ;
 this->ProductID = ProductID ;
@@ -35,9 +33,8 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-DeliveryOrderStoreProduct::DeliveryOrderStoreProduct(QString Title,int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+DeliveryOrderStoreProduct::DeliveryOrderStoreProduct(int DeliveryOrderID,int StoreID,int ProductID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->DeliveryOrderStoreProductID = 0 ;
-this->Title = Title ;
 this->DeliveryOrderID = DeliveryOrderID ;
 this->StoreID = StoreID ;
 this->ProductID = ProductID ;
@@ -53,8 +50,8 @@ QString table = "DeliveryOrderStoreProduct";
 QString query =
 "(DeliveryOrderStoreProductID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (DeliveryOrderStoreProductID),"
-"Title VARCHAR(40) NOT NULL, "
 "DeliveryOrderID INT NOT NULL, "
+" KEY(DeliveryOrderID),"
 "FOREIGN KEY (DeliveryOrderID) REFERENCES DeliveryOrder(DeliveryOrderID)  ON DELETE CASCADE,"
 "StoreID INT NOT NULL, "
 "FOREIGN KEY (StoreID) REFERENCES Store(StoreID)  ON DELETE CASCADE,"
@@ -62,7 +59,7 @@ QString query =
 "FOREIGN KEY (ProductID) REFERENCES Product(ProductID)  ON DELETE CASCADE,"
 "Amount DECIMAL(6,2) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -79,11 +76,11 @@ bool DeliveryOrderStoreProduct::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(DeliveryOrderStoreProductID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO DeliveryOrderStoreProduct (Title,DeliveryOrderID,StoreID,ProductID,Amount,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Title)+"','"+QString::number(this->DeliveryOrderID)+"','"+QString::number(this->StoreID)+"','"+QString::number(this->ProductID)+"','"+QString::number(this->Amount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO DeliveryOrderStoreProduct (DeliveryOrderID,StoreID,ProductID,Amount,CreatedOn,EditedOn)"
+"VALUES ('" +QString::number(this->DeliveryOrderID)+"','"+QString::number(this->StoreID)+"','"+QString::number(this->ProductID)+"','"+QString::number(this->Amount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE DeliveryOrderStoreProduct SET "	"Title = '"+QString(this->Title)+"',"+"DeliveryOrderID = '"+QString::number(this->DeliveryOrderID)+"',"+"StoreID = '"+QString::number(this->StoreID)+"',"+"ProductID = '"+QString::number(this->ProductID)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE DeliveryOrderStoreProductID ='"+QString::number(this->DeliveryOrderStoreProductID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  DeliveryOrderStoreProductID FROM DeliveryOrderStoreProduct WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ErpModel::GetInstance()->qeryExec("UPDATE DeliveryOrderStoreProduct SET "	"DeliveryOrderID = '"+QString::number(this->DeliveryOrderID)+"',"+"StoreID = '"+QString::number(this->StoreID)+"',"+"ProductID = '"+QString::number(this->ProductID)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE DeliveryOrderStoreProductID ='"+QString::number(this->DeliveryOrderStoreProductID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  DeliveryOrderStoreProductID FROM DeliveryOrderStoreProduct WHERE DeliveryOrderID = "+QString::number(DeliveryOrderID)+" AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->DeliveryOrderStoreProductID = query.value(0).toInt();	
@@ -105,7 +102,7 @@ if(DeliveryOrderStoreProductID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderStoreProduct"
 "WHERE DeliveryOrderStoreProductID ='"+QString::number(this->DeliveryOrderStoreProductID)+"'"));
 while (query.next()) {
-return new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+return new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
  }
 
 }
@@ -116,7 +113,7 @@ QList<DeliveryOrderStoreProduct*> DeliveryOrderStoreProduct::GetAll() {
 	QList<DeliveryOrderStoreProduct*> deliveryorderstoreproducts =   QList<DeliveryOrderStoreProduct*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStoreProduct"));
 	while (query.next()) {
-deliveryorderstoreproducts.append(new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+deliveryorderstoreproducts.append(new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
 qStableSort(deliveryorderstoreproducts.begin(),deliveryorderstoreproducts.end());
 	return deliveryorderstoreproducts;
@@ -127,7 +124,7 @@ DeliveryOrderStoreProduct* deliveryorderstoreproduct = new DeliveryOrderStorePro
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderStoreProduct WHERE DeliveryOrderStoreProductID = '"+QString::number(id)+"'"));
 while (query.next()) {
-deliveryorderstoreproduct = new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+deliveryorderstoreproduct = new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
  }
 
 }
@@ -144,9 +141,9 @@ else return new DeliveryOrderStoreProduct();
 DeliveryOrderStoreProduct* DeliveryOrderStoreProduct::Get(QString name) {
 DeliveryOrderStoreProduct* deliveryorderstoreproduct = new DeliveryOrderStoreProduct();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStoreProduct WHERE Title = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStoreProduct WHERE DeliveryOrderID = QString::number("+name+")"));
 while (query.next()) {
-deliveryorderstoreproduct = new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
+deliveryorderstoreproduct = new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
 
  }
 
@@ -159,12 +156,11 @@ QList<DeliveryOrderStoreProduct*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStoreProduct"
 "WHERE" 
-"Title LIKE '%"+keyword+"%'"
-"OR CreatedOn LIKE '%"+keyword+"%'"
+"CreatedOn LIKE '%"+keyword+"%'"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+list.append(new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
  }
 
 }
@@ -176,7 +172,6 @@ QList<QString> DeliveryOrderStoreProduct::GetStringList() {
 	QList<DeliveryOrderStoreProduct*> deliveryorderstoreproducts =   QList<DeliveryOrderStoreProduct*>();
 deliveryorderstoreproducts = GetAll();
 	for(int i = 0; i <deliveryorderstoreproducts.count(); i++){
-		list.append(deliveryorderstoreproducts[i]->Title);
 	}
 qStableSort(list.begin(),list.end());
 	return list;
@@ -187,7 +182,7 @@ QHash<int,QString> DeliveryOrderStoreProduct::GetHashList() {
 	QList<DeliveryOrderStoreProduct*> deliveryorderstoreproducts =   QList<DeliveryOrderStoreProduct*>();
 deliveryorderstoreproducts = GetAll();
 	for(int i = 0; i <deliveryorderstoreproducts.count(); i++){
-		list.insert(deliveryorderstoreproducts[i]->DeliveryOrderStoreProductID,deliveryorderstoreproducts[i]->Title);
+		list.insert(deliveryorderstoreproducts[i]->DeliveryOrderStoreProductID,QString::number(deliveryorderstoreproducts[i]->DeliveryOrderID));
 	}
 	return list;
 }
@@ -196,7 +191,7 @@ int DeliveryOrderStoreProduct::GetIndex(QString name) {
 	QList<DeliveryOrderStoreProduct*> deliveryorderstoreproducts =   QList<DeliveryOrderStoreProduct*>();
 deliveryorderstoreproducts = GetAll();
 	for(int i = 0; i <deliveryorderstoreproducts.count(); i++){
-		if(deliveryorderstoreproducts[i]->Title == name){
+		if(deliveryorderstoreproducts[i]->DeliveryOrderID == name.toInt()){
 			return i;
 		}
 	}
@@ -208,7 +203,7 @@ QList<DeliveryOrderStoreProduct*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStoreProduct WHERE "+select+"" ));
 while (query.next()) {
-list.append(new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
+list.append(new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
  }
 
 }
@@ -219,7 +214,7 @@ Qt::ItemFlags DeliveryOrderStoreProduct::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -232,18 +227,16 @@ int id = data(primaryKeyIndex).toInt();
 bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
-ok = setTitle(id, value.toString());
-else if (index.column() == 2)
 ok = setDeliveryOrderID(id, value.toString());
-else if (index.column() == 3)
+else if (index.column() == 2)
 ok = setStoreID(id, value.toString());
-else if (index.column() == 4)
+else if (index.column() == 3)
 ok = setProductID(id, value.toString());
-else if (index.column() == 5)
+else if (index.column() == 4)
 ok = setAmount(id, value.toString());
-else if (index.column() == 6)
+else if (index.column() == 5)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 7)
+else if (index.column() == 6)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -262,25 +255,15 @@ return ok;
 void DeliveryOrderStoreProduct::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() DeliveryOrderStoreProduct!";
-this->setHeaderData(1, Qt::Horizontal, QObject::tr("Title"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Delivery Order"));
-this->setHeaderData(3, Qt::Horizontal, QObject::tr("Store"));
-this->setHeaderData(4, Qt::Horizontal, QObject::tr("Product"));
-this->setHeaderData(5, Qt::Horizontal, QObject::tr("Amount"));
-this->setHeaderData(6, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(7, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Delivery Order"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Store"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Product"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Amount"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(6, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
-}
-bool DeliveryOrderStoreProduct::setTitle(int DeliveryOrderStoreProductID, const QString &Title) {
-QSqlQuery query;
-query.prepare("update DeliveryOrderStoreProduct set Title = ? where DeliveryOrderStoreProductID = ?");
-query.addBindValue(Title);
-query.addBindValue(DeliveryOrderStoreProductID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
 }
 bool DeliveryOrderStoreProduct::setDeliveryOrderID(int DeliveryOrderStoreProductID, const QString &DeliveryOrderID) {
 QSqlQuery query;

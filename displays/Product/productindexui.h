@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productindexui.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,6 +16,7 @@
 #include "../../Model/tax.h"
 #include "../../Model/productcategory.h"
 
+#include "../ProductImage/productimageui.h"
 #include "../ProductFieldData/productfielddataui.h"
 
 #include <QWidget>

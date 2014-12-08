@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: fieldtypeui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->fieldtype = new FieldType();
 } 
 void FieldTypeUI::selectFieldType(){ 
-if(FieldType::GetStringList().contains(description->text()))
+if(FieldType::GetStringList().contains(this->fieldtype->Description))
 {
-FieldType* con = FieldType::Get(description->text());
+FieldType* con = FieldType::Get(this->fieldtype->Description);
 if(this->fieldtype->FieldTypeID != con->FieldTypeID){
 fill(con);
 }

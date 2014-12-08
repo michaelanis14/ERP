@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreelineui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -73,9 +73,9 @@ price->setText("");
 this->purchasefreeline = new PurchaseFreeLine();
 } 
 void PurchaseFreeLineUI::selectPurchaseFreeLine(){ 
-if(PurchaseFreeLine::GetStringList().contains(description->text()))
+if(PurchaseFreeLine::GetStringList().contains(QString::number(this->purchasefreeline->PurchaseID)))
 {
-PurchaseFreeLine* con = PurchaseFreeLine::Get(description->text());
+PurchaseFreeLine* con = PurchaseFreeLine::Get(QString::number(this->purchasefreeline->PurchaseID));
 if(this->purchasefreeline->PurchaseFreeLineID != con->PurchaseFreeLineID){
 fill(con);
 }

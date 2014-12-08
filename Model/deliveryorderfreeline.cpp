@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreeline.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -49,12 +49,13 @@ QString query =
 "(DeliveryOrderFreelineID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (DeliveryOrderFreelineID),"
 "DeliveryOrderID INT NOT NULL, "
+" KEY(DeliveryOrderID),"
 "FOREIGN KEY (DeliveryOrderID) REFERENCES DeliveryOrder(DeliveryOrderID)  ON DELETE CASCADE,"
 "Description VARCHAR(40) NOT NULL, "
 "Amount DECIMAL(6,2) NOT NULL, "
 "Price DECIMAL(6,2) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -75,7 +76,7 @@ ErpModel::GetInstance()->qeryExec("INSERT INTO DeliveryOrderFreeline (DeliveryOr
 "VALUES ('" +QString::number(this->DeliveryOrderID)+"','"+QString(this->Description)+"','"+QString::number(this->Amount)+"','"+QString::number(this->Price)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
 ErpModel::GetInstance()->qeryExec("UPDATE DeliveryOrderFreeline SET "	"DeliveryOrderID = '"+QString::number(this->DeliveryOrderID)+"',"+"Description = '"+QString(this->Description)+"',"+"Amount = '"+QString::number(this->Amount)+"',"+"Price = '"+QString::number(this->Price)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE DeliveryOrderFreelineID ='"+QString::number(this->DeliveryOrderFreelineID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  DeliveryOrderFreelineID FROM DeliveryOrderFreeline WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  DeliveryOrderFreelineID FROM DeliveryOrderFreeline WHERE DeliveryOrderID = "+QString::number(DeliveryOrderID)+" AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->DeliveryOrderFreelineID = query.value(0).toInt();	
@@ -136,7 +137,7 @@ else return new DeliveryOrderFreeline();
 DeliveryOrderFreeline* DeliveryOrderFreeline::Get(QString name) {
 DeliveryOrderFreeline* deliveryorderfreeline = new DeliveryOrderFreeline();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderFreeline WHERE Description = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderFreeline WHERE DeliveryOrderID = QString::number("+name+")"));
 while (query.next()) {
 deliveryorderfreeline = new DeliveryOrderFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
 
@@ -179,7 +180,7 @@ QHash<int,QString> DeliveryOrderFreeline::GetHashList() {
 	QList<DeliveryOrderFreeline*> deliveryorderfreelines =   QList<DeliveryOrderFreeline*>();
 deliveryorderfreelines = GetAll();
 	for(int i = 0; i <deliveryorderfreelines.count(); i++){
-		list.insert(deliveryorderfreelines[i]->DeliveryOrderFreelineID,deliveryorderfreelines[i]->Description);
+		list.insert(deliveryorderfreelines[i]->DeliveryOrderFreelineID,QString::number(deliveryorderfreelines[i]->DeliveryOrderID));
 	}
 	return list;
 }
@@ -188,7 +189,7 @@ int DeliveryOrderFreeline::GetIndex(QString name) {
 	QList<DeliveryOrderFreeline*> deliveryorderfreelines =   QList<DeliveryOrderFreeline*>();
 deliveryorderfreelines = GetAll();
 	for(int i = 0; i <deliveryorderfreelines.count(); i++){
-		if(deliveryorderfreelines[i]->Description == name){
+		if(deliveryorderfreelines[i]->DeliveryOrderID == name.toInt()){
 			return i;
 		}
 	}

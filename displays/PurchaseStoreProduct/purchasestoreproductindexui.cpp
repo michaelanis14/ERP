@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproductindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ PurchaseStoreProductIndexUI*PurchaseStoreProductIndexUI::GetUI(){
 	return (PurchaseStoreProductIndexUI*) p_instance; 
 }
 void PurchaseStoreProductIndexUI::addRow(){ 
- PurchaseStoreProductUI::ShowUI(); 
- PurchaseStoreProductUI::GetUI()->fill(new PurchaseStoreProduct()); 
- }
+ PurchaseStoreProductUI::ShowUI();}
 void PurchaseStoreProductIndexUI::editRow(){ 
  PurchaseStoreProductUI::ShowUI(); 
  PurchaseStoreProductUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

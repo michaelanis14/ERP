@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: serviceui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -92,9 +92,9 @@ barcode->setText("");
 this->service = new Service();
 } 
 void ServiceUI::selectService(){ 
-if(Service::GetStringList().contains(name->text()))
+if(Service::GetStringList().contains(this->service->Name))
 {
-Service* con = Service::Get(name->text());
+Service* con = Service::Get(this->service->Name);
 if(this->service->ServiceID != con->ServiceID){
 fill(con);
 }

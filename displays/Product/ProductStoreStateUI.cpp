@@ -32,9 +32,11 @@ ProductStoreStateUI::ProductStoreStateUI(QWidget *parent) :
 	tabel = new ERPTableView();
 //
 	refreshTabel();
-	model->setHeaderData(1, Qt::Horizontal, QObject::tr("Barcode"));
-	model->setHeaderData(2, Qt::Horizontal, QObject::tr("Name"));
-	model->setHeaderData(3, Qt::Horizontal, QObject::tr("Amount"));
+	//tabel->tabel->hideColumn(0);
+	model->setHeaderData(1, Qt::Horizontal, QObject::tr("Store"));
+	model->setHeaderData(2, Qt::Horizontal, QObject::tr("Barcode"));
+	model->setHeaderData(3, Qt::Horizontal, QObject::tr("Name"));
+	model->setHeaderData(4, Qt::Horizontal, QObject::tr("Amount"));
 
 
 	block0Layout->addRow("",tabel);
@@ -95,6 +97,7 @@ void ProductStoreStateUI::refreshTabel(){
 
 		row++;
 	}
+	tabel->tabel->hideColumn(0);
 
 	tabel->tabel->setModel(model);
 	//tabel->sortByColumn(0,Qt::DescendingOrder);

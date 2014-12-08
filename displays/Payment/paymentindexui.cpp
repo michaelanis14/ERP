@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ PaymentIndexUI*PaymentIndexUI::GetUI(){
 	return (PaymentIndexUI*) p_instance; 
 }
 void PaymentIndexUI::addRow(){ 
- PaymentUI::ShowUI(); 
- PaymentUI::GetUI()->fill(new Payment()); 
- }
+ PaymentUI::ShowUI();}
 void PaymentIndexUI::editRow(){ 
  PaymentUI::ShowUI(); 
  PaymentUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

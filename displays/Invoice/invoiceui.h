@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceui.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -41,7 +41,6 @@ public:
 	QList<InvoiceStateDateUI*> InvoiceStateDates;
 	QList<InvoiceFreelineUI*> InvoiceFreelines;
 	QList<PaymentUI*> Payments;
-	QLineEdit*title;
 	QDateEdit*creationdate;
 	QDateEdit*enddate;
 	ERPComboBox*invoiceperiod;

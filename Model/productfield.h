@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfield.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,9 +16,9 @@ class ProductField  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	ProductField();
-	ProductField(int FieldTypeID,QString Description,bool Defaults,QString CreatedOn,QString EditedOn);	int ProductFieldID;
-	int FieldTypeID;
+	ProductField(QString Description,int FieldTypeID,bool Defaults,QString CreatedOn,QString EditedOn);	int ProductFieldID;
 	QString Description;
+	int FieldTypeID;
 	bool Defaults;
 	QString CreatedOn;
 	QString EditedOn;
@@ -42,9 +42,9 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	ProductField(int ProductFieldID,int FieldTypeID,QString Description,bool Defaults,QString CreatedOn,QString EditedOn);	static ProductField* p_instance;
-	bool setFieldTypeID(int ProductFieldID, const QString &FieldTypeID);
+	ProductField(int ProductFieldID,QString Description,int FieldTypeID,bool Defaults,QString CreatedOn,QString EditedOn);	static ProductField* p_instance;
 	bool setDescription(int ProductFieldID, const QString &Description);
+	bool setFieldTypeID(int ProductFieldID, const QString &FieldTypeID);
 	bool setDefaults(int ProductFieldID, const QString &Defaults);
 	bool setCreatedOn(int ProductFieldID, const QString &CreatedOn);
 	bool setEditedOn(int ProductFieldID, const QString &EditedOn);

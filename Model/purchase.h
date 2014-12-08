@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchase.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -17,8 +17,7 @@ class Purchase  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Purchase();
-	Purchase(QString Title,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	int PurchaseID;
-	QString Title;
+	Purchase(QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	int PurchaseID;
 	QString CreationDate;
 	QString DeliveryDate;
 	QList<PurchaseStoreProduct*> purchasestoreproducts;
@@ -44,8 +43,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Purchase(int PurchaseID,QString Title,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	static Purchase* p_instance;
-	bool setTitle(int PurchaseID, const QString &Title);
+	Purchase(int PurchaseID,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	static Purchase* p_instance;
 	bool setCreationDate(int PurchaseID, const QString &CreationDate);
 	bool setDeliveryDate(int PurchaseID, const QString &DeliveryDate);
 	bool setCreatedOn(int PurchaseID, const QString &CreatedOn);

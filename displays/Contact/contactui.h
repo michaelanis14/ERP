@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -52,8 +52,8 @@ public:
 	QList<ContactEmailUI*> ContactEmails;
 	QList<BankAccountUI*> BankAccounts;
 	QList<ContactFieldDataUI*> ContactFieldDatas;
-	QLineEdit*salutation;
 	QLineEdit*name;
+	QLineEdit*salutation;
 	QDateEdit*birthdateordateoffoundation;
 	ERPComboBox*contacttype;
 	ERPComboBox*contactclass;

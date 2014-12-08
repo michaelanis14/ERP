@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproduct.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,8 +16,7 @@ class PurchaseStoreProduct  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	PurchaseStoreProduct();
-	PurchaseStoreProduct(QString Title,int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	int PurchaseStoreProductID;
-	QString Title;
+	PurchaseStoreProduct(int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	int PurchaseStoreProductID;
 	int StoreID;
 	int PurchaseID;
 	int ContactID;
@@ -45,8 +44,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	PurchaseStoreProduct(int PurchaseStoreProductID,QString Title,int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	static PurchaseStoreProduct* p_instance;
-	bool setTitle(int PurchaseStoreProductID, const QString &Title);
+	PurchaseStoreProduct(int PurchaseStoreProductID,int StoreID,int PurchaseID,int ContactID,int ProductID,double Amount,QString CreatedOn,QString EditedOn);	static PurchaseStoreProduct* p_instance;
 	bool setStoreID(int PurchaseStoreProductID, const QString &StoreID);
 	bool setPurchaseID(int PurchaseStoreProductID, const QString &PurchaseID);
 	bool setContactID(int PurchaseStoreProductID, const QString &ContactID);

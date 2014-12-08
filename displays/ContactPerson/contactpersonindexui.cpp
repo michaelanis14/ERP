@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ ContactPersonIndexUI*ContactPersonIndexUI::GetUI(){
 	return (ContactPersonIndexUI*) p_instance; 
 }
 void ContactPersonIndexUI::addRow(){ 
- ContactPersonUI::ShowUI(); 
- ContactPersonUI::GetUI()->fill(new ContactPerson()); 
- }
+ ContactPersonUI::ShowUI();}
 void ContactPersonIndexUI::editRow(){ 
  ContactPersonUI::ShowUI(); 
  ContactPersonUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

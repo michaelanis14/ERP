@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttelephoneindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ ContactTelephoneIndexUI*ContactTelephoneIndexUI::GetUI(){
 	return (ContactTelephoneIndexUI*) p_instance; 
 }
 void ContactTelephoneIndexUI::addRow(){ 
- ContactTelephoneUI::ShowUI(); 
- ContactTelephoneUI::GetUI()->fill(new ContactTelephone()); 
- }
+ ContactTelephoneUI::ShowUI();}
 void ContactTelephoneIndexUI::editRow(){ 
  ContactTelephoneUI::ShowUI(); 
  ContactTelephoneUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

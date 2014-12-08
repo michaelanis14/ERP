@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ title->setText("");
 this->tax = new Tax();
 } 
 void TaxUI::selectTax(){ 
-if(Tax::GetStringList().contains(title->text()))
+if(Tax::GetStringList().contains(this->tax->Title))
 {
-Tax* con = Tax::Get(title->text());
+Tax* con = Tax::Get(this->tax->Title);
 if(this->tax->TaxID != con->TaxID){
 fill(con);
 }

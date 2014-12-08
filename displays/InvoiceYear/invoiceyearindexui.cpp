@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceyearindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ InvoiceYearIndexUI*InvoiceYearIndexUI::GetUI(){
 	return (InvoiceYearIndexUI*) p_instance; 
 }
 void InvoiceYearIndexUI::addRow(){ 
- InvoiceYearUI::ShowUI(); 
- InvoiceYearUI::GetUI()->fill(new InvoiceYear()); 
- }
+ InvoiceYearUI::ShowUI();}
 void InvoiceYearIndexUI::editRow(){ 
  InvoiceYearUI::ShowUI(); 
  InvoiceYearUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

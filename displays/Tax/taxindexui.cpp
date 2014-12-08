@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ TaxIndexUI*TaxIndexUI::GetUI(){
 	return (TaxIndexUI*) p_instance; 
 }
 void TaxIndexUI::addRow(){ 
- TaxUI::ShowUI(); 
- TaxUI::GetUI()->fill(new Tax()); 
- }
+ TaxUI::ShowUI();}
 void TaxIndexUI::editRow(){ 
  TaxUI::ShowUI(); 
  TaxUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

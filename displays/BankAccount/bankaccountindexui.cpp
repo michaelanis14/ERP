@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ BankAccountIndexUI*BankAccountIndexUI::GetUI(){
 	return (BankAccountIndexUI*) p_instance; 
 }
 void BankAccountIndexUI::addRow(){ 
- BankAccountUI::ShowUI(); 
- BankAccountUI::GetUI()->fill(new BankAccount()); 
- }
+ BankAccountUI::ShowUI();}
 void BankAccountIndexUI::editRow(){ 
  BankAccountUI::ShowUI(); 
  BankAccountUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

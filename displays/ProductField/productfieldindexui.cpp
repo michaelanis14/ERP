@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfieldindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ ProductFieldIndexUI*ProductFieldIndexUI::GetUI(){
 	return (ProductFieldIndexUI*) p_instance; 
 }
 void ProductFieldIndexUI::addRow(){ 
- ProductFieldUI::ShowUI(); 
- ProductFieldUI::GetUI()->fill(new ProductField()); 
- }
+ ProductFieldUI::ShowUI();}
 void ProductFieldIndexUI::editRow(){ 
  ProductFieldUI::ShowUI(); 
  ProductFieldUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

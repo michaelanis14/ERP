@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedate.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,8 +16,7 @@ class InvoiceStateDate  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	InvoiceStateDate();
-	InvoiceStateDate(QString Title,int InvoiceID,int InvoiceStateID,QString Date,QString CreatedOn,QString EditedOn);	int InvoiceStateDateID;
-	QString Title;
+	InvoiceStateDate(int InvoiceID,int InvoiceStateID,QString Date,QString CreatedOn,QString EditedOn);	int InvoiceStateDateID;
 	int InvoiceID;
 	int InvoiceStateID;
 	QString Date;
@@ -43,8 +42,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	InvoiceStateDate(int InvoiceStateDateID,QString Title,int InvoiceID,int InvoiceStateID,QString Date,QString CreatedOn,QString EditedOn);	static InvoiceStateDate* p_instance;
-	bool setTitle(int InvoiceStateDateID, const QString &Title);
+	InvoiceStateDate(int InvoiceStateDateID,int InvoiceID,int InvoiceStateID,QString Date,QString CreatedOn,QString EditedOn);	static InvoiceStateDate* p_instance;
 	bool setInvoiceID(int InvoiceStateDateID, const QString &InvoiceID);
 	bool setInvoiceStateID(int InvoiceStateDateID, const QString &InvoiceStateID);
 	bool setDate(int InvoiceStateDateID, const QString &Date);

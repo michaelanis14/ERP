@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ ProjectIndexUI*ProjectIndexUI::GetUI(){
 	return (ProjectIndexUI*) p_instance; 
 }
 void ProjectIndexUI::addRow(){ 
- ProjectUI::ShowUI(); 
- ProjectUI::GetUI()->fill(new Project()); 
- }
+ ProjectUI::ShowUI();}
 void ProjectIndexUI::editRow(){ 
  ProjectUI::ShowUI(); 
  ProjectUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

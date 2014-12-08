@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfieldui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -30,11 +30,11 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
+description = new QLineEdit();
+block0Layout->addRow("Description",description);
 fieldtype = new ERPComboBox();
 fieldtype->addItems(FieldType::GetHashList());
 block0Layout->addRow("Field Type",fieldtype);
-description = new QLineEdit();
-block0Layout->addRow("Description",description);
 defaults = new QCheckBox();
 block0Layout->addRow("Defaults",defaults);
 flowLayout->addWidget(block0Layout);
@@ -66,9 +66,9 @@ defaults->setChecked(false);
 this->productfield = new ProductField();
 } 
 void ProductFieldUI::selectProductField(){ 
-if(ProductField::GetStringList().contains(description->text()))
+if(ProductField::GetStringList().contains(this->productfield->Description))
 {
-ProductField* con = ProductField::Get(description->text());
+ProductField* con = ProductField::Get(this->productfield->Description);
 if(this->productfield->ProductFieldID != con->ProductFieldID){
 fill(con);
 }
@@ -79,8 +79,6 @@ clear();
 bool ProductFieldUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(productfield->FieldTypeID == 0) 
-productfield->FieldTypeID = fieldtype->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Description Can't be Empty! \n";
@@ -96,6 +94,8 @@ description->style()->polish(description);
 description->update();
 productfield->Description = description->text().trimmed();
 }
+if(productfield->FieldTypeID == 0) 
+productfield->FieldTypeID = fieldtype->getKey();
 productfield->Defaults = defaults->text().trimmed().toInt();
 if(!errors) {
 productfield->save();

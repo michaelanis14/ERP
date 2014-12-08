@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,11 +31,11 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
+title = new QLineEdit();
+block0Layout->addRow("Title",title);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetHashList());
 block0Layout->addRow("Contact",contact);
-title = new QLineEdit();
-block0Layout->addRow("Title",title);
 name = new QLineEdit();
 QStringList* list = new QStringList(ContactPerson::GetStringList());
 QCompleter *completer = new QCompleter(*list);
@@ -216,9 +216,9 @@ if(child->parent()->parent()->parent() != 0)
 this->contactperson = new ContactPerson();
 } 
 void ContactPersonUI::selectContactPerson(){ 
-if(ContactPerson::GetStringList().contains(title->text()))
+if(ContactPerson::GetStringList().contains(this->contactperson->Title))
 {
-ContactPerson* con = ContactPerson::Get(title->text());
+ContactPerson* con = ContactPerson::Get(this->contactperson->Title);
 if(this->contactperson->ContactPersonID != con->ContactPersonID){
 fill(con);
 }
@@ -229,8 +229,6 @@ clear();
 bool ContactPersonUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(contactperson->ContactID == 0) 
-contactperson->ContactID = contact->getKey();
 if(title->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Title Can't be Empty! \n";
@@ -246,6 +244,8 @@ title->style()->polish(title);
 title->update();
 contactperson->Title = title->text().trimmed();
 }
+if(contactperson->ContactID == 0) 
+contactperson->ContactID = contact->getKey();
 if(name->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Name Can't be Empty! \n";

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employeeui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -63,9 +63,9 @@ delete this->employee;
 this->employee = new Employee();
 } 
 void EmployeeUI::selectEmployee(){ 
-if(Employee::GetStringList().contains(name->text()))
+if(Employee::GetStringList().contains(this->employee->Name))
 {
-Employee* con = Employee::Get(name->text());
+Employee* con = Employee::Get(this->employee->Name);
 if(this->employee->EmployeeID != con->EmployeeID){
 fill(con);
 }

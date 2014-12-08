@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: service.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -58,6 +58,7 @@ QString query =
 "(ServiceID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (ServiceID),"
 "Name VARCHAR(40) NOT NULL, "
+" KEY(Name),"
 "ShortDescription VARCHAR(40) NOT NULL, "
 "SellingPrice DECIMAL(6,2) NOT NULL, "
 "NetCoast DECIMAL(6,2) NOT NULL, "
@@ -66,7 +67,7 @@ QString query =
 "FOREIGN KEY (TaxID) REFERENCES Tax(TaxID)  ON DELETE CASCADE,"
 "Barcode VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;

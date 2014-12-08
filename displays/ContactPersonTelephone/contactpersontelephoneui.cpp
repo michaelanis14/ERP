@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersontelephoneui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -68,9 +68,9 @@ number->setText("");
 this->contactpersontelephone = new ContactPersonTelephone();
 } 
 void ContactPersonTelephoneUI::selectContactPersonTelephone(){ 
-if(ContactPersonTelephone::GetStringList().contains(description->text()))
+if(ContactPersonTelephone::GetStringList().contains(this->contactpersontelephone->Description))
 {
-ContactPersonTelephone* con = ContactPersonTelephone::Get(description->text());
+ContactPersonTelephone* con = ContactPersonTelephone::Get(this->contactpersontelephone->Description);
 if(this->contactpersontelephone->ContactPersonTelephoneID != con->ContactPersonTelephoneID){
 fill(con);
 }

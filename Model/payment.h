@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: payment.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,9 +16,8 @@ class Payment  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Payment();
-	Payment(int InvoiceID,QString Title,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn);	int PaymentID;
+	Payment(int InvoiceID,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn);	int PaymentID;
 	int InvoiceID;
-	QString Title;
 	double TotalAmount;
 	QString Comment;
 	int PaymentTypeID;
@@ -44,9 +43,8 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Payment(int PaymentID,int InvoiceID,QString Title,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn);	static Payment* p_instance;
+	Payment(int PaymentID,int InvoiceID,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn);	static Payment* p_instance;
 	bool setInvoiceID(int PaymentID, const QString &InvoiceID);
-	bool setTitle(int PaymentID, const QString &Title);
 	bool setTotalAmount(int PaymentID, const QString &TotalAmount);
 	bool setComment(int PaymentID, const QString &Comment);
 	bool setPaymentTypeID(int PaymentID, const QString &PaymentTypeID);

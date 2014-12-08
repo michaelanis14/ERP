@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,6 +10,7 @@
 #include <QSqlRelationalTableModel>
 #include <QSqlError>
 #include <QtGui>
+#include "productimage.h"
 #include "productfielddata.h"
 
 class Product  : public QSqlRelationalTableModel
@@ -17,12 +18,10 @@ class Product  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Product();
-	Product(QString Name,QString Image,QString ShortDescription,int UnitID,bool ProductIsAComposite,double SellingPrice,double NetCoast,double TradeMarginRate,int TaxID,QString information,QString Barcode,int ProductCategoryID,double CriticalAmount,QString CreatedOn,QString EditedOn);	int ProductID;
+	Product(QString Name,QString ShortDescription,int UnitID,double SellingPrice,double NetCoast,double TradeMarginRate,int TaxID,QString information,QString Barcode,int ProductCategoryID,double CriticalAmount,QString CreatedOn,QString EditedOn);	int ProductID;
 	QString Name;
-	QString Image;
 	QString ShortDescription;
 	int UnitID;
-	bool ProductIsAComposite;
 	double SellingPrice;
 	double NetCoast;
 	double TradeMarginRate;
@@ -31,6 +30,7 @@ public:
 	QString Barcode;
 	int ProductCategoryID;
 	double CriticalAmount;
+	QList<ProductImage*> productimages;
 	QList<ProductFieldData*> productfielddatas;
 	QString CreatedOn;
 	QString EditedOn;
@@ -54,12 +54,10 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Product(int ProductID,QString Name,QString Image,QString ShortDescription,int UnitID,bool ProductIsAComposite,double SellingPrice,double NetCoast,double TradeMarginRate,int TaxID,QString information,QString Barcode,int ProductCategoryID,double CriticalAmount,QString CreatedOn,QString EditedOn);	static Product* p_instance;
+	Product(int ProductID,QString Name,QString ShortDescription,int UnitID,double SellingPrice,double NetCoast,double TradeMarginRate,int TaxID,QString information,QString Barcode,int ProductCategoryID,double CriticalAmount,QString CreatedOn,QString EditedOn);	static Product* p_instance;
 	bool setName(int ProductID, const QString &Name);
-	bool setImage(int ProductID, const QString &Image);
 	bool setShortDescription(int ProductID, const QString &ShortDescription);
 	bool setUnitID(int ProductID, const QString &UnitID);
-	bool setProductIsAComposite(int ProductID, const QString &ProductIsAComposite);
 	bool setSellingPrice(int ProductID, const QString &SellingPrice);
 	bool setNetCoast(int ProductID, const QString &NetCoast);
 	bool setTradeMarginRate(int ProductID, const QString &TradeMarginRate);

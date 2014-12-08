@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfielddata.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -47,12 +47,13 @@ QString query =
 "(ContactFieldDataID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (ContactFieldDataID),"
 "ContactID INT NOT NULL, "
+" KEY(ContactID),"
 "FOREIGN KEY (ContactID) REFERENCES Contact(ContactID)  ON DELETE CASCADE,"
 "ContactFieldID INT NOT NULL, "
 "FOREIGN KEY (ContactFieldID) REFERENCES ContactField(ContactFieldID)  ON DELETE CASCADE,"
 "Value VARCHAR(40) NOT NULL, "
 "CreatedOn VARCHAR(40) NOT NULL, "
-"EditedOn VARCHAR(40) NOT NULL)" ;
+"EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 ErpModel::GetInstance()->createTable(table,query);
 return true;
@@ -73,7 +74,7 @@ ErpModel::GetInstance()->qeryExec("INSERT INTO ContactFieldData (ContactID,Conta
 "VALUES ('" +QString::number(this->ContactID)+"','"+QString::number(this->ContactFieldID)+"','"+QString(this->Value)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
 ErpModel::GetInstance()->qeryExec("UPDATE ContactFieldData SET "	"ContactID = '"+QString::number(this->ContactID)+"',"+"ContactFieldID = '"+QString::number(this->ContactFieldID)+"',"+"Value = '"+QString(this->Value)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactFieldDataID ='"+QString::number(this->ContactFieldDataID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactFieldDataID FROM ContactFieldData WHERE Value = '"+Value+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactFieldDataID FROM ContactFieldData WHERE ContactID = "+QString::number(ContactID)+" AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->ContactFieldDataID = query.value(0).toInt();	
@@ -134,7 +135,7 @@ else return new ContactFieldData();
 ContactFieldData* ContactFieldData::Get(QString name) {
 ContactFieldData* contactfielddata = new ContactFieldData();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactFieldData WHERE Value = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactFieldData WHERE ContactID = QString::number("+name+")"));
 while (query.next()) {
 contactfielddata = new ContactFieldData(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString());
 
@@ -177,7 +178,7 @@ QHash<int,QString> ContactFieldData::GetHashList() {
 	QList<ContactFieldData*> contactfielddatas =   QList<ContactFieldData*>();
 contactfielddatas = GetAll();
 	for(int i = 0; i <contactfielddatas.count(); i++){
-		list.insert(contactfielddatas[i]->ContactFieldDataID,contactfielddatas[i]->Value);
+		list.insert(contactfielddatas[i]->ContactFieldDataID,QString::number(contactfielddatas[i]->ContactID));
 	}
 	return list;
 }
@@ -186,7 +187,7 @@ int ContactFieldData::GetIndex(QString name) {
 	QList<ContactFieldData*> contactfielddatas =   QList<ContactFieldData*>();
 contactfielddatas = GetAll();
 	for(int i = 0; i <contactfielddatas.count(); i++){
-		if(contactfielddatas[i]->Value == name){
+		if(contactfielddatas[i]->ContactID == name.toInt()){
 			return i;
 		}
 	}

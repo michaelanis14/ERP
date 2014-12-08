@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestatusui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,9 +59,9 @@ description->setText("");
 this->purchasestatus = new PurchaseStatus();
 } 
 void PurchaseStatusUI::selectPurchaseStatus(){ 
-if(PurchaseStatus::GetStringList().contains(description->text()))
+if(PurchaseStatus::GetStringList().contains(this->purchasestatus->Description))
 {
-PurchaseStatus* con = PurchaseStatus::Get(description->text());
+PurchaseStatus* con = PurchaseStatus::Get(this->purchasestatus->Description);
 if(this->purchasestatus->PurchaseStatusID != con->PurchaseStatusID){
 fill(con);
 }

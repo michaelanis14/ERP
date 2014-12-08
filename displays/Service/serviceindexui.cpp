@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: serviceindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ ServiceIndexUI*ServiceIndexUI::GetUI(){
 	return (ServiceIndexUI*) p_instance; 
 }
 void ServiceIndexUI::addRow(){ 
- ServiceUI::ShowUI(); 
- ServiceUI::GetUI()->fill(new Service()); 
- }
+ ServiceUI::ShowUI();}
 void ServiceIndexUI::editRow(){ 
  ServiceUI::ShowUI(); 
  ServiceUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

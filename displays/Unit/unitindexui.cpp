@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unitindexui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,9 +55,7 @@ UnitIndexUI*UnitIndexUI::GetUI(){
 	return (UnitIndexUI*) p_instance; 
 }
 void UnitIndexUI::addRow(){ 
- UnitUI::ShowUI(); 
- UnitUI::GetUI()->fill(new Unit()); 
- }
+ UnitUI::ShowUI();}
 void UnitIndexUI::editRow(){ 
  UnitUI::ShowUI(); 
  UnitUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 

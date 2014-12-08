@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Mon Dec 01 18:33:03 EET 2014
+#   Created on: Sat Dec 06 23:44:49 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
@@ -28,6 +28,7 @@ SOURCES += main.cpp \
 	displays/CommonUI/RemovebtnWidgets.cpp  \
 	displays/CommonUI/barcode.cpp  \
 	displays/CommonUI/ean13.cpp  \
+	displays/CommonUI/erptableview.cpp  \
 	Model/erpmodel.cpp \
 	Model/company.cpp \
 	Model/tax.cpp \
@@ -52,6 +53,7 @@ SOURCES += main.cpp \
 	Model/project.cpp \
 	Model/unit.cpp \
 	Model/productcategory.cpp \
+	Model/productimage.cpp \
 	Model/product.cpp \
 	Model/productfield.cpp \
 	Model/productfielddata.cpp \
@@ -74,7 +76,7 @@ SOURCES += main.cpp \
 	Model/invoicefreeline.cpp \
 	Model/paymenttype.cpp \
 	Model/payment.cpp \
-	displays/Company/companyindexui.cpp \
+	displays/Product/ProductStoreStateUI.cpp 	displays/Company/companyindexui.cpp \
 	displays/Company/companyui.cpp \
 	displays/Tax/taxindexui.cpp \
 	displays/Tax/taxui.cpp \
@@ -120,6 +122,8 @@ SOURCES += main.cpp \
 	displays/Unit/unitui.cpp \
 	displays/ProductCategory/productcategoryindexui.cpp \
 	displays/ProductCategory/productcategoryui.cpp \
+	displays/ProductImage/productimageindexui.cpp \
+	displays/ProductImage/productimageui.cpp \
 	displays/Product/productindexui.cpp \
 	displays/Product/productui.cpp \
 	displays/ProductField/productfieldindexui.cpp \
@@ -164,9 +168,7 @@ SOURCES += main.cpp \
 	displays/PaymentType/paymenttypeui.cpp \
 	displays/Payment/paymentindexui.cpp \
 	displays/Payment/paymentui.cpp \
-	displays/Product/ProductStoreStateUI.cpp \
-    displays/CommonUI/printview.cpp \
-    displays/CommonUI/erptableview.cpp
+    displays/Purchase/createpurchase.cpp
 
 HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/erpcombobox.h \
@@ -178,6 +180,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/RemovebtnWidgets.h  \
 	displays/CommonUI/barcode.h  \
 	displays/CommonUI/ean13.h  \
+	displays/CommonUI/erptableview.h  \
 	Model/erpmodel.h \
 	Model/company.h \
 	Model/tax.h \
@@ -202,6 +205,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/project.h \
 	Model/unit.h \
 	Model/productcategory.h \
+	Model/productimage.h \
 	Model/product.h \
 	Model/productfield.h \
 	Model/productfielddata.h \
@@ -224,7 +228,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/invoicefreeline.h \
 	Model/paymenttype.h \
 	Model/payment.h \
-	displays/Company/companyindexui.h \
+	displays/Product/ProductStoreStateUI.h 	displays/Company/companyindexui.h \
 	displays/Company/companyui.h \
 	displays/Tax/taxindexui.h \
 	displays/Tax/taxui.h \
@@ -270,6 +274,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Unit/unitui.h \
 	displays/ProductCategory/productcategoryindexui.h \
 	displays/ProductCategory/productcategoryui.h \
+	displays/ProductImage/productimageindexui.h \
+	displays/ProductImage/productimageui.h \
 	displays/Product/productindexui.h \
 	displays/Product/productui.h \
 	displays/ProductField/productfieldindexui.h \
@@ -313,10 +319,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/PaymentType/paymenttypeindexui.h \
 	displays/PaymentType/paymenttypeui.h \
 	displays/Payment/paymentindexui.h \
-	displays/Payment/paymentui.h \
-	displays/Product/ProductStoreStateUI.h \
-    displays/CommonUI/printview.h \
-    displays/CommonUI/erptableview.h
+	displays/Payment/paymentui.h \ 
+    displays/Purchase/createpurchase.h
 
 FORMS	+= mainwindow.ui
 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreeline.h
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,9 +16,9 @@ class InvoiceFreeline  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	InvoiceFreeline();
-	InvoiceFreeline(int InvoiceID,QString Description,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn);	int InvoiceFreelineID;
-	int InvoiceID;
+	InvoiceFreeline(QString Description,int InvoiceID,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn);	int InvoiceFreelineID;
 	QString Description;
+	int InvoiceID;
 	double Price;
 	int TaxID;
 	double Amount;
@@ -44,9 +44,9 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	InvoiceFreeline(int InvoiceFreelineID,int InvoiceID,QString Description,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn);	static InvoiceFreeline* p_instance;
-	bool setInvoiceID(int InvoiceFreelineID, const QString &InvoiceID);
+	InvoiceFreeline(int InvoiceFreelineID,QString Description,int InvoiceID,double Price,int TaxID,double Amount,QString CreatedOn,QString EditedOn);	static InvoiceFreeline* p_instance;
 	bool setDescription(int InvoiceFreelineID, const QString &Description);
+	bool setInvoiceID(int InvoiceFreelineID, const QString &InvoiceID);
 	bool setPrice(int InvoiceFreelineID, const QString &Price);
 	bool setTaxID(int InvoiceFreelineID, const QString &TaxID);
 	bool setAmount(int InvoiceFreelineID, const QString &Amount);

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreelineui.cpp
-**   Created on: Fri Dec 05 14:22:26 EET 2014
+**   Created on: Sun Dec 07 15:14:08 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -73,9 +73,9 @@ price->setText("");
 this->deliveryorderfreeline = new DeliveryOrderFreeline();
 } 
 void DeliveryOrderFreelineUI::selectDeliveryOrderFreeline(){ 
-if(DeliveryOrderFreeline::GetStringList().contains(description->text()))
+if(DeliveryOrderFreeline::GetStringList().contains(QString::number(this->deliveryorderfreeline->DeliveryOrderID)))
 {
-DeliveryOrderFreeline* con = DeliveryOrderFreeline::Get(description->text());
+DeliveryOrderFreeline* con = DeliveryOrderFreeline::Get(QString::number(this->deliveryorderfreeline->DeliveryOrderID));
 if(this->deliveryorderfreeline->DeliveryOrderFreelineID != con->DeliveryOrderFreelineID){
 fill(con);
 }
