@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productcategory.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ProductCategoryID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ProductCategory* ProductCategory::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ProductCategory::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ProductCategory::remove() {
 if(ProductCategoryID!= 0) {
@@ -93,18 +100,17 @@ return new ProductCategory();
 
 QList<ProductCategory*> ProductCategory::GetAll() {
 	QList<ProductCategory*> productcategorys =   QList<ProductCategory*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductCategory"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductCategory ORDER BY ProductCategoryID ASC"));
 	while (query.next()) {
 productcategorys.append(new ProductCategory(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(productcategorys.begin(),productcategorys.end());
 	return productcategorys;
 }
 
 ProductCategory* ProductCategory::Get(int id) {
 ProductCategory* productcategory = new ProductCategory();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ProductCategory WHERE ProductCategoryID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ProductCategory WHERE ProductCategoryID = '"+QString::number(id)+"' ORDER BY ProductCategoryID ASC "));
 while (query.next()) {
 productcategory = new ProductCategory(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ productcategorys = GetAll();
 	for(int i = 0; i <productcategorys.count(); i++){
 		list.append(productcategorys[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ProductCategory::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ProductCategory::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ProductCategory*> productcategorys =   QList<ProductCategory*>();
 productcategorys = GetAll();
 	for(int i = 0; i <productcategorys.count(); i++){
-		list.insert(productcategorys[i]->ProductCategoryID,productcategorys[i]->Description);
+		list.append(qMakePair(productcategorys[i]->ProductCategoryID,productcategorys[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ProductCategory::GetPairList(QList<ProductCategory*> productcategorys) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <productcategorys.count(); i++){
+		list.append(qMakePair(productcategorys[i]->ProductCategoryID,productcategorys[i]->Description));
 	}
 	return list;
 }

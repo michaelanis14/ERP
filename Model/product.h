@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,7 +11,6 @@
 #include <QSqlError>
 #include <QtGui>
 #include "productimage.h"
-#include "productfielddata.h"
 
 class Product  : public QSqlRelationalTableModel
 {
@@ -31,11 +30,11 @@ public:
 	int ProductCategoryID;
 	double CriticalAmount;
 	QList<ProductImage*> productimages;
-	QList<ProductFieldData*> productfielddatas;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	Product* get();
 	Product* get(const QModelIndex &index);
@@ -45,7 +44,8 @@ public:
 	static QList<Product*> Search(QString keyword);
 	static QList<Product*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<Product*> products);
 	static int GetIndex(QString title);
 	static Product* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;

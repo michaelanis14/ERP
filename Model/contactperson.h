@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@
 #include <QtGui>
 #include "contactpersontelephone.h"
 #include "contactpersonemail.h"
-#include "contactpersonfielddata.h"
+#include "projectcontactperson.h"
 
 class ContactPerson  : public QSqlRelationalTableModel
 {
@@ -29,11 +29,12 @@ public:
 	int Number;
 	QList<ContactPersonTelephone*> contactpersontelephones;
 	QList<ContactPersonEmail*> contactpersonemails;
-	QList<ContactPersonFieldData*> contactpersonfielddatas;
+	QList<ProjectContactPerson*> projectcontactpersons;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	ContactPerson* get();
 	ContactPerson* get(const QModelIndex &index);
@@ -43,7 +44,8 @@ public:
 	static QList<ContactPerson*> Search(QString keyword);
 	static QList<ContactPerson*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<ContactPerson*> contactpersons);
 	static int GetIndex(QString title);
 	static ContactPerson* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;

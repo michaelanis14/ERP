@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttype.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactTypeID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactType* ContactType::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactType::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactType::remove() {
 if(ContactTypeID!= 0) {
@@ -93,18 +100,17 @@ return new ContactType();
 
 QList<ContactType*> ContactType::GetAll() {
 	QList<ContactType*> contacttypes =   QList<ContactType*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactType"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactType ORDER BY ContactTypeID ASC"));
 	while (query.next()) {
 contacttypes.append(new ContactType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(contacttypes.begin(),contacttypes.end());
 	return contacttypes;
 }
 
 ContactType* ContactType::Get(int id) {
 ContactType* contacttype = new ContactType();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactType WHERE ContactTypeID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactType WHERE ContactTypeID = '"+QString::number(id)+"' ORDER BY ContactTypeID ASC "));
 while (query.next()) {
 contacttype = new ContactType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ contacttypes = GetAll();
 	for(int i = 0; i <contacttypes.count(); i++){
 		list.append(contacttypes[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactType::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactType::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactType*> contacttypes =   QList<ContactType*>();
 contacttypes = GetAll();
 	for(int i = 0; i <contacttypes.count(); i++){
-		list.insert(contacttypes[i]->ContactTypeID,contacttypes[i]->Description);
+		list.append(qMakePair(contacttypes[i]->ContactTypeID,contacttypes[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactType::GetPairList(QList<ContactType*> contacttypes) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contacttypes.count(); i++){
+		list.append(qMakePair(contacttypes[i]->ContactTypeID,contacttypes[i]->Description));
 	}
 	return list;
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: service.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -69,7 +69,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ServiceID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("ShortDescription")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("SellingPrice")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("NetCoast")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("TradeMarginRate")));variables.append(qMakePair(QString(" INT"),QString("TaxID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Barcode")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Service* Service::p_instance = 0;
@@ -96,6 +97,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Service::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Service::remove() {
 if(ServiceID!= 0) {
@@ -119,18 +126,17 @@ return new Service();
 
 QList<Service*> Service::GetAll() {
 	QList<Service*> services =   QList<Service*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Service"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Service ORDER BY ServiceID ASC"));
 	while (query.next()) {
 services.append(new Service(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
 	}
-qStableSort(services.begin(),services.end());
 	return services;
 }
 
 Service* Service::Get(int id) {
 Service* service = new Service();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Service WHERE ServiceID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Service WHERE ServiceID = '"+QString::number(id)+"' ORDER BY ServiceID ASC "));
 while (query.next()) {
 service = new Service(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString());
  }
@@ -185,16 +191,23 @@ services = GetAll();
 	for(int i = 0; i <services.count(); i++){
 		list.append(services[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Service::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Service::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Service*> services =   QList<Service*>();
 services = GetAll();
 	for(int i = 0; i <services.count(); i++){
-		list.insert(services[i]->ServiceID,services[i]->Name);
+		list.append(qMakePair(services[i]->ServiceID,services[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Service::GetPairList(QList<Service*> services) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <services.count(); i++){
+		list.append(qMakePair(services[i]->ServiceID,services[i]->Name));
 	}
 	return list;
 }

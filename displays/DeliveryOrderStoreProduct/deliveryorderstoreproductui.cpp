@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstoreproductui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,13 +32,13 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 deliveryorder = new ERPComboBox();
-deliveryorder->addItems(DeliveryOrder::GetHashList());
+deliveryorder->addItems(DeliveryOrder::GetPairList());
 block0Layout->addRow("Delivery Order",deliveryorder);
 store = new ERPComboBox();
-store->addItems(Store::GetHashList());
+store->addItems(Store::GetPairList());
 block0Layout->addRow("Store",store);
 product = new ERPComboBox();
-product->addItems(Product::GetHashList());
+product->addItems(Product::GetPairList());
 block0Layout->addRow("Product",product);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
@@ -83,11 +83,11 @@ clear();
 bool DeliveryOrderStoreProductUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(deliveryorderstoreproduct->DeliveryOrderID == 0) 
+if(!deliveryorder->isHidden()) 
 deliveryorderstoreproduct->DeliveryOrderID = deliveryorder->getKey();
-if(deliveryorderstoreproduct->StoreID == 0) 
+if(!store->isHidden()) 
 deliveryorderstoreproduct->StoreID = store->getKey();
-if(deliveryorderstoreproduct->ProductID == 0) 
+if(!product->isHidden()) 
 deliveryorderstoreproduct->ProductID = product->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
@@ -117,4 +117,35 @@ return false;
 }
 void DeliveryOrderStoreProductUI::cancel(){ 
 DeliveryOrderStoreProductIndexUI::ShowUI();
+}
+bool DeliveryOrderStoreProductUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(deliveryorderstoreproduct->DeliveryOrderID == 0) 
+deliveryorderstoreproduct->DeliveryOrderID = deliveryorder->getKey();
+if(deliveryorderstoreproduct->StoreID == 0) 
+deliveryorderstoreproduct->StoreID = store->getKey();
+if(deliveryorderstoreproduct->ProductID == 0) 
+deliveryorderstoreproduct->ProductID = product->getKey();
+if(amount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Amount Can't be Empty! \n";
+amount->setObjectName("error");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+}
+else { 
+amount->setObjectName("amount");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+deliveryorderstoreproduct->Amount = amount->text().trimmed().toDouble();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "DeliveryOrderStoreProduct",errorString.trimmed());
+return false; 
+ }
 }

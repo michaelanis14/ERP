@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestate.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("InvoiceStateID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 InvoiceState* InvoiceState::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool InvoiceState::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool InvoiceState::remove() {
 if(InvoiceStateID!= 0) {
@@ -93,18 +100,17 @@ return new InvoiceState();
 
 QList<InvoiceState*> InvoiceState::GetAll() {
 	QList<InvoiceState*> invoicestates =   QList<InvoiceState*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceState"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceState ORDER BY InvoiceStateID ASC"));
 	while (query.next()) {
 invoicestates.append(new InvoiceState(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(invoicestates.begin(),invoicestates.end());
 	return invoicestates;
 }
 
 InvoiceState* InvoiceState::Get(int id) {
 InvoiceState* invoicestate = new InvoiceState();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceState WHERE InvoiceStateID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceState WHERE InvoiceStateID = '"+QString::number(id)+"' ORDER BY InvoiceStateID ASC "));
 while (query.next()) {
 invoicestate = new InvoiceState(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ invoicestates = GetAll();
 	for(int i = 0; i <invoicestates.count(); i++){
 		list.append(invoicestates[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> InvoiceState::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > InvoiceState::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<InvoiceState*> invoicestates =   QList<InvoiceState*>();
 invoicestates = GetAll();
 	for(int i = 0; i <invoicestates.count(); i++){
-		list.insert(invoicestates[i]->InvoiceStateID,invoicestates[i]->Description);
+		list.append(qMakePair(invoicestates[i]->InvoiceStateID,invoicestates[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > InvoiceState::GetPairList(QList<InvoiceState*> invoicestates) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <invoicestates.count(); i++){
+		list.append(qMakePair(invoicestates[i]->InvoiceStateID,invoicestates[i]->Description));
 	}
 	return list;
 }

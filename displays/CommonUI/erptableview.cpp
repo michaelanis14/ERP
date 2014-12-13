@@ -16,8 +16,8 @@ ERPTableView::ERPTableView(QWidget *parent) :
 	tabel->hideColumn(0); // don't show the ID
 	tabel->sortByColumn(0,Qt::DescendingOrder);
 	tabel->setSortingEnabled(true);
-	tabel->resizeColumnsToContents();
-	tabel->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+//	tabel->resizeColumnsToContents();
+//	tabel->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	tabel->setSelectionBehavior(QAbstractItemView::SelectRows);
 	tabel->setSelectionMode(QAbstractItemView::SingleSelection);
 

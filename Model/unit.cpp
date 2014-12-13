@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("UnitID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Unit* Unit::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Unit::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Unit::remove() {
 if(UnitID!= 0) {
@@ -93,18 +100,17 @@ return new Unit();
 
 QList<Unit*> Unit::GetAll() {
 	QList<Unit*> units =   QList<Unit*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Unit ORDER BY UnitID ASC"));
 	while (query.next()) {
 units.append(new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(units.begin(),units.end());
 	return units;
 }
 
 Unit* Unit::Get(int id) {
 Unit* unit = new Unit();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Unit WHERE UnitID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Unit WHERE UnitID = '"+QString::number(id)+"' ORDER BY UnitID ASC "));
 while (query.next()) {
 unit = new Unit(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ units = GetAll();
 	for(int i = 0; i <units.count(); i++){
 		list.append(units[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Unit::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Unit::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Unit*> units =   QList<Unit*>();
 units = GetAll();
 	for(int i = 0; i <units.count(); i++){
-		list.insert(units[i]->UnitID,units[i]->Description);
+		list.append(qMakePair(units[i]->UnitID,units[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Unit::GetPairList(QList<Unit*> units) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <units.count(); i++){
+		list.append(qMakePair(units[i]->UnitID,units[i]->Description));
 	}
 	return list;
 }

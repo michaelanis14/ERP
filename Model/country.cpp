@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: country.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("CountryID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Country* Country::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Country::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Country::remove() {
 if(CountryID!= 0) {
@@ -93,18 +100,17 @@ return new Country();
 
 QList<Country*> Country::GetAll() {
 	QList<Country*> countrys =   QList<Country*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Country"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Country ORDER BY CountryID ASC"));
 	while (query.next()) {
 countrys.append(new Country(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(countrys.begin(),countrys.end());
 	return countrys;
 }
 
 Country* Country::Get(int id) {
 Country* country = new Country();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Country WHERE CountryID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Country WHERE CountryID = '"+QString::number(id)+"' ORDER BY CountryID ASC "));
 while (query.next()) {
 country = new Country(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ countrys = GetAll();
 	for(int i = 0; i <countrys.count(); i++){
 		list.append(countrys[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Country::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Country::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Country*> countrys =   QList<Country*>();
 countrys = GetAll();
 	for(int i = 0; i <countrys.count(); i++){
-		list.insert(countrys[i]->CountryID,countrys[i]->Name);
+		list.append(qMakePair(countrys[i]->CountryID,countrys[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Country::GetPairList(QList<Country*> countrys) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <countrys.count(); i++){
+		list.append(qMakePair(countrys[i]->CountryID,countrys[i]->Name));
 	}
 	return list;
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedateui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,10 +31,10 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 invoice = new ERPComboBox();
-invoice->addItems(Invoice::GetHashList());
+invoice->addItems(Invoice::GetPairList());
 block0Layout->addRow("Invoice",invoice);
 invoicestate = new ERPComboBox();
-invoicestate->addItems(InvoiceState::GetHashList());
+invoicestate->addItems(InvoiceState::GetPairList());
 block0Layout->addRow("Invoice State",invoicestate);
 date = new QDateEdit(QDate::currentDate());
 date->setCalendarPopup(true);
@@ -80,9 +80,9 @@ clear();
 bool InvoiceStateDateUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(invoicestatedate->InvoiceID == 0) 
+if(!invoice->isHidden()) 
 invoicestatedate->InvoiceID = invoice->getKey();
-if(invoicestatedate->InvoiceStateID == 0) 
+if(!invoicestate->isHidden()) 
 invoicestatedate->InvoiceStateID = invoicestate->getKey();
 if(date->text().trimmed().isEmpty()){
 errors = true;
@@ -112,4 +112,33 @@ return false;
 }
 void InvoiceStateDateUI::cancel(){ 
 InvoiceStateDateIndexUI::ShowUI();
+}
+bool InvoiceStateDateUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(invoicestatedate->InvoiceID == 0) 
+invoicestatedate->InvoiceID = invoice->getKey();
+if(invoicestatedate->InvoiceStateID == 0) 
+invoicestatedate->InvoiceStateID = invoicestate->getKey();
+if(date->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Date Can't be Empty! \n";
+date->setObjectName("error");
+date->style()->unpolish(date);
+date->style()->polish(date);
+date->update();
+}
+else { 
+date->setObjectName("date");
+date->style()->unpolish(date);
+date->style()->polish(date);
+date->update();
+invoicestatedate->Date = date->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "InvoiceStateDate",errorString.trimmed());
+return false; 
+ }
 }

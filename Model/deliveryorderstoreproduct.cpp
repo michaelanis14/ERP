@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstoreproduct.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,6 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("DeliveryOrderStoreProduct");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(1, QSqlRelation("DeliveryOrder", "DeliveryOrderID", "Title"));
 this->setRelation(2, QSqlRelation("Store", "StoreID", "Name"));
 this->setRelation(3, QSqlRelation("Product", "ProductID", "Name"));
 }
@@ -61,7 +60,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("DeliveryOrderStoreProductID")));variables.append(qMakePair(QString(" INT"),QString("DeliveryOrderID")));variables.append(qMakePair(QString(" INT"),QString("StoreID")));variables.append(qMakePair(QString(" INT"),QString("ProductID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("Amount")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 DeliveryOrderStoreProduct* DeliveryOrderStoreProduct::p_instance = 0;
@@ -88,6 +88,12 @@ while (query.next()) {
  }
 return true;
 }
+bool DeliveryOrderStoreProduct::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool DeliveryOrderStoreProduct::remove() {
 if(DeliveryOrderStoreProductID!= 0) {
@@ -111,18 +117,17 @@ return new DeliveryOrderStoreProduct();
 
 QList<DeliveryOrderStoreProduct*> DeliveryOrderStoreProduct::GetAll() {
 	QList<DeliveryOrderStoreProduct*> deliveryorderstoreproducts =   QList<DeliveryOrderStoreProduct*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStoreProduct"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStoreProduct ORDER BY DeliveryOrderStoreProductID ASC"));
 	while (query.next()) {
 deliveryorderstoreproducts.append(new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
-qStableSort(deliveryorderstoreproducts.begin(),deliveryorderstoreproducts.end());
 	return deliveryorderstoreproducts;
 }
 
 DeliveryOrderStoreProduct* DeliveryOrderStoreProduct::Get(int id) {
 DeliveryOrderStoreProduct* deliveryorderstoreproduct = new DeliveryOrderStoreProduct();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderStoreProduct WHERE DeliveryOrderStoreProductID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderStoreProduct WHERE DeliveryOrderStoreProductID = '"+QString::number(id)+"' ORDER BY DeliveryOrderStoreProductID ASC "));
 while (query.next()) {
 deliveryorderstoreproduct = new DeliveryOrderStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
  }
@@ -173,16 +178,23 @@ QList<QString> DeliveryOrderStoreProduct::GetStringList() {
 deliveryorderstoreproducts = GetAll();
 	for(int i = 0; i <deliveryorderstoreproducts.count(); i++){
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> DeliveryOrderStoreProduct::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > DeliveryOrderStoreProduct::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<DeliveryOrderStoreProduct*> deliveryorderstoreproducts =   QList<DeliveryOrderStoreProduct*>();
 deliveryorderstoreproducts = GetAll();
 	for(int i = 0; i <deliveryorderstoreproducts.count(); i++){
-		list.insert(deliveryorderstoreproducts[i]->DeliveryOrderStoreProductID,QString::number(deliveryorderstoreproducts[i]->DeliveryOrderID));
+		list.append(qMakePair(deliveryorderstoreproducts[i]->DeliveryOrderStoreProductID,QString::number(deliveryorderstoreproducts[i]->DeliveryOrderID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > DeliveryOrderStoreProduct::GetPairList(QList<DeliveryOrderStoreProduct*> deliveryorderstoreproducts) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <deliveryorderstoreproducts.count(); i++){
+		list.append(qMakePair(deliveryorderstoreproducts[i]->DeliveryOrderStoreProductID,QString::number(deliveryorderstoreproducts[i]->DeliveryOrderID)));
 	}
 	return list;
 }

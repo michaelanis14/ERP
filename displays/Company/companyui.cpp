@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: companyui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -142,4 +142,59 @@ return false;
 }
 void CompanyUI::cancel(){ 
 CompanyIndexUI::ShowUI();
+}
+bool CompanyUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+company->Name = name->text().trimmed();
+}
+if(header->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Header Can't be Empty! \n";
+header->setObjectName("error");
+header->style()->unpolish(header);
+header->style()->polish(header);
+header->update();
+}
+else { 
+header->setObjectName("header");
+header->style()->unpolish(header);
+header->style()->polish(header);
+header->update();
+company->Header = header->text().trimmed();
+}
+if(footer->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Footer Can't be Empty! \n";
+footer->setObjectName("error");
+footer->style()->unpolish(footer);
+footer->style()->polish(footer);
+footer->update();
+}
+else { 
+footer->setObjectName("footer");
+footer->style()->unpolish(footer);
+footer->style()->polish(footer);
+footer->update();
+company->Footer = footer->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Company",errorString.trimmed());
+return false; 
+ }
 }

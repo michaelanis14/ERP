@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonemailui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -35,7 +35,7 @@ block0Layout->addRow("Description",description);
 email = new QLineEdit();
 block0Layout->addRow("Email",email);
 contactperson = new ERPComboBox();
-contactperson->addItems(ContactPerson::GetHashList());
+contactperson->addItems(ContactPerson::GetPairList());
 block0Layout->addRow("Contact Person",contactperson);
 flowLayout->addWidget(block0Layout);
 
@@ -109,7 +109,7 @@ email->style()->polish(email);
 email->update();
 contactpersonemail->Email = email->text().trimmed();
 }
-if(contactpersonemail->ContactPersonID == 0) 
+if(!contactperson->isHidden()) 
 contactpersonemail->ContactPersonID = contactperson->getKey();
 if(!errors) {
 contactpersonemail->save();
@@ -124,4 +124,46 @@ return false;
 }
 void ContactPersonEmailUI::cancel(){ 
 ContactPersonEmailIndexUI::ShowUI();
+}
+bool ContactPersonEmailUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+contactpersonemail->Description = description->text().trimmed();
+}
+if(email->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Email Can't be Empty! \n";
+email->setObjectName("error");
+email->style()->unpolish(email);
+email->style()->polish(email);
+email->update();
+}
+else { 
+email->setObjectName("email");
+email->style()->unpolish(email);
+email->style()->polish(email);
+email->update();
+contactpersonemail->Email = email->text().trimmed();
+}
+if(contactpersonemail->ContactPersonID == 0) 
+contactpersonemail->ContactPersonID = contactperson->getKey();
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactPersonEmail",errorString.trimmed());
+return false; 
+ }
 }

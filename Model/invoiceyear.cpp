@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceyear.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("InvoiceYearID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 InvoiceYear* InvoiceYear::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool InvoiceYear::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool InvoiceYear::remove() {
 if(InvoiceYearID!= 0) {
@@ -93,18 +100,17 @@ return new InvoiceYear();
 
 QList<InvoiceYear*> InvoiceYear::GetAll() {
 	QList<InvoiceYear*> invoiceyears =   QList<InvoiceYear*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceYear"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceYear ORDER BY InvoiceYearID ASC"));
 	while (query.next()) {
 invoiceyears.append(new InvoiceYear(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(invoiceyears.begin(),invoiceyears.end());
 	return invoiceyears;
 }
 
 InvoiceYear* InvoiceYear::Get(int id) {
 InvoiceYear* invoiceyear = new InvoiceYear();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceYear WHERE InvoiceYearID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceYear WHERE InvoiceYearID = '"+QString::number(id)+"' ORDER BY InvoiceYearID ASC "));
 while (query.next()) {
 invoiceyear = new InvoiceYear(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ invoiceyears = GetAll();
 	for(int i = 0; i <invoiceyears.count(); i++){
 		list.append(invoiceyears[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> InvoiceYear::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > InvoiceYear::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<InvoiceYear*> invoiceyears =   QList<InvoiceYear*>();
 invoiceyears = GetAll();
 	for(int i = 0; i <invoiceyears.count(); i++){
-		list.insert(invoiceyears[i]->InvoiceYearID,invoiceyears[i]->Description);
+		list.append(qMakePair(invoiceyears[i]->InvoiceYearID,invoiceyears[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > InvoiceYear::GetPairList(QList<InvoiceYear*> invoiceyears) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <invoiceyears.count(); i++){
+		list.append(qMakePair(invoiceyears[i]->InvoiceYearID,invoiceyears[i]->Description));
 	}
 	return list;
 }

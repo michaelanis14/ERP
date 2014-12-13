@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttelephone.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -53,7 +53,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactTelephoneID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" INT"),QString("Number")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactTelephone* ContactTelephone::p_instance = 0;
@@ -80,6 +81,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactTelephone::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactTelephone::remove() {
 if(ContactTelephoneID!= 0) {
@@ -103,18 +110,17 @@ return new ContactTelephone();
 
 QList<ContactTelephone*> ContactTelephone::GetAll() {
 	QList<ContactTelephone*> contacttelephones =   QList<ContactTelephone*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactTelephone"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactTelephone ORDER BY ContactTelephoneID ASC"));
 	while (query.next()) {
 contacttelephones.append(new ContactTelephone(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(contacttelephones.begin(),contacttelephones.end());
 	return contacttelephones;
 }
 
 ContactTelephone* ContactTelephone::Get(int id) {
 ContactTelephone* contacttelephone = new ContactTelephone();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactTelephone WHERE ContactTelephoneID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactTelephone WHERE ContactTelephoneID = '"+QString::number(id)+"' ORDER BY ContactTelephoneID ASC "));
 while (query.next()) {
 contacttelephone = new ContactTelephone(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
  }
@@ -167,16 +173,23 @@ contacttelephones = GetAll();
 	for(int i = 0; i <contacttelephones.count(); i++){
 		list.append(contacttelephones[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactTelephone::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactTelephone::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactTelephone*> contacttelephones =   QList<ContactTelephone*>();
 contacttelephones = GetAll();
 	for(int i = 0; i <contacttelephones.count(); i++){
-		list.insert(contacttelephones[i]->ContactTelephoneID,contacttelephones[i]->Description);
+		list.append(qMakePair(contacttelephones[i]->ContactTelephoneID,contacttelephones[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactTelephone::GetPairList(QList<ContactTelephone*> contacttelephones) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contacttelephones.count(); i++){
+		list.append(qMakePair(contacttelephones[i]->ContactTelephoneID,contacttelephones[i]->Description));
 	}
 	return list;
 }

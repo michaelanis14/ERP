@@ -23,7 +23,8 @@ public:
 	void addControllerButton(QPushButton* pushButton) ;
 
 	void removeAll();
-
+protected:
+	void resizeEvent(QResizeEvent * event);
 private:
 	QList<QPushButton*> navigationButtons;
 	QHBoxLayout* layout;

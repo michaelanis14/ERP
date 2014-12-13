@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: payment.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -58,7 +58,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("PaymentID")));variables.append(qMakePair(QString(" INT"),QString("InvoiceID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("TotalAmount")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Comment")));variables.append(qMakePair(QString(" INT"),QString("PaymentTypeID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Payment* Payment::p_instance = 0;
@@ -85,6 +86,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Payment::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Payment::remove() {
 if(PaymentID!= 0) {
@@ -108,18 +115,17 @@ return new Payment();
 
 QList<Payment*> Payment::GetAll() {
 	QList<Payment*> payments =   QList<Payment*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Payment"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Payment ORDER BY PaymentID ASC"));
 	while (query.next()) {
 payments.append(new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
-qStableSort(payments.begin(),payments.end());
 	return payments;
 }
 
 Payment* Payment::Get(int id) {
 Payment* payment = new Payment();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Payment WHERE PaymentID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Payment WHERE PaymentID = '"+QString::number(id)+"' ORDER BY PaymentID ASC "));
 while (query.next()) {
 payment = new Payment(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
  }
@@ -171,16 +177,23 @@ QList<QString> Payment::GetStringList() {
 payments = GetAll();
 	for(int i = 0; i <payments.count(); i++){
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Payment::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Payment::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Payment*> payments =   QList<Payment*>();
 payments = GetAll();
 	for(int i = 0; i <payments.count(); i++){
-		list.insert(payments[i]->PaymentID,QString::number(payments[i]->InvoiceID));
+		list.append(qMakePair(payments[i]->PaymentID,QString::number(payments[i]->InvoiceID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Payment::GetPairList(QList<Payment*> payments) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <payments.count(); i++){
+		list.append(qMakePair(payments[i]->PaymentID,QString::number(payments[i]->InvoiceID)));
 	}
 	return list;
 }

@@ -8,6 +8,7 @@
 #define ERPMODEL_H
 
 #include <QSqlQuery>
+#include <QPair>
 
 
 class ErpModel
@@ -17,7 +18,7 @@ public:
 	QSqlDatabase db;
 	static ErpModel* GetInstance();
 	QSqlQuery qeryExec(QString q);
-	bool createTable(QString table,QString query);
+	bool createTable(QString table,QString query,QList<QPair<QString,QString> >variables);
 	bool init();
 private:
 	static ErpModel* p_instance;

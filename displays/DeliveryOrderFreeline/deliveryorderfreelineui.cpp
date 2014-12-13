@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreelineui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,7 +32,7 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 deliveryorder = new ERPComboBox();
-deliveryorder->addItems(DeliveryOrder::GetHashList());
+deliveryorder->addItems(DeliveryOrder::GetPairList());
 block0Layout->addRow("Delivery Order",deliveryorder);
 description = new QLineEdit();
 block0Layout->addRow("Description",description);
@@ -86,7 +86,7 @@ clear();
 bool DeliveryOrderFreelineUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(deliveryorderfreeline->DeliveryOrderID == 0) 
+if(!deliveryorder->isHidden()) 
 deliveryorderfreeline->DeliveryOrderID = deliveryorder->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
@@ -146,4 +146,61 @@ return false;
 }
 void DeliveryOrderFreelineUI::cancel(){ 
 DeliveryOrderFreelineIndexUI::ShowUI();
+}
+bool DeliveryOrderFreelineUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(deliveryorderfreeline->DeliveryOrderID == 0) 
+deliveryorderfreeline->DeliveryOrderID = deliveryorder->getKey();
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+deliveryorderfreeline->Description = description->text().trimmed();
+}
+if(amount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Amount Can't be Empty! \n";
+amount->setObjectName("error");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+}
+else { 
+amount->setObjectName("amount");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+deliveryorderfreeline->Amount = amount->text().trimmed().toDouble();
+}
+if(price->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Price Can't be Empty! \n";
+price->setObjectName("error");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+}
+else { 
+price->setObjectName("price");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+deliveryorderfreeline->Price = price->text().trimmed().toDouble();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "DeliveryOrderFreeline",errorString.trimmed());
+return false; 
+ }
 }

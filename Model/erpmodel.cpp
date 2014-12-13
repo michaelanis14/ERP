@@ -35,6 +35,7 @@
 #include "store.h"
 #include "purchasestatus.h"
 #include "purchase.h"
+#include "purchaseserial.h"
 #include "purchasestoreproduct.h"
 #include "purchasefreeline.h"
 #include "deliveryorderstatus.h"
@@ -47,11 +48,22 @@
 #include "invoicestate.h"
 #include "invoicestatedate.h"
 #include "invoice.h"
+#include "invoiceserial.h"
 #include "invoicefreeline.h"
 #include "paymenttype.h"
 #include "payment.h"
+#include "contactpersonfielddata.h"
+#include "task.h"
+#include "projectcontactperson.h"
+#include "projectproduct.h"
+#include "projectservice.h"
+#include "projectfile.h"
+#include "projectstatus.h"
+#include "access.h"
 
 #include <QSql>
+#include <QSqlRecord>
+#include <QSqlField>
 #include <QSqlDatabase>
 #include <QMessageBox>
 #include <QSqlError>
@@ -99,16 +111,16 @@ ErpModel* ErpModel::GetInstance() {
 }
 
 QSqlQuery ErpModel::qeryExec(QString q){
-	qDebug() << q;
+	//qDebug() << q;
 	QDateTime startTime = QDateTime::currentDateTime();
 	if(db.open())   {
 
 		QSqlQuery query(db);
 		query.prepare(q);
 		if( !query.exec() )
-			QMessageBox::warning(0,"BataBase Issue",query.lastError().text());
-		else
-			qDebug() << q +"Exec: " +QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch() - startTime.toMSecsSinceEpoch()) +"ms";
+			QMessageBox::warning(0,"BataBase Issue",query.lastError().text() + query.lastQuery());
+		//else
+		//	qDebug() << q +"Exec: " +QString::number(QDateTime::currentDateTime().toMSecsSinceEpoch() - startTime.toMSecsSinceEpoch()) +"ms";
 		db.close();
 		return query;
 	}
@@ -123,25 +135,76 @@ QSqlQuery ErpModel::qeryExec(QString q){
 	}
 }
 
-bool ErpModel::createTable(QString table,QString query){
+bool ErpModel::createTable(QString table,QString query,QList<QPair<QString,QString> >variables){
 
 	if(db.open())   {
-		QStringList tableList = ErpModel::GetInstance()->db.tables();;
+		QStringList tableList = ErpModel::GetInstance()->db.tables();
 
 
-		db.close();
+
 		bool tableExists = false;
 
 		for(int i=0; i<tableList.count(); i++)
 		{
 			if(table == tableList.at(i)){
 				tableExists=true;
+				QSqlRecord record = db.record(tableList.at(i));
+				//qDebug() << record.field(0).name() ;
+				if(variables.length()-record.count() != 0){
+					if(variables.length() > record.count()){
+						int k = 0;
+						for(int j =0; j < variables.length();j++){
+
+							if(record.fieldName(k)!=variables[j].second){
+							QSqlQuery query(db);
+							query.prepare(QString("ALTER TABLE "+table+" ADD "+variables[j].second+" "+variables[j].first+" NOT NULL AFTER "+variables[j-1].second+";"));
+								qDebug() << query.lastQuery();
+							if( !query.exec() )
+								QMessageBox::warning(0,"BataBase Issue",query.lastError().text() + query.lastQuery());
+
+
+						}
+							else k++;
+					}
+
+					}else{
+						int k = 0;
+						for(int j =0; j < record.count();j++){
+							if(record.fieldName(j)!=variables[k].second){
+							QSqlQuery query(db);
+							query.prepare(QString("ALTER TABLE "+table+" DROP COLUMN "+record.fieldName(j)+";"));
+								qDebug() << query.lastQuery();
+							if( !query.exec() )
+								QMessageBox::warning(0,"BataBase Issue",query.lastError().text() + query.lastQuery());
+
+							}
+							else k++;
+						}
+					}
+					record = db.record(tableList.at(i));
+				}
+
+				for(int j =0; j < record.count();j++){
+
+					if(record.fieldName(j)!=variables[j].second){
+						QSqlQuery query(db);
+						query.prepare(QString("ALTER TABLE "+table+" CHANGE "+record.fieldName(j)+" "+variables[j].second+" "+variables[j].first+";"));
+						qDebug() << query.lastQuery();
+						if( !query.exec() )
+							QMessageBox::warning(0,"BataBase Issue",query.lastError().text() + query.lastQuery());
+
+
+					}
+				}
+
+
 				break;
 			}
 		}
+		db.close();
 		if(tableExists == false)
 		{
-			ErpModel::GetInstance()->qeryExec("CREATE TABLE " + table + query);
+			ErpModel::GetInstance()->qeryExec("CREATE TABLE " + table + query );
 		}
 	}
 	return true;
@@ -205,8 +268,8 @@ bool ErpModel::init(){
 
 	Contact::Init();
 	for(int i = 0; i < 0; i++){
-		Contact* cont = new Contact("Mr.","Contact"+QString::number(Contact::GetAll().count()),"5/5/5",1,1,Contact::GetAll().count(),"AA","na","na",1,1,1,"na","na","na","na");
-		cont->save();
+//		Contact* cont = new Contact("Mr.","Contact"+QString::number(Contact::GetAll().count()),"5/5/5",1,1,Contact::GetAll().count(),"AA","na","na",1,1,1,"na","na","na","na");
+//		cont->save();
 	}
 
 	Currency::Init();
@@ -252,7 +315,8 @@ bool ErpModel::init(){
 
 	ContactPersonTelephone::Init();
 	ContactPersonEmail::Init();
-	Project::Init();
+
+
 	Unit::Init();
 	if(Unit::GetAll().count() < 5){
 		QList<QString> units;
@@ -262,6 +326,7 @@ bool ErpModel::init(){
 			un->save();
 		}
 	}
+
 	ProductCategory::Init();
 	if(ProductCategory::GetAll().count() < 1){
 		ProductCategory *poriductCat = new ProductCategory("General","","");
@@ -272,16 +337,36 @@ bool ErpModel::init(){
 		Product* product = new Product("Product"+QString::number(Product::GetAll().count()),"ShortDescription",1,10,8,90,1,"information","98989898009",1,0,"date","date");
 		product->save();
 	}
+	ProductImage::Init();
 	ProductField::Init();
 	ProductFieldData::Init();
 
 	Service::Init();
+	ProjectStatus::Init();
+	if(ProjectStatus::GetAll().count() < 3){
+		ProjectStatus *projectStatus = new ProjectStatus("Created","","");
+		projectStatus->save();
+		projectStatus = new ProjectStatus("In Progress","","");
+		projectStatus->save();
+		projectStatus = new ProjectStatus("Finished","","");
+		projectStatus->save();
+	}
+	Project::Init();
+	ProjectFile::Init();
+	ProjectProduct::Init();
+	ProjectService::Init();
+
 	Store::Init();
 	if(Store::GetAll().count() < 1){
 		Store *store = new Store("WareHouse","","10001","Cairo",1,"","");
 		store->save();
 	}
 	PurchaseStatus::Init();
+	PurchaseSerial::Init();
+	if(PurchaseSerial::GetAll().count() < 1){
+		PurchaseSerial *purchaseserial = new PurchaseSerial("PURCHASE",1,"","");
+		purchaseserial->save();
+	}
 	Purchase::Init();
 	PurchaseStoreProduct::Init();
 	PurchaseFreeLine::Init();
@@ -301,12 +386,23 @@ bool ErpModel::init(){
 	InvoicePeriod::Init();
 	InvoiceYear::Init();
 	InvoiceState::Init();
+	InvoiceSerial::Init();
+	if(InvoiceSerial::GetAll().count() < 1){
+		InvoiceSerial *invoiceSerial = new InvoiceSerial("INV",1,"","");
+		invoiceSerial->save();
+	}
 	Invoice::Init();
 	InvoiceStateDate::Init();
 
 	InvoiceFreeline::Init();
 	PaymentType::Init();
 	Payment::Init();
+	ContactPersonFieldData::Init();
+	Task::Init();
+	Access::Init();
+
+
+
 
 
 	return true;

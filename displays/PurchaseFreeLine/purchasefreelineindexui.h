@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreelineindexui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,6 +13,7 @@
 #include "../CommonUI/erptableview.h"
 #include "../../Model/purchasefreeline.h"
 #include "../../Model/purchase.h"
+#include "../../Model/contact.h"
 
 
 #include <QWidget>

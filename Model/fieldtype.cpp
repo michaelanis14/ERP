@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: fieldtype.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("FieldTypeID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 FieldType* FieldType::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool FieldType::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool FieldType::remove() {
 if(FieldTypeID!= 0) {
@@ -93,18 +100,17 @@ return new FieldType();
 
 QList<FieldType*> FieldType::GetAll() {
 	QList<FieldType*> fieldtypes =   QList<FieldType*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM FieldType"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM FieldType ORDER BY FieldTypeID ASC"));
 	while (query.next()) {
 fieldtypes.append(new FieldType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(fieldtypes.begin(),fieldtypes.end());
 	return fieldtypes;
 }
 
 FieldType* FieldType::Get(int id) {
 FieldType* fieldtype = new FieldType();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM FieldType WHERE FieldTypeID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM FieldType WHERE FieldTypeID = '"+QString::number(id)+"' ORDER BY FieldTypeID ASC "));
 while (query.next()) {
 fieldtype = new FieldType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ fieldtypes = GetAll();
 	for(int i = 0; i <fieldtypes.count(); i++){
 		list.append(fieldtypes[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> FieldType::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > FieldType::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<FieldType*> fieldtypes =   QList<FieldType*>();
 fieldtypes = GetAll();
 	for(int i = 0; i <fieldtypes.count(); i++){
-		list.insert(fieldtypes[i]->FieldTypeID,fieldtypes[i]->Description);
+		list.append(qMakePair(fieldtypes[i]->FieldTypeID,fieldtypes[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > FieldType::GetPairList(QList<FieldType*> fieldtypes) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <fieldtypes.count(); i++){
+		list.append(qMakePair(fieldtypes[i]->FieldTypeID,fieldtypes[i]->Description));
 	}
 	return list;
 }

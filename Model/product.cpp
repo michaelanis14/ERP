@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: product.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -89,7 +89,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ProductID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("ShortDescription")));variables.append(qMakePair(QString(" INT"),QString("UnitID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("SellingPrice")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("NetCoast")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("TradeMarginRate")));variables.append(qMakePair(QString(" INT"),QString("TaxID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("information")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Barcode")));variables.append(qMakePair(QString(" INT"),QString("ProductCategoryID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("CriticalAmount")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Product* Product::p_instance = 0;
@@ -116,6 +117,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Product::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Product::remove() {
 if(ProductID!= 0) {
@@ -139,23 +146,21 @@ return new Product();
 
 QList<Product*> Product::GetAll() {
 	QList<Product*> products =   QList<Product*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product ORDER BY ProductID ASC"));
 	while (query.next()) {
 products.append(new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString()));
 	}
-qStableSort(products.begin(),products.end());
 	return products;
 }
 
 Product* Product::Get(int id) {
 Product* product = new Product();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Product WHERE ProductID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Product WHERE ProductID = '"+QString::number(id)+"' ORDER BY ProductID ASC "));
 while (query.next()) {
 product = new Product(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toString(),query.value(13).toString());
  }
 product->productimages = ProductImage::QuerySelect("ProductID = " + QString::number(id));
-product->productfielddatas = ProductFieldData::QuerySelect("ProductID = " + QString::number(id));
 
 }
 return product;
@@ -177,7 +182,6 @@ product = new Product(query.value(0).toInt(),query.value(1).toString(),query.val
 
  }
 product->productimages = ProductImage::QuerySelect("ProductID = " +QString::number(product->ProductID));
-product->productfielddatas = ProductFieldData::QuerySelect("ProductID = " +QString::number(product->ProductID));
 
 }
 return product;
@@ -210,16 +214,23 @@ products = GetAll();
 	for(int i = 0; i <products.count(); i++){
 		list.append(products[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Product::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Product::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Product*> products =   QList<Product*>();
 products = GetAll();
 	for(int i = 0; i <products.count(); i++){
-		list.insert(products[i]->ProductID,products[i]->Name);
+		list.append(qMakePair(products[i]->ProductID,products[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Product::GetPairList(QList<Product*> products) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <products.count(); i++){
+		list.append(qMakePair(products[i]->ProductID,products[i]->Name));
 	}
 	return list;
 }
@@ -251,7 +262,7 @@ Qt::ItemFlags Product::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 14 || index.column() == 15)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 13 || index.column() == 14)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -285,9 +296,9 @@ else if (index.column() == 10)
 ok = setProductCategoryID(id, value.toString());
 else if (index.column() == 11)
 ok = setCriticalAmount(id, value.toString());
-else if (index.column() == 14)
+else if (index.column() == 13)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 15)
+else if (index.column() == 14)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -317,8 +328,8 @@ this->setHeaderData(8, Qt::Horizontal, QObject::tr("information"));
 this->setHeaderData(9, Qt::Horizontal, QObject::tr("Barcode"));
 this->setHeaderData(10, Qt::Horizontal, QObject::tr("Product Category"));
 this->setHeaderData(11, Qt::Horizontal, QObject::tr("Critical Amount"));
-this->setHeaderData(14, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(15, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(13, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(14, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();

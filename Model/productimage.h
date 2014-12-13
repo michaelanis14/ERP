@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productimage.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,13 +16,15 @@ class ProductImage  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	ProductImage();
-	ProductImage(QString Description,int ProductID,QString CreatedOn,QString EditedOn);	int ProductImageID;
-	QString Description;
+	ProductImage(QString Name,QVariant imageData,int ProductID,QString CreatedOn,QString EditedOn);	int ProductImageID;
+	QString Name;
+	QVariant imageData;
 	int ProductID;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	ProductImage* get();
 	ProductImage* get(const QModelIndex &index);
@@ -32,7 +34,8 @@ public:
 	static QList<ProductImage*> Search(QString keyword);
 	static QList<ProductImage*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<ProductImage*> productimages);
 	static int GetIndex(QString title);
 	static ProductImage* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -41,8 +44,9 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	ProductImage(int ProductImageID,QString Description,int ProductID,QString CreatedOn,QString EditedOn);	static ProductImage* p_instance;
-	bool setDescription(int ProductImageID, const QString &Description);
+	ProductImage(int ProductImageID,QString Name,QVariant imageData,int ProductID,QString CreatedOn,QString EditedOn);	static ProductImage* p_instance;
+	bool setName(int ProductImageID, const QString &Name);
+	bool setimageData(int ProductImageID, const QString &imageData);
 	bool setProductID(int ProductImageID, const QString &ProductID);
 	bool setCreatedOn(int ProductImageID, const QString &CreatedOn);
 	bool setEditedOn(int ProductImageID, const QString &EditedOn);

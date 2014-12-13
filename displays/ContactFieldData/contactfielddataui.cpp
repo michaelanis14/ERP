@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfielddataui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,10 +31,10 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 contact = new ERPComboBox();
-contact->addItems(Contact::GetHashList());
+contact->addItems(Contact::GetPairList());
 block0Layout->addRow("Contact",contact);
 contactfield = new ERPComboBox();
-contactfield->addItems(ContactField::GetHashList());
+contactfield->addItems(ContactField::GetPairList());
 block0Layout->addRow("Contact Field",contactfield);
 value = new QLineEdit();
 block0Layout->addRow("Value",value);
@@ -78,9 +78,9 @@ clear();
 bool ContactFieldDataUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(contactfielddata->ContactID == 0) 
+if(!contact->isHidden()) 
 contactfielddata->ContactID = contact->getKey();
-if(contactfielddata->ContactFieldID == 0) 
+if(!contactfield->isHidden()) 
 contactfielddata->ContactFieldID = contactfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
@@ -110,4 +110,33 @@ return false;
 }
 void ContactFieldDataUI::cancel(){ 
 ContactFieldDataIndexUI::ShowUI();
+}
+bool ContactFieldDataUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(contactfielddata->ContactID == 0) 
+contactfielddata->ContactID = contact->getKey();
+if(contactfielddata->ContactFieldID == 0) 
+contactfielddata->ContactFieldID = contactfield->getKey();
+if(value->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Value Can't be Empty! \n";
+value->setObjectName("error");
+value->style()->unpolish(value);
+value->style()->polish(value);
+value->update();
+}
+else { 
+value->setObjectName("value");
+value->style()->unpolish(value);
+value->style()->polish(value);
+value->update();
+contactfielddata->Value = value->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactFieldData",errorString.trimmed());
+return false; 
+ }
 }

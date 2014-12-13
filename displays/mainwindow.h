@@ -27,17 +27,24 @@ public:
 	class HNavigationButtons* innerNavigation;
 	class QToolButton* btnHome;
 	class QToolButton* btnContacts;
+	class QToolButton* btnProjects;
 	class QToolButton* btnProducts;
 	class QToolButton* btnAccounting;
 	class QToolButton* btnReports;
+//Home
+		class QPushButton* inNavAccess;
 
 //Contacts
 	class QPushButton* inNavContacts;
 	class QPushButton* inNavcontactPersones;
 	class QPushButton* inNavcontactType;
+
+//Project
+		class QPushButton* inNavProjects;
+		class QPushButton* inNavTimeBookings;
+		class QPushButton* inNavServices;
 //Products
 	class QPushButton* inNavProducts;
-	class QPushButton* inNavService;
 	class QPushButton* inNavStoreHouse;
 	class QPushButton* inNavPurchase;
 	class QPushButton* inNavDeliveryOrder;
@@ -53,6 +60,7 @@ protected:
 protected slots:
 	void btnHomeClicked();
 	void btnContactsClicked();
+	void btnProjectsClicked();
 	void btnProductsClicked();
 	void btnAccountingClicked();
 	void btnReportsClicked();

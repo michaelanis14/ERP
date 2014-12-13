@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreelineui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,6 +16,7 @@
 #include "../../Model/purchasefreeline.h"
 #include "../../Model/purchasefreeline.h"
 #include "../../Model/purchase.h"
+#include "../../Model/contact.h"
 
 
 #include <QWidget>
@@ -35,6 +36,7 @@ public:
 	ERPFormBlock* block0Layout;
 	ERPComboBox*purchase;
 	QLineEdit*description;
+	ERPComboBox*contact;
 	QLineEdit*amount;
 	QLineEdit*price;
 	void fill(PurchaseFreeLine* purchasefreeline);
@@ -47,5 +49,6 @@ private slots:
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

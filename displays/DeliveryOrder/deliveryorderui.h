@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,6 +13,7 @@
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
 #include "../CommonUI/RemovebtnWidgets.h"
+#include "../CommonUI/barcode.h"
 #include "../../Model/deliveryorder.h"
 #include "../../Model/deliveryorder.h"
 #include "../../Model/deliveryorderstatus.h"
@@ -44,8 +45,10 @@ public:
 	QList<DeliveryOrderStoreProductUI*> DeliveryOrderStoreProducts;
 	QList<DeliveryOrderServiceUI*> DeliveryOrderServices;
 	QList<DeliveryOrderFreelineUI*> DeliveryOrderFreelines;
-	QLineEdit*title;
-	QLineEdit*number;
+	QLineEdit*serial;
+	QLineEdit*barcode;
+	Barcode* barcodeDisplay;
+	QPushButton* generatebarcode;
 	ERPComboBox*deliveryorderstatus;
 	ERPComboBox*contact;
 	QDateEdit*creationdate;
@@ -71,7 +74,10 @@ private slots:
 	void selectDeliveryOrder();
 	void cancel();
 	void clear();
+	void generateBarcode();
+	void barcodeChanged(QString barcode);
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

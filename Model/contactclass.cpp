@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclass.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactClassID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactClass* ContactClass::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactClass::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactClass::remove() {
 if(ContactClassID!= 0) {
@@ -93,18 +100,17 @@ return new ContactClass();
 
 QList<ContactClass*> ContactClass::GetAll() {
 	QList<ContactClass*> contactclasss =   QList<ContactClass*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactClass"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactClass ORDER BY ContactClassID ASC"));
 	while (query.next()) {
 contactclasss.append(new ContactClass(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(contactclasss.begin(),contactclasss.end());
 	return contactclasss;
 }
 
 ContactClass* ContactClass::Get(int id) {
 ContactClass* contactclass = new ContactClass();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactClass WHERE ContactClassID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactClass WHERE ContactClassID = '"+QString::number(id)+"' ORDER BY ContactClassID ASC "));
 while (query.next()) {
 contactclass = new ContactClass(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ contactclasss = GetAll();
 	for(int i = 0; i <contactclasss.count(); i++){
 		list.append(contactclasss[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactClass::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactClass::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactClass*> contactclasss =   QList<ContactClass*>();
 contactclasss = GetAll();
 	for(int i = 0; i <contactclasss.count(); i++){
-		list.insert(contactclasss[i]->ContactClassID,contactclasss[i]->Description);
+		list.append(qMakePair(contactclasss[i]->ContactClassID,contactclasss[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactClass::GetPairList(QList<ContactClass*> contactclasss) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contactclasss.count(); i++){
+		list.append(qMakePair(contactclasss[i]->ContactClassID,contactclasss[i]->Description));
 	}
 	return list;
 }

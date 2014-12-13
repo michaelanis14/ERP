@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,7 +15,14 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/project.h"
 #include "../../Model/project.h"
+#include "../../Model/projectstatus.h"
+#include "../../Model/contact.h"
 
+#include "../Task/taskui.h"
+#include "../ProjectContactPerson/projectcontactpersonui.h"
+#include "../ProjectProduct/projectproductui.h"
+#include "../ProjectService/projectserviceui.h"
+#include "../ProjectFile/projectfileui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -32,16 +39,50 @@ public:
 	static void ShowUI();
 	static ProjectUI* GetUI();
 	ERPFormBlock* block0Layout;
+	ERPFormBlock* block1Layout;
+	ERPFormBlock* block2Layout;
+	ERPFormBlock* block3Layout;
+	ERPFormBlock* block4Layout;
+	ERPFormBlock* block5Layout;
+	ERPFormBlock* block6Layout;
+	ERPFormBlock* block7Layout;
+	QList<TaskUI*> Tasks;
+	QList<ProjectContactPersonUI*> ProjectContactPersons;
+	QList<ProjectProductUI*> ProjectProducts;
+	QList<ProjectServiceUI*> ProjectServices;
+	QList<ProjectFileUI*> ProjectFiles;
 	QLineEdit*title;
+	ERPComboBox*projectstatus;
+	ERPComboBox*contact;
+	QDateEdit*startdate;
+	QDateEdit*enddate;
+	QCheckBox* willbeinvoiced;
+	QLineEdit*note;
 	void fill(Project* project);
 Project* project;
 private:
 	static ERPDisplay* p_instance;
 private slots:
+	void addTask();
+	void addTask(Task* Task);
+	void removeTask(QWidget* widget);
+	void addProjectContactPerson();
+	void addProjectContactPerson(ProjectContactPerson* ProjectContactPerson);
+	void removeProjectContactPerson(QWidget* widget);
+	void addProjectProduct();
+	void addProjectProduct(ProjectProduct* ProjectProduct);
+	void removeProjectProduct(QWidget* widget);
+	void addProjectService();
+	void addProjectService(ProjectService* ProjectService);
+	void removeProjectService(QWidget* widget);
+	void addProjectFile();
+	void addProjectFile(ProjectFile* ProjectFile);
+	void removeProjectFile(QWidget* widget);
 	void selectProject();
 	void cancel();
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

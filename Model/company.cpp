@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: company.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -51,7 +51,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("CompanyID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Header")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Footer")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Company* Company::p_instance = 0;
@@ -78,6 +79,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Company::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Company::remove() {
 if(CompanyID!= 0) {
@@ -101,18 +108,17 @@ return new Company();
 
 QList<Company*> Company::GetAll() {
 	QList<Company*> companys =   QList<Company*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Company"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Company ORDER BY CompanyID ASC"));
 	while (query.next()) {
 companys.append(new Company(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(companys.begin(),companys.end());
 	return companys;
 }
 
 Company* Company::Get(int id) {
 Company* company = new Company();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Company WHERE CompanyID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Company WHERE CompanyID = '"+QString::number(id)+"' ORDER BY CompanyID ASC "));
 while (query.next()) {
 company = new Company(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString());
  }
@@ -167,16 +173,23 @@ companys = GetAll();
 	for(int i = 0; i <companys.count(); i++){
 		list.append(companys[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Company::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Company::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Company*> companys =   QList<Company*>();
 companys = GetAll();
 	for(int i = 0; i <companys.count(); i++){
-		list.insert(companys[i]->CompanyID,companys[i]->Name);
+		list.append(qMakePair(companys[i]->CompanyID,companys[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Company::GetPairList(QList<Company*> companys) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <companys.count(); i++){
+		list.append(qMakePair(companys[i]->CompanyID,companys[i]->Name));
 	}
 	return list;
 }

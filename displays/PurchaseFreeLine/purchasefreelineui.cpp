@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreelineui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,10 +32,13 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 purchase = new ERPComboBox();
-purchase->addItems(Purchase::GetHashList());
+purchase->addItems(Purchase::GetPairList());
 block0Layout->addRow("Purchase",purchase);
 description = new QLineEdit();
 block0Layout->addRow("Description",description);
+contact = new ERPComboBox();
+contact->addItems(Contact::GetPairList());
+block0Layout->addRow("Contact",contact);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
 block0Layout->addRow("Amount",amount);
@@ -86,7 +89,7 @@ clear();
 bool PurchaseFreeLineUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(purchasefreeline->PurchaseID == 0) 
+if(!purchase->isHidden()) 
 purchasefreeline->PurchaseID = purchase->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
@@ -103,6 +106,8 @@ description->style()->polish(description);
 description->update();
 purchasefreeline->Description = description->text().trimmed();
 }
+if(!contact->isHidden()) 
+purchasefreeline->ContactID = contact->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Amount Can't be Empty! \n";
@@ -146,4 +151,63 @@ return false;
 }
 void PurchaseFreeLineUI::cancel(){ 
 PurchaseFreeLineIndexUI::ShowUI();
+}
+bool PurchaseFreeLineUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(purchasefreeline->PurchaseID == 0) 
+purchasefreeline->PurchaseID = purchase->getKey();
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+purchasefreeline->Description = description->text().trimmed();
+}
+if(purchasefreeline->ContactID == 0) 
+purchasefreeline->ContactID = contact->getKey();
+if(amount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Amount Can't be Empty! \n";
+amount->setObjectName("error");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+}
+else { 
+amount->setObjectName("amount");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+purchasefreeline->Amount = amount->text().trimmed().toDouble();
+}
+if(price->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Price Can't be Empty! \n";
+price->setObjectName("error");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+}
+else { 
+price->setObjectName("price");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+purchasefreeline->Price = price->text().trimmed().toDouble();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "PurchaseFreeLine",errorString.trimmed());
+return false; 
+ }
 }

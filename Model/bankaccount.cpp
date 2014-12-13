@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccount.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -85,7 +85,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("BankAccountID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" INT"),QString("CountryID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("BankCode")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("BankAddress")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("AccountNumber")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("AccountOwner")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("IBAN")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("BIC")));variables.append(qMakePair(QString(" INT"),QString("CurrencyID")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 BankAccount* BankAccount::p_instance = 0;
@@ -112,6 +113,12 @@ while (query.next()) {
  }
 return true;
 }
+bool BankAccount::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool BankAccount::remove() {
 if(BankAccountID!= 0) {
@@ -135,18 +142,17 @@ return new BankAccount();
 
 QList<BankAccount*> BankAccount::GetAll() {
 	QList<BankAccount*> bankaccounts =   QList<BankAccount*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM BankAccount ORDER BY BankAccountID ASC"));
 	while (query.next()) {
 bankaccounts.append(new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString()));
 	}
-qStableSort(bankaccounts.begin(),bankaccounts.end());
 	return bankaccounts;
 }
 
 BankAccount* BankAccount::Get(int id) {
 BankAccount* bankaccount = new BankAccount();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM BankAccount WHERE BankAccountID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM BankAccount WHERE BankAccountID = '"+QString::number(id)+"' ORDER BY BankAccountID ASC "));
 while (query.next()) {
 bankaccount = new BankAccount(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toString(),query.value(8).toString(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString());
  }
@@ -205,16 +211,23 @@ bankaccounts = GetAll();
 	for(int i = 0; i <bankaccounts.count(); i++){
 		list.append(bankaccounts[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> BankAccount::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > BankAccount::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<BankAccount*> bankaccounts =   QList<BankAccount*>();
 bankaccounts = GetAll();
 	for(int i = 0; i <bankaccounts.count(); i++){
-		list.insert(bankaccounts[i]->BankAccountID,bankaccounts[i]->Name);
+		list.append(qMakePair(bankaccounts[i]->BankAccountID,bankaccounts[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > BankAccount::GetPairList(QList<BankAccount*> bankaccounts) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <bankaccounts.count(); i++){
+		list.append(qMakePair(bankaccounts[i]->BankAccountID,bankaccounts[i]->Name));
 	}
 	return list;
 }

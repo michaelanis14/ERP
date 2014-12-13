@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorder.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,9 +19,9 @@ class DeliveryOrder  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	DeliveryOrder();
-	DeliveryOrder(QString Title,int Number,int DeliveryOrderStatusID,int ContactID,QString CreationDate,QString DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	int DeliveryOrderID;
-	QString Title;
-	int Number;
+	DeliveryOrder(QString Serial,QString Barcode,int DeliveryOrderStatusID,int ContactID,QString CreationDate,QString DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	int DeliveryOrderID;
+	QString Serial;
+	QString Barcode;
 	int DeliveryOrderStatusID;
 	int ContactID;
 	QString CreationDate;
@@ -37,6 +37,7 @@ public:
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	DeliveryOrder* get();
 	DeliveryOrder* get(const QModelIndex &index);
@@ -46,7 +47,8 @@ public:
 	static QList<DeliveryOrder*> Search(QString keyword);
 	static QList<DeliveryOrder*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<DeliveryOrder*> deliveryorders);
 	static int GetIndex(QString title);
 	static DeliveryOrder* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -55,9 +57,9 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	DeliveryOrder(int DeliveryOrderID,QString Title,int Number,int DeliveryOrderStatusID,int ContactID,QString CreationDate,QString DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	static DeliveryOrder* p_instance;
-	bool setTitle(int DeliveryOrderID, const QString &Title);
-	bool setNumber(int DeliveryOrderID, const QString &Number);
+	DeliveryOrder(int DeliveryOrderID,QString Serial,QString Barcode,int DeliveryOrderStatusID,int ContactID,QString CreationDate,QString DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	static DeliveryOrder* p_instance;
+	bool setSerial(int DeliveryOrderID, const QString &Serial);
+	bool setBarcode(int DeliveryOrderID, const QString &Barcode);
 	bool setDeliveryOrderStatusID(int DeliveryOrderID, const QString &DeliveryOrderStatusID);
 	bool setContactID(int DeliveryOrderID, const QString &ContactID);
 	bool setCreationDate(int DeliveryOrderID, const QString &CreationDate);

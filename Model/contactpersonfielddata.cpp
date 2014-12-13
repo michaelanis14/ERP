@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonfielddata.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -56,7 +56,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactPersonFieldDataID")));variables.append(qMakePair(QString(" INT"),QString("ContactPersonID")));variables.append(qMakePair(QString(" INT"),QString("ContactPersonFieldID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Value")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactPersonFieldData* ContactPersonFieldData::p_instance = 0;
@@ -83,6 +84,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactPersonFieldData::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactPersonFieldData::remove() {
 if(ContactPersonFieldDataID!= 0) {
@@ -106,18 +113,17 @@ return new ContactPersonFieldData();
 
 QList<ContactPersonFieldData*> ContactPersonFieldData::GetAll() {
 	QList<ContactPersonFieldData*> contactpersonfielddatas =   QList<ContactPersonFieldData*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPersonFieldData"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPersonFieldData ORDER BY ContactPersonFieldDataID ASC"));
 	while (query.next()) {
 contactpersonfielddatas.append(new ContactPersonFieldData(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(contactpersonfielddatas.begin(),contactpersonfielddatas.end());
 	return contactpersonfielddatas;
 }
 
 ContactPersonFieldData* ContactPersonFieldData::Get(int id) {
 ContactPersonFieldData* contactpersonfielddata = new ContactPersonFieldData();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPersonFieldData WHERE ContactPersonFieldDataID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPersonFieldData WHERE ContactPersonFieldDataID = '"+QString::number(id)+"' ORDER BY ContactPersonFieldDataID ASC "));
 while (query.next()) {
 contactpersonfielddata = new ContactPersonFieldData(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString());
  }
@@ -170,16 +176,23 @@ contactpersonfielddatas = GetAll();
 	for(int i = 0; i <contactpersonfielddatas.count(); i++){
 		list.append(contactpersonfielddatas[i]->Value);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactPersonFieldData::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactPersonFieldData::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactPersonFieldData*> contactpersonfielddatas =   QList<ContactPersonFieldData*>();
 contactpersonfielddatas = GetAll();
 	for(int i = 0; i <contactpersonfielddatas.count(); i++){
-		list.insert(contactpersonfielddatas[i]->ContactPersonFieldDataID,QString::number(contactpersonfielddatas[i]->ContactPersonID));
+		list.append(qMakePair(contactpersonfielddatas[i]->ContactPersonFieldDataID,QString::number(contactpersonfielddatas[i]->ContactPersonID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactPersonFieldData::GetPairList(QList<ContactPersonFieldData*> contactpersonfielddatas) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contactpersonfielddatas.count(); i++){
+		list.append(qMakePair(contactpersonfielddatas[i]->ContactPersonFieldDataID,QString::number(contactpersonfielddatas[i]->ContactPersonID)));
 	}
 	return list;
 }

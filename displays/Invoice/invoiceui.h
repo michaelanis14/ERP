@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,6 +15,7 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/invoice.h"
 #include "../../Model/invoice.h"
+#include "../../Model/invoiceserial.h"
 #include "../../Model/invoiceperiod.h"
 #include "../../Model/invoiceyear.h"
 #include "../../Model/project.h"
@@ -41,6 +42,7 @@ public:
 	QList<InvoiceStateDateUI*> InvoiceStateDates;
 	QList<InvoiceFreelineUI*> InvoiceFreelines;
 	QList<PaymentUI*> Payments;
+	ERPComboBox*invoiceserial;
 	QDateEdit*creationdate;
 	QDateEdit*enddate;
 	ERPComboBox*invoiceperiod;
@@ -70,5 +72,6 @@ private slots:
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

@@ -25,7 +25,7 @@ ProductStoreStateUI::ProductStoreStateUI(QWidget *parent) :
 	flowLayout->setContentsMargins(0,0,0,0);
 	ERPFormBlock* block0Layout = new ERPFormBlock;
 	store = new ERPComboBox();
-	store->addItems(Store::GetHashList());
+	store->addItems(Store::GetPairList());
 	QObject::connect(store, SIGNAL(currentIndexChanged(QString)), this, SLOT(selectionChanged(QString)));
 	block0Layout->addRow("Store",store);
 

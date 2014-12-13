@@ -3,7 +3,7 @@
 **   Author: michaelbishara
 **   Copyright: Bishara©.
 **************************************/
-
+#include "../mainwindow.h"
 #include "navigationButtons.h"
 
 NavigationButtons::NavigationButtons(QWidget *parent) :
@@ -27,13 +27,10 @@ void NavigationButtons::addButton(QToolButton* pushButton) {
 		pushButton->setFont(*font);
 	}
 	navigationButtons.append(pushButton);
-	for (int i=0; i< this->navigationButtons.size(); i++) {
-		navigationButtons.at(i)->setFixedHeight(this->height()/navigationButtons.size());
-			}
 
 
 	connect(pushButton,SIGNAL(clicked()),this, SLOT(toggle()));
-
+this->adjustSize();
 }
 
 void NavigationButtons::toggle() {
@@ -44,4 +41,18 @@ void NavigationButtons::toggle() {
 		}
 		else this->navigationButtons.at(i)->setChecked(true);
 	}
+}
+void NavigationButtons::resizeEvent(QResizeEvent * event){
+
+
+	this->setFixedHeight(mainwindow::GetMainDisplay()->height());
+	this->setFixedWidth(mainwindow::GetMainDisplay()->navigation->width());
+	for (int i=0; i< this->navigationButtons.size(); i++) {
+		navigationButtons.at(i)->setFixedHeight(this->height()/navigationButtons.size());
+			}
+	this->adjustSize();
+
+	//this->adjustSize();
+	QWidget::resizeEvent(event);
+//	event->accept();
 }

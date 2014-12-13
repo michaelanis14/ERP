@@ -5,6 +5,7 @@
 **************************************/
 
 #include "HNavigationButtons.h"
+#include "../mainwindow.h"
 
 
 HNavigationButtons::HNavigationButtons(QWidget *parent) :
@@ -13,13 +14,14 @@ HNavigationButtons::HNavigationButtons(QWidget *parent) :
 
 	font = NULL;
 	layout = new QHBoxLayout(this);
-	layout->setContentsMargins(2,0,2,0);
+	layout->setContentsMargins(2,2,2,0);
 	this->setContentsMargins(0,0,1,0);
 }
 
 void HNavigationButtons::addButton(QPushButton* pushButton) {
 	layout->addWidget(pushButton);
-	layout->addStretch(1);
+//	layout->addStretch(1);
+		pushButton->setParent(this);
 	pushButton->setFlat(true);
 	pushButton->setCheckable(true);
 
@@ -33,11 +35,13 @@ void HNavigationButtons::addButton(QPushButton* pushButton) {
 
 	pushButton->setVisible(true);
 	connect(pushButton,SIGNAL(clicked()),this, SLOT(toggle()));
-
+	this->adjustSize();
 }
 void HNavigationButtons::addControllerButton(QPushButton* pushButton) {
+
 	layout->addStretch(1);
 	layout->addWidget(pushButton);
+	pushButton->setParent(this);
 	layout->addStretch(1);
 
 	if (this->font != NULL) {
@@ -46,7 +50,7 @@ void HNavigationButtons::addControllerButton(QPushButton* pushButton) {
 	navigationButtons.append(pushButton);
 
 	connect(pushButton,SIGNAL(clicked()),this, SLOT(toggle()));
-
+	this->adjustSize();
 }
 void HNavigationButtons::removeAll() {
 
@@ -54,6 +58,7 @@ void HNavigationButtons::removeAll() {
 		foreach(QWidget * child, Widgets)
 		{
 			 child->setHidden(true);
+			 child->setParent(0);
 			 navigationButtons.clear();
 
 		}
@@ -68,4 +73,13 @@ void HNavigationButtons::toggle() {
 		}
 		else this->navigationButtons.at(i)->setChecked(true);
 	}
+}
+void HNavigationButtons::resizeEvent(QResizeEvent * event){
+
+
+	this->setFixedWidth(mainwindow::GetMainDisplay()->width() - mainwindow::GetMainDisplay()->navigation->width());
+	this->setFixedHeight(39);
+	//this->adjustSize();
+	QWidget::resizeEvent(event);
+//	event->accept();
 }

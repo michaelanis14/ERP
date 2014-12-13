@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,7 +32,7 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 invoice = new ERPComboBox();
-invoice->addItems(Invoice::GetHashList());
+invoice->addItems(Invoice::GetPairList());
 block0Layout->addRow("Invoice",invoice);
 totalamount = new QLineEdit();
 totalamount->setValidator( doubleValidator );
@@ -40,7 +40,7 @@ block0Layout->addRow("Total Amount",totalamount);
 comment = new QLineEdit();
 block0Layout->addRow("Comment",comment);
 paymenttype = new ERPComboBox();
-paymenttype->addItems(PaymentType::GetHashList());
+paymenttype->addItems(PaymentType::GetPairList());
 block0Layout->addRow("Payment Type",paymenttype);
 flowLayout->addWidget(block0Layout);
 
@@ -84,6 +84,57 @@ clear();
 bool PaymentUI::save(){ 
 bool errors = false;
 QString errorString =  "";
+if(!invoice->isHidden()) 
+payment->InvoiceID = invoice->getKey();
+if(totalamount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Total Amount Can't be Empty! \n";
+totalamount->setObjectName("error");
+totalamount->style()->unpolish(totalamount);
+totalamount->style()->polish(totalamount);
+totalamount->update();
+}
+else { 
+totalamount->setObjectName("totalamount");
+totalamount->style()->unpolish(totalamount);
+totalamount->style()->polish(totalamount);
+totalamount->update();
+payment->TotalAmount = totalamount->text().trimmed().toDouble();
+}
+if(comment->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Comment Can't be Empty! \n";
+comment->setObjectName("error");
+comment->style()->unpolish(comment);
+comment->style()->polish(comment);
+comment->update();
+}
+else { 
+comment->setObjectName("comment");
+comment->style()->unpolish(comment);
+comment->style()->polish(comment);
+comment->update();
+payment->Comment = comment->text().trimmed();
+}
+if(!paymenttype->isHidden()) 
+payment->PaymentTypeID = paymenttype->getKey();
+if(!errors) {
+payment->save();
+if(!errors){
+PaymentIndexUI::ShowUI();
+return true;}
+else return false;
+}
+else{ QMessageBox::warning(this, "Payment",errorString.trimmed());
+return false; 
+ }
+}
+void PaymentUI::cancel(){ 
+PaymentIndexUI::ShowUI();
+}
+bool PaymentUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
 if(payment->InvoiceID == 0) 
 payment->InvoiceID = invoice->getKey();
 if(totalamount->text().trimmed().isEmpty()){
@@ -118,17 +169,10 @@ payment->Comment = comment->text().trimmed();
 }
 if(payment->PaymentTypeID == 0) 
 payment->PaymentTypeID = paymenttype->getKey();
-if(!errors) {
-payment->save();
 if(!errors){
-PaymentIndexUI::ShowUI();
-return true;}
-else return false;
+	return true;
 }
-else{ QMessageBox::warning(this, "Payment",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Payment",errorString.trimmed());
 return false; 
  }
-}
-void PaymentUI::cancel(){ 
-PaymentIndexUI::ShowUI();
 }

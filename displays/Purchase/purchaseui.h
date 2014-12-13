@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchaseui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,8 +15,10 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/purchase.h"
 #include "../../Model/purchase.h"
+#include "../../Model/purchaseserial.h"
 
 #include "../PurchaseStoreProduct/purchasestoreproductui.h"
+#include "../PurchaseFreeLine/purchasefreelineui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -34,6 +36,8 @@ public:
 	static PurchaseUI* GetUI();
 	ERPFormBlock* block0Layout;
 	QList<PurchaseStoreProductUI*> PurchaseStoreProducts;
+	QList<PurchaseFreeLineUI*> PurchaseFreeLines;
+	ERPComboBox*purchaseserial;
 	QDateEdit*creationdate;
 	QDateEdit*deliverydate;
 	void fill(Purchase* purchase);
@@ -44,10 +48,14 @@ private slots:
 	void addPurchaseStoreProduct();
 	void addPurchaseStoreProduct(PurchaseStoreProduct* PurchaseStoreProduct);
 	void removePurchaseStoreProduct(QWidget* widget);
+	void addPurchaseFreeLine();
+	void addPurchaseFreeLine(PurchaseFreeLine* PurchaseFreeLine);
+	void removePurchaseFreeLine(QWidget* widget);
 	void selectPurchase();
 	void cancel();
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

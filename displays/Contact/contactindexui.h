@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactindexui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,7 +21,6 @@
 #include "../ContactTelephone/contacttelephoneui.h"
 #include "../ContactEmail/contactemailui.h"
 #include "../BankAccount/bankaccountui.h"
-#include "../ContactFieldData/contactfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>

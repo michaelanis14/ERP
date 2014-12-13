@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Sat Dec 06 23:44:49 EET 2014
+#   Created on: Sat Dec 13 13:51:05 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
@@ -50,7 +50,12 @@ SOURCES += main.cpp \
 	Model/contactperson.cpp \
 	Model/contactpersontelephone.cpp \
 	Model/contactpersonemail.cpp \
+	Model/projectstatus.cpp \
 	Model/project.cpp \
+	Model/projectfile.cpp \
+	Model/projectcontactperson.cpp \
+	Model/projectproduct.cpp \
+	Model/projectservice.cpp \
 	Model/unit.cpp \
 	Model/productcategory.cpp \
 	Model/productimage.cpp \
@@ -60,6 +65,7 @@ SOURCES += main.cpp \
 	Model/service.cpp \
 	Model/store.cpp \
 	Model/purchasestatus.cpp \
+	Model/purchaseserial.cpp \
 	Model/purchase.cpp \
 	Model/purchasestoreproduct.cpp \
 	Model/purchasefreeline.cpp \
@@ -71,12 +77,17 @@ SOURCES += main.cpp \
 	Model/invoiceperiod.cpp \
 	Model/invoiceyear.cpp \
 	Model/invoicestate.cpp \
+	Model/invoiceserial.cpp \
 	Model/invoice.cpp \
 	Model/invoicestatedate.cpp \
 	Model/invoicefreeline.cpp \
 	Model/paymenttype.cpp \
 	Model/payment.cpp \
-	displays/Product/ProductStoreStateUI.cpp 	displays/Company/companyindexui.cpp \
+	Model/task.cpp \
+	Model/timebooking.cpp \
+	displays/Product/ProductStoreStateUI.cpp \ 
+	 displays/Purchase/createpurchase.cpp \
+	displays/Company/companyindexui.cpp \
 	displays/Company/companyui.cpp \
 	displays/Tax/taxindexui.cpp \
 	displays/Tax/taxui.cpp \
@@ -116,8 +127,18 @@ SOURCES += main.cpp \
 	displays/ContactPersonTelephone/contactpersontelephoneui.cpp \
 	displays/ContactPersonEmail/contactpersonemailindexui.cpp \
 	displays/ContactPersonEmail/contactpersonemailui.cpp \
+	displays/ProjectStatus/projectstatusindexui.cpp \
+	displays/ProjectStatus/projectstatusui.cpp \
 	displays/Project/projectindexui.cpp \
 	displays/Project/projectui.cpp \
+	displays/ProjectFile/projectfileindexui.cpp \
+	displays/ProjectFile/projectfileui.cpp \
+	displays/ProjectContactPerson/projectcontactpersonindexui.cpp \
+	displays/ProjectContactPerson/projectcontactpersonui.cpp \
+	displays/ProjectProduct/projectproductindexui.cpp \
+	displays/ProjectProduct/projectproductui.cpp \
+	displays/ProjectService/projectserviceindexui.cpp \
+	displays/ProjectService/projectserviceui.cpp \
 	displays/Unit/unitindexui.cpp \
 	displays/Unit/unitui.cpp \
 	displays/ProductCategory/productcategoryindexui.cpp \
@@ -136,6 +157,8 @@ SOURCES += main.cpp \
 	displays/Store/storeui.cpp \
 	displays/PurchaseStatus/purchasestatusindexui.cpp \
 	displays/PurchaseStatus/purchasestatusui.cpp \
+	displays/PurchaseSerial/purchaseserialindexui.cpp \
+	displays/PurchaseSerial/purchaseserialui.cpp \
 	displays/Purchase/purchaseindexui.cpp \
 	displays/Purchase/purchaseui.cpp \
 	displays/PurchaseStoreProduct/purchasestoreproductindexui.cpp \
@@ -158,6 +181,8 @@ SOURCES += main.cpp \
 	displays/InvoiceYear/invoiceyearui.cpp \
 	displays/InvoiceState/invoicestateindexui.cpp \
 	displays/InvoiceState/invoicestateui.cpp \
+	displays/InvoiceSerial/invoiceserialindexui.cpp \
+	displays/InvoiceSerial/invoiceserialui.cpp \
 	displays/Invoice/invoiceindexui.cpp \
 	displays/Invoice/invoiceui.cpp \
 	displays/InvoiceStateDate/invoicestatedateindexui.cpp \
@@ -168,7 +193,10 @@ SOURCES += main.cpp \
 	displays/PaymentType/paymenttypeui.cpp \
 	displays/Payment/paymentindexui.cpp \
 	displays/Payment/paymentui.cpp \
-    displays/Purchase/createpurchase.cpp
+	displays/Task/taskindexui.cpp \
+	displays/Task/taskui.cpp \
+	displays/TimeBooking/timebookingindexui.cpp \
+	displays/TimeBooking/timebookingui.cpp
 
 HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/erpcombobox.h \
@@ -202,7 +230,12 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/contactperson.h \
 	Model/contactpersontelephone.h \
 	Model/contactpersonemail.h \
+	Model/projectstatus.h \
 	Model/project.h \
+	Model/projectfile.h \
+	Model/projectcontactperson.h \
+	Model/projectproduct.h \
+	Model/projectservice.h \
 	Model/unit.h \
 	Model/productcategory.h \
 	Model/productimage.h \
@@ -212,6 +245,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/service.h \
 	Model/store.h \
 	Model/purchasestatus.h \
+	Model/purchaseserial.h \
 	Model/purchase.h \
 	Model/purchasestoreproduct.h \
 	Model/purchasefreeline.h \
@@ -223,12 +257,17 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/invoiceperiod.h \
 	Model/invoiceyear.h \
 	Model/invoicestate.h \
+	Model/invoiceserial.h \
 	Model/invoice.h \
 	Model/invoicestatedate.h \
 	Model/invoicefreeline.h \
 	Model/paymenttype.h \
 	Model/payment.h \
-	displays/Product/ProductStoreStateUI.h 	displays/Company/companyindexui.h \
+	Model/task.h \
+	Model/timebooking.h \
+	displays/Product/ProductStoreStateUI.h \
+	 displays/Purchase/createpurchase.h \
+	displays/Company/companyindexui.h \
 	displays/Company/companyui.h \
 	displays/Tax/taxindexui.h \
 	displays/Tax/taxui.h \
@@ -268,8 +307,18 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/ContactPersonTelephone/contactpersontelephoneui.h \
 	displays/ContactPersonEmail/contactpersonemailindexui.h \
 	displays/ContactPersonEmail/contactpersonemailui.h \
+	displays/ProjectStatus/projectstatusindexui.h \
+	displays/ProjectStatus/projectstatusui.h \
 	displays/Project/projectindexui.h \
 	displays/Project/projectui.h \
+	displays/ProjectFile/projectfileindexui.h \
+	displays/ProjectFile/projectfileui.h \
+	displays/ProjectContactPerson/projectcontactpersonindexui.h \
+	displays/ProjectContactPerson/projectcontactpersonui.h \
+	displays/ProjectProduct/projectproductindexui.h \
+	displays/ProjectProduct/projectproductui.h \
+	displays/ProjectService/projectserviceindexui.h \
+	displays/ProjectService/projectserviceui.h \
 	displays/Unit/unitindexui.h \
 	displays/Unit/unitui.h \
 	displays/ProductCategory/productcategoryindexui.h \
@@ -288,6 +337,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Store/storeui.h \
 	displays/PurchaseStatus/purchasestatusindexui.h \
 	displays/PurchaseStatus/purchasestatusui.h \
+	displays/PurchaseSerial/purchaseserialindexui.h \
+	displays/PurchaseSerial/purchaseserialui.h \
 	displays/Purchase/purchaseindexui.h \
 	displays/Purchase/purchaseui.h \
 	displays/PurchaseStoreProduct/purchasestoreproductindexui.h \
@@ -310,6 +361,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/InvoiceYear/invoiceyearui.h \
 	displays/InvoiceState/invoicestateindexui.h \
 	displays/InvoiceState/invoicestateui.h \
+	displays/InvoiceSerial/invoiceserialindexui.h \
+	displays/InvoiceSerial/invoiceserialui.h \
 	displays/Invoice/invoiceindexui.h \
 	displays/Invoice/invoiceui.h \
 	displays/InvoiceStateDate/invoicestatedateindexui.h \
@@ -319,8 +372,11 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/PaymentType/paymenttypeindexui.h \
 	displays/PaymentType/paymenttypeui.h \
 	displays/Payment/paymentindexui.h \
-	displays/Payment/paymentui.h \ 
-    displays/Purchase/createpurchase.h
+	displays/Payment/paymentui.h \
+	displays/Task/taskindexui.h \
+	displays/Task/taskui.h \
+	displays/TimeBooking/timebookingindexui.h \
+	displays/TimeBooking/timebookingui.h 
 
 FORMS	+= mainwindow.ui
 

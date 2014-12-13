@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreeline.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,6 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("DeliveryOrderFreeline");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(1, QSqlRelation("DeliveryOrder", "DeliveryOrderID", "Title"));
 }
 DeliveryOrderFreeline::DeliveryOrderFreeline(int DeliveryOrderFreelineID,int DeliveryOrderID,QString Description,double Amount,double Price,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->DeliveryOrderFreelineID = DeliveryOrderFreelineID ;
@@ -57,7 +56,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("DeliveryOrderFreelineID")));variables.append(qMakePair(QString(" INT"),QString("DeliveryOrderID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("Amount")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("Price")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 DeliveryOrderFreeline* DeliveryOrderFreeline::p_instance = 0;
@@ -84,6 +84,12 @@ while (query.next()) {
  }
 return true;
 }
+bool DeliveryOrderFreeline::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool DeliveryOrderFreeline::remove() {
 if(DeliveryOrderFreelineID!= 0) {
@@ -107,18 +113,17 @@ return new DeliveryOrderFreeline();
 
 QList<DeliveryOrderFreeline*> DeliveryOrderFreeline::GetAll() {
 	QList<DeliveryOrderFreeline*> deliveryorderfreelines =   QList<DeliveryOrderFreeline*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderFreeline"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderFreeline ORDER BY DeliveryOrderFreelineID ASC"));
 	while (query.next()) {
 deliveryorderfreelines.append(new DeliveryOrderFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString()));
 	}
-qStableSort(deliveryorderfreelines.begin(),deliveryorderfreelines.end());
 	return deliveryorderfreelines;
 }
 
 DeliveryOrderFreeline* DeliveryOrderFreeline::Get(int id) {
 DeliveryOrderFreeline* deliveryorderfreeline = new DeliveryOrderFreeline();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderFreeline WHERE DeliveryOrderFreelineID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderFreeline WHERE DeliveryOrderFreelineID = '"+QString::number(id)+"' ORDER BY DeliveryOrderFreelineID ASC "));
 while (query.next()) {
 deliveryorderfreeline = new DeliveryOrderFreeline(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toString(),query.value(6).toString());
  }
@@ -171,16 +176,23 @@ deliveryorderfreelines = GetAll();
 	for(int i = 0; i <deliveryorderfreelines.count(); i++){
 		list.append(deliveryorderfreelines[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> DeliveryOrderFreeline::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > DeliveryOrderFreeline::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<DeliveryOrderFreeline*> deliveryorderfreelines =   QList<DeliveryOrderFreeline*>();
 deliveryorderfreelines = GetAll();
 	for(int i = 0; i <deliveryorderfreelines.count(); i++){
-		list.insert(deliveryorderfreelines[i]->DeliveryOrderFreelineID,QString::number(deliveryorderfreelines[i]->DeliveryOrderID));
+		list.append(qMakePair(deliveryorderfreelines[i]->DeliveryOrderFreelineID,QString::number(deliveryorderfreelines[i]->DeliveryOrderID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > DeliveryOrderFreeline::GetPairList(QList<DeliveryOrderFreeline*> deliveryorderfreelines) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <deliveryorderfreelines.count(); i++){
+		list.append(qMakePair(deliveryorderfreelines[i]->DeliveryOrderFreelineID,QString::number(deliveryorderfreelines[i]->DeliveryOrderID)));
 	}
 	return list;
 }

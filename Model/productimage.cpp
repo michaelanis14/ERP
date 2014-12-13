@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productimage.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,25 +11,28 @@ ProductImage::ProductImage()
  : QSqlRelationalTableModel(){
 
 this->ProductImageID = 0 ;
-this->Description = "";
+this->Name = "";
+this->imageData = 0 ;
 this->ProductID = 0 ;
 this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("ProductImage");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(2, QSqlRelation("Product", "ProductID", "Name"));
+this->setRelation(3, QSqlRelation("Product", "ProductID", "Name"));
 }
-ProductImage::ProductImage(int ProductImageID,QString Description,int ProductID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+ProductImage::ProductImage(int ProductImageID,QString Name,QVariant imageData,int ProductID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ProductImageID = ProductImageID ;
-this->Description = Description ;
+this->Name = Name ;
+this->imageData = imageData ;
 this->ProductID = ProductID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-ProductImage::ProductImage(QString Description,int ProductID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+ProductImage::ProductImage(QString Name,QVariant imageData,int ProductID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ProductImageID = 0 ;
-this->Description = Description ;
+this->Name = Name ;
+this->imageData = imageData ;
 this->ProductID = ProductID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
@@ -42,14 +45,16 @@ QString table = "ProductImage";
 QString query =
 "(ProductImageID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (ProductImageID),"
-"Description VARCHAR(40) NOT NULL, "
-" KEY(Description),"
+"Name VARCHAR(40) NOT NULL, "
+" KEY(Name),"
+"imageData LONGBLOB NOT NULL, "
 "ProductID INT NOT NULL, "
 "FOREIGN KEY (ProductID) REFERENCES Product(ProductID)  ON DELETE CASCADE,"
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ProductImageID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" LONGBLOB"),QString("imageData")));variables.append(qMakePair(QString(" INT"),QString("ProductID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ProductImage* ProductImage::p_instance = 0;
@@ -64,17 +69,23 @@ bool ProductImage::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(ProductImageID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO ProductImage (Description,ProductID,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Description)+"','"+QString::number(this->ProductID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO ProductImage (Name,imageData,ProductID,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Name)+"','"+(this->imageData.toString())+"','"+QString::number(this->ProductID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE ProductImage SET "	"Description = '"+QString(this->Description)+"',"+"ProductID = '"+QString::number(this->ProductID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductImageID ='"+QString::number(this->ProductImageID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProductImageID FROM ProductImage WHERE Description = '"+Description+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ErpModel::GetInstance()->qeryExec("UPDATE ProductImage SET "	"Name = '"+QString(this->Name)+"',"+"imageData = '"+(this->imageData.toString())+"',"+"ProductID = '"+QString::number(this->ProductID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductImageID ='"+QString::number(this->ProductImageID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProductImageID FROM ProductImage WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->ProductImageID = query.value(0).toInt();	
  } 
  }
 return true;
+}
+bool ProductImage::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
 }
 
 bool ProductImage::remove() {
@@ -90,7 +101,7 @@ if(ProductImageID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ProductImage"
 "WHERE ProductImageID ='"+QString::number(this->ProductImageID)+"'"));
 while (query.next()) {
-return new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString());
+return new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
  }
 
 }
@@ -99,20 +110,19 @@ return new ProductImage();
 
 QList<ProductImage*> ProductImage::GetAll() {
 	QList<ProductImage*> productimages =   QList<ProductImage*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductImage"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductImage ORDER BY ProductImageID ASC"));
 	while (query.next()) {
-productimages.append(new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString()));
+productimages.append(new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(productimages.begin(),productimages.end());
 	return productimages;
 }
 
 ProductImage* ProductImage::Get(int id) {
 ProductImage* productimage = new ProductImage();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ProductImage WHERE ProductImageID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ProductImage WHERE ProductImageID = '"+QString::number(id)+"' ORDER BY ProductImageID ASC "));
 while (query.next()) {
-productimage = new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString());
+productimage = new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
  }
 
 }
@@ -129,9 +139,9 @@ else return new ProductImage();
 ProductImage* ProductImage::Get(QString name) {
 ProductImage* productimage = new ProductImage();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductImage WHERE Description = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductImage WHERE Name = '"+name+"'"));
 while (query.next()) {
-productimage = new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString());
+productimage = new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
 
  }
 
@@ -144,12 +154,12 @@ QList<ProductImage*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductImage"
 "WHERE" 
-"Description LIKE '%"+keyword+"%'"
+"Name LIKE '%"+keyword+"%'"
 "OR CreatedOn LIKE '%"+keyword+"%'"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString()));
+list.append(new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
  }
 
 }
@@ -161,18 +171,25 @@ QList<QString> ProductImage::GetStringList() {
 	QList<ProductImage*> productimages =   QList<ProductImage*>();
 productimages = GetAll();
 	for(int i = 0; i <productimages.count(); i++){
-		list.append(productimages[i]->Description);
+		list.append(productimages[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ProductImage::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ProductImage::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ProductImage*> productimages =   QList<ProductImage*>();
 productimages = GetAll();
 	for(int i = 0; i <productimages.count(); i++){
-		list.insert(productimages[i]->ProductImageID,productimages[i]->Description);
+		list.append(qMakePair(productimages[i]->ProductImageID,productimages[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ProductImage::GetPairList(QList<ProductImage*> productimages) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <productimages.count(); i++){
+		list.append(qMakePair(productimages[i]->ProductImageID,productimages[i]->Name));
 	}
 	return list;
 }
@@ -181,7 +198,7 @@ int ProductImage::GetIndex(QString name) {
 	QList<ProductImage*> productimages =   QList<ProductImage*>();
 productimages = GetAll();
 	for(int i = 0; i <productimages.count(); i++){
-		if(productimages[i]->Description == name){
+		if(productimages[i]->Name == name){
 			return i;
 		}
 	}
@@ -193,7 +210,7 @@ QList<ProductImage*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductImage WHERE "+select+"" ));
 while (query.next()) {
-list.append(new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString()));
+list.append(new ProductImage(query.value(0).toInt(),query.value(1).toString(),query.value(2),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
  }
 
 }
@@ -204,7 +221,7 @@ Qt::ItemFlags ProductImage::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -217,12 +234,14 @@ int id = data(primaryKeyIndex).toInt();
 bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
-ok = setDescription(id, value.toString());
+ok = setName(id, value.toString());
 else if (index.column() == 2)
-ok = setProductID(id, value.toString());
+ok = setimageData(id, value.toString());
 else if (index.column() == 3)
-ok = setCreatedOn(id, value.toString());
+ok = setProductID(id, value.toString());
 else if (index.column() == 4)
+ok = setCreatedOn(id, value.toString());
+else if (index.column() == 5)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -241,18 +260,28 @@ return ok;
 void ProductImage::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() ProductImage!";
-this->setHeaderData(1, Qt::Horizontal, QObject::tr("Description"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("Product"));
-this->setHeaderData(3, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(4, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Name"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("imageData"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("Product"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
 }
-bool ProductImage::setDescription(int ProductImageID, const QString &Description) {
+bool ProductImage::setName(int ProductImageID, const QString &Name) {
 QSqlQuery query;
-query.prepare("update ProductImage set Description = ? where ProductImageID = ?");
-query.addBindValue(Description);
+query.prepare("update ProductImage set Name = ? where ProductImageID = ?");
+query.addBindValue(Name);
+query.addBindValue(ProductImageID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool ProductImage::setimageData(int ProductImageID, const QString &imageData) {
+QSqlQuery query;
+query.prepare("update ProductImage set imageData = ? where ProductImageID = ?");
+query.addBindValue(imageData);
 query.addBindValue(ProductImageID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

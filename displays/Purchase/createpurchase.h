@@ -37,9 +37,11 @@ public:
 	ERPTableView *tabel;
 	QStandardItemModel *model;
 	ERPFormBlock* block0Layout;
+	AddRemoveButtons* addremovePurchaseStoreProductButtons;
 	QPushButton *remove;
 	ERPFormBlock *block1Layout;
 
+	PurchaseStoreProductUI* purchasestoreproductui;
 	QList<PurchaseStoreProductUI*> PurchaseStoreProducts;
 	QDateEdit*creationdate;
 	QDateEdit*deliverydate;
@@ -59,6 +61,7 @@ private slots:
 
 public slots:
 	bool save();
+	bool updateModel();
 	void onSelectionChanged();
 protected:
 void showEvent(QShowEvent * event);

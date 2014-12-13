@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -100,4 +100,29 @@ return false;
 }
 void TaxUI::cancel(){ 
 TaxIndexUI::ShowUI();
+}
+bool TaxUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(title->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Title Can't be Empty! \n";
+title->setObjectName("error");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+}
+else { 
+title->setObjectName("title");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+tax->Title = title->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Tax",errorString.trimmed());
+return false; 
+ }
 }

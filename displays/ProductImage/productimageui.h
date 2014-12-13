@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productimageui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -33,7 +33,12 @@ public:
 	static void ShowUI();
 	static ProductImageUI* GetUI();
 	ERPFormBlock* block0Layout;
-	QLineEdit*description;
+	QLineEdit*name;
+ QLabel* imageLabel;
+ QLineEdit* fileName;
+ QPushButton* Add;
+QByteArray bytes;
+	QVariant* imagedata;
 	ERPComboBox*product;
 	void fill(ProductImage* productimage);
 ProductImage* productimage;
@@ -45,5 +50,7 @@ private slots:
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
+void on_loadImageButton_clicked(); 
 };
 #endif

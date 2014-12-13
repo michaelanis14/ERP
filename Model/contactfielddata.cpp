@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfielddata.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,7 +55,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactFieldDataID")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(" INT"),QString("ContactFieldID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Value")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactFieldData* ContactFieldData::p_instance = 0;
@@ -82,6 +83,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactFieldData::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactFieldData::remove() {
 if(ContactFieldDataID!= 0) {
@@ -105,18 +112,17 @@ return new ContactFieldData();
 
 QList<ContactFieldData*> ContactFieldData::GetAll() {
 	QList<ContactFieldData*> contactfielddatas =   QList<ContactFieldData*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactFieldData"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactFieldData ORDER BY ContactFieldDataID ASC"));
 	while (query.next()) {
 contactfielddatas.append(new ContactFieldData(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(contactfielddatas.begin(),contactfielddatas.end());
 	return contactfielddatas;
 }
 
 ContactFieldData* ContactFieldData::Get(int id) {
 ContactFieldData* contactfielddata = new ContactFieldData();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactFieldData WHERE ContactFieldDataID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactFieldData WHERE ContactFieldDataID = '"+QString::number(id)+"' ORDER BY ContactFieldDataID ASC "));
 while (query.next()) {
 contactfielddata = new ContactFieldData(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString());
  }
@@ -169,16 +175,23 @@ contactfielddatas = GetAll();
 	for(int i = 0; i <contactfielddatas.count(); i++){
 		list.append(contactfielddatas[i]->Value);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactFieldData::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactFieldData::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactFieldData*> contactfielddatas =   QList<ContactFieldData*>();
 contactfielddatas = GetAll();
 	for(int i = 0; i <contactfielddatas.count(); i++){
-		list.insert(contactfielddatas[i]->ContactFieldDataID,QString::number(contactfielddatas[i]->ContactID));
+		list.append(qMakePair(contactfielddatas[i]->ContactFieldDataID,QString::number(contactfielddatas[i]->ContactID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactFieldData::GetPairList(QList<ContactFieldData*> contactfielddatas) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contactfielddatas.count(); i++){
+		list.append(qMakePair(contactfielddatas[i]->ContactFieldDataID,QString::number(contactfielddatas[i]->ContactID)));
 	}
 	return list;
 }

@@ -60,16 +60,35 @@ void ERPFormBlock::removeRow(QWidget* field){
 	QList<QWidget *> Widgets = field->findChildren<QWidget *>();
 	foreach(QWidget * child, Widgets)
 	{
-			child->setHidden(true);
-			formLayout->removeWidget(child);
+		child->setHidden(true);
+		formLayout->removeWidget(child);
 	}
-	  if (label){
-		  label->setHidden(true);
-		  formLayout->removeWidget(label);
-	  }
+	if (label){
+		label->setHidden(true);
+		formLayout->removeWidget(label);
+	}
 
-	   field->setHidden(true);
-	   field->deleteLater();
+	field->setHidden(true);
+	field->deleteLater();
+}
+void ERPFormBlock::hideRow(QWidget* field){
+	QLabel* label = (QLabel*)formLayout->labelForField(field);
+	QList<QWidget *> Widgets = field->findChildren<QWidget *>();
+	foreach(QWidget * child, Widgets)
+	{
+		child->setFixedHeight(0);
+		child->setHidden(true);
+		formLayout->removeWidget(child);
+		//child->deleteLater();
+	}
+	if (label){
+		label->setFixedHeight(0);
+		label->setHidden(true);
+		formLayout->removeWidget(label);
+		label->deleteLater();
+	}
+	field->setParent(0);
+	field->setHidden(true);
 }
 
 void ERPFormBlock::addWidget(QWidget *widget){

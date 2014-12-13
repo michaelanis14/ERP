@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchase.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,20 +11,24 @@
 #include <QSqlError>
 #include <QtGui>
 #include "purchasestoreproduct.h"
+#include "purchasefreeline.h"
 
 class Purchase  : public QSqlRelationalTableModel
 {
 	Q_OBJECT
 public:
 	Purchase();
-	Purchase(QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	int PurchaseID;
+	Purchase(int PurchaseSerialID,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	int PurchaseID;
+	int PurchaseSerialID;
 	QString CreationDate;
 	QString DeliveryDate;
 	QList<PurchaseStoreProduct*> purchasestoreproducts;
+	QList<PurchaseFreeLine*> purchasefreelines;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	Purchase* get();
 	Purchase* get(const QModelIndex &index);
@@ -34,7 +38,8 @@ public:
 	static QList<Purchase*> Search(QString keyword);
 	static QList<Purchase*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<Purchase*> purchases);
 	static int GetIndex(QString title);
 	static Purchase* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -43,7 +48,8 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Purchase(int PurchaseID,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	static Purchase* p_instance;
+	Purchase(int PurchaseID,int PurchaseSerialID,QString CreationDate,QString DeliveryDate,QString CreatedOn,QString EditedOn);	static Purchase* p_instance;
+	bool setPurchaseSerialID(int PurchaseID, const QString &PurchaseSerialID);
 	bool setCreationDate(int PurchaseID, const QString &CreationDate);
 	bool setDeliveryDate(int PurchaseID, const QString &DeliveryDate);
 	bool setCreatedOn(int PurchaseID, const QString &CreatedOn);

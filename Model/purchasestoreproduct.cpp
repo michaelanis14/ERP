@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproduct.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -66,7 +66,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("PurchaseStoreProductID")));variables.append(qMakePair(QString(" INT"),QString("StoreID")));variables.append(qMakePair(QString(" INT"),QString("PurchaseID")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(" INT"),QString("ProductID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("Amount")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 PurchaseStoreProduct* PurchaseStoreProduct::p_instance = 0;
@@ -93,6 +94,12 @@ while (query.next()) {
  }
 return true;
 }
+bool PurchaseStoreProduct::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool PurchaseStoreProduct::remove() {
 if(PurchaseStoreProductID!= 0) {
@@ -116,18 +123,17 @@ return new PurchaseStoreProduct();
 
 QList<PurchaseStoreProduct*> PurchaseStoreProduct::GetAll() {
 	QList<PurchaseStoreProduct*> purchasestoreproducts =   QList<PurchaseStoreProduct*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStoreProduct"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStoreProduct ORDER BY PurchaseStoreProductID ASC"));
 	while (query.next()) {
 purchasestoreproducts.append(new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
 	}
-qStableSort(purchasestoreproducts.begin(),purchasestoreproducts.end());
 	return purchasestoreproducts;
 }
 
 PurchaseStoreProduct* PurchaseStoreProduct::Get(int id) {
 PurchaseStoreProduct* purchasestoreproduct = new PurchaseStoreProduct();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PurchaseStoreProduct WHERE PurchaseStoreProductID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PurchaseStoreProduct WHERE PurchaseStoreProductID = '"+QString::number(id)+"' ORDER BY PurchaseStoreProductID ASC "));
 while (query.next()) {
 purchasestoreproduct = new PurchaseStoreProduct(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
  }
@@ -178,16 +184,23 @@ QList<QString> PurchaseStoreProduct::GetStringList() {
 purchasestoreproducts = GetAll();
 	for(int i = 0; i <purchasestoreproducts.count(); i++){
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> PurchaseStoreProduct::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > PurchaseStoreProduct::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<PurchaseStoreProduct*> purchasestoreproducts =   QList<PurchaseStoreProduct*>();
 purchasestoreproducts = GetAll();
 	for(int i = 0; i <purchasestoreproducts.count(); i++){
-		list.insert(purchasestoreproducts[i]->PurchaseStoreProductID,QString::number(purchasestoreproducts[i]->StoreID));
+		list.append(qMakePair(purchasestoreproducts[i]->PurchaseStoreProductID,QString::number(purchasestoreproducts[i]->StoreID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > PurchaseStoreProduct::GetPairList(QList<PurchaseStoreProduct*> purchasestoreproducts) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <purchasestoreproducts.count(); i++){
+		list.append(qMakePair(purchasestoreproducts[i]->PurchaseStoreProductID,QString::number(purchasestoreproducts[i]->StoreID)));
 	}
 	return list;
 }

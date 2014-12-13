@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employee.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("EmployeeID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Employee* Employee::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Employee::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Employee::remove() {
 if(EmployeeID!= 0) {
@@ -93,18 +100,17 @@ return new Employee();
 
 QList<Employee*> Employee::GetAll() {
 	QList<Employee*> employees =   QList<Employee*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Employee"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Employee ORDER BY EmployeeID ASC"));
 	while (query.next()) {
 employees.append(new Employee(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(employees.begin(),employees.end());
 	return employees;
 }
 
 Employee* Employee::Get(int id) {
 Employee* employee = new Employee();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Employee WHERE EmployeeID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Employee WHERE EmployeeID = '"+QString::number(id)+"' ORDER BY EmployeeID ASC "));
 while (query.next()) {
 employee = new Employee(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ employees = GetAll();
 	for(int i = 0; i <employees.count(); i++){
 		list.append(employees[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Employee::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Employee::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Employee*> employees =   QList<Employee*>();
 employees = GetAll();
 	for(int i = 0; i <employees.count(); i++){
-		list.insert(employees[i]->EmployeeID,employees[i]->Name);
+		list.append(qMakePair(employees[i]->EmployeeID,employees[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Employee::GetPairList(QList<Employee*> employees) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <employees.count(); i++){
+		list.append(qMakePair(employees[i]->EmployeeID,employees[i]->Name));
 	}
 	return list;
 }

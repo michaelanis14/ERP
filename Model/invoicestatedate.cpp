@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedate.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -54,7 +54,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("InvoiceStateDateID")));variables.append(qMakePair(QString(" INT"),QString("InvoiceID")));variables.append(qMakePair(QString(" INT"),QString("InvoiceStateID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Date")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 InvoiceStateDate* InvoiceStateDate::p_instance = 0;
@@ -81,6 +82,12 @@ while (query.next()) {
  }
 return true;
 }
+bool InvoiceStateDate::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool InvoiceStateDate::remove() {
 if(InvoiceStateDateID!= 0) {
@@ -104,18 +111,17 @@ return new InvoiceStateDate();
 
 QList<InvoiceStateDate*> InvoiceStateDate::GetAll() {
 	QList<InvoiceStateDate*> invoicestatedates =   QList<InvoiceStateDate*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceStateDate"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceStateDate ORDER BY InvoiceStateDateID ASC"));
 	while (query.next()) {
 invoicestatedates.append(new InvoiceStateDate(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(invoicestatedates.begin(),invoicestatedates.end());
 	return invoicestatedates;
 }
 
 InvoiceStateDate* InvoiceStateDate::Get(int id) {
 InvoiceStateDate* invoicestatedate = new InvoiceStateDate();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceStateDate WHERE InvoiceStateDateID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceStateDate WHERE InvoiceStateDateID = '"+QString::number(id)+"' ORDER BY InvoiceStateDateID ASC "));
 while (query.next()) {
 invoicestatedate = new InvoiceStateDate(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString());
  }
@@ -167,16 +173,23 @@ QList<QString> InvoiceStateDate::GetStringList() {
 invoicestatedates = GetAll();
 	for(int i = 0; i <invoicestatedates.count(); i++){
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> InvoiceStateDate::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > InvoiceStateDate::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<InvoiceStateDate*> invoicestatedates =   QList<InvoiceStateDate*>();
 invoicestatedates = GetAll();
 	for(int i = 0; i <invoicestatedates.count(); i++){
-		list.insert(invoicestatedates[i]->InvoiceStateDateID,QString::number(invoicestatedates[i]->InvoiceID));
+		list.append(qMakePair(invoicestatedates[i]->InvoiceStateDateID,QString::number(invoicestatedates[i]->InvoiceID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > InvoiceStateDate::GetPairList(QList<InvoiceStateDate*> invoicestatedates) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <invoicestatedates.count(); i++){
+		list.append(qMakePair(invoicestatedates[i]->InvoiceStateDateID,QString::number(invoicestatedates[i]->InvoiceID)));
 	}
 	return list;
 }

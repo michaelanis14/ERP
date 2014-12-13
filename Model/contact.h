@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,20 +13,19 @@
 #include "contacttelephone.h"
 #include "contactemail.h"
 #include "bankaccount.h"
-#include "contactfielddata.h"
 
 class Contact  : public QSqlRelationalTableModel
 {
 	Q_OBJECT
 public:
 	Contact();
-	Contact(QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
+	Contact(QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
 	QString Name;
 	QString Salutation;
 	QString BirthdateOrDateOfFoundation;
 	int ContactTypeID;
 	int ContactClassID;
-	int Number;
+	int Serial;
 	QString Address;
 	QString PostalCode;
 	QString City;
@@ -38,11 +37,11 @@ public:
 	QList<ContactTelephone*> contacttelephones;
 	QList<ContactEmail*> contactemails;
 	QList<BankAccount*> bankaccounts;
-	QList<ContactFieldData*> contactfielddatas;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	Contact* get();
 	Contact* get(const QModelIndex &index);
@@ -52,7 +51,8 @@ public:
 	static QList<Contact*> Search(QString keyword);
 	static QList<Contact*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<Contact*> contacts);
 	static int GetIndex(QString title);
 	static Contact* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -61,13 +61,13 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Contact(int ContactID,QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Number,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
+	Contact(int ContactID,QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
 	bool setName(int ContactID, const QString &Name);
 	bool setSalutation(int ContactID, const QString &Salutation);
 	bool setBirthdateOrDateOfFoundation(int ContactID, const QString &BirthdateOrDateOfFoundation);
 	bool setContactTypeID(int ContactID, const QString &ContactTypeID);
 	bool setContactClassID(int ContactID, const QString &ContactClassID);
-	bool setNumber(int ContactID, const QString &Number);
+	bool setSerial(int ContactID, const QString &Serial);
 	bool setAddress(int ContactID, const QString &Address);
 	bool setPostalCode(int ContactID, const QString &PostalCode);
 	bool setCity(int ContactID, const QString &City);

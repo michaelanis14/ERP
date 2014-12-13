@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,7 @@
 
 #include "../ContactPersonTelephone/contactpersontelephoneui.h"
 #include "../ContactPersonEmail/contactpersonemailui.h"
-#include "../ContactPersonFieldData/contactpersonfielddataui.h"
+#include "../ProjectContactPerson/projectcontactpersonui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -41,7 +41,7 @@ public:
 	ERPFormBlock* block3Layout;
 	QList<ContactPersonTelephoneUI*> ContactPersonTelephones;
 	QList<ContactPersonEmailUI*> ContactPersonEmails;
-	QList<ContactPersonFieldDataUI*> ContactPersonFieldDatas;
+	QList<ProjectContactPersonUI*> ProjectContactPersons;
 	QLineEdit*title;
 	ERPComboBox*contact;
 	QLineEdit*name;
@@ -60,13 +60,14 @@ private slots:
 	void addContactPersonEmail();
 	void addContactPersonEmail(ContactPersonEmail* ContactPersonEmail);
 	void removeContactPersonEmail(QWidget* widget);
-	void addContactPersonFieldData();
-	void addContactPersonFieldData(ContactPersonFieldData* ContactPersonFieldData);
-	void removeContactPersonFieldData(QWidget* widget);
+	void addProjectContactPerson();
+	void addProjectContactPerson(ProjectContactPerson* ProjectContactPerson);
+	void removeProjectContactPerson(QWidget* widget);
 	void selectContactPerson();
 	void cancel();
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderserviceui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,10 +32,10 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 deliveryorder = new ERPComboBox();
-deliveryorder->addItems(DeliveryOrder::GetHashList());
+deliveryorder->addItems(DeliveryOrder::GetPairList());
 block0Layout->addRow("Delivery Order",deliveryorder);
 service = new ERPComboBox();
-service->addItems(Service::GetHashList());
+service->addItems(Service::GetPairList());
 block0Layout->addRow("Service",service);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
@@ -80,9 +80,9 @@ clear();
 bool DeliveryOrderServiceUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(deliveryorderservice->DeliveryOrderID == 0) 
+if(!deliveryorder->isHidden()) 
 deliveryorderservice->DeliveryOrderID = deliveryorder->getKey();
-if(deliveryorderservice->ServiceID == 0) 
+if(!service->isHidden()) 
 deliveryorderservice->ServiceID = service->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
@@ -112,4 +112,33 @@ return false;
 }
 void DeliveryOrderServiceUI::cancel(){ 
 DeliveryOrderServiceIndexUI::ShowUI();
+}
+bool DeliveryOrderServiceUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(deliveryorderservice->DeliveryOrderID == 0) 
+deliveryorderservice->DeliveryOrderID = deliveryorder->getKey();
+if(deliveryorderservice->ServiceID == 0) 
+deliveryorderservice->ServiceID = service->getKey();
+if(amount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Amount Can't be Empty! \n";
+amount->setObjectName("error");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+}
+else { 
+amount->setObjectName("amount");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+deliveryorderservice->Amount = amount->text().trimmed().toDouble();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "DeliveryOrderService",errorString.trimmed());
+return false; 
+ }
 }

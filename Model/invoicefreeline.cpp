@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreeline.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -62,7 +62,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("InvoiceFreelineID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" INT"),QString("InvoiceID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("Price")));variables.append(qMakePair(QString(" INT"),QString("TaxID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("Amount")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 InvoiceFreeline* InvoiceFreeline::p_instance = 0;
@@ -89,6 +90,12 @@ while (query.next()) {
  }
 return true;
 }
+bool InvoiceFreeline::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool InvoiceFreeline::remove() {
 if(InvoiceFreelineID!= 0) {
@@ -112,18 +119,17 @@ return new InvoiceFreeline();
 
 QList<InvoiceFreeline*> InvoiceFreeline::GetAll() {
 	QList<InvoiceFreeline*> invoicefreelines =   QList<InvoiceFreeline*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceFreeline"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoiceFreeline ORDER BY InvoiceFreelineID ASC"));
 	while (query.next()) {
 invoicefreelines.append(new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
 	}
-qStableSort(invoicefreelines.begin(),invoicefreelines.end());
 	return invoicefreelines;
 }
 
 InvoiceFreeline* InvoiceFreeline::Get(int id) {
 InvoiceFreeline* invoicefreeline = new InvoiceFreeline();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceFreeline WHERE InvoiceFreelineID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoiceFreeline WHERE InvoiceFreelineID = '"+QString::number(id)+"' ORDER BY InvoiceFreelineID ASC "));
 while (query.next()) {
 invoicefreeline = new InvoiceFreeline(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
  }
@@ -176,16 +182,23 @@ invoicefreelines = GetAll();
 	for(int i = 0; i <invoicefreelines.count(); i++){
 		list.append(invoicefreelines[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> InvoiceFreeline::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > InvoiceFreeline::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<InvoiceFreeline*> invoicefreelines =   QList<InvoiceFreeline*>();
 invoicefreelines = GetAll();
 	for(int i = 0; i <invoicefreelines.count(); i++){
-		list.insert(invoicefreelines[i]->InvoiceFreelineID,invoicefreelines[i]->Description);
+		list.append(qMakePair(invoicefreelines[i]->InvoiceFreelineID,invoicefreelines[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > InvoiceFreeline::GetPairList(QList<InvoiceFreeline*> invoicefreelines) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <invoicefreelines.count(); i++){
+		list.append(qMakePair(invoicefreelines[i]->InvoiceFreelineID,invoicefreelines[i]->Description));
 	}
 	return list;
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,7 +21,6 @@
 #include "../../Model/productcategory.h"
 
 #include "../ProductImage/productimageui.h"
-#include "../ProductFieldData/productfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -41,7 +40,6 @@ public:
 	ERPFormBlock* block1Layout;
 	ERPFormBlock* block2Layout;
 	QList<ProductImageUI*> ProductImages;
-	QList<ProductFieldDataUI*> ProductFieldDatas;
 	QLineEdit*name;
 	QLineEdit*shortdescription;
 	ERPComboBox*unit;
@@ -63,9 +61,6 @@ private slots:
 	void addProductImage();
 	void addProductImage(ProductImage* ProductImage);
 	void removeProductImage(QWidget* widget);
-	void addProductFieldData();
-	void addProductFieldData(ProductFieldData* ProductFieldData);
-	void removeProductFieldData(QWidget* widget);
 	void selectProduct();
 	void cancel();
 	void clear();
@@ -73,5 +68,6 @@ private slots:
 	void barcodeChanged(QString barcode);
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

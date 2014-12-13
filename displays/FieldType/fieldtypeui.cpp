@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: fieldtypeui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -100,4 +100,29 @@ return false;
 }
 void FieldTypeUI::cancel(){ 
 FieldTypeIndexUI::ShowUI();
+}
+bool FieldTypeUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+fieldtype->Description = description->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "FieldType",errorString.trimmed());
+return false; 
+ }
 }

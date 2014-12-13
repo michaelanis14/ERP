@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: currency.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("CurrencyID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Currency* Currency::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Currency::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Currency::remove() {
 if(CurrencyID!= 0) {
@@ -93,18 +100,17 @@ return new Currency();
 
 QList<Currency*> Currency::GetAll() {
 	QList<Currency*> currencys =   QList<Currency*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Currency ORDER BY CurrencyID ASC"));
 	while (query.next()) {
 currencys.append(new Currency(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(currencys.begin(),currencys.end());
 	return currencys;
 }
 
 Currency* Currency::Get(int id) {
 Currency* currency = new Currency();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Currency WHERE CurrencyID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Currency WHERE CurrencyID = '"+QString::number(id)+"' ORDER BY CurrencyID ASC "));
 while (query.next()) {
 currency = new Currency(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ currencys = GetAll();
 	for(int i = 0; i <currencys.count(); i++){
 		list.append(currencys[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Currency::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Currency::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Currency*> currencys =   QList<Currency*>();
 currencys = GetAll();
 	for(int i = 0; i <currencys.count(); i++){
-		list.insert(currencys[i]->CurrencyID,currencys[i]->Description);
+		list.append(qMakePair(currencys[i]->CurrencyID,currencys[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Currency::GetPairList(QList<Currency*> currencys) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <currencys.count(); i++){
+		list.append(qMakePair(currencys[i]->CurrencyID,currencys[i]->Description));
 	}
 	return list;
 }

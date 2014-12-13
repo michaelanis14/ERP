@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,6 +31,9 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
+invoiceserial = new ERPComboBox();
+invoiceserial->addItems(InvoiceSerial::GetPairList());
+block0Layout->addRow("Invoice Serial",invoiceserial);
 creationdate = new QDateEdit(QDate::currentDate());
 creationdate->setCalendarPopup(true);
 creationdate->setDisplayFormat("ddd dd/MM/yyyy");
@@ -40,13 +43,13 @@ enddate->setCalendarPopup(true);
 enddate->setDisplayFormat("ddd dd/MM/yyyy");
 block0Layout->addRow("End Date",enddate);
 invoiceperiod = new ERPComboBox();
-invoiceperiod->addItems(InvoicePeriod::GetHashList());
+invoiceperiod->addItems(InvoicePeriod::GetPairList());
 block0Layout->addRow("Invoice Period",invoiceperiod);
 invoiceyear = new ERPComboBox();
-invoiceyear->addItems(InvoiceYear::GetHashList());
+invoiceyear->addItems(InvoiceYear::GetPairList());
 block0Layout->addRow("Invoice Year",invoiceyear);
 project = new ERPComboBox();
-project->addItems(Project::GetHashList());
+project->addItems(Project::GetPairList());
 block0Layout->addRow("Project",project);
 duedate = new QDateEdit(QDate::currentDate());
 duedate->setCalendarPopup(true);
@@ -92,7 +95,7 @@ InvoiceUI*InvoiceUI::GetUI(){
 }
 void InvoiceUI::addInvoiceStateDate(){ 
 InvoiceStateDateUI* invoicestatedateui = new InvoiceStateDateUI();
-invoicestatedateui->block0Layout->removeRow(invoicestatedateui->invoice);
+invoicestatedateui->block0Layout->hideRow(invoicestatedateui->invoice);
 invoicestatedateui->controllers->setFixedHeight(0);
 InvoiceStateDates.append(invoicestatedateui);
 RemovebtnWidgets* rminvoicestatedate = new RemovebtnWidgets(0,invoicestatedateui);
@@ -101,7 +104,7 @@ block0Layout->addRow("InvoiceStateDate"+QString::number(InvoiceStateDates.count(
 }
 void InvoiceUI::addInvoiceStateDate(InvoiceStateDate* InvoiceStateDate){ 
 InvoiceStateDateUI* invoicestatedateui = new InvoiceStateDateUI();
-invoicestatedateui->block0Layout->removeRow(invoicestatedateui->invoice);
+invoicestatedateui->block0Layout->hideRow(invoicestatedateui->invoice);
 invoicestatedateui->controllers->setFixedHeight(0);
 invoicestatedateui->fill(InvoiceStateDate);
 InvoiceStateDates.append(invoicestatedateui);
@@ -119,7 +122,7 @@ block0Layout->removeRow(sender);
 }
 void InvoiceUI::addInvoiceFreeline(){ 
 InvoiceFreelineUI* invoicefreelineui = new InvoiceFreelineUI();
-invoicefreelineui->block0Layout->removeRow(invoicefreelineui->invoice);
+invoicefreelineui->block0Layout->hideRow(invoicefreelineui->invoice);
 invoicefreelineui->controllers->setFixedHeight(0);
 InvoiceFreelines.append(invoicefreelineui);
 RemovebtnWidgets* rminvoicefreeline = new RemovebtnWidgets(0,invoicefreelineui);
@@ -128,7 +131,7 @@ block0Layout->addRow("InvoiceFreeline"+QString::number(InvoiceFreelines.count())
 }
 void InvoiceUI::addInvoiceFreeline(InvoiceFreeline* InvoiceFreeline){ 
 InvoiceFreelineUI* invoicefreelineui = new InvoiceFreelineUI();
-invoicefreelineui->block0Layout->removeRow(invoicefreelineui->invoice);
+invoicefreelineui->block0Layout->hideRow(invoicefreelineui->invoice);
 invoicefreelineui->controllers->setFixedHeight(0);
 invoicefreelineui->fill(InvoiceFreeline);
 InvoiceFreelines.append(invoicefreelineui);
@@ -146,7 +149,7 @@ block0Layout->removeRow(sender);
 }
 void InvoiceUI::addPayment(){ 
 PaymentUI* paymentui = new PaymentUI();
-paymentui->block0Layout->removeRow(paymentui->invoice);
+paymentui->block0Layout->hideRow(paymentui->invoice);
 paymentui->controllers->setFixedHeight(0);
 Payments.append(paymentui);
 RemovebtnWidgets* rmpayment = new RemovebtnWidgets(0,paymentui);
@@ -155,7 +158,7 @@ block0Layout->addRow("Payment"+QString::number(Payments.count()),rmpayment);
 }
 void InvoiceUI::addPayment(Payment* Payment){ 
 PaymentUI* paymentui = new PaymentUI();
-paymentui->block0Layout->removeRow(paymentui->invoice);
+paymentui->block0Layout->hideRow(paymentui->invoice);
 paymentui->controllers->setFixedHeight(0);
 paymentui->fill(Payment);
 Payments.append(paymentui);
@@ -212,9 +215,9 @@ if(child->parent()->parent()->parent() != 0)
 this->invoice = new Invoice();
 } 
 void InvoiceUI::selectInvoice(){ 
-if(Invoice::GetStringList().contains(this->invoice->CreationDate))
+if(Invoice::GetStringList().contains(QString::number(this->invoice->InvoiceSerialID)))
 {
-Invoice* con = Invoice::Get(this->invoice->CreationDate);
+Invoice* con = Invoice::Get(QString::number(this->invoice->InvoiceSerialID));
 if(this->invoice->InvoiceID != con->InvoiceID){
 fill(con);
 }
@@ -225,6 +228,8 @@ clear();
 bool InvoiceUI::save(){ 
 bool errors = false;
 QString errorString =  "";
+if(!invoiceserial->isHidden()) 
+invoice->InvoiceSerialID = invoiceserial->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
 errorString += "Creation Date Can't be Empty! \n";
@@ -255,11 +260,11 @@ enddate->style()->polish(enddate);
 enddate->update();
 invoice->EndDate = enddate->text().trimmed();
 }
-if(invoice->InvoicePeriodID == 0) 
+if(!invoiceperiod->isHidden()) 
 invoice->InvoicePeriodID = invoiceperiod->getKey();
-if(invoice->InvoiceYearID == 0) 
+if(!invoiceyear->isHidden()) 
 invoice->InvoiceYearID = invoiceyear->getKey();
-if(invoice->ProjectID == 0) 
+if(!project->isHidden()) 
 invoice->ProjectID = project->getKey();
 if(duedate->text().trimmed().isEmpty()){
 errors = true;
@@ -406,4 +411,160 @@ return false;
 }
 void InvoiceUI::cancel(){ 
 InvoiceIndexUI::ShowUI();
+}
+bool InvoiceUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(invoice->InvoiceSerialID == 0) 
+invoice->InvoiceSerialID = invoiceserial->getKey();
+if(creationdate->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Creation Date Can't be Empty! \n";
+creationdate->setObjectName("error");
+creationdate->style()->unpolish(creationdate);
+creationdate->style()->polish(creationdate);
+creationdate->update();
+}
+else { 
+creationdate->setObjectName("creationdate");
+creationdate->style()->unpolish(creationdate);
+creationdate->style()->polish(creationdate);
+creationdate->update();
+invoice->CreationDate = creationdate->text().trimmed();
+}
+if(enddate->text().trimmed().isEmpty()){
+errors = true;
+errorString += "End Date Can't be Empty! \n";
+enddate->setObjectName("error");
+enddate->style()->unpolish(enddate);
+enddate->style()->polish(enddate);
+enddate->update();
+}
+else { 
+enddate->setObjectName("enddate");
+enddate->style()->unpolish(enddate);
+enddate->style()->polish(enddate);
+enddate->update();
+invoice->EndDate = enddate->text().trimmed();
+}
+if(invoice->InvoicePeriodID == 0) 
+invoice->InvoicePeriodID = invoiceperiod->getKey();
+if(invoice->InvoiceYearID == 0) 
+invoice->InvoiceYearID = invoiceyear->getKey();
+if(invoice->ProjectID == 0) 
+invoice->ProjectID = project->getKey();
+if(duedate->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Due Date Can't be Empty! \n";
+duedate->setObjectName("error");
+duedate->style()->unpolish(duedate);
+duedate->style()->polish(duedate);
+duedate->update();
+}
+else { 
+duedate->setObjectName("duedate");
+duedate->style()->unpolish(duedate);
+duedate->style()->polish(duedate);
+duedate->update();
+invoice->DueDate = duedate->text().trimmed();
+}
+if(discount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "discount Can't be Empty! \n";
+discount->setObjectName("error");
+discount->style()->unpolish(discount);
+discount->style()->polish(discount);
+discount->update();
+}
+else { 
+discount->setObjectName("discount");
+discount->style()->unpolish(discount);
+discount->style()->polish(discount);
+discount->update();
+invoice->discount = discount->text().trimmed().toDouble();
+}
+if(allowance->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Allowance Can't be Empty! \n";
+allowance->setObjectName("error");
+allowance->style()->unpolish(allowance);
+allowance->style()->polish(allowance);
+allowance->update();
+}
+else { 
+allowance->setObjectName("allowance");
+allowance->style()->unpolish(allowance);
+allowance->style()->polish(allowance);
+allowance->update();
+invoice->Allowance = allowance->text().trimmed().toDouble();
+}
+for(int j = 0; j < InvoiceFreelines.length(); j++){
+InvoiceFreelines.at(j)->description->setObjectName("description");
+InvoiceFreelines.at(j)->description->style()->unpolish(InvoiceFreelines.at(j)->description);
+InvoiceFreelines.at(j)->description->style()->polish(InvoiceFreelines.at(j)->description);
+InvoiceFreelines.at(j)->description->update();
+for(int w = 0; w < InvoiceFreelines.length(); w++){
+if(InvoiceFreelines.at(j) != InvoiceFreelines.at(w))
+if(InvoiceFreelines.at(j)->description->text() == InvoiceFreelines.at(w)->description->text()){
+errors = true; 
+ errorString += "InvoiceFreeline has the same description \n";
+InvoiceFreelines.at(j)->description->setObjectName("error");
+InvoiceFreelines.at(j)->description->style()->unpolish(InvoiceFreelines.at(j)->description);
+InvoiceFreelines.at(j)->description->style()->polish(InvoiceFreelines.at(j)->description);
+InvoiceFreelines.at(j)->description->update();
+}}}
+if(header->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Header Can't be Empty! \n";
+header->setObjectName("error");
+header->style()->unpolish(header);
+header->style()->polish(header);
+header->update();
+}
+else { 
+header->setObjectName("header");
+header->style()->unpolish(header);
+header->style()->polish(header);
+header->update();
+invoice->Header = header->text().trimmed();
+}
+if(footer->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Footer Can't be Empty! \n";
+footer->setObjectName("error");
+footer->style()->unpolish(footer);
+footer->style()->polish(footer);
+footer->update();
+}
+else { 
+footer->setObjectName("footer");
+footer->style()->unpolish(footer);
+footer->style()->polish(footer);
+footer->update();
+invoice->Footer = footer->text().trimmed();
+}
+for(int i = 0; i < InvoiceStateDates.length(); i++){
+InvoiceStateDates.at(i)->invoicestatedate->InvoiceID= invoice->InvoiceID;
+if(!InvoiceStateDates.at(i)->updateModel()){ 
+ errors = true; 
+ break; } 
+}
+for(int i = 0; i < InvoiceFreelines.length(); i++){
+InvoiceFreelines.at(i)->invoicefreeline->InvoiceID= invoice->InvoiceID;
+if(!InvoiceFreelines.at(i)->updateModel()){ 
+ errors = true; 
+ break; } 
+}
+for(int i = 0; i < Payments.length(); i++){
+Payments.at(i)->payment->InvoiceID= invoice->InvoiceID;
+if(!Payments.at(i)->updateModel()){ 
+ errors = true; 
+ break; } 
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Invoice",errorString.trimmed());
+return false; 
+ }
 }

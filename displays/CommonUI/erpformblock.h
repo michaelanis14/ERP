@@ -18,6 +18,7 @@ public:
 	void addRow(const QString & labelText, QWidget * field );
 	void addWidget(QWidget *widget);
 	void removeRow(QWidget* field);
+	void hideRow(QWidget* field);
 	QWidget * baseWidget;
 	QFormLayout *formLayout ;
 	QVBoxLayout *boxLayout ;

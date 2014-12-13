@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstatus.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("DeliveryOrderStatusID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 DeliveryOrderStatus* DeliveryOrderStatus::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool DeliveryOrderStatus::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool DeliveryOrderStatus::remove() {
 if(DeliveryOrderStatusID!= 0) {
@@ -93,18 +100,17 @@ return new DeliveryOrderStatus();
 
 QList<DeliveryOrderStatus*> DeliveryOrderStatus::GetAll() {
 	QList<DeliveryOrderStatus*> deliveryorderstatuss =   QList<DeliveryOrderStatus*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStatus"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderStatus ORDER BY DeliveryOrderStatusID ASC"));
 	while (query.next()) {
 deliveryorderstatuss.append(new DeliveryOrderStatus(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(deliveryorderstatuss.begin(),deliveryorderstatuss.end());
 	return deliveryorderstatuss;
 }
 
 DeliveryOrderStatus* DeliveryOrderStatus::Get(int id) {
 DeliveryOrderStatus* deliveryorderstatus = new DeliveryOrderStatus();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderStatus WHERE DeliveryOrderStatusID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderStatus WHERE DeliveryOrderStatusID = '"+QString::number(id)+"' ORDER BY DeliveryOrderStatusID ASC "));
 while (query.next()) {
 deliveryorderstatus = new DeliveryOrderStatus(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ deliveryorderstatuss = GetAll();
 	for(int i = 0; i <deliveryorderstatuss.count(); i++){
 		list.append(deliveryorderstatuss[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> DeliveryOrderStatus::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > DeliveryOrderStatus::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<DeliveryOrderStatus*> deliveryorderstatuss =   QList<DeliveryOrderStatus*>();
 deliveryorderstatuss = GetAll();
 	for(int i = 0; i <deliveryorderstatuss.count(); i++){
-		list.insert(deliveryorderstatuss[i]->DeliveryOrderStatusID,deliveryorderstatuss[i]->Description);
+		list.append(qMakePair(deliveryorderstatuss[i]->DeliveryOrderStatusID,deliveryorderstatuss[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > DeliveryOrderStatus::GetPairList(QList<DeliveryOrderStatus*> deliveryorderstatuss) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <deliveryorderstatuss.count(); i++){
+		list.append(qMakePair(deliveryorderstatuss[i]->DeliveryOrderStatusID,deliveryorderstatuss[i]->Description));
 	}
 	return list;
 }

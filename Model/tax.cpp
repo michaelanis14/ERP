@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("TaxID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Title")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Tax* Tax::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Tax::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Tax::remove() {
 if(TaxID!= 0) {
@@ -93,18 +100,17 @@ return new Tax();
 
 QList<Tax*> Tax::GetAll() {
 	QList<Tax*> taxs =   QList<Tax*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Tax ORDER BY TaxID ASC"));
 	while (query.next()) {
 taxs.append(new Tax(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(taxs.begin(),taxs.end());
 	return taxs;
 }
 
 Tax* Tax::Get(int id) {
 Tax* tax = new Tax();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Tax WHERE TaxID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Tax WHERE TaxID = '"+QString::number(id)+"' ORDER BY TaxID ASC "));
 while (query.next()) {
 tax = new Tax(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ taxs = GetAll();
 	for(int i = 0; i <taxs.count(); i++){
 		list.append(taxs[i]->Title);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Tax::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Tax::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Tax*> taxs =   QList<Tax*>();
 taxs = GetAll();
 	for(int i = 0; i <taxs.count(); i++){
-		list.insert(taxs[i]->TaxID,taxs[i]->Title);
+		list.append(qMakePair(taxs[i]->TaxID,taxs[i]->Title));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Tax::GetPairList(QList<Tax*> taxs) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <taxs.count(); i++){
+		list.append(qMakePair(taxs[i]->TaxID,taxs[i]->Title));
 	}
 	return list;
 }

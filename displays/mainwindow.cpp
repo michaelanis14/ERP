@@ -15,7 +15,9 @@
 #include "displays/Purchase/purchaseindexui.h"
 #include "displays/DeliveryOrder/deliveryorderindexui.h"
 #include "displays/Service/serviceindexui.h"
-
+#include "displays/Project/projectindexui.h"
+#include "displays/TimeBooking/timebookingindexui.h"
+#include "displays/Access/accessindexui.h"
 
 /**
 * A class.
@@ -118,6 +120,12 @@ mainwindow::mainwindow()
 	navigation->addButton(btnContacts);
 	connect(this->btnContacts, SIGNAL(clicked()), this, SLOT(btnContactsClicked()));
 
+	btnProjects = new QToolButton(navigation);
+	btnProjects->setIcon(icon1);
+	btnProjects->setText("Projects");
+	navigation->addButton(btnProjects);
+	connect(this->btnProjects, SIGNAL(clicked()), this, SLOT(btnProjectsClicked()));
+
 	btnProducts = new QToolButton(navigation);
 	btnProducts->setIcon(icon1);
 	btnProducts->setText("Products");
@@ -144,25 +152,39 @@ mainwindow::mainwindow()
 	boxLayout = new QVBoxLayout(this);
 	boxLayout->setContentsMargins(this->navigation->width(), this->innerNavigation->height(), 0, 0);
 
+//Home
+	inNavAccess = new QPushButton(icon1,"Access");
+	inNavAccess->setObjectName("inNavAccess");
+	connect(this->inNavAccess, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
 
 
-	//Contacts
+//Contacts
 	inNavContacts = new QPushButton(icon1,"Contacts");
 	inNavContacts->setObjectName("inNavContacts");
 	connect(this->inNavContacts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 	inNavcontactPersones = new QPushButton(icon1,"ContactPersone");
 	inNavcontactPersones->setObjectName("inNavcontactPersones");
 	connect(this->inNavcontactPersones, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+//Projects
+	inNavProjects =	 new QPushButton(icon1,"Projects");
+	inNavProjects->setObjectName("inNavProjects");
+	connect(this->inNavProjects, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
-	//Products
+	inNavTimeBookings = new QPushButton(icon1,"TimeBookings");
+	inNavTimeBookings->setObjectName("inNavTimeBookings");
+	connect(this->inNavTimeBookings, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
+	inNavServices = new QPushButton(icon1,"Service");
+	inNavServices->setObjectName("inNavService");
+	connect(this->inNavServices, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
+
+//Products
 	inNavProducts = new QPushButton(icon1,"Products");
 	inNavProducts->setObjectName("inNavProducts");
 	connect(this->inNavProducts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-	inNavService = new QPushButton(icon1,"Service");
-	inNavService->setObjectName("inNavService");
-	connect(this->inNavService, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-	inNavStoreHouse = new QPushButton(icon1,"Store House");
+		inNavStoreHouse = new QPushButton(icon1,"Store House");
 	inNavStoreHouse->setObjectName("inNavStoreHouse");
 	connect(this->inNavStoreHouse, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 	inNavPurchase = new QPushButton(icon1,"Purchase");
@@ -268,27 +290,26 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 
 void mainwindow::btnHomeClicked() {
 	innerNavigation->removeAll();
-	qDebug() << "wassup";
+	innerNavigation->addButton(inNavAccess);
+	inNavAccess->click();
+
 
 }
 void mainwindow::btnContactsClicked(){
 	innerNavigation->removeAll();
 	innerNavigation->addButton(inNavContacts);
 	innerNavigation->addButton(inNavcontactPersones);
-	//	innerNavigation->addButton(inNavcontactType);
-
-	ContactIndexUI::ShowUI();
+	inNavContacts->click();
 }
 
 void mainwindow::btnProductsClicked(){
 	innerNavigation->removeAll();
 	innerNavigation->addButton(inNavProducts);
-	innerNavigation->addButton(inNavService);
 	innerNavigation->addButton(inNavStoreHouse);
 	innerNavigation->addButton(inNavPurchase);
 	innerNavigation->addButton(inNavDeliveryOrder);
 	innerNavigation->addButton(inNavStoreStatus);
-	ProductIndexUI::ShowUI();
+	inNavProducts->click();
 }
 void mainwindow::btnAccountingClicked(){;}
 void mainwindow::btnReportsClicked(){;}
@@ -315,13 +336,28 @@ void mainwindow::innerNavClicked(){
 		DeliveryOrderIndexUI::ShowUI();
 	else  if(sender->objectName() == "inNavStoreStatus")
 		ProductStoreStateUI::ShowUI();
+	else  if(sender->objectName() == "inNavProjects")
+		ProjectIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavTimeBookings")
+		TimeBookingIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavAccess")
+		AccessIndexUI::ShowUI();
 
 
 }
 
+void mainwindow::btnProjectsClicked(){
+	innerNavigation->removeAll();
+	innerNavigation->addButton(inNavProjects);
+	innerNavigation->addButton(inNavTimeBookings);
+	innerNavigation->addButton(inNavServices);
+
+	inNavProjects->click();
+
+}
 void mainwindow::resizeEvent(QResizeEvent * event){
 
-
+//qDebug() << "Res";
 	if(this->currentDisplay != 0)
 		if(currentDisplay->objectName().contains("Index")){
 			QList<QTableView *> tabel = currentDisplay->findChildren<QTableView *>();
@@ -334,5 +370,6 @@ void mainwindow::resizeEvent(QResizeEvent * event){
 			}
 
 		}
+	navigation->resizeEvent(event);
 	event->accept();
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestate.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -22,6 +22,7 @@ public:
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	InvoiceState* get();
 	InvoiceState* get(const QModelIndex &index);
@@ -31,7 +32,8 @@ public:
 	static QList<InvoiceState*> Search(QString keyword);
 	static QList<InvoiceState*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<InvoiceState*> invoicestates);
 	static int GetIndex(QString title);
 	static InvoiceState* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;

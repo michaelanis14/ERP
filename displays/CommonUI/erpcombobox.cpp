@@ -7,7 +7,7 @@
 #include "erpcombobox.h"
 #include "QDebug"
 #include "QCompleter"
-#include <QHashIterator>
+#include <QPair>
 
 ERPComboBox::ERPComboBox(QWidget *parent) :
 	QComboBox(parent)
@@ -15,18 +15,19 @@ ERPComboBox::ERPComboBox(QWidget *parent) :
 	this->setEditable(true);
 	this->setInsertPolicy(QComboBox::NoInsert);
 	this->setAutoCompletion(true);
-	this->items = QHash<int,QString>();
+	this->items = QList<QPair<int, QString> >();
 	this->addedItems = false;
 }
-void ERPComboBox::addItems(QHash<int,QString> items){
+void ERPComboBox::addItems(QList<QPair<int, QString> > pairList){
 
-	this->addedItems = true;
-	this->items = items;
+
+	this->items = pairList;
 	QList<QString> list;
-	QHashIterator<int, QString> i(items);
-	while (i.hasNext()) {
-		i.next();
-		list.append(i.value());
+	for(int i = 0; i < pairList.length();i++) {
+		this->addedItems = true;
+
+
+		list.append(pairList.at(i).second);
 	}
 	QComboBox::addItems(list);
 }
@@ -69,17 +70,10 @@ if(this->addedItems){
 
 
 int ERPComboBox::getKey(){
-	int j = 0;
 if(this->addedItems){
-	QHashIterator<int, QString> i(items);
-	while (i.hasNext()) {
-		 i.next();
-	if(j == currentIndex())
-			return i.key();
-		j++;
-	}
+//	qDebug() << currentIndex()<< items.at(currentIndex()).first << items.at(currentIndex()).second;
+return items.at(currentIndex()).first;
 }
-
 	return 0;
 }
 

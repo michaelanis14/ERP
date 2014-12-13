@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproductui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,16 +32,16 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 store = new ERPComboBox();
-store->addItems(Store::GetHashList());
+store->addItems(Store::GetPairList());
 block0Layout->addRow("Store",store);
 purchase = new ERPComboBox();
-purchase->addItems(Purchase::GetHashList());
+purchase->addItems(Purchase::GetPairList());
 block0Layout->addRow("Purchase",purchase);
 contact = new ERPComboBox();
-contact->addItems(Contact::GetHashList());
+contact->addItems(Contact::GetPairList());
 block0Layout->addRow("Contact",contact);
 product = new ERPComboBox();
-product->addItems(Product::GetHashList());
+product->addItems(Product::GetPairList());
 block0Layout->addRow("Product",product);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
@@ -86,13 +86,13 @@ clear();
 bool PurchaseStoreProductUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(purchasestoreproduct->StoreID == 0) 
+if(!store->isHidden()) 
 purchasestoreproduct->StoreID = store->getKey();
-if(purchasestoreproduct->PurchaseID == 0) 
+if(!purchase->isHidden()) 
 purchasestoreproduct->PurchaseID = purchase->getKey();
-if(purchasestoreproduct->ContactID == 0) 
+if(!contact->isHidden()) 
 purchasestoreproduct->ContactID = contact->getKey();
-if(purchasestoreproduct->ProductID == 0) 
+if(!product->isHidden()) 
 purchasestoreproduct->ProductID = product->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
@@ -122,4 +122,37 @@ return false;
 }
 void PurchaseStoreProductUI::cancel(){ 
 PurchaseStoreProductIndexUI::ShowUI();
+}
+bool PurchaseStoreProductUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(purchasestoreproduct->StoreID == 0) 
+purchasestoreproduct->StoreID = store->getKey();
+if(purchasestoreproduct->PurchaseID == 0) 
+purchasestoreproduct->PurchaseID = purchase->getKey();
+if(purchasestoreproduct->ContactID == 0) 
+purchasestoreproduct->ContactID = contact->getKey();
+if(purchasestoreproduct->ProductID == 0) 
+purchasestoreproduct->ProductID = product->getKey();
+if(amount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Amount Can't be Empty! \n";
+amount->setObjectName("error");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+}
+else { 
+amount->setObjectName("amount");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+purchasestoreproduct->Amount = amount->text().trimmed().toDouble();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "PurchaseStoreProduct",errorString.trimmed());
+return false; 
+ }
 }

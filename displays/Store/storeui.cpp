@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: storeui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -44,7 +44,7 @@ block0Layout->addRow("Postal Code",postalcode);
 city = new QLineEdit();
 block0Layout->addRow("City",city);
 country = new ERPComboBox();
-country->addItems(Country::GetHashList());
+country->addItems(Country::GetPairList());
 block0Layout->addRow("Country",country);
 flowLayout->addWidget(block0Layout);
 
@@ -151,7 +151,7 @@ city->style()->polish(city);
 city->update();
 store->City = city->text().trimmed();
 }
-if(store->CountryID == 0) 
+if(!country->isHidden()) 
 store->CountryID = country->getKey();
 if(!errors) {
 store->save();
@@ -166,4 +166,76 @@ return false;
 }
 void StoreUI::cancel(){ 
 StoreIndexUI::ShowUI();
+}
+bool StoreUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+store->Name = name->text().trimmed();
+}
+if(address->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Address Can't be Empty! \n";
+address->setObjectName("error");
+address->style()->unpolish(address);
+address->style()->polish(address);
+address->update();
+}
+else { 
+address->setObjectName("address");
+address->style()->unpolish(address);
+address->style()->polish(address);
+address->update();
+store->Address = address->text().trimmed();
+}
+if(postalcode->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Postal Code Can't be Empty! \n";
+postalcode->setObjectName("error");
+postalcode->style()->unpolish(postalcode);
+postalcode->style()->polish(postalcode);
+postalcode->update();
+}
+else { 
+postalcode->setObjectName("postalcode");
+postalcode->style()->unpolish(postalcode);
+postalcode->style()->polish(postalcode);
+postalcode->update();
+store->PostalCode = postalcode->text().trimmed();
+}
+if(city->text().trimmed().isEmpty()){
+errors = true;
+errorString += "City Can't be Empty! \n";
+city->setObjectName("error");
+city->style()->unpolish(city);
+city->style()->polish(city);
+city->update();
+}
+else { 
+city->setObjectName("city");
+city->style()->unpolish(city);
+city->style()->polish(city);
+city->update();
+store->City = city->text().trimmed();
+}
+if(store->CountryID == 0) 
+store->CountryID = country->getKey();
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Store",errorString.trimmed());
+return false; 
+ }
 }

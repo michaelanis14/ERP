@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersontelephoneui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,7 +37,7 @@ number = new QLineEdit();
 number->setValidator( intValidator );
 block0Layout->addRow("Number",number);
 contactperson = new ERPComboBox();
-contactperson->addItems(ContactPerson::GetHashList());
+contactperson->addItems(ContactPerson::GetPairList());
 block0Layout->addRow("Contact Person",contactperson);
 flowLayout->addWidget(block0Layout);
 
@@ -111,7 +111,7 @@ number->style()->polish(number);
 number->update();
 contactpersontelephone->Number = number->text().trimmed().toInt();
 }
-if(contactpersontelephone->ContactPersonID == 0) 
+if(!contactperson->isHidden()) 
 contactpersontelephone->ContactPersonID = contactperson->getKey();
 if(!errors) {
 contactpersontelephone->save();
@@ -126,4 +126,46 @@ return false;
 }
 void ContactPersonTelephoneUI::cancel(){ 
 ContactPersonTelephoneIndexUI::ShowUI();
+}
+bool ContactPersonTelephoneUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+contactpersontelephone->Description = description->text().trimmed();
+}
+if(number->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Number Can't be Empty! \n";
+number->setObjectName("error");
+number->style()->unpolish(number);
+number->style()->polish(number);
+number->update();
+}
+else { 
+number->setObjectName("number");
+number->style()->unpolish(number);
+number->style()->polish(number);
+number->update();
+contactpersontelephone->Number = number->text().trimmed().toInt();
+}
+if(contactpersontelephone->ContactPersonID == 0) 
+contactpersontelephone->ContactPersonID = contactperson->getKey();
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactPersonTelephone",errorString.trimmed());
+return false; 
+ }
 }

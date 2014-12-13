@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: serviceui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -50,7 +50,7 @@ trademarginrate = new QLineEdit();
 trademarginrate->setValidator( doubleValidator );
 block0Layout->addRow("Trade Margin Rate",trademarginrate);
 tax = new ERPComboBox();
-tax->addItems(Tax::GetHashList());
+tax->addItems(Tax::GetPairList());
 block0Layout->addRow("Tax",tax);
 barcode = new QLineEdit();
 QObject::connect(barcode, SIGNAL(textChanged(QString)), this, SLOT(barcodeChanged(QString)));
@@ -182,7 +182,7 @@ trademarginrate->style()->polish(trademarginrate);
 trademarginrate->update();
 service->TradeMarginRate = trademarginrate->text().trimmed().toDouble();
 }
-if(service->TaxID == 0) 
+if(!tax->isHidden()) 
 service->TaxID = tax->getKey();
 if(barcode->text().trimmed().isEmpty()){
 errors = true;
@@ -212,4 +212,106 @@ return false;
 }
 void ServiceUI::cancel(){ 
 ServiceIndexUI::ShowUI();
+}
+bool ServiceUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+service->Name = name->text().trimmed();
+}
+if(shortdescription->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Short Description Can't be Empty! \n";
+shortdescription->setObjectName("error");
+shortdescription->style()->unpolish(shortdescription);
+shortdescription->style()->polish(shortdescription);
+shortdescription->update();
+}
+else { 
+shortdescription->setObjectName("shortdescription");
+shortdescription->style()->unpolish(shortdescription);
+shortdescription->style()->polish(shortdescription);
+shortdescription->update();
+service->ShortDescription = shortdescription->text().trimmed();
+}
+if(sellingprice->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Selling Price Can't be Empty! \n";
+sellingprice->setObjectName("error");
+sellingprice->style()->unpolish(sellingprice);
+sellingprice->style()->polish(sellingprice);
+sellingprice->update();
+}
+else { 
+sellingprice->setObjectName("sellingprice");
+sellingprice->style()->unpolish(sellingprice);
+sellingprice->style()->polish(sellingprice);
+sellingprice->update();
+service->SellingPrice = sellingprice->text().trimmed().toDouble();
+}
+if(netcoast->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Net Coast Can't be Empty! \n";
+netcoast->setObjectName("error");
+netcoast->style()->unpolish(netcoast);
+netcoast->style()->polish(netcoast);
+netcoast->update();
+}
+else { 
+netcoast->setObjectName("netcoast");
+netcoast->style()->unpolish(netcoast);
+netcoast->style()->polish(netcoast);
+netcoast->update();
+service->NetCoast = netcoast->text().trimmed().toDouble();
+}
+if(trademarginrate->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Trade Margin Rate Can't be Empty! \n";
+trademarginrate->setObjectName("error");
+trademarginrate->style()->unpolish(trademarginrate);
+trademarginrate->style()->polish(trademarginrate);
+trademarginrate->update();
+}
+else { 
+trademarginrate->setObjectName("trademarginrate");
+trademarginrate->style()->unpolish(trademarginrate);
+trademarginrate->style()->polish(trademarginrate);
+trademarginrate->update();
+service->TradeMarginRate = trademarginrate->text().trimmed().toDouble();
+}
+if(service->TaxID == 0) 
+service->TaxID = tax->getKey();
+if(barcode->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Barcode Can't be Empty! \n";
+barcode->setObjectName("error");
+barcode->style()->unpolish(barcode);
+barcode->style()->polish(barcode);
+barcode->update();
+}
+else { 
+barcode->setObjectName("barcode");
+barcode->style()->unpolish(barcode);
+barcode->style()->polish(barcode);
+barcode->update();
+service->Barcode = barcode->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Service",errorString.trimmed());
+return false; 
+ }
 }

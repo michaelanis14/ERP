@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactemail.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -53,7 +53,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactEmailID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Email")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactEmail* ContactEmail::p_instance = 0;
@@ -80,6 +81,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactEmail::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactEmail::remove() {
 if(ContactEmailID!= 0) {
@@ -103,18 +110,17 @@ return new ContactEmail();
 
 QList<ContactEmail*> ContactEmail::GetAll() {
 	QList<ContactEmail*> contactemails =   QList<ContactEmail*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactEmail"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactEmail ORDER BY ContactEmailID ASC"));
 	while (query.next()) {
 contactemails.append(new ContactEmail(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(contactemails.begin(),contactemails.end());
 	return contactemails;
 }
 
 ContactEmail* ContactEmail::Get(int id) {
 ContactEmail* contactemail = new ContactEmail();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactEmail WHERE ContactEmailID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactEmail WHERE ContactEmailID = '"+QString::number(id)+"' ORDER BY ContactEmailID ASC "));
 while (query.next()) {
 contactemail = new ContactEmail(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
  }
@@ -168,16 +174,23 @@ contactemails = GetAll();
 	for(int i = 0; i <contactemails.count(); i++){
 		list.append(contactemails[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactEmail::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactEmail::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactEmail*> contactemails =   QList<ContactEmail*>();
 contactemails = GetAll();
 	for(int i = 0; i <contactemails.count(); i++){
-		list.insert(contactemails[i]->ContactEmailID,contactemails[i]->Description);
+		list.append(qMakePair(contactemails[i]->ContactEmailID,contactemails[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactEmail::GetPairList(QList<ContactEmail*> contactemails) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contactemails.count(); i++){
+		list.append(qMakePair(contactemails[i]->ContactEmailID,contactemails[i]->Description));
 	}
 	return list;
 }

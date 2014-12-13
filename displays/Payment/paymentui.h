@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -48,5 +48,6 @@ private slots:
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

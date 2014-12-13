@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymenttype.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("PaymentTypeID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 PaymentType* PaymentType::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool PaymentType::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool PaymentType::remove() {
 if(PaymentTypeID!= 0) {
@@ -93,18 +100,17 @@ return new PaymentType();
 
 QList<PaymentType*> PaymentType::GetAll() {
 	QList<PaymentType*> paymenttypes =   QList<PaymentType*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PaymentType"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PaymentType ORDER BY PaymentTypeID ASC"));
 	while (query.next()) {
 paymenttypes.append(new PaymentType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(paymenttypes.begin(),paymenttypes.end());
 	return paymenttypes;
 }
 
 PaymentType* PaymentType::Get(int id) {
 PaymentType* paymenttype = new PaymentType();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PaymentType WHERE PaymentTypeID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PaymentType WHERE PaymentTypeID = '"+QString::number(id)+"' ORDER BY PaymentTypeID ASC "));
 while (query.next()) {
 paymenttype = new PaymentType(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ paymenttypes = GetAll();
 	for(int i = 0; i <paymenttypes.count(); i++){
 		list.append(paymenttypes[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> PaymentType::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > PaymentType::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<PaymentType*> paymenttypes =   QList<PaymentType*>();
 paymenttypes = GetAll();
 	for(int i = 0; i <paymenttypes.count(); i++){
-		list.insert(paymenttypes[i]->PaymentTypeID,paymenttypes[i]->Description);
+		list.append(qMakePair(paymenttypes[i]->PaymentTypeID,paymenttypes[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > PaymentType::GetPairList(QList<PaymentType*> paymenttypes) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <paymenttypes.count(); i++){
+		list.append(qMakePair(paymenttypes[i]->PaymentTypeID,paymenttypes[i]->Description));
 	}
 	return list;
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonindexui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,7 +16,7 @@
 
 #include "../ContactPersonTelephone/contactpersontelephoneui.h"
 #include "../ContactPersonEmail/contactpersonemailui.h"
-#include "../ContactPersonFieldData/contactpersonfielddataui.h"
+#include "../ProjectContactPerson/projectcontactpersonui.h"
 
 #include <QWidget>
 #include <QLineEdit>

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: countryui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -104,4 +104,29 @@ return false;
 }
 void CountryUI::cancel(){ 
 CountryIndexUI::ShowUI();
+}
+bool CountryUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Name Can't be Empty! \n";
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+country->Name = name->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Country",errorString.trimmed());
+return false; 
+ }
 }

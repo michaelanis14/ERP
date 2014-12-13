@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfieldui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -33,7 +33,7 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
 description = new QLineEdit();
 block0Layout->addRow("Description",description);
 fieldtype = new ERPComboBox();
-fieldtype->addItems(FieldType::GetHashList());
+fieldtype->addItems(FieldType::GetPairList());
 block0Layout->addRow("Field Type",fieldtype);
 defaults = new QCheckBox();
 block0Layout->addRow("Defaults",defaults);
@@ -94,7 +94,7 @@ description->style()->polish(description);
 description->update();
 contactfield->Description = description->text().trimmed();
 }
-if(contactfield->FieldTypeID == 0) 
+if(!fieldtype->isHidden()) 
 contactfield->FieldTypeID = fieldtype->getKey();
 contactfield->Defaults = defaults->text().trimmed().toInt();
 if(!errors) {
@@ -110,4 +110,32 @@ return false;
 }
 void ContactFieldUI::cancel(){ 
 ContactFieldIndexUI::ShowUI();
+}
+bool ContactFieldUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+contactfield->Description = description->text().trimmed();
+}
+if(contactfield->FieldTypeID == 0) 
+contactfield->FieldTypeID = fieldtype->getKey();
+contactfield->Defaults = defaults->text().trimmed().toInt();
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactField",errorString.trimmed());
+return false; 
+ }
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreelineui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -34,13 +34,13 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
 description = new QLineEdit();
 block0Layout->addRow("Description",description);
 invoice = new ERPComboBox();
-invoice->addItems(Invoice::GetHashList());
+invoice->addItems(Invoice::GetPairList());
 block0Layout->addRow("Invoice",invoice);
 price = new QLineEdit();
 price->setValidator( doubleValidator );
 block0Layout->addRow("Price",price);
 tax = new ERPComboBox();
-tax->addItems(Tax::GetHashList());
+tax->addItems(Tax::GetPairList());
 block0Layout->addRow("Tax",tax);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
@@ -104,6 +104,72 @@ description->style()->polish(description);
 description->update();
 invoicefreeline->Description = description->text().trimmed();
 }
+if(!invoice->isHidden()) 
+invoicefreeline->InvoiceID = invoice->getKey();
+if(price->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Price Can't be Empty! \n";
+price->setObjectName("error");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+}
+else { 
+price->setObjectName("price");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+invoicefreeline->Price = price->text().trimmed().toDouble();
+}
+if(!tax->isHidden()) 
+invoicefreeline->TaxID = tax->getKey();
+if(amount->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Amount Can't be Empty! \n";
+amount->setObjectName("error");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+}
+else { 
+amount->setObjectName("amount");
+amount->style()->unpolish(amount);
+amount->style()->polish(amount);
+amount->update();
+invoicefreeline->Amount = amount->text().trimmed().toDouble();
+}
+if(!errors) {
+invoicefreeline->save();
+if(!errors){
+InvoiceFreelineIndexUI::ShowUI();
+return true;}
+else return false;
+}
+else{ QMessageBox::warning(this, "InvoiceFreeline",errorString.trimmed());
+return false; 
+ }
+}
+void InvoiceFreelineUI::cancel(){ 
+InvoiceFreelineIndexUI::ShowUI();
+}
+bool InvoiceFreelineUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(description->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Description Can't be Empty! \n";
+description->setObjectName("error");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+}
+else { 
+description->setObjectName("description");
+description->style()->unpolish(description);
+description->style()->polish(description);
+description->update();
+invoicefreeline->Description = description->text().trimmed();
+}
 if(invoicefreeline->InvoiceID == 0) 
 invoicefreeline->InvoiceID = invoice->getKey();
 if(price->text().trimmed().isEmpty()){
@@ -138,17 +204,10 @@ amount->style()->polish(amount);
 amount->update();
 invoicefreeline->Amount = amount->text().trimmed().toDouble();
 }
-if(!errors) {
-invoicefreeline->save();
 if(!errors){
-InvoiceFreelineIndexUI::ShowUI();
-return true;}
-else return false;
+	return true;
 }
-else{ QMessageBox::warning(this, "InvoiceFreeline",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "InvoiceFreeline",errorString.trimmed());
 return false; 
  }
-}
-void InvoiceFreelineUI::cancel(){ 
-InvoiceFreelineIndexUI::ShowUI();
 }

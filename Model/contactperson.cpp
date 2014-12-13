@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -69,7 +69,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactPersonID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Title")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("LastName")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Position")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Birthdate")));variables.append(qMakePair(QString(" INT"),QString("Number")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactPerson* ContactPerson::p_instance = 0;
@@ -96,6 +97,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactPerson::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactPerson::remove() {
 if(ContactPersonID!= 0) {
@@ -119,24 +126,23 @@ return new ContactPerson();
 
 QList<ContactPerson*> ContactPerson::GetAll() {
 	QList<ContactPerson*> contactpersons =   QList<ContactPerson*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPerson"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPerson ORDER BY ContactPersonID ASC"));
 	while (query.next()) {
 contactpersons.append(new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString()));
 	}
-qStableSort(contactpersons.begin(),contactpersons.end());
 	return contactpersons;
 }
 
 ContactPerson* ContactPerson::Get(int id) {
 ContactPerson* contactperson = new ContactPerson();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPerson WHERE ContactPersonID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPerson WHERE ContactPersonID = '"+QString::number(id)+"' ORDER BY ContactPersonID ASC "));
 while (query.next()) {
 contactperson = new ContactPerson(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toString(),query.value(9).toString());
  }
 contactperson->contactpersontelephones = ContactPersonTelephone::QuerySelect("ContactPersonID = " + QString::number(id));
 contactperson->contactpersonemails = ContactPersonEmail::QuerySelect("ContactPersonID = " + QString::number(id));
-contactperson->contactpersonfielddatas = ContactPersonFieldData::QuerySelect("ContactPersonID = " + QString::number(id));
+contactperson->projectcontactpersons = ProjectContactPerson::QuerySelect("ContactPersonID = " + QString::number(id));
 
 }
 return contactperson;
@@ -159,7 +165,7 @@ contactperson = new ContactPerson(query.value(0).toInt(),query.value(1).toString
  }
 contactperson->contactpersontelephones = ContactPersonTelephone::QuerySelect("ContactPersonID = " +QString::number(contactperson->ContactPersonID));
 contactperson->contactpersonemails = ContactPersonEmail::QuerySelect("ContactPersonID = " +QString::number(contactperson->ContactPersonID));
-contactperson->contactpersonfielddatas = ContactPersonFieldData::QuerySelect("ContactPersonID = " +QString::number(contactperson->ContactPersonID));
+contactperson->projectcontactpersons = ProjectContactPerson::QuerySelect("ContactPersonID = " +QString::number(contactperson->ContactPersonID));
 
 }
 return contactperson;
@@ -193,16 +199,23 @@ contactpersons = GetAll();
 	for(int i = 0; i <contactpersons.count(); i++){
 		list.append(contactpersons[i]->Title);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactPerson::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactPerson::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactPerson*> contactpersons =   QList<ContactPerson*>();
 contactpersons = GetAll();
 	for(int i = 0; i <contactpersons.count(); i++){
-		list.insert(contactpersons[i]->ContactPersonID,contactpersons[i]->Title);
+		list.append(qMakePair(contactpersons[i]->ContactPersonID,contactpersons[i]->Title));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactPerson::GetPairList(QList<ContactPerson*> contactpersons) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contactpersons.count(); i++){
+		list.append(qMakePair(contactpersons[i]->ContactPersonID,contactpersons[i]->Title));
 	}
 	return list;
 }

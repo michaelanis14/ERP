@@ -8,10 +8,12 @@
 #include "../PurchaseStoreProduct/purchasestoreproductindexui.h"
 #include "../MainWindow.h"
 
+#include <QItemSelectionModel>
+
 CreatePurchase::CreatePurchase(QWidget *parent) :
 	ERPDisplay(parent)
 {
-
+	this->setObjectName("Index");
 	purchase = new Purchase();
 	flowLayout = new FlowLayout(formPanel);
 	flowLayout->setContentsMargins(0,0,0,0);
@@ -41,17 +43,12 @@ CreatePurchase::CreatePurchase(QWidget *parent) :
 	block0Layout->addRow("Delivery Date",deliverydate);
 
 
-	PurchaseStoreProductUI* purchasestoreproductui = new PurchaseStoreProductUI();
-	purchasestoreproductui->block0Layout->removeRow(purchasestoreproductui->purchase);
+	purchasestoreproductui = new PurchaseStoreProductUI();
+	purchasestoreproductui->block0Layout->hideRow(purchasestoreproductui->purchase);
 	purchasestoreproductui->controllers->setFixedHeight(0);
-	PurchaseStoreProducts.append(purchasestoreproductui);
-	//RemovebtnWidgets* rmpurchasestoreproduct = new RemovebtnWidgets(0,purchasestoreproductui);
-	//QObject::connect(rmpurchasestoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseStoreProduct(QWidget*)));
 	block0Layout->addRow("Product"+QString::number(PurchaseStoreProducts.count()),purchasestoreproductui);
-//	QHBoxLayout *buttons = new QHBoxLayout();
 
-	//purchasestoreproductui->setVisible(true);
-	AddRemoveButtons* addremovePurchaseStoreProductButtons = new AddRemoveButtons();
+	addremovePurchaseStoreProductButtons = new AddRemoveButtons();
 	QObject::connect(addremovePurchaseStoreProductButtons, SIGNAL(addPressed()), this, SLOT(addPurchaseStoreProduct()));
 
 
@@ -60,25 +57,25 @@ CreatePurchase::CreatePurchase(QWidget *parent) :
 	flowLayout->addWidget(block0Layout);
 
 	block1Layout = new ERPFormBlock;
-//	if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
-		//block1Layout->setMinimumWidth(530);
-
 
 	tabel = new ERPTableView();
-
-	//
-	refreshTabel();
-	//tabel->tabel->hideColumn(0);
-
-	QObject::connect(tabel->tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CreatePurchase::onSelectionChanged);
-
-
+	model = new QStandardItemModel(PurchaseStoreProducts.count(),5,0);
+	model->setHeaderData(0, Qt::Horizontal, QObject::tr("Number"));
+	model->setHeaderData(1, Qt::Horizontal, QObject::tr("Store"));
+	model->setHeaderData(2, Qt::Horizontal, QObject::tr("Supplier"));
+	model->setHeaderData(3, Qt::Horizontal, QObject::tr("Product"));
+	model->setHeaderData(4, Qt::Horizontal, QObject::tr("Amount"));
+	tabel->tabel->setModel(model);
 	block1Layout->addRow("",tabel);
+
 	QWidget *tabelControls =  new QWidget();
 	QHBoxLayout *layout = new QHBoxLayout(tabelControls);
 	layout->setContentsMargins(0,0,0,0);
 	remove = new QPushButton("Remove");
+
 	QObject::connect(remove, SIGNAL(clicked()), this, SLOT(removeRow()));
+	QObject::connect(tabel->tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CreatePurchase::onSelectionChanged);
+
 	remove->setObjectName("remove");
 	remove->setEnabled(false);
 	layout->addWidget(remove,0,Qt::AlignCenter);
@@ -105,45 +102,51 @@ void CreatePurchase::onSelectionChanged(){
 	remove->setEnabled(e);
 }
 void CreatePurchase::removeRow(){
-	//model->remove(tabel->tabel->selectionModel()->selectedRows().last());
+	PurchaseStoreProducts.takeAt(tabel->tabel->selectionModel()->selectedRows().at(0).row())->deleteLater();
+	refreshTabel();
 }
 void CreatePurchase::refreshTabel(){
-	QList<Product*> products = Product::GetAll();
-	model = new QStandardItemModel(products.count(),3,0);
-
+	model = new QStandardItemModel(PurchaseStoreProducts.count(),5,0);
 	int row = 0; //row
 
 	foreach(PurchaseStoreProductUI* p,PurchaseStoreProducts){
-		model->setItem(row,0,new QStandardItem(QString::number(row)));
+
+		model->setItem(row,0,new QStandardItem(QString::number(row+1)));
 		model->setItem(row,1,new QStandardItem(p->store->currentText()));
 		model->setItem(row,2,new QStandardItem(p->contact->currentText()));
 		model->setItem(row,3,new QStandardItem(p->product->currentText()));
-		model->setItem(row,4,new QStandardItem(QString::number(p->amount->text().toInt())));
+		model->setItem(row,4,new QStandardItem(QString::number(p->purchasestoreproduct->Amount)));
 		row++;
 	}
-
-	//tabel->tabel->hideColumn(0);
 	model->setHeaderData(0, Qt::Horizontal, QObject::tr("Number"));
 	model->setHeaderData(1, Qt::Horizontal, QObject::tr("Store"));
 	model->setHeaderData(2, Qt::Horizontal, QObject::tr("Supplier"));
 	model->setHeaderData(3, Qt::Horizontal, QObject::tr("Product"));
 	model->setHeaderData(4, Qt::Horizontal, QObject::tr("Amount"));
 	tabel->tabel->setModel(model);
-	tabel->tabel->sortByColumn(0,Qt::AscendingOrder);
+	QObject::connect(tabel->tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &CreatePurchase::onSelectionChanged);
+
+	//tabel->tabel->sortByColumn(0,Qt::AscendingOrder);
 	tabel->repaint();
 }
 
 void CreatePurchase::addPurchaseStoreProduct(){
-	PurchaseStoreProductUI* purchasestoreproductui = new PurchaseStoreProductUI();
 
-	purchasestoreproductui->block0Layout->removeRow(purchasestoreproductui->purchase);
-	purchasestoreproductui->controllers->setFixedHeight(0);
 	PurchaseStoreProducts.append(purchasestoreproductui);
-
+	if(!this->updateModel())
+		PurchaseStoreProducts.removeOne(purchasestoreproductui);
+	else{
+	block0Layout->hideRow(purchasestoreproductui);
+	block0Layout->removeRow(addremovePurchaseStoreProductButtons);
 	refreshTabel();
-	//RemovebtnWidgets* rmpurchasestoreproduct = new RemovebtnWidgets(0,purchasestoreproductui);
-	//QObject::connect(rmpurchasestoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseStoreProduct(QWidget*)));
-	//block0Layout->addRow("PurchaseStoreProduct"+QString::number(PurchaseStoreProducts.count()),rmpurchasestoreproduct);
+	purchasestoreproductui = new PurchaseStoreProductUI();
+	purchasestoreproductui->controllers->setFixedHeight(0);
+	block0Layout->addRow("",purchasestoreproductui);
+
+	addremovePurchaseStoreProductButtons = new AddRemoveButtons();
+	QObject::connect(addremovePurchaseStoreProductButtons, SIGNAL(addPressed()), this, SLOT(addPurchaseStoreProduct()));
+	block0Layout->addRow("",addremovePurchaseStoreProductButtons);
+	}
 }
 void CreatePurchase::addPurchaseStoreProduct(PurchaseStoreProduct* PurchaseStoreProduct){
 	PurchaseStoreProductUI*purchasestoreproductui = new PurchaseStoreProductUI();
@@ -151,10 +154,6 @@ void CreatePurchase::addPurchaseStoreProduct(PurchaseStoreProduct* PurchaseStore
 	purchasestoreproductui->block0Layout->removeRow(purchasestoreproductui->purchase);
 	purchasestoreproductui->controllers->setFixedHeight(0);
 	purchasestoreproductui->fill(PurchaseStoreProduct);
-
-	//RemovebtnWidgets* rmpurchasestoreproduct = new RemovebtnWidgets(0,purchasestoreproductui);
-	//QObject::connect(rmpurchasestoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseStoreProduct(QWidget*)));
-	//block0Layout->addRow("PurchaseStoreProduct"+QString::number(PurchaseStoreProducts.count()),rmpurchasestoreproduct);
 	refreshTabel();
 }
 void CreatePurchase::removePurchaseStoreProduct(QWidget* widget){
@@ -179,12 +178,6 @@ void CreatePurchase::clear(){
 	this->PurchaseStoreProducts.clear();
 	creationdate->setDate(QDate::currentDate());
 	deliverydate->setDate(QDate::currentDate());
-	QList<RemovebtnWidgets *> RWidgets = this->findChildren<RemovebtnWidgets *>();
-	foreach(RemovebtnWidgets * child, RWidgets)
-	{
-		if(child->parent()->parent()->parent() != 0)
-			((ERPFormBlock*)child->parent()->parent())->removeRow(child);
-	}
 	this->purchase = new Purchase();
 }
 void CreatePurchase::selectPurchase(){
@@ -259,10 +252,56 @@ bool CreatePurchase::save(){
 void CreatePurchase::cancel(){
 	PurchaseIndexUI::ShowUI();
 }
+bool CreatePurchase::updateModel(){
+	bool errors = false;
+	QString errorString =  "";
+	if(creationdate->text().trimmed().isEmpty()){
+		errors = true;
+		errorString += "Creation Date Can't be Empty! \n";
+		creationdate->setObjectName("error");
+		creationdate->style()->unpolish(creationdate);
+		creationdate->style()->polish(creationdate);
+		creationdate->update();
+	}
+	else {
+		creationdate->setObjectName("creationdate");
+		creationdate->style()->unpolish(creationdate);
+		creationdate->style()->polish(creationdate);
+		creationdate->update();
+		purchase->CreationDate = creationdate->text().trimmed();
+	}
+	if(deliverydate->text().trimmed().isEmpty()){
+		errors = true;
+		errorString += "Delivery Date Can't be Empty! \n";
+		deliverydate->setObjectName("error");
+		deliverydate->style()->unpolish(deliverydate);
+		deliverydate->style()->polish(deliverydate);
+		deliverydate->update();
+	}
+	else {
+		deliverydate->setObjectName("deliverydate");
+		deliverydate->style()->unpolish(deliverydate);
+		deliverydate->style()->polish(deliverydate);
+		deliverydate->update();
+		purchase->DeliveryDate = deliverydate->text().trimmed();
+	}
+	for(int i = 0; i < PurchaseStoreProducts.length(); i++){
+		if(!PurchaseStoreProducts.at(i)->updateModel()){
+			errors = true;
+			break; }
+	}
+	if(!errors){
+		return true;
+	}
+	else{ if(!errorString.trimmed().isEmpty())
+		QMessageBox::warning(this, "Purchase",errorString.trimmed());
+		return false;
+	}
+}
 void CreatePurchase::showEvent(QShowEvent * event){
 	if(this->parent() != 0){
- tabel->setFixedWidth(mainwindow::GetMainDisplay()->width() - mainwindow::GetMainDisplay()->navigation->width() - 420);
- tabel->setFixedHeight(mainwindow::GetMainDisplay()->height() - mainwindow::GetMainDisplay()->inNavPurchase->height() - 150);
+		tabel->setFixedWidth(mainwindow::GetMainDisplay()->width() - mainwindow::GetMainDisplay()->navigation->width() - 420);
+		tabel->setFixedHeight(mainwindow::GetMainDisplay()->height() - mainwindow::GetMainDisplay()->inNavPurchase->height() - 150);
 	}
- event->accept();
- }
+	event->accept();
+}

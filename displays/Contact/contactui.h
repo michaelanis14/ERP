@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -24,7 +24,6 @@
 #include "../ContactTelephone/contacttelephoneui.h"
 #include "../ContactEmail/contactemailui.h"
 #include "../BankAccount/bankaccountui.h"
-#include "../ContactFieldData/contactfielddataui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -51,13 +50,12 @@ public:
 	QList<ContactTelephoneUI*> ContactTelephones;
 	QList<ContactEmailUI*> ContactEmails;
 	QList<BankAccountUI*> BankAccounts;
-	QList<ContactFieldDataUI*> ContactFieldDatas;
 	QLineEdit*name;
 	QLineEdit*salutation;
 	QDateEdit*birthdateordateoffoundation;
 	ERPComboBox*contacttype;
 	ERPComboBox*contactclass;
-	QLineEdit*number;
+	QLineEdit*serial;
 	QLineEdit*address;
 	QLineEdit*postalcode;
 	QLineEdit*city;
@@ -80,13 +78,11 @@ private slots:
 	void addBankAccount();
 	void addBankAccount(BankAccount* BankAccount);
 	void removeBankAccount(QWidget* widget);
-	void addContactFieldData();
-	void addContactFieldData(ContactFieldData* ContactFieldData);
-	void removeContactFieldData(QWidget* widget);
 	void selectContact();
 	void cancel();
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

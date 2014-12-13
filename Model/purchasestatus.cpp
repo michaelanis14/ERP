@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestatus.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("PurchaseStatusID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 PurchaseStatus* PurchaseStatus::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool PurchaseStatus::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool PurchaseStatus::remove() {
 if(PurchaseStatusID!= 0) {
@@ -93,18 +100,17 @@ return new PurchaseStatus();
 
 QList<PurchaseStatus*> PurchaseStatus::GetAll() {
 	QList<PurchaseStatus*> purchasestatuss =   QList<PurchaseStatus*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStatus"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseStatus ORDER BY PurchaseStatusID ASC"));
 	while (query.next()) {
 purchasestatuss.append(new PurchaseStatus(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(purchasestatuss.begin(),purchasestatuss.end());
 	return purchasestatuss;
 }
 
 PurchaseStatus* PurchaseStatus::Get(int id) {
 PurchaseStatus* purchasestatus = new PurchaseStatus();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PurchaseStatus WHERE PurchaseStatusID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM PurchaseStatus WHERE PurchaseStatusID = '"+QString::number(id)+"' ORDER BY PurchaseStatusID ASC "));
 while (query.next()) {
 purchasestatus = new PurchaseStatus(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ purchasestatuss = GetAll();
 	for(int i = 0; i <purchasestatuss.count(); i++){
 		list.append(purchasestatuss[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> PurchaseStatus::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > PurchaseStatus::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<PurchaseStatus*> purchasestatuss =   QList<PurchaseStatus*>();
 purchasestatuss = GetAll();
 	for(int i = 0; i <purchasestatuss.count(); i++){
-		list.insert(purchasestatuss[i]->PurchaseStatusID,purchasestatuss[i]->Description);
+		list.append(qMakePair(purchasestatuss[i]->PurchaseStatusID,purchasestatuss[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > PurchaseStatus::GetPairList(QList<PurchaseStatus*> purchasestatuss) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <purchasestatuss.count(); i++){
+		list.append(qMakePair(purchasestatuss[i]->PurchaseStatusID,purchasestatuss[i]->Description));
 	}
 	return list;
 }

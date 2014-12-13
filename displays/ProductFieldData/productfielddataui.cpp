@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfielddataui.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,10 +31,10 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 product = new ERPComboBox();
-product->addItems(Product::GetHashList());
+product->addItems(Product::GetPairList());
 block0Layout->addRow("Product",product);
 productfield = new ERPComboBox();
-productfield->addItems(ProductField::GetHashList());
+productfield->addItems(ProductField::GetPairList());
 block0Layout->addRow("Product Field",productfield);
 value = new QLineEdit();
 block0Layout->addRow("Value",value);
@@ -78,9 +78,9 @@ clear();
 bool ProductFieldDataUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(productfielddata->ProductID == 0) 
+if(!product->isHidden()) 
 productfielddata->ProductID = product->getKey();
-if(productfielddata->ProductFieldID == 0) 
+if(!productfield->isHidden()) 
 productfielddata->ProductFieldID = productfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
@@ -110,4 +110,33 @@ return false;
 }
 void ProductFieldDataUI::cancel(){ 
 ProductFieldDataIndexUI::ShowUI();
+}
+bool ProductFieldDataUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(productfielddata->ProductID == 0) 
+productfielddata->ProductID = product->getKey();
+if(productfielddata->ProductFieldID == 0) 
+productfielddata->ProductFieldID = productfield->getKey();
+if(value->text().trimmed().isEmpty()){
+errors = true;
+errorString += "Value Can't be Empty! \n";
+value->setObjectName("error");
+value->style()->unpolish(value);
+value->style()->polish(value);
+value->update();
+}
+else { 
+value->setObjectName("value");
+value->style()->unpolish(value);
+value->style()->polish(value);
+value->update();
+productfielddata->Value = value->text().trimmed();
+}
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ProductFieldData",errorString.trimmed());
+return false; 
+ }
 }

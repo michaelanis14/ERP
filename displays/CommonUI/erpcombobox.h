@@ -15,11 +15,11 @@ class ERPComboBox : public QComboBox
 	Q_OBJECT
 public:
 	explicit ERPComboBox(QWidget *parent = 0);
-	void addItems(QHash<int,QString> items);
+	void addItems(QList<QPair< int,QString > >);
 	int getKey();
 	bool addedItems;
 private:
-	QHash<int,QString>  items;
+	QList<QPair<int, QString> >  items;
 signals:
 	void refreshModel();
 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: unit.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -22,6 +22,7 @@ public:
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	Unit* get();
 	Unit* get(const QModelIndex &index);
@@ -31,7 +32,8 @@ public:
 	static QList<Unit*> Search(QString keyword);
 	static QList<Unit*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<Unit*> units);
 	static int GetIndex(QString title);
 	static Unit* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;

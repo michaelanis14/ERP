@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceperiod.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -43,7 +43,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("InvoicePeriodID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 InvoicePeriod* InvoicePeriod::p_instance = 0;
@@ -70,6 +71,12 @@ while (query.next()) {
  }
 return true;
 }
+bool InvoicePeriod::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool InvoicePeriod::remove() {
 if(InvoicePeriodID!= 0) {
@@ -93,18 +100,17 @@ return new InvoicePeriod();
 
 QList<InvoicePeriod*> InvoicePeriod::GetAll() {
 	QList<InvoicePeriod*> invoiceperiods =   QList<InvoicePeriod*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoicePeriod"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM InvoicePeriod ORDER BY InvoicePeriodID ASC"));
 	while (query.next()) {
 invoiceperiods.append(new InvoicePeriod(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString()));
 	}
-qStableSort(invoiceperiods.begin(),invoiceperiods.end());
 	return invoiceperiods;
 }
 
 InvoicePeriod* InvoicePeriod::Get(int id) {
 InvoicePeriod* invoiceperiod = new InvoicePeriod();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoicePeriod WHERE InvoicePeriodID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM InvoicePeriod WHERE InvoicePeriodID = '"+QString::number(id)+"' ORDER BY InvoicePeriodID ASC "));
 while (query.next()) {
 invoiceperiod = new InvoicePeriod(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString());
  }
@@ -157,16 +163,23 @@ invoiceperiods = GetAll();
 	for(int i = 0; i <invoiceperiods.count(); i++){
 		list.append(invoiceperiods[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> InvoicePeriod::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > InvoicePeriod::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<InvoicePeriod*> invoiceperiods =   QList<InvoicePeriod*>();
 invoiceperiods = GetAll();
 	for(int i = 0; i <invoiceperiods.count(); i++){
-		list.insert(invoiceperiods[i]->InvoicePeriodID,invoiceperiods[i]->Description);
+		list.append(qMakePair(invoiceperiods[i]->InvoicePeriodID,invoiceperiods[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > InvoicePeriod::GetPairList(QList<InvoicePeriod*> invoiceperiods) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <invoiceperiods.count(); i++){
+		list.append(qMakePair(invoiceperiods[i]->InvoicePeriodID,invoiceperiods[i]->Description));
 	}
 	return list;
 }

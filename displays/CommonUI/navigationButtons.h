@@ -21,6 +21,7 @@ public:
 	class QFont * font;
 
 	void addButton(class QToolButton* pushButton);
+	void resizeEvent(QResizeEvent * event);
 private:
 	QList<QToolButton*> navigationButtons;
 	QVBoxLayout* layout;

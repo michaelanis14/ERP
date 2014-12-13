@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoice.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,8 @@ class Invoice  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Invoice();
-	Invoice(QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	int InvoiceID;
+	Invoice(int InvoiceSerialID,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	int InvoiceID;
+	int InvoiceSerialID;
 	QString CreationDate;
 	QString EndDate;
 	int InvoicePeriodID;
@@ -37,6 +38,7 @@ public:
 	QString EditedOn;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	Invoice* get();
 	Invoice* get(const QModelIndex &index);
@@ -46,7 +48,8 @@ public:
 	static QList<Invoice*> Search(QString keyword);
 	static QList<Invoice*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<Invoice*> invoices);
 	static int GetIndex(QString title);
 	static Invoice* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -55,7 +58,8 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Invoice(int InvoiceID,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	static Invoice* p_instance;
+	Invoice(int InvoiceID,int InvoiceSerialID,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	static Invoice* p_instance;
+	bool setInvoiceSerialID(int InvoiceID, const QString &InvoiceSerialID);
 	bool setCreationDate(int InvoiceID, const QString &CreationDate);
 	bool setEndDate(int InvoiceID, const QString &EndDate);
 	bool setInvoicePeriodID(int InvoiceID, const QString &InvoicePeriodID);

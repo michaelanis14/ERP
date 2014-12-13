@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfield.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -53,7 +53,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ProductFieldID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" INT"),QString("FieldTypeID")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Defaults")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ProductField* ProductField::p_instance = 0;
@@ -80,6 +81,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ProductField::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ProductField::remove() {
 if(ProductFieldID!= 0) {
@@ -103,18 +110,17 @@ return new ProductField();
 
 QList<ProductField*> ProductField::GetAll() {
 	QList<ProductField*> productfields =   QList<ProductField*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductField"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ProductField ORDER BY ProductFieldID ASC"));
 	while (query.next()) {
 productfields.append(new ProductField(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(productfields.begin(),productfields.end());
 	return productfields;
 }
 
 ProductField* ProductField::Get(int id) {
 ProductField* productfield = new ProductField();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ProductField WHERE ProductFieldID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ProductField WHERE ProductFieldID = '"+QString::number(id)+"' ORDER BY ProductFieldID ASC "));
 while (query.next()) {
 productfield = new ProductField(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
  }
@@ -167,16 +173,23 @@ productfields = GetAll();
 	for(int i = 0; i <productfields.count(); i++){
 		list.append(productfields[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ProductField::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ProductField::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ProductField*> productfields =   QList<ProductField*>();
 productfields = GetAll();
 	for(int i = 0; i <productfields.count(); i++){
-		list.insert(productfields[i]->ProductFieldID,productfields[i]->Description);
+		list.append(qMakePair(productfields[i]->ProductFieldID,productfields[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ProductField::GetPairList(QList<ProductField*> productfields) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <productfields.count(); i++){
+		list.append(qMakePair(productfields[i]->ProductFieldID,productfields[i]->Description));
 	}
 	return list;
 }

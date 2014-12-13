@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchaseindexui.h
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,8 +12,10 @@
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/erptableview.h"
 #include "../../Model/purchase.h"
+#include "../../Model/purchaseserial.h"
 
 #include "../PurchaseStoreProduct/purchasestoreproductui.h"
+#include "../PurchaseFreeLine/purchasefreelineui.h"
 
 #include <QWidget>
 #include <QLineEdit>

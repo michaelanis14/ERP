@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderservice.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:05 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -18,7 +18,6 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("DeliveryOrderService");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(1, QSqlRelation("DeliveryOrder", "DeliveryOrderID", "Title"));
 this->setRelation(2, QSqlRelation("Service", "ServiceID", "Name"));
 }
 DeliveryOrderService::DeliveryOrderService(int DeliveryOrderServiceID,int DeliveryOrderID,int ServiceID,double Amount,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
@@ -55,7 +54,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("DeliveryOrderServiceID")));variables.append(qMakePair(QString(" INT"),QString("DeliveryOrderID")));variables.append(qMakePair(QString(" INT"),QString("ServiceID")));variables.append(qMakePair(QString(" DECIMAL(6,2)"),QString("Amount")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 DeliveryOrderService* DeliveryOrderService::p_instance = 0;
@@ -82,6 +82,12 @@ while (query.next()) {
  }
 return true;
 }
+bool DeliveryOrderService::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool DeliveryOrderService::remove() {
 if(DeliveryOrderServiceID!= 0) {
@@ -105,18 +111,17 @@ return new DeliveryOrderService();
 
 QList<DeliveryOrderService*> DeliveryOrderService::GetAll() {
 	QList<DeliveryOrderService*> deliveryorderservices =   QList<DeliveryOrderService*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderService"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM DeliveryOrderService ORDER BY DeliveryOrderServiceID ASC"));
 	while (query.next()) {
 deliveryorderservices.append(new DeliveryOrderService(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(deliveryorderservices.begin(),deliveryorderservices.end());
 	return deliveryorderservices;
 }
 
 DeliveryOrderService* DeliveryOrderService::Get(int id) {
 DeliveryOrderService* deliveryorderservice = new DeliveryOrderService();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderService WHERE DeliveryOrderServiceID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM DeliveryOrderService WHERE DeliveryOrderServiceID = '"+QString::number(id)+"' ORDER BY DeliveryOrderServiceID ASC "));
 while (query.next()) {
 deliveryorderservice = new DeliveryOrderService(query.value(0).toInt(),query.value(1).toInt(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
  }
@@ -167,16 +172,23 @@ QList<QString> DeliveryOrderService::GetStringList() {
 deliveryorderservices = GetAll();
 	for(int i = 0; i <deliveryorderservices.count(); i++){
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> DeliveryOrderService::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > DeliveryOrderService::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<DeliveryOrderService*> deliveryorderservices =   QList<DeliveryOrderService*>();
 deliveryorderservices = GetAll();
 	for(int i = 0; i <deliveryorderservices.count(); i++){
-		list.insert(deliveryorderservices[i]->DeliveryOrderServiceID,QString::number(deliveryorderservices[i]->DeliveryOrderID));
+		list.append(qMakePair(deliveryorderservices[i]->DeliveryOrderServiceID,QString::number(deliveryorderservices[i]->DeliveryOrderID)));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > DeliveryOrderService::GetPairList(QList<DeliveryOrderService*> deliveryorderservices) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <deliveryorderservices.count(); i++){
+		list.append(qMakePair(deliveryorderservices[i]->DeliveryOrderServiceID,QString::number(deliveryorderservices[i]->DeliveryOrderID)));
 	}
 	return list;
 }

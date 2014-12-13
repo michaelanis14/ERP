@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersontelephone.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -54,7 +54,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("ContactPersonTelephoneID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Description")));variables.append(qMakePair(QString(" INT"),QString("Number")));variables.append(qMakePair(QString(" INT"),QString("ContactPersonID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 ContactPersonTelephone* ContactPersonTelephone::p_instance = 0;
@@ -81,6 +82,12 @@ while (query.next()) {
  }
 return true;
 }
+bool ContactPersonTelephone::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool ContactPersonTelephone::remove() {
 if(ContactPersonTelephoneID!= 0) {
@@ -104,18 +111,17 @@ return new ContactPersonTelephone();
 
 QList<ContactPersonTelephone*> ContactPersonTelephone::GetAll() {
 	QList<ContactPersonTelephone*> contactpersontelephones =   QList<ContactPersonTelephone*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPersonTelephone"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM ContactPersonTelephone ORDER BY ContactPersonTelephoneID ASC"));
 	while (query.next()) {
 contactpersontelephones.append(new ContactPersonTelephone(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString()));
 	}
-qStableSort(contactpersontelephones.begin(),contactpersontelephones.end());
 	return contactpersontelephones;
 }
 
 ContactPersonTelephone* ContactPersonTelephone::Get(int id) {
 ContactPersonTelephone* contactpersontelephone = new ContactPersonTelephone();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPersonTelephone WHERE ContactPersonTelephoneID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM ContactPersonTelephone WHERE ContactPersonTelephoneID = '"+QString::number(id)+"' ORDER BY ContactPersonTelephoneID ASC "));
 while (query.next()) {
 contactpersontelephone = new ContactPersonTelephone(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString());
  }
@@ -168,16 +174,23 @@ contactpersontelephones = GetAll();
 	for(int i = 0; i <contactpersontelephones.count(); i++){
 		list.append(contactpersontelephones[i]->Description);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> ContactPersonTelephone::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > ContactPersonTelephone::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<ContactPersonTelephone*> contactpersontelephones =   QList<ContactPersonTelephone*>();
 contactpersontelephones = GetAll();
 	for(int i = 0; i <contactpersontelephones.count(); i++){
-		list.insert(contactpersontelephones[i]->ContactPersonTelephoneID,contactpersontelephones[i]->Description);
+		list.append(qMakePair(contactpersontelephones[i]->ContactPersonTelephoneID,contactpersontelephones[i]->Description));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > ContactPersonTelephone::GetPairList(QList<ContactPersonTelephone*> contactpersontelephones) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <contactpersontelephones.count(); i++){
+		list.append(qMakePair(contactpersontelephones[i]->ContactPersonTelephoneID,contactpersontelephones[i]->Description));
 	}
 	return list;
 }

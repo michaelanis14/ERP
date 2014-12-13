@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: store.cpp
-**   Created on: Sun Dec 07 15:14:08 EET 2014
+**   Created on: Sat Dec 13 13:51:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -61,7 +61,8 @@ QString query =
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
-ErpModel::GetInstance()->createTable(table,query);
+QList<QPair<QString,QString> >variables;
+variables.append(qMakePair(QString(" INT"),QString("StoreID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Name")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Address")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("PostalCode")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("City")));variables.append(qMakePair(QString(" INT"),QString("CountryID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Store* Store::p_instance = 0;
@@ -88,6 +89,12 @@ while (query.next()) {
  }
 return true;
 }
+bool Store::save(QSqlRecord &record) {
+	if(ErpModel::GetInstance()->db.open()) 
+ if(this->insertRowIntoTable(record)) 
+ return true; 
+ return false;
+}
 
 bool Store::remove() {
 if(StoreID!= 0) {
@@ -111,18 +118,17 @@ return new Store();
 
 QList<Store*> Store::GetAll() {
 	QList<Store*> stores =   QList<Store*>();
-	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Store"));
+	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Store ORDER BY StoreID ASC"));
 	while (query.next()) {
 stores.append(new Store(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString()));
 	}
-qStableSort(stores.begin(),stores.end());
 	return stores;
 }
 
 Store* Store::Get(int id) {
 Store* store = new Store();
 if(id != 0) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Store WHERE StoreID = '"+QString::number(id)+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Store WHERE StoreID = '"+QString::number(id)+"' ORDER BY StoreID ASC "));
 while (query.next()) {
 store = new Store(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toInt(),query.value(6).toString(),query.value(7).toString());
  }
@@ -178,16 +184,23 @@ stores = GetAll();
 	for(int i = 0; i <stores.count(); i++){
 		list.append(stores[i]->Name);
 	}
-qStableSort(list.begin(),list.end());
 	return list;
 }
 
-QHash<int,QString> Store::GetHashList() {
-	QHash<int,QString> list;
+QList<QPair< int,QString > > Store::GetPairList() {
+	QList<QPair<int,QString > > list;
 	QList<Store*> stores =   QList<Store*>();
 stores = GetAll();
 	for(int i = 0; i <stores.count(); i++){
-		list.insert(stores[i]->StoreID,stores[i]->Name);
+		list.append(qMakePair(stores[i]->StoreID,stores[i]->Name));
+	}
+	return list;
+}
+
+QList<QPair< int,QString > > Store::GetPairList(QList<Store*> stores) {
+	QList<QPair<int,QString > > list;
+	for(int i = 0; i <stores.count(); i++){
+		list.append(qMakePair(stores[i]->StoreID,stores[i]->Name));
 	}
 	return list;
 }
