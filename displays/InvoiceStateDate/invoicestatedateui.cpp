@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedateui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,6 +59,8 @@ InvoiceStateDateUI*InvoiceStateDateUI::GetUI(){
 void InvoiceStateDateUI::fill(InvoiceStateDate* invoicestatedate){ 
 clear();
 this->invoicestatedate = invoicestatedate;
+invoice->setIndexByKey(invoicestatedate->InvoiceID);
+invoicestate->setIndexByKey(invoicestatedate->InvoiceStateID);
 date->setDate(QDate::fromString(invoicestatedate->Date));
 } 
 void InvoiceStateDateUI::clear(){ 
@@ -86,7 +88,7 @@ if(!invoicestate->isHidden())
 invoicestatedate->InvoiceStateID = invoicestate->getKey();
 if(date->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Date Can't be Empty! \n";
+errorString += QObject::tr("Date Can't be Empty! \n");
 date->setObjectName("error");
 date->style()->unpolish(date);
 date->style()->polish(date);
@@ -106,7 +108,7 @@ InvoiceStateDateIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "InvoiceStateDate",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("InvoiceStateDate"),errorString.trimmed());
 return false; 
  }
 }
@@ -122,7 +124,7 @@ if(invoicestatedate->InvoiceStateID == 0)
 invoicestatedate->InvoiceStateID = invoicestate->getKey();
 if(date->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Date Can't be Empty! \n";
+errorString += QObject::tr("Date Can't be Empty! \n");
 date->setObjectName("error");
 date->style()->unpolish(date);
 date->style()->polish(date);
@@ -138,7 +140,7 @@ invoicestatedate->Date = date->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "InvoiceStateDate",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("InvoiceStateDate"),errorString.trimmed());
 return false; 
  }
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonfieldui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -57,6 +57,7 @@ void ContactPersonFieldUI::fill(ContactPersonField* contactpersonfield){
 clear();
 this->contactpersonfield = contactpersonfield;
 description->setText(contactpersonfield->Description);
+fieldtype->setIndexByKey(contactpersonfield->FieldTypeID);
 defaults->setChecked(contactpersonfield->Defaults);
 } 
 void ContactPersonFieldUI::clear(){ 
@@ -81,7 +82,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -104,7 +105,7 @@ ContactPersonFieldIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ContactPersonField",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ContactPersonField"),errorString.trimmed());
 return false; 
  }
 }
@@ -116,7 +117,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -135,7 +136,7 @@ contactpersonfield->Defaults = defaults->text().trimmed().toInt();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactPersonField",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ContactPersonField"),errorString.trimmed());
 return false; 
  }
 }

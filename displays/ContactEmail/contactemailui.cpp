@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactemailui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -58,6 +58,7 @@ clear();
 this->contactemail = contactemail;
 description->setText(contactemail->Description);
 email->setText(contactemail->Email);
+contact->setIndexByKey(contactemail->ContactID);
 } 
 void ContactEmailUI::clear(){ 
 delete this->contactemail;
@@ -81,7 +82,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -96,7 +97,7 @@ contactemail->Description = description->text().trimmed();
 }
 if(email->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Email Can't be Empty! \n";
+errorString += QObject::tr("Email Can't be Empty! \n");
 email->setObjectName("error");
 email->style()->unpolish(email);
 email->style()->polish(email);
@@ -118,7 +119,7 @@ ContactEmailIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ContactEmail",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ContactEmail"),errorString.trimmed());
 return false; 
  }
 }
@@ -130,7 +131,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -145,7 +146,7 @@ contactemail->Description = description->text().trimmed();
 }
 if(email->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Email Can't be Empty! \n";
+errorString += QObject::tr("Email Can't be Empty! \n");
 email->setObjectName("error");
 email->style()->unpolish(email);
 email->style()->polish(email);
@@ -163,7 +164,7 @@ contactemail->ContactID = contact->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactEmail",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ContactEmail"),errorString.trimmed());
 return false; 
  }
 }

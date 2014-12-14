@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: companyui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -86,7 +86,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -101,7 +101,7 @@ company->Name = name->text().trimmed();
 }
 if(header->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Header Can't be Empty! \n";
+errorString += QObject::tr("Header Can't be Empty! \n");
 header->setObjectName("error");
 header->style()->unpolish(header);
 header->style()->polish(header);
@@ -116,7 +116,7 @@ company->Header = header->text().trimmed();
 }
 if(footer->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Footer Can't be Empty! \n";
+errorString += QObject::tr("Footer Can't be Empty! \n");
 footer->setObjectName("error");
 footer->style()->unpolish(footer);
 footer->style()->polish(footer);
@@ -136,7 +136,7 @@ CompanyIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Company",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Company"),errorString.trimmed());
 return false; 
  }
 }
@@ -148,7 +148,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -163,7 +163,7 @@ company->Name = name->text().trimmed();
 }
 if(header->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Header Can't be Empty! \n";
+errorString += QObject::tr("Header Can't be Empty! \n");
 header->setObjectName("error");
 header->style()->unpolish(header);
 header->style()->polish(header);
@@ -178,7 +178,7 @@ company->Header = header->text().trimmed();
 }
 if(footer->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Footer Can't be Empty! \n";
+errorString += QObject::tr("Footer Can't be Empty! \n");
 footer->setObjectName("error");
 footer->style()->unpolish(footer);
 footer->style()->polish(footer);
@@ -194,7 +194,7 @@ company->Footer = footer->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Company",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Company"),errorString.trimmed());
 return false; 
  }
 }

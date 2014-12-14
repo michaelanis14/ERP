@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: access.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,6 +37,7 @@ this->ProjectFile = 0 ;
 this->ProjectContactPerson = 0 ;
 this->ProjectProduct = 0 ;
 this->ProjectService = 0 ;
+this->ProjectSales = 0 ;
 this->Unit = 0 ;
 this->ProductCategory = 0 ;
 this->ProductImage = 0 ;
@@ -65,16 +66,17 @@ this->InvoiceFreeline = 0 ;
 this->PaymentType = 0 ;
 this->Payment = 0 ;
 this->Task = 0 ;
+this->Language = 0 ;
 this->TimeBooking = 0 ;
 this->hashKey = "";
-this->EmployeeID = 0 ;
+this->UserID = 0 ;
 this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("Access");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(57, QSqlRelation("Employee", "EmployeeID", "Name"));
+this->setRelation(59, QSqlRelation("User", "UserID", "Name"));
 }
-Access::Access(int AccessID,QString Title,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectProduct,bool ProjectService,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrder,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateD,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool TimeBooking,QString hashKey,int EmployeeID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Access::Access(int AccessID,QString Title,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectProduct,bool ProjectService,bool ProjectSales,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrder,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateD,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool Language,bool TimeBooking,QString hashKey,int UserID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->AccessID = AccessID ;
 this->Title = Title ;
 this->Company = Company ;
@@ -102,6 +104,7 @@ this->ProjectFile = ProjectFile ;
 this->ProjectContactPerson = ProjectContactPerson ;
 this->ProjectProduct = ProjectProduct ;
 this->ProjectService = ProjectService ;
+this->ProjectSales = ProjectSales ;
 this->Unit = Unit ;
 this->ProductCategory = ProductCategory ;
 this->ProductImage = ProductImage ;
@@ -130,14 +133,15 @@ this->InvoiceFreeline = InvoiceFreeline ;
 this->PaymentType = PaymentType ;
 this->Payment = Payment ;
 this->Task = Task ;
+this->Language = Language ;
 this->TimeBooking = TimeBooking ;
 this->hashKey = hashKey ;
-this->EmployeeID = EmployeeID ;
+this->UserID = UserID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-Access::Access(QString Title,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectProduct,bool ProjectService,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrder,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateD,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool TimeBooking,QString hashKey,int EmployeeID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Access::Access(QString Title,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectProduct,bool ProjectService,bool ProjectSales,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrder,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateD,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool Language,bool TimeBooking,QString hashKey,int UserID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->AccessID = 0 ;
 this->Title = Title ;
 this->Company = Company ;
@@ -165,6 +169,7 @@ this->ProjectFile = ProjectFile ;
 this->ProjectContactPerson = ProjectContactPerson ;
 this->ProjectProduct = ProjectProduct ;
 this->ProjectService = ProjectService ;
+this->ProjectSales = ProjectSales ;
 this->Unit = Unit ;
 this->ProductCategory = ProductCategory ;
 this->ProductImage = ProductImage ;
@@ -193,9 +198,10 @@ this->InvoiceFreeline = InvoiceFreeline ;
 this->PaymentType = PaymentType ;
 this->Payment = Payment ;
 this->Task = Task ;
+this->Language = Language ;
 this->TimeBooking = TimeBooking ;
 this->hashKey = hashKey ;
-this->EmployeeID = EmployeeID ;
+this->UserID = UserID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
@@ -234,6 +240,7 @@ QString query =
 "ProjectContactPerson VARCHAR(1) NOT NULL, "
 "ProjectProduct VARCHAR(1) NOT NULL, "
 "ProjectService VARCHAR(1) NOT NULL, "
+"ProjectSales VARCHAR(1) NOT NULL, "
 "Unit VARCHAR(1) NOT NULL, "
 "ProductCategory VARCHAR(1) NOT NULL, "
 "ProductImage VARCHAR(1) NOT NULL, "
@@ -262,15 +269,16 @@ QString query =
 "PaymentType VARCHAR(1) NOT NULL, "
 "Payment VARCHAR(1) NOT NULL, "
 "Task VARCHAR(1) NOT NULL, "
+"Language VARCHAR(1) NOT NULL, "
 "TimeBooking VARCHAR(1) NOT NULL, "
 "hashKey VARCHAR(40) NOT NULL, "
-"EmployeeID INT NOT NULL, "
-"FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)  ON DELETE CASCADE,"
+"UserID INT NOT NULL, "
+"FOREIGN KEY (UserID) REFERENCES User(UserID)  ON DELETE CASCADE,"
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 QList<QPair<QString,QString> >variables;
-variables.append(qMakePair(QString(" INT"),QString("AccessID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Title")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Company")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Tax")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Contact")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactTelephone")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactEmail")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("BankAccount")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactClass")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactType")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Country")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Currency")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("FieldType")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactField")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactFieldData")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonField")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonFieldData")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPerson")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonTelephone")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonEmail")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Project")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectFile")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectContactPerson")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectProduct")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectService")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Unit")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductCategory")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductImage")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Product")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductField")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductFieldData")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Service")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Store")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseSerial")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Purchase")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseStoreProduct")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseFreeLine")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrder")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderStoreProduct")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderService")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderFreeline")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoicePeriod")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceYear")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceState")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceSerial")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Invoice")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceStateD")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceFreeline")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PaymentType")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Payment")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Task")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("TimeBooking")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("hashKey")));variables.append(qMakePair(QString(" INT"),QString("EmployeeID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
+variables.append(qMakePair(QString(" INT"),QString("AccessID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Title")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Company")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Tax")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Contact")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactTelephone")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactEmail")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("BankAccount")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactClass")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactType")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Country")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Currency")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("FieldType")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactField")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactFieldData")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonField")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonFieldData")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPerson")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonTelephone")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ContactPersonEmail")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Project")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectFile")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectContactPerson")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectProduct")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectService")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProjectSales")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Unit")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductCategory")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductImage")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Product")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductField")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("ProductFieldData")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Service")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Store")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseSerial")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Purchase")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseStoreProduct")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PurchaseFreeLine")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderStatus")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrder")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderStoreProduct")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderService")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("DeliveryOrderFreeline")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoicePeriod")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceYear")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceState")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceSerial")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Invoice")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceStateD")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("InvoiceFreeline")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("PaymentType")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Payment")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Task")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("Language")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("TimeBooking")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("hashKey")));variables.append(qMakePair(QString(" INT"),QString("UserID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Access* Access::p_instance = 0;
@@ -285,10 +293,10 @@ bool Access::save() {
 this->EditedOn = QDateTime::currentDateTime().toString();
 if(AccessID== 0) {
 this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO Access (Title,Company,Tax,Contact,ContactTelephone,ContactEmail,BankAccount,ContactClass,ContactType,Country,Currency,ContactStatus,FieldType,ContactField,ContactFieldData,ContactPersonField,ContactPersonFieldData,ContactPerson,ContactPersonTelephone,ContactPersonEmail,ProjectStatus,Project,ProjectFile,ProjectContactPerson,ProjectProduct,ProjectService,Unit,ProductCategory,ProductImage,Product,ProductField,ProductFieldData,Service,Store,PurchaseStatus,PurchaseSerial,Purchase,PurchaseStoreProduct,PurchaseFreeLine,DeliveryOrderStatus,DeliveryOrder,DeliveryOrderStoreProduct,DeliveryOrderService,DeliveryOrderFreeline,InvoicePeriod,InvoiceYear,InvoiceState,InvoiceSerial,Invoice,InvoiceStateD,InvoiceFreeline,PaymentType,Payment,Task,TimeBooking,hashKey,EmployeeID,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Title)+"','"+QString::number(this->Company)+"','"+QString::number(this->Tax)+"','"+QString::number(this->Contact)+"','"+QString::number(this->ContactTelephone)+"','"+QString::number(this->ContactEmail)+"','"+QString::number(this->BankAccount)+"','"+QString::number(this->ContactClass)+"','"+QString::number(this->ContactType)+"','"+QString::number(this->Country)+"','"+QString::number(this->Currency)+"','"+QString::number(this->ContactStatus)+"','"+QString::number(this->FieldType)+"','"+QString::number(this->ContactField)+"','"+QString::number(this->ContactFieldData)+"','"+QString::number(this->ContactPersonField)+"','"+QString::number(this->ContactPersonFieldData)+"','"+QString::number(this->ContactPerson)+"','"+QString::number(this->ContactPersonTelephone)+"','"+QString::number(this->ContactPersonEmail)+"','"+QString::number(this->ProjectStatus)+"','"+QString::number(this->Project)+"','"+QString::number(this->ProjectFile)+"','"+QString::number(this->ProjectContactPerson)+"','"+QString::number(this->ProjectProduct)+"','"+QString::number(this->ProjectService)+"','"+QString::number(this->Unit)+"','"+QString::number(this->ProductCategory)+"','"+QString::number(this->ProductImage)+"','"+QString::number(this->Product)+"','"+QString::number(this->ProductField)+"','"+QString::number(this->ProductFieldData)+"','"+QString::number(this->Service)+"','"+QString::number(this->Store)+"','"+QString::number(this->PurchaseStatus)+"','"+QString::number(this->PurchaseSerial)+"','"+QString::number(this->Purchase)+"','"+QString::number(this->PurchaseStoreProduct)+"','"+QString::number(this->PurchaseFreeLine)+"','"+QString::number(this->DeliveryOrderStatus)+"','"+QString::number(this->DeliveryOrder)+"','"+QString::number(this->DeliveryOrderStoreProduct)+"','"+QString::number(this->DeliveryOrderService)+"','"+QString::number(this->DeliveryOrderFreeline)+"','"+QString::number(this->InvoicePeriod)+"','"+QString::number(this->InvoiceYear)+"','"+QString::number(this->InvoiceState)+"','"+QString::number(this->InvoiceSerial)+"','"+QString::number(this->Invoice)+"','"+QString::number(this->InvoiceStateD)+"','"+QString::number(this->InvoiceFreeline)+"','"+QString::number(this->PaymentType)+"','"+QString::number(this->Payment)+"','"+QString::number(this->Task)+"','"+QString::number(this->TimeBooking)+"','"+QString(this->hashKey)+"','"+QString::number(this->EmployeeID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+ErpModel::GetInstance()->qeryExec("INSERT INTO Access (Title,Company,Tax,Contact,ContactTelephone,ContactEmail,BankAccount,ContactClass,ContactType,Country,Currency,ContactStatus,FieldType,ContactField,ContactFieldData,ContactPersonField,ContactPersonFieldData,ContactPerson,ContactPersonTelephone,ContactPersonEmail,ProjectStatus,Project,ProjectFile,ProjectContactPerson,ProjectProduct,ProjectService,ProjectSales,Unit,ProductCategory,ProductImage,Product,ProductField,ProductFieldData,Service,Store,PurchaseStatus,PurchaseSerial,Purchase,PurchaseStoreProduct,PurchaseFreeLine,DeliveryOrderStatus,DeliveryOrder,DeliveryOrderStoreProduct,DeliveryOrderService,DeliveryOrderFreeline,InvoicePeriod,InvoiceYear,InvoiceState,InvoiceSerial,Invoice,InvoiceStateD,InvoiceFreeline,PaymentType,Payment,Task,Language,TimeBooking,hashKey,UserID,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Title)+"','"+QString::number(this->Company)+"','"+QString::number(this->Tax)+"','"+QString::number(this->Contact)+"','"+QString::number(this->ContactTelephone)+"','"+QString::number(this->ContactEmail)+"','"+QString::number(this->BankAccount)+"','"+QString::number(this->ContactClass)+"','"+QString::number(this->ContactType)+"','"+QString::number(this->Country)+"','"+QString::number(this->Currency)+"','"+QString::number(this->ContactStatus)+"','"+QString::number(this->FieldType)+"','"+QString::number(this->ContactField)+"','"+QString::number(this->ContactFieldData)+"','"+QString::number(this->ContactPersonField)+"','"+QString::number(this->ContactPersonFieldData)+"','"+QString::number(this->ContactPerson)+"','"+QString::number(this->ContactPersonTelephone)+"','"+QString::number(this->ContactPersonEmail)+"','"+QString::number(this->ProjectStatus)+"','"+QString::number(this->Project)+"','"+QString::number(this->ProjectFile)+"','"+QString::number(this->ProjectContactPerson)+"','"+QString::number(this->ProjectProduct)+"','"+QString::number(this->ProjectService)+"','"+QString::number(this->ProjectSales)+"','"+QString::number(this->Unit)+"','"+QString::number(this->ProductCategory)+"','"+QString::number(this->ProductImage)+"','"+QString::number(this->Product)+"','"+QString::number(this->ProductField)+"','"+QString::number(this->ProductFieldData)+"','"+QString::number(this->Service)+"','"+QString::number(this->Store)+"','"+QString::number(this->PurchaseStatus)+"','"+QString::number(this->PurchaseSerial)+"','"+QString::number(this->Purchase)+"','"+QString::number(this->PurchaseStoreProduct)+"','"+QString::number(this->PurchaseFreeLine)+"','"+QString::number(this->DeliveryOrderStatus)+"','"+QString::number(this->DeliveryOrder)+"','"+QString::number(this->DeliveryOrderStoreProduct)+"','"+QString::number(this->DeliveryOrderService)+"','"+QString::number(this->DeliveryOrderFreeline)+"','"+QString::number(this->InvoicePeriod)+"','"+QString::number(this->InvoiceYear)+"','"+QString::number(this->InvoiceState)+"','"+QString::number(this->InvoiceSerial)+"','"+QString::number(this->Invoice)+"','"+QString::number(this->InvoiceStateD)+"','"+QString::number(this->InvoiceFreeline)+"','"+QString::number(this->PaymentType)+"','"+QString::number(this->Payment)+"','"+QString::number(this->Task)+"','"+QString::number(this->Language)+"','"+QString::number(this->TimeBooking)+"','"+QString(this->hashKey)+"','"+QString::number(this->UserID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Access SET "	"Title = '"+QString(this->Title)+"',"+"Company = '"+QString::number(this->Company)+"',"+"Tax = '"+QString::number(this->Tax)+"',"+"Contact = '"+QString::number(this->Contact)+"',"+"ContactTelephone = '"+QString::number(this->ContactTelephone)+"',"+"ContactEmail = '"+QString::number(this->ContactEmail)+"',"+"BankAccount = '"+QString::number(this->BankAccount)+"',"+"ContactClass = '"+QString::number(this->ContactClass)+"',"+"ContactType = '"+QString::number(this->ContactType)+"',"+"Country = '"+QString::number(this->Country)+"',"+"Currency = '"+QString::number(this->Currency)+"',"+"ContactStatus = '"+QString::number(this->ContactStatus)+"',"+"FieldType = '"+QString::number(this->FieldType)+"',"+"ContactField = '"+QString::number(this->ContactField)+"',"+"ContactFieldData = '"+QString::number(this->ContactFieldData)+"',"+"ContactPersonField = '"+QString::number(this->ContactPersonField)+"',"+"ContactPersonFieldData = '"+QString::number(this->ContactPersonFieldData)+"',"+"ContactPerson = '"+QString::number(this->ContactPerson)+"',"+"ContactPersonTelephone = '"+QString::number(this->ContactPersonTelephone)+"',"+"ContactPersonEmail = '"+QString::number(this->ContactPersonEmail)+"',"+"ProjectStatus = '"+QString::number(this->ProjectStatus)+"',"+"Project = '"+QString::number(this->Project)+"',"+"ProjectFile = '"+QString::number(this->ProjectFile)+"',"+"ProjectContactPerson = '"+QString::number(this->ProjectContactPerson)+"',"+"ProjectProduct = '"+QString::number(this->ProjectProduct)+"',"+"ProjectService = '"+QString::number(this->ProjectService)+"',"+"Unit = '"+QString::number(this->Unit)+"',"+"ProductCategory = '"+QString::number(this->ProductCategory)+"',"+"ProductImage = '"+QString::number(this->ProductImage)+"',"+"Product = '"+QString::number(this->Product)+"',"+"ProductField = '"+QString::number(this->ProductField)+"',"+"ProductFieldData = '"+QString::number(this->ProductFieldData)+"',"+"Service = '"+QString::number(this->Service)+"',"+"Store = '"+QString::number(this->Store)+"',"+"PurchaseStatus = '"+QString::number(this->PurchaseStatus)+"',"+"PurchaseSerial = '"+QString::number(this->PurchaseSerial)+"',"+"Purchase = '"+QString::number(this->Purchase)+"',"+"PurchaseStoreProduct = '"+QString::number(this->PurchaseStoreProduct)+"',"+"PurchaseFreeLine = '"+QString::number(this->PurchaseFreeLine)+"',"+"DeliveryOrderStatus = '"+QString::number(this->DeliveryOrderStatus)+"',"+"DeliveryOrder = '"+QString::number(this->DeliveryOrder)+"',"+"DeliveryOrderStoreProduct = '"+QString::number(this->DeliveryOrderStoreProduct)+"',"+"DeliveryOrderService = '"+QString::number(this->DeliveryOrderService)+"',"+"DeliveryOrderFreeline = '"+QString::number(this->DeliveryOrderFreeline)+"',"+"InvoicePeriod = '"+QString::number(this->InvoicePeriod)+"',"+"InvoiceYear = '"+QString::number(this->InvoiceYear)+"',"+"InvoiceState = '"+QString::number(this->InvoiceState)+"',"+"InvoiceSerial = '"+QString::number(this->InvoiceSerial)+"',"+"Invoice = '"+QString::number(this->Invoice)+"',"+"InvoiceStateD = '"+QString::number(this->InvoiceStateD)+"',"+"InvoiceFreeline = '"+QString::number(this->InvoiceFreeline)+"',"+"PaymentType = '"+QString::number(this->PaymentType)+"',"+"Payment = '"+QString::number(this->Payment)+"',"+"Task = '"+QString::number(this->Task)+"',"+"TimeBooking = '"+QString::number(this->TimeBooking)+"',"+"hashKey = '"+QString(this->hashKey)+"',"+"EmployeeID = '"+QString::number(this->EmployeeID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE AccessID ='"+QString::number(this->AccessID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Access SET "	"Title = '"+QString(this->Title)+"',"+"Company = '"+QString::number(this->Company)+"',"+"Tax = '"+QString::number(this->Tax)+"',"+"Contact = '"+QString::number(this->Contact)+"',"+"ContactTelephone = '"+QString::number(this->ContactTelephone)+"',"+"ContactEmail = '"+QString::number(this->ContactEmail)+"',"+"BankAccount = '"+QString::number(this->BankAccount)+"',"+"ContactClass = '"+QString::number(this->ContactClass)+"',"+"ContactType = '"+QString::number(this->ContactType)+"',"+"Country = '"+QString::number(this->Country)+"',"+"Currency = '"+QString::number(this->Currency)+"',"+"ContactStatus = '"+QString::number(this->ContactStatus)+"',"+"FieldType = '"+QString::number(this->FieldType)+"',"+"ContactField = '"+QString::number(this->ContactField)+"',"+"ContactFieldData = '"+QString::number(this->ContactFieldData)+"',"+"ContactPersonField = '"+QString::number(this->ContactPersonField)+"',"+"ContactPersonFieldData = '"+QString::number(this->ContactPersonFieldData)+"',"+"ContactPerson = '"+QString::number(this->ContactPerson)+"',"+"ContactPersonTelephone = '"+QString::number(this->ContactPersonTelephone)+"',"+"ContactPersonEmail = '"+QString::number(this->ContactPersonEmail)+"',"+"ProjectStatus = '"+QString::number(this->ProjectStatus)+"',"+"Project = '"+QString::number(this->Project)+"',"+"ProjectFile = '"+QString::number(this->ProjectFile)+"',"+"ProjectContactPerson = '"+QString::number(this->ProjectContactPerson)+"',"+"ProjectProduct = '"+QString::number(this->ProjectProduct)+"',"+"ProjectService = '"+QString::number(this->ProjectService)+"',"+"ProjectSales = '"+QString::number(this->ProjectSales)+"',"+"Unit = '"+QString::number(this->Unit)+"',"+"ProductCategory = '"+QString::number(this->ProductCategory)+"',"+"ProductImage = '"+QString::number(this->ProductImage)+"',"+"Product = '"+QString::number(this->Product)+"',"+"ProductField = '"+QString::number(this->ProductField)+"',"+"ProductFieldData = '"+QString::number(this->ProductFieldData)+"',"+"Service = '"+QString::number(this->Service)+"',"+"Store = '"+QString::number(this->Store)+"',"+"PurchaseStatus = '"+QString::number(this->PurchaseStatus)+"',"+"PurchaseSerial = '"+QString::number(this->PurchaseSerial)+"',"+"Purchase = '"+QString::number(this->Purchase)+"',"+"PurchaseStoreProduct = '"+QString::number(this->PurchaseStoreProduct)+"',"+"PurchaseFreeLine = '"+QString::number(this->PurchaseFreeLine)+"',"+"DeliveryOrderStatus = '"+QString::number(this->DeliveryOrderStatus)+"',"+"DeliveryOrder = '"+QString::number(this->DeliveryOrder)+"',"+"DeliveryOrderStoreProduct = '"+QString::number(this->DeliveryOrderStoreProduct)+"',"+"DeliveryOrderService = '"+QString::number(this->DeliveryOrderService)+"',"+"DeliveryOrderFreeline = '"+QString::number(this->DeliveryOrderFreeline)+"',"+"InvoicePeriod = '"+QString::number(this->InvoicePeriod)+"',"+"InvoiceYear = '"+QString::number(this->InvoiceYear)+"',"+"InvoiceState = '"+QString::number(this->InvoiceState)+"',"+"InvoiceSerial = '"+QString::number(this->InvoiceSerial)+"',"+"Invoice = '"+QString::number(this->Invoice)+"',"+"InvoiceStateD = '"+QString::number(this->InvoiceStateD)+"',"+"InvoiceFreeline = '"+QString::number(this->InvoiceFreeline)+"',"+"PaymentType = '"+QString::number(this->PaymentType)+"',"+"Payment = '"+QString::number(this->Payment)+"',"+"Task = '"+QString::number(this->Task)+"',"+"Language = '"+QString::number(this->Language)+"',"+"TimeBooking = '"+QString::number(this->TimeBooking)+"',"+"hashKey = '"+QString(this->hashKey)+"',"+"UserID = '"+QString::number(this->UserID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE AccessID ='"+QString::number(this->AccessID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  AccessID FROM Access WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
@@ -317,7 +325,7 @@ if(AccessID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Access"
 "WHERE AccessID ='"+QString::number(this->AccessID)+"'"));
 while (query.next()) {
-return new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toString(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toString());
+return new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toInt(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toInt(),query.value(60).toString(),query.value(61).toString());
  }
 
 }
@@ -328,7 +336,7 @@ QList<Access*> Access::GetAll() {
 	QList<Access*> accesss =   QList<Access*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Access ORDER BY AccessID ASC"));
 	while (query.next()) {
-accesss.append(new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toString(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toString()));
+accesss.append(new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toInt(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toInt(),query.value(60).toString(),query.value(61).toString()));
 	}
 	return accesss;
 }
@@ -338,7 +346,7 @@ Access* access = new Access();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Access WHERE AccessID = '"+QString::number(id)+"' ORDER BY AccessID ASC "));
 while (query.next()) {
-access = new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toString(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toString());
+access = new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toInt(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toInt(),query.value(60).toString(),query.value(61).toString());
  }
 
 }
@@ -357,7 +365,7 @@ Access* access = new Access();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Access WHERE Title = '"+name+"'"));
 while (query.next()) {
-access = new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toString(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toString());
+access = new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toInt(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toInt(),query.value(60).toString(),query.value(61).toString());
 
  }
 
@@ -376,7 +384,7 @@ QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Access"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toString(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toString()));
+list.append(new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toInt(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toInt(),query.value(60).toString(),query.value(61).toString()));
  }
 
 }
@@ -427,7 +435,7 @@ QList<Access*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Access WHERE "+select+"" ));
 while (query.next()) {
-list.append(new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toString(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toString()));
+list.append(new Access(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toInt(),query.value(5).toInt(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toInt(),query.value(12).toInt(),query.value(13).toInt(),query.value(14).toInt(),query.value(15).toInt(),query.value(16).toInt(),query.value(17).toInt(),query.value(18).toInt(),query.value(19).toInt(),query.value(20).toInt(),query.value(21).toInt(),query.value(22).toInt(),query.value(23).toInt(),query.value(24).toInt(),query.value(25).toInt(),query.value(26).toInt(),query.value(27).toInt(),query.value(28).toInt(),query.value(29).toInt(),query.value(30).toInt(),query.value(31).toInt(),query.value(32).toInt(),query.value(33).toInt(),query.value(34).toInt(),query.value(35).toInt(),query.value(36).toInt(),query.value(37).toInt(),query.value(38).toInt(),query.value(39).toInt(),query.value(40).toInt(),query.value(41).toInt(),query.value(42).toInt(),query.value(43).toInt(),query.value(44).toInt(),query.value(45).toInt(),query.value(46).toInt(),query.value(47).toInt(),query.value(48).toInt(),query.value(49).toInt(),query.value(50).toInt(),query.value(51).toInt(),query.value(52).toInt(),query.value(53).toInt(),query.value(54).toInt(),query.value(55).toInt(),query.value(56).toInt(),query.value(57).toInt(),query.value(58).toString(),query.value(59).toInt(),query.value(60).toString(),query.value(61).toString()));
  }
 
 }
@@ -438,7 +446,7 @@ Qt::ItemFlags Access::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13 || index.column() == 14 || index.column() == 15 || index.column() == 16 || index.column() == 17 || index.column() == 18 || index.column() == 19 || index.column() == 20 || index.column() == 21 || index.column() == 22 || index.column() == 23 || index.column() == 24 || index.column() == 25 || index.column() == 26 || index.column() == 27 || index.column() == 28 || index.column() == 29 || index.column() == 30 || index.column() == 31 || index.column() == 32 || index.column() == 33 || index.column() == 34 || index.column() == 35 || index.column() == 36 || index.column() == 37 || index.column() == 38 || index.column() == 39 || index.column() == 40 || index.column() == 41 || index.column() == 42 || index.column() == 43 || index.column() == 44 || index.column() == 45 || index.column() == 46 || index.column() == 47 || index.column() == 48 || index.column() == 49 || index.column() == 50 || index.column() == 51 || index.column() == 52 || index.column() == 53 || index.column() == 54 || index.column() == 55 || index.column() == 56 || index.column() == 57 || index.column() == 58 || index.column() == 59)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13 || index.column() == 14 || index.column() == 15 || index.column() == 16 || index.column() == 17 || index.column() == 18 || index.column() == 19 || index.column() == 20 || index.column() == 21 || index.column() == 22 || index.column() == 23 || index.column() == 24 || index.column() == 25 || index.column() == 26 || index.column() == 27 || index.column() == 28 || index.column() == 29 || index.column() == 30 || index.column() == 31 || index.column() == 32 || index.column() == 33 || index.column() == 34 || index.column() == 35 || index.column() == 36 || index.column() == 37 || index.column() == 38 || index.column() == 39 || index.column() == 40 || index.column() == 41 || index.column() == 42 || index.column() == 43 || index.column() == 44 || index.column() == 45 || index.column() == 46 || index.column() == 47 || index.column() == 48 || index.column() == 49 || index.column() == 50 || index.column() == 51 || index.column() == 52 || index.column() == 53 || index.column() == 54 || index.column() == 55 || index.column() == 56 || index.column() == 57 || index.column() == 58 || index.column() == 59 || index.column() == 60 || index.column() == 61)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -503,70 +511,74 @@ ok = setProjectProduct(id, value.toString());
 else if (index.column() == 26)
 ok = setProjectService(id, value.toString());
 else if (index.column() == 27)
-ok = setUnit(id, value.toString());
+ok = setProjectSales(id, value.toString());
 else if (index.column() == 28)
-ok = setProductCategory(id, value.toString());
+ok = setUnit(id, value.toString());
 else if (index.column() == 29)
-ok = setProductImage(id, value.toString());
+ok = setProductCategory(id, value.toString());
 else if (index.column() == 30)
-ok = setProduct(id, value.toString());
+ok = setProductImage(id, value.toString());
 else if (index.column() == 31)
-ok = setProductField(id, value.toString());
+ok = setProduct(id, value.toString());
 else if (index.column() == 32)
-ok = setProductFieldData(id, value.toString());
+ok = setProductField(id, value.toString());
 else if (index.column() == 33)
-ok = setService(id, value.toString());
+ok = setProductFieldData(id, value.toString());
 else if (index.column() == 34)
-ok = setStore(id, value.toString());
+ok = setService(id, value.toString());
 else if (index.column() == 35)
-ok = setPurchaseStatus(id, value.toString());
+ok = setStore(id, value.toString());
 else if (index.column() == 36)
-ok = setPurchaseSerial(id, value.toString());
+ok = setPurchaseStatus(id, value.toString());
 else if (index.column() == 37)
-ok = setPurchase(id, value.toString());
+ok = setPurchaseSerial(id, value.toString());
 else if (index.column() == 38)
-ok = setPurchaseStoreProduct(id, value.toString());
+ok = setPurchase(id, value.toString());
 else if (index.column() == 39)
-ok = setPurchaseFreeLine(id, value.toString());
+ok = setPurchaseStoreProduct(id, value.toString());
 else if (index.column() == 40)
-ok = setDeliveryOrderStatus(id, value.toString());
+ok = setPurchaseFreeLine(id, value.toString());
 else if (index.column() == 41)
-ok = setDeliveryOrder(id, value.toString());
+ok = setDeliveryOrderStatus(id, value.toString());
 else if (index.column() == 42)
-ok = setDeliveryOrderStoreProduct(id, value.toString());
+ok = setDeliveryOrder(id, value.toString());
 else if (index.column() == 43)
-ok = setDeliveryOrderService(id, value.toString());
+ok = setDeliveryOrderStoreProduct(id, value.toString());
 else if (index.column() == 44)
-ok = setDeliveryOrderFreeline(id, value.toString());
+ok = setDeliveryOrderService(id, value.toString());
 else if (index.column() == 45)
-ok = setInvoicePeriod(id, value.toString());
+ok = setDeliveryOrderFreeline(id, value.toString());
 else if (index.column() == 46)
-ok = setInvoiceYear(id, value.toString());
+ok = setInvoicePeriod(id, value.toString());
 else if (index.column() == 47)
-ok = setInvoiceState(id, value.toString());
+ok = setInvoiceYear(id, value.toString());
 else if (index.column() == 48)
-ok = setInvoiceSerial(id, value.toString());
+ok = setInvoiceState(id, value.toString());
 else if (index.column() == 49)
-ok = setInvoice(id, value.toString());
+ok = setInvoiceSerial(id, value.toString());
 else if (index.column() == 50)
-ok = setInvoiceStateD(id, value.toString());
+ok = setInvoice(id, value.toString());
 else if (index.column() == 51)
-ok = setInvoiceFreeline(id, value.toString());
+ok = setInvoiceStateD(id, value.toString());
 else if (index.column() == 52)
-ok = setPaymentType(id, value.toString());
+ok = setInvoiceFreeline(id, value.toString());
 else if (index.column() == 53)
-ok = setPayment(id, value.toString());
+ok = setPaymentType(id, value.toString());
 else if (index.column() == 54)
-ok = setTask(id, value.toString());
+ok = setPayment(id, value.toString());
 else if (index.column() == 55)
-ok = setTimeBooking(id, value.toString());
+ok = setTask(id, value.toString());
 else if (index.column() == 56)
-ok = sethashKey(id, value.toString());
+ok = setLanguage(id, value.toString());
 else if (index.column() == 57)
-ok = setEmployeeID(id, value.toString());
+ok = setTimeBooking(id, value.toString());
 else if (index.column() == 58)
-ok = setCreatedOn(id, value.toString());
+ok = sethashKey(id, value.toString());
 else if (index.column() == 59)
+ok = setUserID(id, value.toString());
+else if (index.column() == 60)
+ok = setCreatedOn(id, value.toString());
+else if (index.column() == 61)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -611,39 +623,41 @@ this->setHeaderData(23, Qt::Horizontal, QObject::tr("Project File"));
 this->setHeaderData(24, Qt::Horizontal, QObject::tr("Project Contact Person"));
 this->setHeaderData(25, Qt::Horizontal, QObject::tr("Project Product"));
 this->setHeaderData(26, Qt::Horizontal, QObject::tr("Project Service"));
-this->setHeaderData(27, Qt::Horizontal, QObject::tr("Unit"));
-this->setHeaderData(28, Qt::Horizontal, QObject::tr("Product Category"));
-this->setHeaderData(29, Qt::Horizontal, QObject::tr("Product Image"));
-this->setHeaderData(30, Qt::Horizontal, QObject::tr("Product"));
-this->setHeaderData(31, Qt::Horizontal, QObject::tr("Product Field"));
-this->setHeaderData(32, Qt::Horizontal, QObject::tr("Product Field Data"));
-this->setHeaderData(33, Qt::Horizontal, QObject::tr("Service"));
-this->setHeaderData(34, Qt::Horizontal, QObject::tr("Store"));
-this->setHeaderData(35, Qt::Horizontal, QObject::tr("Purchase Status"));
-this->setHeaderData(36, Qt::Horizontal, QObject::tr("Purchase Serial"));
-this->setHeaderData(37, Qt::Horizontal, QObject::tr("Purchase"));
-this->setHeaderData(38, Qt::Horizontal, QObject::tr("Purchase Store Product"));
-this->setHeaderData(39, Qt::Horizontal, QObject::tr("Purchase Free Line"));
-this->setHeaderData(40, Qt::Horizontal, QObject::tr("Delivery Order Status"));
-this->setHeaderData(41, Qt::Horizontal, QObject::tr("Delivery Order"));
-this->setHeaderData(42, Qt::Horizontal, QObject::tr("Delivery Order Store Product"));
-this->setHeaderData(43, Qt::Horizontal, QObject::tr("Delivery Order Service"));
-this->setHeaderData(44, Qt::Horizontal, QObject::tr("Delivery Order Freeline"));
-this->setHeaderData(45, Qt::Horizontal, QObject::tr("Invoice Period"));
-this->setHeaderData(46, Qt::Horizontal, QObject::tr("Invoice Year"));
-this->setHeaderData(47, Qt::Horizontal, QObject::tr("Invoice State"));
-this->setHeaderData(48, Qt::Horizontal, QObject::tr("Invoice Serial"));
-this->setHeaderData(49, Qt::Horizontal, QObject::tr("Invoice"));
-this->setHeaderData(50, Qt::Horizontal, QObject::tr("Invoice State D"));
-this->setHeaderData(51, Qt::Horizontal, QObject::tr("Invoice Freeline"));
-this->setHeaderData(52, Qt::Horizontal, QObject::tr("Payment Type"));
-this->setHeaderData(53, Qt::Horizontal, QObject::tr("Payment"));
-this->setHeaderData(54, Qt::Horizontal, QObject::tr("Task"));
-this->setHeaderData(55, Qt::Horizontal, QObject::tr("Time Booking"));
-this->setHeaderData(56, Qt::Horizontal, QObject::tr("hashKey"));
-this->setHeaderData(57, Qt::Horizontal, QObject::tr("Employee"));
-this->setHeaderData(58, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(59, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(27, Qt::Horizontal, QObject::tr("Project Sales"));
+this->setHeaderData(28, Qt::Horizontal, QObject::tr("Unit"));
+this->setHeaderData(29, Qt::Horizontal, QObject::tr("Product Category"));
+this->setHeaderData(30, Qt::Horizontal, QObject::tr("Product Image"));
+this->setHeaderData(31, Qt::Horizontal, QObject::tr("Product"));
+this->setHeaderData(32, Qt::Horizontal, QObject::tr("Product Field"));
+this->setHeaderData(33, Qt::Horizontal, QObject::tr("Product Field Data"));
+this->setHeaderData(34, Qt::Horizontal, QObject::tr("Service"));
+this->setHeaderData(35, Qt::Horizontal, QObject::tr("Store"));
+this->setHeaderData(36, Qt::Horizontal, QObject::tr("Purchase Status"));
+this->setHeaderData(37, Qt::Horizontal, QObject::tr("Purchase Serial"));
+this->setHeaderData(38, Qt::Horizontal, QObject::tr("Purchase"));
+this->setHeaderData(39, Qt::Horizontal, QObject::tr("Purchase Store Product"));
+this->setHeaderData(40, Qt::Horizontal, QObject::tr("Purchase Free Line"));
+this->setHeaderData(41, Qt::Horizontal, QObject::tr("Delivery Order Status"));
+this->setHeaderData(42, Qt::Horizontal, QObject::tr("Delivery Order"));
+this->setHeaderData(43, Qt::Horizontal, QObject::tr("Delivery Order Store Product"));
+this->setHeaderData(44, Qt::Horizontal, QObject::tr("Delivery Order Service"));
+this->setHeaderData(45, Qt::Horizontal, QObject::tr("Delivery Order Freeline"));
+this->setHeaderData(46, Qt::Horizontal, QObject::tr("Invoice Period"));
+this->setHeaderData(47, Qt::Horizontal, QObject::tr("Invoice Year"));
+this->setHeaderData(48, Qt::Horizontal, QObject::tr("Invoice State"));
+this->setHeaderData(49, Qt::Horizontal, QObject::tr("Invoice Serial"));
+this->setHeaderData(50, Qt::Horizontal, QObject::tr("Invoice"));
+this->setHeaderData(51, Qt::Horizontal, QObject::tr("Invoice State D"));
+this->setHeaderData(52, Qt::Horizontal, QObject::tr("Invoice Freeline"));
+this->setHeaderData(53, Qt::Horizontal, QObject::tr("Payment Type"));
+this->setHeaderData(54, Qt::Horizontal, QObject::tr("Payment"));
+this->setHeaderData(55, Qt::Horizontal, QObject::tr("Task"));
+this->setHeaderData(56, Qt::Horizontal, QObject::tr("Language"));
+this->setHeaderData(57, Qt::Horizontal, QObject::tr("Time Booking"));
+this->setHeaderData(58, Qt::Horizontal, QObject::tr("hashKey"));
+this->setHeaderData(59, Qt::Horizontal, QObject::tr("User"));
+this->setHeaderData(60, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(61, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
@@ -877,6 +891,15 @@ bool Access::setProjectService(int AccessID, const QString &ProjectService) {
 QSqlQuery query;
 query.prepare("update Access set ProjectService = ? where AccessID = ?");
 query.addBindValue(ProjectService);
+query.addBindValue(AccessID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
+bool Access::setProjectSales(int AccessID, const QString &ProjectSales) {
+QSqlQuery query;
+query.prepare("update Access set ProjectSales = ? where AccessID = ?");
+query.addBindValue(ProjectSales);
 query.addBindValue(AccessID);
 if( !query.exec() )
 qDebug() << query.lastError().text();
@@ -1134,6 +1157,15 @@ if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
+bool Access::setLanguage(int AccessID, const QString &Language) {
+QSqlQuery query;
+query.prepare("update Access set Language = ? where AccessID = ?");
+query.addBindValue(Language);
+query.addBindValue(AccessID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
+}
 bool Access::setTimeBooking(int AccessID, const QString &TimeBooking) {
 QSqlQuery query;
 query.prepare("update Access set TimeBooking = ? where AccessID = ?");
@@ -1152,10 +1184,10 @@ if( !query.exec() )
 qDebug() << query.lastError().text();
 return true;
 }
-bool Access::setEmployeeID(int AccessID, const QString &EmployeeID) {
+bool Access::setUserID(int AccessID, const QString &UserID) {
 QSqlQuery query;
-query.prepare("update Access set EmployeeID = ? where AccessID = ?");
-query.addBindValue(EmployeeID);
+query.prepare("update Access set UserID = ? where AccessID = ?");
+query.addBindValue(UserID);
 query.addBindValue(AccessID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

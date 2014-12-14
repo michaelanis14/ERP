@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taskui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -58,6 +58,8 @@ void TaskUI::fill(Task* task){
 clear();
 this->task = task;
 note->setText(task->Note);
+project->setIndexByKey(task->ProjectID);
+contactperson->setIndexByKey(task->ContactPersonID);
 } 
 void TaskUI::clear(){ 
 delete this->task;
@@ -80,7 +82,7 @@ bool errors = false;
 QString errorString =  "";
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -104,7 +106,7 @@ TaskIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Task",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Task"),errorString.trimmed());
 return false; 
  }
 }
@@ -116,7 +118,7 @@ bool errors = false;
 QString errorString =  "";
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -136,7 +138,7 @@ task->ContactPersonID = contactperson->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Task",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Task"),errorString.trimmed());
 return false; 
  }
 }

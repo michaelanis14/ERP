@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 	ErpModel::GetInstance()->init();
 	QTranslator translator;
-	translator.load(":/ERP.qm");
+	translator.load(":/erp_ar.qm");
 	a.installTranslator(&translator);
 	//translator.translate("MainWindow", "English");
 	// QTextCodec::setCodecForTr(QTextCodec::codecForName("utf8"));

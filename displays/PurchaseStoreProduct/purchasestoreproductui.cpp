@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproductui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -65,6 +65,10 @@ PurchaseStoreProductUI*PurchaseStoreProductUI::GetUI(){
 void PurchaseStoreProductUI::fill(PurchaseStoreProduct* purchasestoreproduct){ 
 clear();
 this->purchasestoreproduct = purchasestoreproduct;
+store->setIndexByKey(purchasestoreproduct->StoreID);
+purchase->setIndexByKey(purchasestoreproduct->PurchaseID);
+contact->setIndexByKey(purchasestoreproduct->ContactID);
+product->setIndexByKey(purchasestoreproduct->ProductID);
 amount->setText(QString::number(purchasestoreproduct->Amount));
 } 
 void PurchaseStoreProductUI::clear(){ 
@@ -96,7 +100,7 @@ if(!product->isHidden())
 purchasestoreproduct->ProductID = product->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -116,7 +120,7 @@ PurchaseStoreProductIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "PurchaseStoreProduct",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("PurchaseStoreProduct"),errorString.trimmed());
 return false; 
  }
 }
@@ -136,7 +140,7 @@ if(purchasestoreproduct->ProductID == 0)
 purchasestoreproduct->ProductID = product->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -152,7 +156,7 @@ purchasestoreproduct->Amount = amount->text().trimmed().toDouble();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "PurchaseStoreProduct",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("PurchaseStoreProduct"),errorString.trimmed());
 return false; 
  }
 }

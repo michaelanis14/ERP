@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: accessui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -82,6 +82,8 @@ projectproduct = new QCheckBox();
 block0Layout->addRow(QObject::tr("Project Product"),projectproduct);
 projectservice = new QCheckBox();
 block0Layout->addRow(QObject::tr("Project Service"),projectservice);
+projectsales = new QCheckBox();
+block0Layout->addRow(QObject::tr("Project Sales"),projectsales);
 unit = new QCheckBox();
 block0Layout->addRow(QObject::tr("Unit"),unit);
 productcategory = new QCheckBox();
@@ -138,13 +140,15 @@ payment = new QCheckBox();
 block0Layout->addRow(QObject::tr("Payment"),payment);
 task = new QCheckBox();
 block0Layout->addRow(QObject::tr("Task"),task);
+language = new QCheckBox();
+block0Layout->addRow(QObject::tr("Language"),language);
 timebooking = new QCheckBox();
 block0Layout->addRow(QObject::tr("Time Booking"),timebooking);
 hashkey = new QLineEdit();
 block0Layout->addRow(QObject::tr("hashKey"),hashkey);
-employee = new ERPComboBox();
-employee->addItems(Employee::GetPairList());
-block0Layout->addRow(QObject::tr("Employee"),employee);
+user = new ERPComboBox();
+user->addItems(User::GetPairList());
+block0Layout->addRow(QObject::tr("User"),user);
 flowLayout->addWidget(block0Layout);
 
 }
@@ -190,6 +194,7 @@ projectfile->setChecked(access->ProjectFile);
 projectcontactperson->setChecked(access->ProjectContactPerson);
 projectproduct->setChecked(access->ProjectProduct);
 projectservice->setChecked(access->ProjectService);
+projectsales->setChecked(access->ProjectSales);
 unit->setChecked(access->Unit);
 productcategory->setChecked(access->ProductCategory);
 productimage->setChecked(access->ProductImage);
@@ -218,8 +223,10 @@ invoicefreeline->setChecked(access->InvoiceFreeline);
 paymenttype->setChecked(access->PaymentType);
 payment->setChecked(access->Payment);
 task->setChecked(access->Task);
+language->setChecked(access->Language);
 timebooking->setChecked(access->TimeBooking);
 hashkey->setText(access->hashKey);
+user->setIndexByKey(access->UserID);
 } 
 void AccessUI::clear(){ 
 delete this->access;
@@ -249,6 +256,7 @@ projectfile->setChecked(false);
 projectcontactperson->setChecked(false);
 projectproduct->setChecked(false);
 projectservice->setChecked(false);
+projectsales->setChecked(false);
 unit->setChecked(false);
 productcategory->setChecked(false);
 productimage->setChecked(false);
@@ -277,6 +285,7 @@ invoicefreeline->setChecked(false);
 paymenttype->setChecked(false);
 payment->setChecked(false);
 task->setChecked(false);
+language->setChecked(false);
 timebooking->setChecked(false);
 hashkey->setText("");
 this->access = new Access();
@@ -297,7 +306,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -335,6 +344,7 @@ access->ProjectFile = projectfile->text().trimmed().toInt();
 access->ProjectContactPerson = projectcontactperson->text().trimmed().toInt();
 access->ProjectProduct = projectproduct->text().trimmed().toInt();
 access->ProjectService = projectservice->text().trimmed().toInt();
+access->ProjectSales = projectsales->text().trimmed().toInt();
 access->Unit = unit->text().trimmed().toInt();
 access->ProductCategory = productcategory->text().trimmed().toInt();
 access->ProductImage = productimage->text().trimmed().toInt();
@@ -363,10 +373,11 @@ access->InvoiceFreeline = invoicefreeline->text().trimmed().toInt();
 access->PaymentType = paymenttype->text().trimmed().toInt();
 access->Payment = payment->text().trimmed().toInt();
 access->Task = task->text().trimmed().toInt();
+access->Language = language->text().trimmed().toInt();
 access->TimeBooking = timebooking->text().trimmed().toInt();
 if(hashkey->text().trimmed().isEmpty()){
 errors = true;
-errorString += "hashKey Can't be Empty! \n";
+errorString += QObject::tr("hashKey Can't be Empty! \n");
 hashkey->setObjectName("error");
 hashkey->style()->unpolish(hashkey);
 hashkey->style()->polish(hashkey);
@@ -379,8 +390,8 @@ hashkey->style()->polish(hashkey);
 hashkey->update();
 access->hashKey = hashkey->text().trimmed();
 }
-if(!employee->isHidden()) 
-access->EmployeeID = employee->getKey();
+if(!user->isHidden()) 
+access->UserID = user->getKey();
 if(!errors) {
 access->save();
 if(!errors){
@@ -388,7 +399,7 @@ AccessIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Access",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Access"),errorString.trimmed());
 return false; 
  }
 }
@@ -400,7 +411,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -438,6 +449,7 @@ access->ProjectFile = projectfile->text().trimmed().toInt();
 access->ProjectContactPerson = projectcontactperson->text().trimmed().toInt();
 access->ProjectProduct = projectproduct->text().trimmed().toInt();
 access->ProjectService = projectservice->text().trimmed().toInt();
+access->ProjectSales = projectsales->text().trimmed().toInt();
 access->Unit = unit->text().trimmed().toInt();
 access->ProductCategory = productcategory->text().trimmed().toInt();
 access->ProductImage = productimage->text().trimmed().toInt();
@@ -466,10 +478,11 @@ access->InvoiceFreeline = invoicefreeline->text().trimmed().toInt();
 access->PaymentType = paymenttype->text().trimmed().toInt();
 access->Payment = payment->text().trimmed().toInt();
 access->Task = task->text().trimmed().toInt();
+access->Language = language->text().trimmed().toInt();
 access->TimeBooking = timebooking->text().trimmed().toInt();
 if(hashkey->text().trimmed().isEmpty()){
 errors = true;
-errorString += "hashKey Can't be Empty! \n";
+errorString += QObject::tr("hashKey Can't be Empty! \n");
 hashkey->setObjectName("error");
 hashkey->style()->unpolish(hashkey);
 hashkey->style()->polish(hashkey);
@@ -482,12 +495,12 @@ hashkey->style()->polish(hashkey);
 hashkey->update();
 access->hashKey = hashkey->text().trimmed();
 }
-if(access->EmployeeID == 0) 
-access->EmployeeID = employee->getKey();
+if(access->UserID == 0) 
+access->UserID = user->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Access",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Access"),errorString.trimmed());
 return false; 
  }
 }

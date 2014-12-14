@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderstoreproductui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -62,6 +62,9 @@ DeliveryOrderStoreProductUI*DeliveryOrderStoreProductUI::GetUI(){
 void DeliveryOrderStoreProductUI::fill(DeliveryOrderStoreProduct* deliveryorderstoreproduct){ 
 clear();
 this->deliveryorderstoreproduct = deliveryorderstoreproduct;
+deliveryorder->setIndexByKey(deliveryorderstoreproduct->DeliveryOrderID);
+store->setIndexByKey(deliveryorderstoreproduct->StoreID);
+product->setIndexByKey(deliveryorderstoreproduct->ProductID);
 amount->setText(QString::number(deliveryorderstoreproduct->Amount));
 } 
 void DeliveryOrderStoreProductUI::clear(){ 
@@ -91,7 +94,7 @@ if(!product->isHidden())
 deliveryorderstoreproduct->ProductID = product->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -111,7 +114,7 @@ DeliveryOrderStoreProductIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "DeliveryOrderStoreProduct",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("DeliveryOrderStoreProduct"),errorString.trimmed());
 return false; 
  }
 }
@@ -129,7 +132,7 @@ if(deliveryorderstoreproduct->ProductID == 0)
 deliveryorderstoreproduct->ProductID = product->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -145,7 +148,7 @@ deliveryorderstoreproduct->Amount = amount->text().trimmed().toDouble();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "DeliveryOrderStoreProduct",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("DeliveryOrderStoreProduct"),errorString.trimmed());
 return false; 
  }
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taxui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -74,7 +74,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -94,7 +94,7 @@ TaxIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Tax",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Tax"),errorString.trimmed());
 return false; 
  }
 }
@@ -106,7 +106,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -122,7 +122,7 @@ tax->Title = title->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Tax",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Tax"),errorString.trimmed());
 return false; 
  }
 }

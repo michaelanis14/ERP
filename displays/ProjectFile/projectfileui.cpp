@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectfileui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -67,6 +67,7 @@ clear();
 this->projectfile = projectfile;
 name->setText(projectfile->Name);
 	QVariant currentImage = projectfile->imageData;bytes = currentImage.toByteArray();QImage image;image.loadFromData(bytes);imageLabel->setPixmap(QPixmap::fromImage(image)); this->Add->setFixedHeight(0);this->Add->setParent(0);
+project->setIndexByKey(projectfile->ProjectID);
 } 
 void ProjectFileUI::clear(){ 
 delete this->projectfile;
@@ -88,7 +89,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -111,7 +112,7 @@ ProjectFileIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ProjectFile",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ProjectFile"),errorString.trimmed());
 return false; 
  }
 }
@@ -123,7 +124,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -141,13 +142,13 @@ projectfile->ProjectID = project->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ProjectFile",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ProjectFile"),errorString.trimmed());
 return false; 
  }
 }
 void ProjectFileUI::on_loadImageButton_clicked(){ 
 QString fileName;
-fileName = QFileDialog::getOpenFileName(this,"Choose Image",".", tr("Image Files (*.png *.jpg *.bmp)"));
+fileName = QFileDialog::getOpenFileName(this,QObject::tr("Choose Image"),".", tr("Image Files (*.png *.jpg *.bmp)"));
 imageLabel->setPixmap(QPixmap(fileName));
 QFileInfo fi(fileName);
 this->name->setText(fi.fileName());

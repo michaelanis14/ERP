@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreelineui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -61,6 +61,7 @@ DeliveryOrderFreelineUI*DeliveryOrderFreelineUI::GetUI(){
 void DeliveryOrderFreelineUI::fill(DeliveryOrderFreeline* deliveryorderfreeline){ 
 clear();
 this->deliveryorderfreeline = deliveryorderfreeline;
+deliveryorder->setIndexByKey(deliveryorderfreeline->DeliveryOrderID);
 description->setText(deliveryorderfreeline->Description);
 amount->setText(QString::number(deliveryorderfreeline->Amount));
 price->setText(QString::number(deliveryorderfreeline->Price));
@@ -90,7 +91,7 @@ if(!deliveryorder->isHidden())
 deliveryorderfreeline->DeliveryOrderID = deliveryorder->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -105,7 +106,7 @@ deliveryorderfreeline->Description = description->text().trimmed();
 }
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -120,7 +121,7 @@ deliveryorderfreeline->Amount = amount->text().trimmed().toDouble();
 }
 if(price->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Price Can't be Empty! \n";
+errorString += QObject::tr("Price Can't be Empty! \n");
 price->setObjectName("error");
 price->style()->unpolish(price);
 price->style()->polish(price);
@@ -140,7 +141,7 @@ DeliveryOrderFreelineIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "DeliveryOrderFreeline",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("DeliveryOrderFreeline"),errorString.trimmed());
 return false; 
  }
 }
@@ -154,7 +155,7 @@ if(deliveryorderfreeline->DeliveryOrderID == 0)
 deliveryorderfreeline->DeliveryOrderID = deliveryorder->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -169,7 +170,7 @@ deliveryorderfreeline->Description = description->text().trimmed();
 }
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -184,7 +185,7 @@ deliveryorderfreeline->Amount = amount->text().trimmed().toDouble();
 }
 if(price->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Price Can't be Empty! \n";
+errorString += QObject::tr("Price Can't be Empty! \n");
 price->setObjectName("error");
 price->style()->unpolish(price);
 price->style()->polish(price);
@@ -200,7 +201,7 @@ deliveryorderfreeline->Price = price->text().trimmed().toDouble();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "DeliveryOrderFreeline",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("DeliveryOrderFreeline"),errorString.trimmed());
 return false; 
  }
 }

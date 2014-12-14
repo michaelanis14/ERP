@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: countryui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -78,7 +78,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -98,7 +98,7 @@ CountryIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Country",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Country"),errorString.trimmed());
 return false; 
  }
 }
@@ -110,7 +110,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -126,7 +126,7 @@ country->Name = name->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Country",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Country"),errorString.trimmed());
 return false; 
  }
 }

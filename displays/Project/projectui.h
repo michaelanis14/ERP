@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectui.h
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -17,6 +17,7 @@
 #include "../../Model/project.h"
 #include "../../Model/projectstatus.h"
 #include "../../Model/contact.h"
+#include "../../Model/projectsales.h"
 
 #include "../Task/taskui.h"
 #include "../ProjectContactPerson/projectcontactpersonui.h"
@@ -46,6 +47,7 @@ public:
 	ERPFormBlock* block5Layout;
 	ERPFormBlock* block6Layout;
 	ERPFormBlock* block7Layout;
+	ERPFormBlock* block8Layout;
 	QList<TaskUI*> Tasks;
 	QList<ProjectContactPersonUI*> ProjectContactPersons;
 	QList<ProjectProductUI*> ProjectProducts;
@@ -58,6 +60,7 @@ public:
 	QDateEdit*enddate;
 	QCheckBox* willbeinvoiced;
 	QLineEdit*note;
+	ERPComboBox*projectsales;
 	void fill(Project* project);
 Project* project;
 private:

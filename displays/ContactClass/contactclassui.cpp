@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactclassui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -74,7 +74,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -94,7 +94,7 @@ ContactClassIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ContactClass",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ContactClass"),errorString.trimmed());
 return false; 
  }
 }
@@ -106,7 +106,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -122,7 +122,7 @@ contactclass->Description = description->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactClass",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ContactClass"),errorString.trimmed());
 return false; 
  }
 }

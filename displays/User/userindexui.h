@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: userindexui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,14 +10,14 @@
 #include "../../erpdisplay.h"
 #include "../CommonUI/erpformblock.h"
 #include "../CommonUI/erpcombobox.h"
+#include "../CommonUI/erptableview.h"
 #include "../../Model/user.h"
-#include "../../Model/user.h"
-#include "../../Model/employee.h"
+#include "../../Model/language.h"
+#include "../../Model/contact.h"
 
 
 #include <QWidget>
 #include <QLineEdit>
-#include <QTableView>
 #include <QPushButton>
 #include <QtSql>
 #include <QSqlRelationalDelegate>
@@ -29,7 +29,7 @@ public:
 	explicit UserIndexUI(QWidget *parent = 0);
 	static void ShowUI();
 	static UserIndexUI* GetUI();
-QTableView *tabel; 
+ERPTableView *tabel; 
  User *model; 
  QPushButton* add; 
  QPushButton* remove; 

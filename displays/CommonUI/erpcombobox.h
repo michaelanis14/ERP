@@ -17,6 +17,7 @@ public:
 	explicit ERPComboBox(QWidget *parent = 0);
 	void addItems(QList<QPair< int,QString > >);
 	int getKey();
+	void setIndexByKey(int key);
 	bool addedItems;
 private:
 	QList<QPair<int, QString> >  items;

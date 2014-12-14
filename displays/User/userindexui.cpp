@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: userindexui.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -21,37 +21,31 @@ model = new User();
 	if(!ErpModel::GetInstance()->db.open()) 
 	qDebug() <<"Couldn't open databaseee!";
 ERPFormBlock* block0Layout = new ERPFormBlock; 
- tabel = new QTableView(); 
- tabel->setModel(model); 
- tabel->setItemDelegate(new QSqlRelationalDelegate(tabel)); 
- tabel->hideColumn(0); // don't show the ID 
- tabel->setSortingEnabled(true); 
- tabel->setSelectionBehavior(QAbstractItemView::SelectRows); 
- tabel->setSelectionMode(QAbstractItemView::SingleSelection); 
+ tabel = new ERPTableView(); 
+ tabel->tabel->setModel(model); 
  block0Layout->addRow("",tabel); 
  flowLayout->addWidget(block0Layout); 
   add = new QPushButton("Add"); 
  QObject::connect(add, SIGNAL(clicked()), this, SLOT(addRow())); 
  add->setObjectName("add"); 
- remove = new QPushButton("Remove"); 
+ remove = new QPushButton(QObject::tr("Remove")); 
  remove->setObjectName("remove"); 
  QObject::connect(remove, SIGNAL(clicked()), this, SLOT(removeRow())); 
- edit = new QPushButton("Edit"); 
+ edit = new QPushButton(QObject::tr("Edit")); 
  QObject::connect(edit, SIGNAL(clicked()), this, SLOT(editRow())); 
  edit->setObjectName("edit"); 
  edit->setEnabled(false); 
  remove->setEnabled(false); 
- QObject::connect(tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &UserIndexUI::onSelectionChanged);
+ QObject::connect(tabel->tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &UserIndexUI::onSelectionChanged);
 this->controllers->addControllerButton(add); 
  this->controllers->addControllerButton(edit);  
  this->controllers->addControllerButton(remove);
 }
 ERPDisplay* UserIndexUI::p_instance = 0;
 void UserIndexUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new UserIndexUI(mainwindow::GetMainDisplay());
-	} 
- UserIndexUI::GetUI()->model->refresh();	
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new UserIndexUI(mainwindow::GetMainDisplay()); 	
  mainwindow::ShowDisplay(p_instance); 
 }
 UserIndexUI*UserIndexUI::GetUI(){ 
@@ -61,18 +55,16 @@ UserIndexUI*UserIndexUI::GetUI(){
 	return (UserIndexUI*) p_instance; 
 }
 void UserIndexUI::addRow(){ 
- UserUI::ShowUI(); 
- UserUI::GetUI()->fill(new User()); 
- }
+ UserUI::ShowUI();}
 void UserIndexUI::editRow(){ 
  UserUI::ShowUI(); 
- UserUI::GetUI()->fill(model->get(tabel->selectionModel()->selectedRows().last())); 
+ UserUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last())); 
  }
 void UserIndexUI::removeRow(){ 
- model->remove(tabel->selectionModel()->selectedRows().last()); 
+ model->remove(tabel->tabel->selectionModel()->selectedRows().last()); 
  }
 void UserIndexUI::onSelectionChanged(){ 
- int e = tabel->selectionModel()->selectedRows().count(); 
+ int e = tabel->tabel->selectionModel()->selectedRows().count(); 
  remove->setEnabled(e); 
  edit->setEnabled(e); 
  }

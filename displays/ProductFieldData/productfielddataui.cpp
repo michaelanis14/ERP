@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfielddataui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -57,6 +57,8 @@ ProductFieldDataUI*ProductFieldDataUI::GetUI(){
 void ProductFieldDataUI::fill(ProductFieldData* productfielddata){ 
 clear();
 this->productfielddata = productfielddata;
+product->setIndexByKey(productfielddata->ProductID);
+productfield->setIndexByKey(productfielddata->ProductFieldID);
 value->setText(productfielddata->Value);
 } 
 void ProductFieldDataUI::clear(){ 
@@ -84,7 +86,7 @@ if(!productfield->isHidden())
 productfielddata->ProductFieldID = productfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Value Can't be Empty! \n";
+errorString += QObject::tr("Value Can't be Empty! \n");
 value->setObjectName("error");
 value->style()->unpolish(value);
 value->style()->polish(value);
@@ -104,7 +106,7 @@ ProductFieldDataIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ProductFieldData",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ProductFieldData"),errorString.trimmed());
 return false; 
  }
 }
@@ -120,7 +122,7 @@ if(productfielddata->ProductFieldID == 0)
 productfielddata->ProductFieldID = productfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Value Can't be Empty! \n";
+errorString += QObject::tr("Value Can't be Empty! \n");
 value->setObjectName("error");
 value->style()->unpolish(value);
 value->style()->polish(value);
@@ -136,7 +138,7 @@ productfielddata->Value = value->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ProductFieldData",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ProductFieldData"),errorString.trimmed());
 return false; 
  }
 }

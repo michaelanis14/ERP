@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: storeui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -69,6 +69,7 @@ name->setText(store->Name);
 address->setText(store->Address);
 postalcode->setText(store->PostalCode);
 city->setText(store->City);
+country->setIndexByKey(store->CountryID);
 } 
 void StoreUI::clear(){ 
 delete this->store;
@@ -93,7 +94,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -108,7 +109,7 @@ store->Name = name->text().trimmed();
 }
 if(address->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Address Can't be Empty! \n";
+errorString += QObject::tr("Address Can't be Empty! \n");
 address->setObjectName("error");
 address->style()->unpolish(address);
 address->style()->polish(address);
@@ -123,7 +124,7 @@ store->Address = address->text().trimmed();
 }
 if(postalcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Postal Code Can't be Empty! \n";
+errorString += QObject::tr("Postal Code Can't be Empty! \n");
 postalcode->setObjectName("error");
 postalcode->style()->unpolish(postalcode);
 postalcode->style()->polish(postalcode);
@@ -138,7 +139,7 @@ store->PostalCode = postalcode->text().trimmed();
 }
 if(city->text().trimmed().isEmpty()){
 errors = true;
-errorString += "City Can't be Empty! \n";
+errorString += QObject::tr("City Can't be Empty! \n");
 city->setObjectName("error");
 city->style()->unpolish(city);
 city->style()->polish(city);
@@ -160,7 +161,7 @@ StoreIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Store",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Store"),errorString.trimmed());
 return false; 
  }
 }
@@ -172,7 +173,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -187,7 +188,7 @@ store->Name = name->text().trimmed();
 }
 if(address->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Address Can't be Empty! \n";
+errorString += QObject::tr("Address Can't be Empty! \n");
 address->setObjectName("error");
 address->style()->unpolish(address);
 address->style()->polish(address);
@@ -202,7 +203,7 @@ store->Address = address->text().trimmed();
 }
 if(postalcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Postal Code Can't be Empty! \n";
+errorString += QObject::tr("Postal Code Can't be Empty! \n");
 postalcode->setObjectName("error");
 postalcode->style()->unpolish(postalcode);
 postalcode->style()->polish(postalcode);
@@ -217,7 +218,7 @@ store->PostalCode = postalcode->text().trimmed();
 }
 if(city->text().trimmed().isEmpty()){
 errors = true;
-errorString += "City Can't be Empty! \n";
+errorString += QObject::tr("City Can't be Empty! \n");
 city->setObjectName("error");
 city->style()->unpolish(city);
 city->style()->polish(city);
@@ -235,7 +236,7 @@ store->CountryID = country->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Store",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Store"),errorString.trimmed());
 return false; 
  }
 }

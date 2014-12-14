@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchaseui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -72,7 +72,7 @@ purchasestoreproductui->controllers->setFixedHeight(0);
 PurchaseStoreProducts.append(purchasestoreproductui);
 RemovebtnWidgets* rmpurchasestoreproduct = new RemovebtnWidgets(0,purchasestoreproductui);
 QObject::connect(rmpurchasestoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseStoreProduct(QWidget*)));
-block0Layout->addRow("PurchaseStoreProduct"+QString::number(PurchaseStoreProducts.count()),rmpurchasestoreproduct);
+block0Layout->addRow(QObject::tr("PurchaseStoreProduct")+QString::number(PurchaseStoreProducts.count()),rmpurchasestoreproduct);
 }
 void PurchaseUI::addPurchaseStoreProduct(PurchaseStoreProduct* PurchaseStoreProduct){ 
 PurchaseStoreProductUI* purchasestoreproductui = new PurchaseStoreProductUI();
@@ -99,7 +99,7 @@ purchasefreelineui->controllers->setFixedHeight(0);
 PurchaseFreeLines.append(purchasefreelineui);
 RemovebtnWidgets* rmpurchasefreeline = new RemovebtnWidgets(0,purchasefreelineui);
 QObject::connect(rmpurchasefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseFreeLine(QWidget*)));
-block0Layout->addRow("PurchaseFreeLine"+QString::number(PurchaseFreeLines.count()),rmpurchasefreeline);
+block0Layout->addRow(QObject::tr("PurchaseFreeLine")+QString::number(PurchaseFreeLines.count()),rmpurchasefreeline);
 }
 void PurchaseUI::addPurchaseFreeLine(PurchaseFreeLine* PurchaseFreeLine){ 
 PurchaseFreeLineUI* purchasefreelineui = new PurchaseFreeLineUI();
@@ -122,6 +122,7 @@ block0Layout->removeRow(sender);
 void PurchaseUI::fill(Purchase* purchase){ 
 clear();
 this->purchase = purchase;
+purchaseserial->setIndexByKey(purchase->PurchaseSerialID);
 creationdate->setDate(QDate::fromString(purchase->CreationDate));
 deliverydate->setDate(QDate::fromString(purchase->DeliveryDate));
 foreach(PurchaseStoreProduct* purchasestoreproduct, purchase->purchasestoreproducts) {
@@ -163,7 +164,7 @@ if(!purchaseserial->isHidden())
 purchase->PurchaseSerialID = purchaseserial->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Creation Date Can't be Empty! \n";
+errorString += QObject::tr("Creation Date Can't be Empty! \n");
 creationdate->setObjectName("error");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
@@ -178,7 +179,7 @@ purchase->CreationDate = creationdate->text().trimmed();
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Delivery Date Can't be Empty! \n";
+errorString += QObject::tr("Delivery Date Can't be Empty! \n");
 deliverydate->setObjectName("error");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
@@ -200,7 +201,7 @@ for(int w = 0; w < PurchaseFreeLines.length(); w++){
 if(PurchaseFreeLines.at(j) != PurchaseFreeLines.at(w))
 if(PurchaseFreeLines.at(j)->description->text() == PurchaseFreeLines.at(w)->description->text()){
 errors = true; 
- errorString += "PurchaseFreeLine has the same description \n";
+ errorString += QObject::tr("PurchaseFreeLine has the same description \n");
 PurchaseFreeLines.at(j)->description->setObjectName("error");
 PurchaseFreeLines.at(j)->description->style()->unpolish(PurchaseFreeLines.at(j)->description);
 PurchaseFreeLines.at(j)->description->style()->polish(PurchaseFreeLines.at(j)->description);
@@ -241,7 +242,7 @@ PurchaseIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Purchase",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Purchase"),errorString.trimmed());
 return false; 
  }
 }
@@ -255,7 +256,7 @@ if(purchase->PurchaseSerialID == 0)
 purchase->PurchaseSerialID = purchaseserial->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Creation Date Can't be Empty! \n";
+errorString += QObject::tr("Creation Date Can't be Empty! \n");
 creationdate->setObjectName("error");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
@@ -270,7 +271,7 @@ purchase->CreationDate = creationdate->text().trimmed();
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Delivery Date Can't be Empty! \n";
+errorString += QObject::tr("Delivery Date Can't be Empty! \n");
 deliverydate->setObjectName("error");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
@@ -292,7 +293,7 @@ for(int w = 0; w < PurchaseFreeLines.length(); w++){
 if(PurchaseFreeLines.at(j) != PurchaseFreeLines.at(w))
 if(PurchaseFreeLines.at(j)->description->text() == PurchaseFreeLines.at(w)->description->text()){
 errors = true; 
- errorString += "PurchaseFreeLine has the same description \n";
+ errorString +=QObject::tr( "PurchaseFreeLine has the same description \n");
 PurchaseFreeLines.at(j)->description->setObjectName("error");
 PurchaseFreeLines.at(j)->description->style()->unpolish(PurchaseFreeLines.at(j)->description);
 PurchaseFreeLines.at(j)->description->style()->polish(PurchaseFreeLines.at(j)->description);
@@ -313,7 +314,7 @@ if(!PurchaseFreeLines.at(i)->updateModel()){
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Purchase",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Purchase"),errorString.trimmed());
 return false; 
  }
 }

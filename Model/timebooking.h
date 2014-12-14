@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: timebooking.h
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,7 +16,7 @@ class TimeBooking  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	TimeBooking();
-	TimeBooking(QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int EmployeeID,QString Note,QString CreatedOn,QString EditedOn);	int TimeBookingID;
+	TimeBooking(QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn);	int TimeBookingID;
 	QString StartDate;
 	QString EndDate;
 	QString StartTime;
@@ -25,7 +25,7 @@ public:
 	bool OnlyTimeBooking;
 	int ProjectID;
 	int ServiceID;
-	int EmployeeID;
+	int UserID;
 	QString Note;
 	QString CreatedOn;
 	QString EditedOn;
@@ -51,7 +51,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	TimeBooking(int TimeBookingID,QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int EmployeeID,QString Note,QString CreatedOn,QString EditedOn);	static TimeBooking* p_instance;
+	TimeBooking(int TimeBookingID,QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn);	static TimeBooking* p_instance;
 	bool setStartDate(int TimeBookingID, const QString &StartDate);
 	bool setEndDate(int TimeBookingID, const QString &EndDate);
 	bool setStartTime(int TimeBookingID, const QString &StartTime);
@@ -60,7 +60,7 @@ private:
 	bool setOnlyTimeBooking(int TimeBookingID, const QString &OnlyTimeBooking);
 	bool setProjectID(int TimeBookingID, const QString &ProjectID);
 	bool setServiceID(int TimeBookingID, const QString &ServiceID);
-	bool setEmployeeID(int TimeBookingID, const QString &EmployeeID);
+	bool setUserID(int TimeBookingID, const QString &UserID);
 	bool setNote(int TimeBookingID, const QString &Note);
 	bool setCreatedOn(int TimeBookingID, const QString &CreatedOn);
 	bool setEditedOn(int TimeBookingID, const QString &EditedOn);

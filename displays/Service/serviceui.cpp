@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: serviceui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -80,6 +80,7 @@ shortdescription->setText(service->ShortDescription);
 sellingprice->setText(QString::number(service->SellingPrice));
 netcoast->setText(QString::number(service->NetCoast));
 trademarginrate->setText(QString::number(service->TradeMarginRate));
+tax->setIndexByKey(service->TaxID);
 barcode->setText(service->Barcode);
 } 
 void ServiceUI::clear(){ 
@@ -109,7 +110,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -124,7 +125,7 @@ service->Name = name->text().trimmed();
 }
 if(shortdescription->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Short Description Can't be Empty! \n";
+errorString += QObject::tr("Short Description Can't be Empty! \n");
 shortdescription->setObjectName("error");
 shortdescription->style()->unpolish(shortdescription);
 shortdescription->style()->polish(shortdescription);
@@ -139,7 +140,7 @@ service->ShortDescription = shortdescription->text().trimmed();
 }
 if(sellingprice->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Selling Price Can't be Empty! \n";
+errorString += QObject::tr("Selling Price Can't be Empty! \n");
 sellingprice->setObjectName("error");
 sellingprice->style()->unpolish(sellingprice);
 sellingprice->style()->polish(sellingprice);
@@ -154,7 +155,7 @@ service->SellingPrice = sellingprice->text().trimmed().toDouble();
 }
 if(netcoast->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Net Coast Can't be Empty! \n";
+errorString += QObject::tr("Net Coast Can't be Empty! \n");
 netcoast->setObjectName("error");
 netcoast->style()->unpolish(netcoast);
 netcoast->style()->polish(netcoast);
@@ -169,7 +170,7 @@ service->NetCoast = netcoast->text().trimmed().toDouble();
 }
 if(trademarginrate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Trade Margin Rate Can't be Empty! \n";
+errorString += QObject::tr("Trade Margin Rate Can't be Empty! \n");
 trademarginrate->setObjectName("error");
 trademarginrate->style()->unpolish(trademarginrate);
 trademarginrate->style()->polish(trademarginrate);
@@ -186,7 +187,7 @@ if(!tax->isHidden())
 service->TaxID = tax->getKey();
 if(barcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Barcode Can't be Empty! \n";
+errorString += QObject::tr("Barcode Can't be Empty! \n");
 barcode->setObjectName("error");
 barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
@@ -206,7 +207,7 @@ ServiceIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Service",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Service"),errorString.trimmed());
 return false; 
  }
 }
@@ -218,7 +219,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -233,7 +234,7 @@ service->Name = name->text().trimmed();
 }
 if(shortdescription->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Short Description Can't be Empty! \n";
+errorString += QObject::tr("Short Description Can't be Empty! \n");
 shortdescription->setObjectName("error");
 shortdescription->style()->unpolish(shortdescription);
 shortdescription->style()->polish(shortdescription);
@@ -248,7 +249,7 @@ service->ShortDescription = shortdescription->text().trimmed();
 }
 if(sellingprice->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Selling Price Can't be Empty! \n";
+errorString += QObject::tr("Selling Price Can't be Empty! \n");
 sellingprice->setObjectName("error");
 sellingprice->style()->unpolish(sellingprice);
 sellingprice->style()->polish(sellingprice);
@@ -263,7 +264,7 @@ service->SellingPrice = sellingprice->text().trimmed().toDouble();
 }
 if(netcoast->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Net Coast Can't be Empty! \n";
+errorString += QObject::tr("Net Coast Can't be Empty! \n");
 netcoast->setObjectName("error");
 netcoast->style()->unpolish(netcoast);
 netcoast->style()->polish(netcoast);
@@ -278,7 +279,7 @@ service->NetCoast = netcoast->text().trimmed().toDouble();
 }
 if(trademarginrate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Trade Margin Rate Can't be Empty! \n";
+errorString += QObject::tr("Trade Margin Rate Can't be Empty! \n");
 trademarginrate->setObjectName("error");
 trademarginrate->style()->unpolish(trademarginrate);
 trademarginrate->style()->polish(trademarginrate);
@@ -295,7 +296,7 @@ if(service->TaxID == 0)
 service->TaxID = tax->getKey();
 if(barcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Barcode Can't be Empty! \n";
+errorString += QObject::tr("Barcode Can't be Empty! \n");
 barcode->setObjectName("error");
 barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
@@ -311,7 +312,7 @@ service->Barcode = barcode->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Service",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Service"),errorString.trimmed());
 return false; 
  }
 }

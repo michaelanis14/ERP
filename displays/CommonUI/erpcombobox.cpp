@@ -68,13 +68,23 @@ if(this->addedItems){
 
 }
 
-
 int ERPComboBox::getKey(){
 if(this->addedItems){
 //	qDebug() << currentIndex()<< items.at(currentIndex()).first << items.at(currentIndex()).second;
 return items.at(currentIndex()).first;
 }
 	return 0;
+}
+
+void ERPComboBox::setIndexByKey(int key){
+	for(int i = 0; i < items.length();i++){
+		if(items.at(i).first == key){
+			this->setCurrentIndex(i);
+			this->repaint();
+			break;
+		}
+	}
+
 }
 
 

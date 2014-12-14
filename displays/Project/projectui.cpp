@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -65,47 +65,55 @@ flowLayout->addWidget(block2Layout);
 block3Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block3Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveTaskButtons = new AddRemoveButtons();
-block3Layout->addRow("Tasks",addremoveTaskButtons);
-QObject::connect(addremoveTaskButtons, SIGNAL(addPressed()), this, SLOT(addTask()));
-
+projectsales = new ERPComboBox();
+projectsales->addItems(ProjectSales::GetPairList());
+block3Layout->addRow(QObject::tr("Project Sales"),projectsales);
 flowLayout->addWidget(block3Layout);
 
 block4Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block4Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveProjectContactPersonButtons = new AddRemoveButtons();
-block4Layout->addRow("ProjectContactPersons",addremoveProjectContactPersonButtons);
-QObject::connect(addremoveProjectContactPersonButtons, SIGNAL(addPressed()), this, SLOT(addProjectContactPerson()));
+AddRemoveButtons* addremoveTaskButtons = new AddRemoveButtons();
+block4Layout->addRow("Tasks",addremoveTaskButtons);
+QObject::connect(addremoveTaskButtons, SIGNAL(addPressed()), this, SLOT(addTask()));
 
 flowLayout->addWidget(block4Layout);
 
 block5Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block5Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveProjectProductButtons = new AddRemoveButtons();
-block5Layout->addRow("ProjectProducts",addremoveProjectProductButtons);
-QObject::connect(addremoveProjectProductButtons, SIGNAL(addPressed()), this, SLOT(addProjectProduct()));
+AddRemoveButtons* addremoveProjectContactPersonButtons = new AddRemoveButtons();
+block5Layout->addRow("ProjectContactPersons",addremoveProjectContactPersonButtons);
+QObject::connect(addremoveProjectContactPersonButtons, SIGNAL(addPressed()), this, SLOT(addProjectContactPerson()));
 
 flowLayout->addWidget(block5Layout);
 
 block6Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block6Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveProjectServiceButtons = new AddRemoveButtons();
-block6Layout->addRow("ProjectServices",addremoveProjectServiceButtons);
-QObject::connect(addremoveProjectServiceButtons, SIGNAL(addPressed()), this, SLOT(addProjectService()));
+AddRemoveButtons* addremoveProjectProductButtons = new AddRemoveButtons();
+block6Layout->addRow("ProjectProducts",addremoveProjectProductButtons);
+QObject::connect(addremoveProjectProductButtons, SIGNAL(addPressed()), this, SLOT(addProjectProduct()));
 
 flowLayout->addWidget(block6Layout);
 
 block7Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block7Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveProjectFileButtons = new AddRemoveButtons();
-block7Layout->addRow("ProjectFiles",addremoveProjectFileButtons);
-QObject::connect(addremoveProjectFileButtons, SIGNAL(addPressed()), this, SLOT(addProjectFile()));
+AddRemoveButtons* addremoveProjectServiceButtons = new AddRemoveButtons();
+block7Layout->addRow("ProjectServices",addremoveProjectServiceButtons);
+QObject::connect(addremoveProjectServiceButtons, SIGNAL(addPressed()), this, SLOT(addProjectService()));
 
 flowLayout->addWidget(block7Layout);
+
+block8Layout = new ERPFormBlock;
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block8Layout->setMinimumWidth(330);
+AddRemoveButtons* addremoveProjectFileButtons = new AddRemoveButtons();
+block8Layout->addRow("ProjectFiles",addremoveProjectFileButtons);
+QObject::connect(addremoveProjectFileButtons, SIGNAL(addPressed()), this, SLOT(addProjectFile()));
+
+flowLayout->addWidget(block8Layout);
 
 }
 ERPDisplay* ProjectUI::p_instance = 0;
@@ -128,7 +136,7 @@ taskui->controllers->setFixedHeight(0);
 Tasks.append(taskui);
 RemovebtnWidgets* rmtask = new RemovebtnWidgets(0,taskui);
 QObject::connect(rmtask, SIGNAL(removePressed(QWidget*)), this, SLOT(removeTask(QWidget*)));
-block3Layout->addRow("Task"+QString::number(Tasks.count()),rmtask);
+block4Layout->addRow(QObject::tr("Task")+QString::number(Tasks.count()),rmtask);
 }
 void ProjectUI::addTask(Task* Task){ 
 TaskUI* taskui = new TaskUI();
@@ -138,14 +146,14 @@ taskui->fill(Task);
 Tasks.append(taskui);
 RemovebtnWidgets* rmtask = new RemovebtnWidgets(0,taskui);
 QObject::connect(rmtask, SIGNAL(removePressed(QWidget*)), this, SLOT(removeTask(QWidget*)));
-block3Layout->addRow(QObject::tr("Task") +QString::number(Tasks.count()),rmtask);
+block4Layout->addRow(QObject::tr("Task") +QString::number(Tasks.count()),rmtask);
 }
 void ProjectUI::removeTask(QWidget* widget){ 
 if(Tasks.count()  > 0){
 TaskUI* taskui = (TaskUI*) widget;
 Tasks.removeOne(taskui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block3Layout->removeRow(sender);
+block4Layout->removeRow(sender);
 }
 }
 void ProjectUI::addProjectContactPerson(){ 
@@ -155,7 +163,7 @@ projectcontactpersonui->controllers->setFixedHeight(0);
 ProjectContactPersons.append(projectcontactpersonui);
 RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
 QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
-block4Layout->addRow("ProjectContactPerson"+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
+block5Layout->addRow(QObject::tr("ProjectContactPerson")+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
 }
 void ProjectUI::addProjectContactPerson(ProjectContactPerson* ProjectContactPerson){ 
 ProjectContactPersonUI* projectcontactpersonui = new ProjectContactPersonUI();
@@ -165,14 +173,14 @@ projectcontactpersonui->fill(ProjectContactPerson);
 ProjectContactPersons.append(projectcontactpersonui);
 RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
 QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
-block4Layout->addRow(QObject::tr("ProjectContactPerson") +QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
+block5Layout->addRow(QObject::tr("ProjectContactPerson") +QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
 }
 void ProjectUI::removeProjectContactPerson(QWidget* widget){ 
 if(ProjectContactPersons.count()  > 0){
 ProjectContactPersonUI* projectcontactpersonui = (ProjectContactPersonUI*) widget;
 ProjectContactPersons.removeOne(projectcontactpersonui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block4Layout->removeRow(sender);
+block5Layout->removeRow(sender);
 }
 }
 void ProjectUI::addProjectProduct(){ 
@@ -182,7 +190,7 @@ projectproductui->controllers->setFixedHeight(0);
 ProjectProducts.append(projectproductui);
 RemovebtnWidgets* rmprojectproduct = new RemovebtnWidgets(0,projectproductui);
 QObject::connect(rmprojectproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectProduct(QWidget*)));
-block5Layout->addRow("ProjectProduct"+QString::number(ProjectProducts.count()),rmprojectproduct);
+block6Layout->addRow(QObject::tr("ProjectProduct")+QString::number(ProjectProducts.count()),rmprojectproduct);
 }
 void ProjectUI::addProjectProduct(ProjectProduct* ProjectProduct){ 
 ProjectProductUI* projectproductui = new ProjectProductUI();
@@ -192,14 +200,14 @@ projectproductui->fill(ProjectProduct);
 ProjectProducts.append(projectproductui);
 RemovebtnWidgets* rmprojectproduct = new RemovebtnWidgets(0,projectproductui);
 QObject::connect(rmprojectproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectProduct(QWidget*)));
-block5Layout->addRow(QObject::tr("ProjectProduct") +QString::number(ProjectProducts.count()),rmprojectproduct);
+block6Layout->addRow(QObject::tr("ProjectProduct") +QString::number(ProjectProducts.count()),rmprojectproduct);
 }
 void ProjectUI::removeProjectProduct(QWidget* widget){ 
 if(ProjectProducts.count()  > 0){
 ProjectProductUI* projectproductui = (ProjectProductUI*) widget;
 ProjectProducts.removeOne(projectproductui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block5Layout->removeRow(sender);
+block6Layout->removeRow(sender);
 }
 }
 void ProjectUI::addProjectService(){ 
@@ -209,7 +217,7 @@ projectserviceui->controllers->setFixedHeight(0);
 ProjectServices.append(projectserviceui);
 RemovebtnWidgets* rmprojectservice = new RemovebtnWidgets(0,projectserviceui);
 QObject::connect(rmprojectservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectService(QWidget*)));
-block6Layout->addRow("ProjectService"+QString::number(ProjectServices.count()),rmprojectservice);
+block7Layout->addRow(QObject::tr("ProjectService")+QString::number(ProjectServices.count()),rmprojectservice);
 }
 void ProjectUI::addProjectService(ProjectService* ProjectService){ 
 ProjectServiceUI* projectserviceui = new ProjectServiceUI();
@@ -219,14 +227,14 @@ projectserviceui->fill(ProjectService);
 ProjectServices.append(projectserviceui);
 RemovebtnWidgets* rmprojectservice = new RemovebtnWidgets(0,projectserviceui);
 QObject::connect(rmprojectservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectService(QWidget*)));
-block6Layout->addRow(QObject::tr("ProjectService") +QString::number(ProjectServices.count()),rmprojectservice);
+block7Layout->addRow(QObject::tr("ProjectService") +QString::number(ProjectServices.count()),rmprojectservice);
 }
 void ProjectUI::removeProjectService(QWidget* widget){ 
 if(ProjectServices.count()  > 0){
 ProjectServiceUI* projectserviceui = (ProjectServiceUI*) widget;
 ProjectServices.removeOne(projectserviceui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block6Layout->removeRow(sender);
+block7Layout->removeRow(sender);
 }
 }
 void ProjectUI::addProjectFile(){ 
@@ -236,7 +244,7 @@ projectfileui->controllers->setFixedHeight(0);
 ProjectFiles.append(projectfileui);
 RemovebtnWidgets* rmprojectfile = new RemovebtnWidgets(0,projectfileui);
 QObject::connect(rmprojectfile, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectFile(QWidget*)));
-block7Layout->addRow("ProjectFile"+QString::number(ProjectFiles.count()),rmprojectfile);
+block8Layout->addRow(QObject::tr("ProjectFile")+QString::number(ProjectFiles.count()),rmprojectfile);
 }
 void ProjectUI::addProjectFile(ProjectFile* ProjectFile){ 
 ProjectFileUI* projectfileui = new ProjectFileUI();
@@ -246,24 +254,27 @@ projectfileui->fill(ProjectFile);
 ProjectFiles.append(projectfileui);
 RemovebtnWidgets* rmprojectfile = new RemovebtnWidgets(0,projectfileui);
 QObject::connect(rmprojectfile, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectFile(QWidget*)));
-block7Layout->addRow(QObject::tr("ProjectFile") +QString::number(ProjectFiles.count()),rmprojectfile);
+block8Layout->addRow(QObject::tr("ProjectFile") +QString::number(ProjectFiles.count()),rmprojectfile);
 }
 void ProjectUI::removeProjectFile(QWidget* widget){ 
 if(ProjectFiles.count()  > 0){
 ProjectFileUI* projectfileui = (ProjectFileUI*) widget;
 ProjectFiles.removeOne(projectfileui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block7Layout->removeRow(sender);
+block8Layout->removeRow(sender);
 }
 }
 void ProjectUI::fill(Project* project){ 
 clear();
 this->project = project;
 title->setText(project->Title);
+projectstatus->setIndexByKey(project->ProjectStatusID);
+contact->setIndexByKey(project->ContactID);
 startdate->setDate(QDate::fromString(project->StartDate));
 enddate->setDate(QDate::fromString(project->EndDate));
 willbeinvoiced->setChecked(project->WillBeInvoiced);
 note->setText(project->Note);
+projectsales->setIndexByKey(project->ProjectSalesID);
 foreach(Task* task, project->tasks) {
 addTask(task);
 }
@@ -316,7 +327,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -335,7 +346,7 @@ if(!contact->isHidden())
 project->ContactID = contact->getKey();
 if(startdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Start Date Can't be Empty! \n";
+errorString += QObject::tr("Start Date Can't be Empty! \n");
 startdate->setObjectName("error");
 startdate->style()->unpolish(startdate);
 startdate->style()->polish(startdate);
@@ -350,7 +361,7 @@ project->StartDate = startdate->text().trimmed();
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Date Can't be Empty! \n";
+errorString += QObject::tr("End Date Can't be Empty! \n");
 enddate->setObjectName("error");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
@@ -366,7 +377,7 @@ project->EndDate = enddate->text().trimmed();
 project->WillBeInvoiced = willbeinvoiced->text().trimmed().toInt();
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -379,6 +390,8 @@ note->style()->polish(note);
 note->update();
 project->Note = note->text().trimmed();
 }
+if(!projectsales->isHidden()) 
+project->ProjectSalesID = projectsales->getKey();
 for(int j = 0; j < ProjectFiles.length(); j++){
 ProjectFiles.at(j)->name->setObjectName("name");
 ProjectFiles.at(j)->name->style()->unpolish(ProjectFiles.at(j)->name);
@@ -388,7 +401,7 @@ for(int w = 0; w < ProjectFiles.length(); w++){
 if(ProjectFiles.at(j) != ProjectFiles.at(w))
 if(ProjectFiles.at(j)->name->text() == ProjectFiles.at(w)->name->text()){
 errors = true; 
- errorString += "ProjectFile has the same name \n";
+ errorString += QObject::tr("ProjectFile has the same name \n");
 ProjectFiles.at(j)->name->setObjectName("error");
 ProjectFiles.at(j)->name->style()->unpolish(ProjectFiles.at(j)->name);
 ProjectFiles.at(j)->name->style()->polish(ProjectFiles.at(j)->name);
@@ -471,7 +484,7 @@ ProjectIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Project",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Project"),errorString.trimmed());
 return false; 
  }
 }
@@ -483,7 +496,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -502,7 +515,7 @@ if(project->ContactID == 0)
 project->ContactID = contact->getKey();
 if(startdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Start Date Can't be Empty! \n";
+errorString += QObject::tr("Start Date Can't be Empty! \n");
 startdate->setObjectName("error");
 startdate->style()->unpolish(startdate);
 startdate->style()->polish(startdate);
@@ -517,7 +530,7 @@ project->StartDate = startdate->text().trimmed();
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Date Can't be Empty! \n";
+errorString += QObject::tr("End Date Can't be Empty! \n");
 enddate->setObjectName("error");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
@@ -533,7 +546,7 @@ project->EndDate = enddate->text().trimmed();
 project->WillBeInvoiced = willbeinvoiced->text().trimmed().toInt();
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -546,6 +559,8 @@ note->style()->polish(note);
 note->update();
 project->Note = note->text().trimmed();
 }
+if(project->ProjectSalesID == 0) 
+project->ProjectSalesID = projectsales->getKey();
 for(int j = 0; j < ProjectFiles.length(); j++){
 ProjectFiles.at(j)->name->setObjectName("name");
 ProjectFiles.at(j)->name->style()->unpolish(ProjectFiles.at(j)->name);
@@ -555,7 +570,7 @@ for(int w = 0; w < ProjectFiles.length(); w++){
 if(ProjectFiles.at(j) != ProjectFiles.at(w))
 if(ProjectFiles.at(j)->name->text() == ProjectFiles.at(w)->name->text()){
 errors = true; 
- errorString += "ProjectFile has the same name \n";
+ errorString +=QObject::tr( "ProjectFile has the same name \n");
 ProjectFiles.at(j)->name->setObjectName("error");
 ProjectFiles.at(j)->name->style()->unpolish(ProjectFiles.at(j)->name);
 ProjectFiles.at(j)->name->style()->polish(ProjectFiles.at(j)->name);
@@ -594,7 +609,7 @@ if(!ProjectFiles.at(i)->updateModel()){
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Project",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Project"),errorString.trimmed());
 return false; 
  }
 }

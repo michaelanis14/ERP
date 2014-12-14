@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: userui.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,7 +15,8 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/user.h"
 #include "../../Model/user.h"
-#include "../../Model/employee.h"
+#include "../../Model/language.h"
+#include "../../Model/contact.h"
 
 
 #include <QWidget>
@@ -24,6 +25,7 @@
 #include <QPushButton>
 #include <QCompleter>
 #include <QMessageBox>
+#include <QDateEdit>
 class UserUI : public ERPDisplay
 {
 	Q_OBJECT
@@ -35,10 +37,8 @@ public:
 	QLineEdit*name;
 	QLineEdit*username;
 	QLineEdit*password;
-	QLineEdit*lastlogin;
-	ERPComboBox*employee;
-	QCheckBox* active;
-	QLineEdit*lastip;
+	ERPComboBox*language;
+	ERPComboBox*contact;
 	void fill(User* user);
 User* user;
 private:
@@ -49,5 +49,6 @@ private slots:
 	void clear();
 public slots:
 	bool save();
+	bool updateModel();
 };
 #endif

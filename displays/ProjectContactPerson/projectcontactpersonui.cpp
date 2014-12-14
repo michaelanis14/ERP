@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectcontactpersonui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,6 +55,8 @@ ProjectContactPersonUI*ProjectContactPersonUI::GetUI(){
 void ProjectContactPersonUI::fill(ProjectContactPerson* projectcontactperson){ 
 clear();
 this->projectcontactperson = projectcontactperson;
+project->setIndexByKey(projectcontactperson->ProjectID);
+contactperson->setIndexByKey(projectcontactperson->ContactPersonID);
 } 
 void ProjectContactPersonUI::clear(){ 
 delete this->projectcontactperson;
@@ -85,7 +87,7 @@ ProjectContactPersonIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ProjectContactPerson",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ProjectContactPerson"),errorString.trimmed());
 return false; 
  }
 }
@@ -102,7 +104,7 @@ projectcontactperson->ContactPersonID = contactperson->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ProjectContactPerson",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ProjectContactPerson"),errorString.trimmed());
 return false; 
  }
 }

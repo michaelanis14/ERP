@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.h
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,6 @@
 #include "../../Model/contactclass.h"
 #include "../../Model/country.h"
 #include "../../Model/contactstatus.h"
-#include "../../Model/employee.h"
 
 #include "../ContactTelephone/contacttelephoneui.h"
 #include "../ContactEmail/contactemailui.h"
@@ -59,10 +58,8 @@ public:
 	QLineEdit*address;
 	QLineEdit*postalcode;
 	QLineEdit*city;
-	QLineEdit*blablabla;
 	ERPComboBox*country;
 	ERPComboBox*contactstatus;
-	ERPComboBox*employee;
 	QLineEdit*website;
 	QLineEdit*taxnumber;
 	void fill(Contact* contact);

@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Sat Dec 13 21:50:44 EET 2014
+#   Created on: Sun Dec 14 22:39:13 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
@@ -33,7 +33,7 @@ SOURCES += main.cpp \
 	Model/company.cpp \
 	Model/tax.cpp \
 	Model/access.cpp \
-	Model/employee.cpp \
+	Model/user.cpp \
 	Model/contact.cpp \
 	Model/contacttelephone.cpp \
 	Model/contactemail.cpp \
@@ -57,6 +57,7 @@ SOURCES += main.cpp \
 	Model/projectcontactperson.cpp \
 	Model/projectproduct.cpp \
 	Model/projectservice.cpp \
+	Model/projectsales.cpp \
 	Model/unit.cpp \
 	Model/productcategory.cpp \
 	Model/productimage.cpp \
@@ -85,6 +86,7 @@ SOURCES += main.cpp \
 	Model/paymenttype.cpp \
 	Model/payment.cpp \
 	Model/task.cpp \
+	Model/language.cpp \
 	Model/timebooking.cpp \
 	displays/Product/ProductStoreStateUI.cpp \ 
 	 displays/Purchase/createpurchase.cpp \
@@ -94,8 +96,8 @@ SOURCES += main.cpp \
 	displays/Tax/taxui.cpp \
 	displays/Access/accessindexui.cpp \
 	displays/Access/accessui.cpp \
-	displays/Employee/employeeindexui.cpp \
-	displays/Employee/employeeui.cpp \
+	displays/User/userindexui.cpp \
+	displays/User/userui.cpp \
 	displays/Contact/contactindexui.cpp \
 	displays/Contact/contactui.cpp \
 	displays/ContactTelephone/contacttelephoneindexui.cpp \
@@ -142,6 +144,8 @@ SOURCES += main.cpp \
 	displays/ProjectProduct/projectproductui.cpp \
 	displays/ProjectService/projectserviceindexui.cpp \
 	displays/ProjectService/projectserviceui.cpp \
+	displays/ProjectSales/projectsalesindexui.cpp \
+	displays/ProjectSales/projectsalesui.cpp \
 	displays/Unit/unitindexui.cpp \
 	displays/Unit/unitui.cpp \
 	displays/ProductCategory/productcategoryindexui.cpp \
@@ -198,6 +202,8 @@ SOURCES += main.cpp \
 	displays/Payment/paymentui.cpp \
 	displays/Task/taskindexui.cpp \
 	displays/Task/taskui.cpp \
+	displays/Language/languageindexui.cpp \
+	displays/Language/languageui.cpp \
 	displays/TimeBooking/timebookingindexui.cpp \
 	displays/TimeBooking/timebookingui.cpp
 
@@ -216,7 +222,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/company.h \
 	Model/tax.h \
 	Model/access.h \
-	Model/employee.h \
+	Model/user.h \
 	Model/contact.h \
 	Model/contacttelephone.h \
 	Model/contactemail.h \
@@ -240,6 +246,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/projectcontactperson.h \
 	Model/projectproduct.h \
 	Model/projectservice.h \
+	Model/projectsales.h \
 	Model/unit.h \
 	Model/productcategory.h \
 	Model/productimage.h \
@@ -268,6 +275,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/paymenttype.h \
 	Model/payment.h \
 	Model/task.h \
+	Model/language.h \
 	Model/timebooking.h \
 	displays/Product/ProductStoreStateUI.h \
 	 displays/Purchase/createpurchase.h \
@@ -277,8 +285,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Tax/taxui.h \
 	displays/Access/accessindexui.h \
 	displays/Access/accessui.h \
-	displays/Employee/employeeindexui.h \
-	displays/Employee/employeeui.h \
+	displays/User/userindexui.h \
+	displays/User/userui.h \
 	displays/Contact/contactindexui.h \
 	displays/Contact/contactui.h \
 	displays/ContactTelephone/contacttelephoneindexui.h \
@@ -325,6 +333,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/ProjectProduct/projectproductui.h \
 	displays/ProjectService/projectserviceindexui.h \
 	displays/ProjectService/projectserviceui.h \
+	displays/ProjectSales/projectsalesindexui.h \
+	displays/ProjectSales/projectsalesui.h \
 	displays/Unit/unitindexui.h \
 	displays/Unit/unitui.h \
 	displays/ProductCategory/productcategoryindexui.h \
@@ -381,9 +391,12 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Payment/paymentui.h \
 	displays/Task/taskindexui.h \
 	displays/Task/taskui.h \
+	displays/Language/languageindexui.h \
+	displays/Language/languageui.h \
 	displays/TimeBooking/timebookingindexui.h \
 	displays/TimeBooking/timebookingui.h 
 
+TRANSLATIONS = erp_ar.ts
 FORMS	+= mainwindow.ui
 
 RESOURCES +=Resources.qrc

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfielddataui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -57,6 +57,8 @@ ContactFieldDataUI*ContactFieldDataUI::GetUI(){
 void ContactFieldDataUI::fill(ContactFieldData* contactfielddata){ 
 clear();
 this->contactfielddata = contactfielddata;
+contact->setIndexByKey(contactfielddata->ContactID);
+contactfield->setIndexByKey(contactfielddata->ContactFieldID);
 value->setText(contactfielddata->Value);
 } 
 void ContactFieldDataUI::clear(){ 
@@ -84,7 +86,7 @@ if(!contactfield->isHidden())
 contactfielddata->ContactFieldID = contactfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Value Can't be Empty! \n";
+errorString += QObject::tr("Value Can't be Empty! \n");
 value->setObjectName("error");
 value->style()->unpolish(value);
 value->style()->polish(value);
@@ -104,7 +106,7 @@ ContactFieldDataIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ContactFieldData",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ContactFieldData"),errorString.trimmed());
 return false; 
  }
 }
@@ -120,7 +122,7 @@ if(contactfielddata->ContactFieldID == 0)
 contactfielddata->ContactFieldID = contactfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Value Can't be Empty! \n";
+errorString += QObject::tr("Value Can't be Empty! \n");
 value->setObjectName("error");
 value->style()->unpolish(value);
 value->style()->polish(value);
@@ -136,7 +138,7 @@ contactfielddata->Value = value->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactFieldData",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ContactFieldData"),errorString.trimmed());
 return false; 
  }
 }

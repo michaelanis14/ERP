@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.h
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,7 @@ class Contact  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Contact();
-	Contact(QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,QString BlaBlaBla,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
+	Contact(QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
 	QString Name;
 	QString Salutation;
 	QString BirthdateOrDateOfFoundation;
@@ -29,10 +29,8 @@ public:
 	QString Address;
 	QString PostalCode;
 	QString City;
-	QString BlaBlaBla;
 	int CountryID;
 	int ContactStatusID;
-	int EmployeeID;
 	QString Website;
 	QString TaxNumber;
 	QList<ContactTelephone*> contacttelephones;
@@ -62,7 +60,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Contact(int ContactID,QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,QString BlaBlaBla,int CountryID,int ContactStatusID,int EmployeeID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
+	Contact(int ContactID,QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
 	bool setName(int ContactID, const QString &Name);
 	bool setSalutation(int ContactID, const QString &Salutation);
 	bool setBirthdateOrDateOfFoundation(int ContactID, const QString &BirthdateOrDateOfFoundation);
@@ -72,10 +70,8 @@ private:
 	bool setAddress(int ContactID, const QString &Address);
 	bool setPostalCode(int ContactID, const QString &PostalCode);
 	bool setCity(int ContactID, const QString &City);
-	bool setBlaBlaBla(int ContactID, const QString &BlaBlaBla);
 	bool setCountryID(int ContactID, const QString &CountryID);
 	bool setContactStatusID(int ContactID, const QString &ContactStatusID);
-	bool setEmployeeID(int ContactID, const QString &EmployeeID);
 	bool setWebsite(int ContactID, const QString &Website);
 	bool setTaxNumber(int ContactID, const QString &TaxNumber);
 	bool setCreatedOn(int ContactID, const QString &CreatedOn);

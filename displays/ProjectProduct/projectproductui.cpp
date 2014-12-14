@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectproductui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,6 +55,8 @@ ProjectProductUI*ProjectProductUI::GetUI(){
 void ProjectProductUI::fill(ProjectProduct* projectproduct){ 
 clear();
 this->projectproduct = projectproduct;
+project->setIndexByKey(projectproduct->ProjectID);
+product->setIndexByKey(projectproduct->ProductID);
 } 
 void ProjectProductUI::clear(){ 
 delete this->projectproduct;
@@ -85,7 +87,7 @@ ProjectProductIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ProjectProduct",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ProjectProduct"),errorString.trimmed());
 return false; 
  }
 }
@@ -102,7 +104,7 @@ projectproduct->ProductID = product->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ProjectProduct",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ProjectProduct"),errorString.trimmed());
 return false; 
  }
 }

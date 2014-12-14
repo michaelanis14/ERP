@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreelineui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -64,7 +64,9 @@ PurchaseFreeLineUI*PurchaseFreeLineUI::GetUI(){
 void PurchaseFreeLineUI::fill(PurchaseFreeLine* purchasefreeline){ 
 clear();
 this->purchasefreeline = purchasefreeline;
+purchase->setIndexByKey(purchasefreeline->PurchaseID);
 description->setText(purchasefreeline->Description);
+contact->setIndexByKey(purchasefreeline->ContactID);
 amount->setText(QString::number(purchasefreeline->Amount));
 price->setText(QString::number(purchasefreeline->Price));
 } 
@@ -93,7 +95,7 @@ if(!purchase->isHidden())
 purchasefreeline->PurchaseID = purchase->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -110,7 +112,7 @@ if(!contact->isHidden())
 purchasefreeline->ContactID = contact->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -125,7 +127,7 @@ purchasefreeline->Amount = amount->text().trimmed().toDouble();
 }
 if(price->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Price Can't be Empty! \n";
+errorString += QObject::tr("Price Can't be Empty! \n");
 price->setObjectName("error");
 price->style()->unpolish(price);
 price->style()->polish(price);
@@ -145,7 +147,7 @@ PurchaseFreeLineIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "PurchaseFreeLine",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("PurchaseFreeLine"),errorString.trimmed());
 return false; 
  }
 }
@@ -159,7 +161,7 @@ if(purchasefreeline->PurchaseID == 0)
 purchasefreeline->PurchaseID = purchase->getKey();
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -176,7 +178,7 @@ if(purchasefreeline->ContactID == 0)
 purchasefreeline->ContactID = contact->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -191,7 +193,7 @@ purchasefreeline->Amount = amount->text().trimmed().toDouble();
 }
 if(price->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Price Can't be Empty! \n";
+errorString += QObject::tr("Price Can't be Empty! \n");
 price->setObjectName("error");
 price->style()->unpolish(price);
 price->style()->polish(price);
@@ -207,7 +209,7 @@ purchasefreeline->Price = price->text().trimmed().toDouble();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "PurchaseFreeLine",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("PurchaseFreeLine"),errorString.trimmed());
 return false; 
  }
 }

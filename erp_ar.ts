@@ -249,10 +249,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Employee</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Created On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -531,6 +527,505 @@
     </message>
     <message>
         <source>StoreStatus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hashKey Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bank Code Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bank Address Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account Number Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account Owner Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I B A N Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B I C Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BankAccount</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Header Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Footer Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactTelephone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactEmail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Salutation Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Birthdate Or Date Of Foundation Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Serial Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Postal Code Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>City Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Website Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tax Number Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactTelephone has the same description 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactEmail has the same description 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>BankAccount has the same name 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactClass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Email Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactField</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Value Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactFieldData</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactPersonTelephone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactPersonEmail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProjectContactPerson</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last Name Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Position Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Birthdate Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactPersonTelephone has the same description 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactPersonEmail has the same description 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactPerson</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactPersonField</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactPersonFieldData</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactStatus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ContactType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DeliveryOrderStoreProduct</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DeliveryOrderService</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DeliveryOrderFreeline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Barcode Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Creation Date Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delivery Date Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delivery Address Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DeliveryOrderFreeline has the same description 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DeliveryOrder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Amount Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Price Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DeliveryOrderStatus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FieldType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InvoiceStateDate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InvoiceFreeline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End Date Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Due Date Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>discount Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allowance Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InvoiceFreeline has the same description 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InvoicePeriod</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InvoiceSerial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InvoiceState</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>InvoiceYear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Total Amount Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comment Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PaymentType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProductImage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Short Description Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Selling Price Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Net Coast Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trade Margin Rate Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>information Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Critical Amount Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProductImage has the same name 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProductCategory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProductField</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProductFieldData</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProjectProduct</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProjectService</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProjectFile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Date Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProjectFile has the same name 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ProjectStatus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PurchaseStoreProduct</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PurchaseFreeLine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PurchaseFreeLine has the same description 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PurchaseSerial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>PurchaseStatus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start Time Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>End Time Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Break Time Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TimeBooking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User Name Can&apos;t be Empty! 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password Can&apos;t be Empty! 
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -113,7 +113,7 @@ deliveryorderstoreproductui->controllers->setFixedHeight(0);
 DeliveryOrderStoreProducts.append(deliveryorderstoreproductui);
 RemovebtnWidgets* rmdeliveryorderstoreproduct = new RemovebtnWidgets(0,deliveryorderstoreproductui);
 QObject::connect(rmdeliveryorderstoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderStoreProduct(QWidget*)));
-block1Layout->addRow("DeliveryOrderStoreProduct"+QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
+block1Layout->addRow(QObject::tr("DeliveryOrderStoreProduct")+QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
 }
 void DeliveryOrderUI::addDeliveryOrderStoreProduct(DeliveryOrderStoreProduct* DeliveryOrderStoreProduct){ 
 DeliveryOrderStoreProductUI* deliveryorderstoreproductui = new DeliveryOrderStoreProductUI();
@@ -140,7 +140,7 @@ deliveryorderserviceui->controllers->setFixedHeight(0);
 DeliveryOrderServices.append(deliveryorderserviceui);
 RemovebtnWidgets* rmdeliveryorderservice = new RemovebtnWidgets(0,deliveryorderserviceui);
 QObject::connect(rmdeliveryorderservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderService(QWidget*)));
-block2Layout->addRow("DeliveryOrderService"+QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
+block2Layout->addRow(QObject::tr("DeliveryOrderService")+QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
 }
 void DeliveryOrderUI::addDeliveryOrderService(DeliveryOrderService* DeliveryOrderService){ 
 DeliveryOrderServiceUI* deliveryorderserviceui = new DeliveryOrderServiceUI();
@@ -167,7 +167,7 @@ deliveryorderfreelineui->controllers->setFixedHeight(0);
 DeliveryOrderFreelines.append(deliveryorderfreelineui);
 RemovebtnWidgets* rmdeliveryorderfreeline = new RemovebtnWidgets(0,deliveryorderfreelineui);
 QObject::connect(rmdeliveryorderfreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderFreeline(QWidget*)));
-block3Layout->addRow("DeliveryOrderFreeline"+QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
+block3Layout->addRow(QObject::tr("DeliveryOrderFreeline")+QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
 }
 void DeliveryOrderUI::addDeliveryOrderFreeline(DeliveryOrderFreeline* DeliveryOrderFreeline){ 
 DeliveryOrderFreelineUI* deliveryorderfreelineui = new DeliveryOrderFreelineUI();
@@ -192,6 +192,8 @@ clear();
 this->deliveryorder = deliveryorder;
 serial->setText(deliveryorder->Serial);
 barcode->setText(deliveryorder->Barcode);
+deliveryorderstatus->setIndexByKey(deliveryorder->DeliveryOrderStatusID);
+contact->setIndexByKey(deliveryorder->ContactID);
 creationdate->setDate(QDate::fromString(deliveryorder->CreationDate));
 deliverydate->setDate(QDate::fromString(deliveryorder->DeliveryDate));
 note->setText(deliveryorder->Note);
@@ -247,7 +249,7 @@ bool errors = false;
 QString errorString =  "";
 if(serial->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Serial Can't be Empty! \n";
+errorString += QObject::tr("Serial Can't be Empty! \n");
 serial->setObjectName("error");
 serial->style()->unpolish(serial);
 serial->style()->polish(serial);
@@ -262,7 +264,7 @@ deliveryorder->Serial = serial->text().trimmed();
 }
 if(barcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Barcode Can't be Empty! \n";
+errorString += QObject::tr("Barcode Can't be Empty! \n");
 barcode->setObjectName("error");
 barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
@@ -281,7 +283,7 @@ if(!contact->isHidden())
 deliveryorder->ContactID = contact->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Creation Date Can't be Empty! \n";
+errorString += QObject::tr("Creation Date Can't be Empty! \n");
 creationdate->setObjectName("error");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
@@ -296,7 +298,7 @@ deliveryorder->CreationDate = creationdate->text().trimmed();
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Delivery Date Can't be Empty! \n";
+errorString += QObject::tr("Delivery Date Can't be Empty! \n");
 deliverydate->setObjectName("error");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
@@ -311,7 +313,7 @@ deliveryorder->DeliveryDate = deliverydate->text().trimmed();
 }
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -326,7 +328,7 @@ deliveryorder->Note = note->text().trimmed();
 }
 if(header->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Header Can't be Empty! \n";
+errorString += QObject::tr("Header Can't be Empty! \n");
 header->setObjectName("error");
 header->style()->unpolish(header);
 header->style()->polish(header);
@@ -341,7 +343,7 @@ deliveryorder->Header = header->text().trimmed();
 }
 if(footer->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Footer Can't be Empty! \n";
+errorString += QObject::tr("Footer Can't be Empty! \n");
 footer->setObjectName("error");
 footer->style()->unpolish(footer);
 footer->style()->polish(footer);
@@ -356,7 +358,7 @@ deliveryorder->Footer = footer->text().trimmed();
 }
 if(deliveryaddress->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Delivery Address Can't be Empty! \n";
+errorString += QObject::tr("Delivery Address Can't be Empty! \n");
 deliveryaddress->setObjectName("error");
 deliveryaddress->style()->unpolish(deliveryaddress);
 deliveryaddress->style()->polish(deliveryaddress);
@@ -378,7 +380,7 @@ for(int w = 0; w < DeliveryOrderFreelines.length(); w++){
 if(DeliveryOrderFreelines.at(j) != DeliveryOrderFreelines.at(w))
 if(DeliveryOrderFreelines.at(j)->description->text() == DeliveryOrderFreelines.at(w)->description->text()){
 errors = true; 
- errorString += "DeliveryOrderFreeline has the same description \n";
+ errorString += QObject::tr("DeliveryOrderFreeline has the same description \n");
 DeliveryOrderFreelines.at(j)->description->setObjectName("error");
 DeliveryOrderFreelines.at(j)->description->style()->unpolish(DeliveryOrderFreelines.at(j)->description);
 DeliveryOrderFreelines.at(j)->description->style()->polish(DeliveryOrderFreelines.at(j)->description);
@@ -433,7 +435,7 @@ DeliveryOrderIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "DeliveryOrder",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("DeliveryOrder"),errorString.trimmed());
 return false; 
  }
 }
@@ -445,7 +447,7 @@ bool errors = false;
 QString errorString =  "";
 if(serial->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Serial Can't be Empty! \n";
+errorString += QObject::tr("Serial Can't be Empty! \n");
 serial->setObjectName("error");
 serial->style()->unpolish(serial);
 serial->style()->polish(serial);
@@ -460,7 +462,7 @@ deliveryorder->Serial = serial->text().trimmed();
 }
 if(barcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Barcode Can't be Empty! \n";
+errorString += QObject::tr("Barcode Can't be Empty! \n");
 barcode->setObjectName("error");
 barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
@@ -479,7 +481,7 @@ if(deliveryorder->ContactID == 0)
 deliveryorder->ContactID = contact->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Creation Date Can't be Empty! \n";
+errorString += QObject::tr("Creation Date Can't be Empty! \n");
 creationdate->setObjectName("error");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
@@ -494,7 +496,7 @@ deliveryorder->CreationDate = creationdate->text().trimmed();
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Delivery Date Can't be Empty! \n";
+errorString += QObject::tr("Delivery Date Can't be Empty! \n");
 deliverydate->setObjectName("error");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
@@ -509,7 +511,7 @@ deliveryorder->DeliveryDate = deliverydate->text().trimmed();
 }
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -524,7 +526,7 @@ deliveryorder->Note = note->text().trimmed();
 }
 if(header->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Header Can't be Empty! \n";
+errorString += QObject::tr("Header Can't be Empty! \n");
 header->setObjectName("error");
 header->style()->unpolish(header);
 header->style()->polish(header);
@@ -539,7 +541,7 @@ deliveryorder->Header = header->text().trimmed();
 }
 if(footer->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Footer Can't be Empty! \n";
+errorString += QObject::tr("Footer Can't be Empty! \n");
 footer->setObjectName("error");
 footer->style()->unpolish(footer);
 footer->style()->polish(footer);
@@ -554,7 +556,7 @@ deliveryorder->Footer = footer->text().trimmed();
 }
 if(deliveryaddress->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Delivery Address Can't be Empty! \n";
+errorString += QObject::tr("Delivery Address Can't be Empty! \n");
 deliveryaddress->setObjectName("error");
 deliveryaddress->style()->unpolish(deliveryaddress);
 deliveryaddress->style()->polish(deliveryaddress);
@@ -576,7 +578,7 @@ for(int w = 0; w < DeliveryOrderFreelines.length(); w++){
 if(DeliveryOrderFreelines.at(j) != DeliveryOrderFreelines.at(w))
 if(DeliveryOrderFreelines.at(j)->description->text() == DeliveryOrderFreelines.at(w)->description->text()){
 errors = true; 
- errorString += "DeliveryOrderFreeline has the same description \n";
+ errorString +=QObject::tr( "DeliveryOrderFreeline has the same description \n");
 DeliveryOrderFreelines.at(j)->description->setObjectName("error");
 DeliveryOrderFreelines.at(j)->description->style()->unpolish(DeliveryOrderFreelines.at(j)->description);
 DeliveryOrderFreelines.at(j)->description->style()->polish(DeliveryOrderFreelines.at(j)->description);
@@ -603,7 +605,7 @@ if(!DeliveryOrderFreelines.at(i)->updateModel()){
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "DeliveryOrder",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("DeliveryOrder"),errorString.trimmed());
 return false; 
  }
 }

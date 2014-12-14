@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -100,7 +100,7 @@ invoicestatedateui->controllers->setFixedHeight(0);
 InvoiceStateDates.append(invoicestatedateui);
 RemovebtnWidgets* rminvoicestatedate = new RemovebtnWidgets(0,invoicestatedateui);
 QObject::connect(rminvoicestatedate, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceStateDate(QWidget*)));
-block0Layout->addRow("InvoiceStateDate"+QString::number(InvoiceStateDates.count()),rminvoicestatedate);
+block0Layout->addRow(QObject::tr("InvoiceStateDate")+QString::number(InvoiceStateDates.count()),rminvoicestatedate);
 }
 void InvoiceUI::addInvoiceStateDate(InvoiceStateDate* InvoiceStateDate){ 
 InvoiceStateDateUI* invoicestatedateui = new InvoiceStateDateUI();
@@ -127,7 +127,7 @@ invoicefreelineui->controllers->setFixedHeight(0);
 InvoiceFreelines.append(invoicefreelineui);
 RemovebtnWidgets* rminvoicefreeline = new RemovebtnWidgets(0,invoicefreelineui);
 QObject::connect(rminvoicefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceFreeline(QWidget*)));
-block0Layout->addRow("InvoiceFreeline"+QString::number(InvoiceFreelines.count()),rminvoicefreeline);
+block0Layout->addRow(QObject::tr("InvoiceFreeline")+QString::number(InvoiceFreelines.count()),rminvoicefreeline);
 }
 void InvoiceUI::addInvoiceFreeline(InvoiceFreeline* InvoiceFreeline){ 
 InvoiceFreelineUI* invoicefreelineui = new InvoiceFreelineUI();
@@ -154,7 +154,7 @@ paymentui->controllers->setFixedHeight(0);
 Payments.append(paymentui);
 RemovebtnWidgets* rmpayment = new RemovebtnWidgets(0,paymentui);
 QObject::connect(rmpayment, SIGNAL(removePressed(QWidget*)), this, SLOT(removePayment(QWidget*)));
-block0Layout->addRow("Payment"+QString::number(Payments.count()),rmpayment);
+block0Layout->addRow(QObject::tr("Payment")+QString::number(Payments.count()),rmpayment);
 }
 void InvoiceUI::addPayment(Payment* Payment){ 
 PaymentUI* paymentui = new PaymentUI();
@@ -177,8 +177,12 @@ block0Layout->removeRow(sender);
 void InvoiceUI::fill(Invoice* invoice){ 
 clear();
 this->invoice = invoice;
+invoiceserial->setIndexByKey(invoice->InvoiceSerialID);
 creationdate->setDate(QDate::fromString(invoice->CreationDate));
 enddate->setDate(QDate::fromString(invoice->EndDate));
+invoiceperiod->setIndexByKey(invoice->InvoicePeriodID);
+invoiceyear->setIndexByKey(invoice->InvoiceYearID);
+project->setIndexByKey(invoice->ProjectID);
 duedate->setDate(QDate::fromString(invoice->DueDate));
 discount->setText(QString::number(invoice->discount));
 allowance->setText(QString::number(invoice->Allowance));
@@ -232,7 +236,7 @@ if(!invoiceserial->isHidden())
 invoice->InvoiceSerialID = invoiceserial->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Creation Date Can't be Empty! \n";
+errorString += QObject::tr("Creation Date Can't be Empty! \n");
 creationdate->setObjectName("error");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
@@ -247,7 +251,7 @@ invoice->CreationDate = creationdate->text().trimmed();
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Date Can't be Empty! \n";
+errorString += QObject::tr("End Date Can't be Empty! \n");
 enddate->setObjectName("error");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
@@ -268,7 +272,7 @@ if(!project->isHidden())
 invoice->ProjectID = project->getKey();
 if(duedate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Due Date Can't be Empty! \n";
+errorString += QObject::tr("Due Date Can't be Empty! \n");
 duedate->setObjectName("error");
 duedate->style()->unpolish(duedate);
 duedate->style()->polish(duedate);
@@ -283,7 +287,7 @@ invoice->DueDate = duedate->text().trimmed();
 }
 if(discount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "discount Can't be Empty! \n";
+errorString += QObject::tr("discount Can't be Empty! \n");
 discount->setObjectName("error");
 discount->style()->unpolish(discount);
 discount->style()->polish(discount);
@@ -298,7 +302,7 @@ invoice->discount = discount->text().trimmed().toDouble();
 }
 if(allowance->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Allowance Can't be Empty! \n";
+errorString += QObject::tr("Allowance Can't be Empty! \n");
 allowance->setObjectName("error");
 allowance->style()->unpolish(allowance);
 allowance->style()->polish(allowance);
@@ -320,7 +324,7 @@ for(int w = 0; w < InvoiceFreelines.length(); w++){
 if(InvoiceFreelines.at(j) != InvoiceFreelines.at(w))
 if(InvoiceFreelines.at(j)->description->text() == InvoiceFreelines.at(w)->description->text()){
 errors = true; 
- errorString += "InvoiceFreeline has the same description \n";
+ errorString += QObject::tr("InvoiceFreeline has the same description \n");
 InvoiceFreelines.at(j)->description->setObjectName("error");
 InvoiceFreelines.at(j)->description->style()->unpolish(InvoiceFreelines.at(j)->description);
 InvoiceFreelines.at(j)->description->style()->polish(InvoiceFreelines.at(j)->description);
@@ -328,7 +332,7 @@ InvoiceFreelines.at(j)->description->update();
 }}}
 if(header->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Header Can't be Empty! \n";
+errorString += QObject::tr("Header Can't be Empty! \n");
 header->setObjectName("error");
 header->style()->unpolish(header);
 header->style()->polish(header);
@@ -343,7 +347,7 @@ invoice->Header = header->text().trimmed();
 }
 if(footer->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Footer Can't be Empty! \n";
+errorString += QObject::tr("Footer Can't be Empty! \n");
 footer->setObjectName("error");
 footer->style()->unpolish(footer);
 footer->style()->polish(footer);
@@ -405,7 +409,7 @@ InvoiceIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Invoice",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Invoice"),errorString.trimmed());
 return false; 
  }
 }
@@ -419,7 +423,7 @@ if(invoice->InvoiceSerialID == 0)
 invoice->InvoiceSerialID = invoiceserial->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Creation Date Can't be Empty! \n";
+errorString += QObject::tr("Creation Date Can't be Empty! \n");
 creationdate->setObjectName("error");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
@@ -434,7 +438,7 @@ invoice->CreationDate = creationdate->text().trimmed();
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Date Can't be Empty! \n";
+errorString += QObject::tr("End Date Can't be Empty! \n");
 enddate->setObjectName("error");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
@@ -455,7 +459,7 @@ if(invoice->ProjectID == 0)
 invoice->ProjectID = project->getKey();
 if(duedate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Due Date Can't be Empty! \n";
+errorString += QObject::tr("Due Date Can't be Empty! \n");
 duedate->setObjectName("error");
 duedate->style()->unpolish(duedate);
 duedate->style()->polish(duedate);
@@ -470,7 +474,7 @@ invoice->DueDate = duedate->text().trimmed();
 }
 if(discount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "discount Can't be Empty! \n";
+errorString += QObject::tr("discount Can't be Empty! \n");
 discount->setObjectName("error");
 discount->style()->unpolish(discount);
 discount->style()->polish(discount);
@@ -485,7 +489,7 @@ invoice->discount = discount->text().trimmed().toDouble();
 }
 if(allowance->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Allowance Can't be Empty! \n";
+errorString += QObject::tr("Allowance Can't be Empty! \n");
 allowance->setObjectName("error");
 allowance->style()->unpolish(allowance);
 allowance->style()->polish(allowance);
@@ -507,7 +511,7 @@ for(int w = 0; w < InvoiceFreelines.length(); w++){
 if(InvoiceFreelines.at(j) != InvoiceFreelines.at(w))
 if(InvoiceFreelines.at(j)->description->text() == InvoiceFreelines.at(w)->description->text()){
 errors = true; 
- errorString += "InvoiceFreeline has the same description \n";
+ errorString +=QObject::tr( "InvoiceFreeline has the same description \n");
 InvoiceFreelines.at(j)->description->setObjectName("error");
 InvoiceFreelines.at(j)->description->style()->unpolish(InvoiceFreelines.at(j)->description);
 InvoiceFreelines.at(j)->description->style()->polish(InvoiceFreelines.at(j)->description);
@@ -515,7 +519,7 @@ InvoiceFreelines.at(j)->description->update();
 }}}
 if(header->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Header Can't be Empty! \n";
+errorString += QObject::tr("Header Can't be Empty! \n");
 header->setObjectName("error");
 header->style()->unpolish(header);
 header->style()->polish(header);
@@ -530,7 +534,7 @@ invoice->Header = header->text().trimmed();
 }
 if(footer->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Footer Can't be Empty! \n";
+errorString += QObject::tr("Footer Can't be Empty! \n");
 footer->setObjectName("error");
 footer->style()->unpolish(footer);
 footer->style()->polish(footer);
@@ -564,7 +568,7 @@ if(!Payments.at(i)->updateModel()){
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Invoice",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Invoice"),errorString.trimmed());
 return false; 
  }
 }

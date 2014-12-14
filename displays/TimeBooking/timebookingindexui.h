@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: timebookingindexui.h
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -14,7 +14,7 @@
 #include "../../Model/timebooking.h"
 #include "../../Model/project.h"
 #include "../../Model/service.h"
-#include "../../Model/employee.h"
+#include "../../Model/user.h"
 
 
 #include <QWidget>

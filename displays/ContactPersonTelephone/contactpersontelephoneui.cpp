@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersontelephoneui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -60,6 +60,7 @@ clear();
 this->contactpersontelephone = contactpersontelephone;
 description->setText(contactpersontelephone->Description);
 number->setText(QString::number(contactpersontelephone->Number));
+contactperson->setIndexByKey(contactpersontelephone->ContactPersonID);
 } 
 void ContactPersonTelephoneUI::clear(){ 
 delete this->contactpersontelephone;
@@ -83,7 +84,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -98,7 +99,7 @@ contactpersontelephone->Description = description->text().trimmed();
 }
 if(number->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Number Can't be Empty! \n";
+errorString += QObject::tr("Number Can't be Empty! \n");
 number->setObjectName("error");
 number->style()->unpolish(number);
 number->style()->polish(number);
@@ -120,7 +121,7 @@ ContactPersonTelephoneIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ContactPersonTelephone",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ContactPersonTelephone"),errorString.trimmed());
 return false; 
  }
 }
@@ -132,7 +133,7 @@ bool errors = false;
 QString errorString =  "";
 if(description->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Description Can't be Empty! \n";
+errorString += QObject::tr("Description Can't be Empty! \n");
 description->setObjectName("error");
 description->style()->unpolish(description);
 description->style()->polish(description);
@@ -147,7 +148,7 @@ contactpersontelephone->Description = description->text().trimmed();
 }
 if(number->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Number Can't be Empty! \n";
+errorString += QObject::tr("Number Can't be Empty! \n");
 number->setObjectName("error");
 number->style()->unpolish(number);
 number->style()->polish(number);
@@ -165,7 +166,7 @@ contactpersontelephone->ContactPersonID = contactperson->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactPersonTelephone",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ContactPersonTelephone"),errorString.trimmed());
 return false; 
  }
 }

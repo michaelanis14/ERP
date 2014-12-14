@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonfielddataui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -57,6 +57,8 @@ ContactPersonFieldDataUI*ContactPersonFieldDataUI::GetUI(){
 void ContactPersonFieldDataUI::fill(ContactPersonFieldData* contactpersonfielddata){ 
 clear();
 this->contactpersonfielddata = contactpersonfielddata;
+contactperson->setIndexByKey(contactpersonfielddata->ContactPersonID);
+contactpersonfield->setIndexByKey(contactpersonfielddata->ContactPersonFieldID);
 value->setText(contactpersonfielddata->Value);
 } 
 void ContactPersonFieldDataUI::clear(){ 
@@ -84,7 +86,7 @@ if(!contactpersonfield->isHidden())
 contactpersonfielddata->ContactPersonFieldID = contactpersonfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Value Can't be Empty! \n";
+errorString += QObject::tr("Value Can't be Empty! \n");
 value->setObjectName("error");
 value->style()->unpolish(value);
 value->style()->polish(value);
@@ -104,7 +106,7 @@ ContactPersonFieldDataIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ContactPersonFieldData",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ContactPersonFieldData"),errorString.trimmed());
 return false; 
  }
 }
@@ -120,7 +122,7 @@ if(contactpersonfielddata->ContactPersonFieldID == 0)
 contactpersonfielddata->ContactPersonFieldID = contactpersonfield->getKey();
 if(value->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Value Can't be Empty! \n";
+errorString += QObject::tr("Value Can't be Empty! \n");
 value->setObjectName("error");
 value->style()->unpolish(value);
 value->style()->polish(value);
@@ -136,7 +138,7 @@ contactpersonfielddata->Value = value->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactPersonFieldData",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ContactPersonFieldData"),errorString.trimmed());
 return false; 
  }
 }

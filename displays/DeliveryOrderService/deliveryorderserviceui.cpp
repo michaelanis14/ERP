@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderserviceui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,6 +59,8 @@ DeliveryOrderServiceUI*DeliveryOrderServiceUI::GetUI(){
 void DeliveryOrderServiceUI::fill(DeliveryOrderService* deliveryorderservice){ 
 clear();
 this->deliveryorderservice = deliveryorderservice;
+deliveryorder->setIndexByKey(deliveryorderservice->DeliveryOrderID);
+service->setIndexByKey(deliveryorderservice->ServiceID);
 amount->setText(QString::number(deliveryorderservice->Amount));
 } 
 void DeliveryOrderServiceUI::clear(){ 
@@ -86,7 +88,7 @@ if(!service->isHidden())
 deliveryorderservice->ServiceID = service->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -106,7 +108,7 @@ DeliveryOrderServiceIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "DeliveryOrderService",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("DeliveryOrderService"),errorString.trimmed());
 return false; 
  }
 }
@@ -122,7 +124,7 @@ if(deliveryorderservice->ServiceID == 0)
 deliveryorderservice->ServiceID = service->getKey();
 if(amount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Amount Can't be Empty! \n";
+errorString += QObject::tr("Amount Can't be Empty! \n");
 amount->setObjectName("error");
 amount->style()->unpolish(amount);
 amount->style()->polish(amount);
@@ -138,7 +140,7 @@ deliveryorderservice->Amount = amount->text().trimmed().toDouble();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "DeliveryOrderService",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("DeliveryOrderService"),errorString.trimmed());
 return false; 
  }
 }

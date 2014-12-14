@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: timebookingui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -52,9 +52,9 @@ block0Layout->addRow(QObject::tr("Project"),project);
 service = new ERPComboBox();
 service->addItems(Service::GetPairList());
 block0Layout->addRow(QObject::tr("Service"),service);
-employee = new ERPComboBox();
-employee->addItems(Employee::GetPairList());
-block0Layout->addRow(QObject::tr("Employee"),employee);
+user = new ERPComboBox();
+user->addItems(User::GetPairList());
+block0Layout->addRow(QObject::tr("User"),user);
 note = new QLineEdit();
 block0Layout->addRow(QObject::tr("Note"),note);
 flowLayout->addWidget(block0Layout);
@@ -82,6 +82,9 @@ starttime->setText(timebooking->StartTime);
 endtime->setText(timebooking->EndTime);
 breaktime->setText(timebooking->BreakTime);
 onlytimebooking->setChecked(timebooking->OnlyTimeBooking);
+project->setIndexByKey(timebooking->ProjectID);
+service->setIndexByKey(timebooking->ServiceID);
+user->setIndexByKey(timebooking->UserID);
 note->setText(timebooking->Note);
 } 
 void TimeBookingUI::clear(){ 
@@ -111,7 +114,7 @@ bool errors = false;
 QString errorString =  "";
 if(startdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Start Date Can't be Empty! \n";
+errorString += QObject::tr("Start Date Can't be Empty! \n");
 startdate->setObjectName("error");
 startdate->style()->unpolish(startdate);
 startdate->style()->polish(startdate);
@@ -126,7 +129,7 @@ timebooking->StartDate = startdate->text().trimmed();
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Date Can't be Empty! \n";
+errorString += QObject::tr("End Date Can't be Empty! \n");
 enddate->setObjectName("error");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
@@ -141,7 +144,7 @@ timebooking->EndDate = enddate->text().trimmed();
 }
 if(starttime->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Start Time Can't be Empty! \n";
+errorString += QObject::tr("Start Time Can't be Empty! \n");
 starttime->setObjectName("error");
 starttime->style()->unpolish(starttime);
 starttime->style()->polish(starttime);
@@ -156,7 +159,7 @@ timebooking->StartTime = starttime->text().trimmed();
 }
 if(endtime->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Time Can't be Empty! \n";
+errorString += QObject::tr("End Time Can't be Empty! \n");
 endtime->setObjectName("error");
 endtime->style()->unpolish(endtime);
 endtime->style()->polish(endtime);
@@ -171,7 +174,7 @@ timebooking->EndTime = endtime->text().trimmed();
 }
 if(breaktime->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Break Time Can't be Empty! \n";
+errorString += QObject::tr("Break Time Can't be Empty! \n");
 breaktime->setObjectName("error");
 breaktime->style()->unpolish(breaktime);
 breaktime->style()->polish(breaktime);
@@ -189,11 +192,11 @@ if(!project->isHidden())
 timebooking->ProjectID = project->getKey();
 if(!service->isHidden()) 
 timebooking->ServiceID = service->getKey();
-if(!employee->isHidden()) 
-timebooking->EmployeeID = employee->getKey();
+if(!user->isHidden()) 
+timebooking->UserID = user->getKey();
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -213,7 +216,7 @@ TimeBookingIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "TimeBooking",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("TimeBooking"),errorString.trimmed());
 return false; 
  }
 }
@@ -225,7 +228,7 @@ bool errors = false;
 QString errorString =  "";
 if(startdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Start Date Can't be Empty! \n";
+errorString += QObject::tr("Start Date Can't be Empty! \n");
 startdate->setObjectName("error");
 startdate->style()->unpolish(startdate);
 startdate->style()->polish(startdate);
@@ -240,7 +243,7 @@ timebooking->StartDate = startdate->text().trimmed();
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Date Can't be Empty! \n";
+errorString += QObject::tr("End Date Can't be Empty! \n");
 enddate->setObjectName("error");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
@@ -255,7 +258,7 @@ timebooking->EndDate = enddate->text().trimmed();
 }
 if(starttime->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Start Time Can't be Empty! \n";
+errorString += QObject::tr("Start Time Can't be Empty! \n");
 starttime->setObjectName("error");
 starttime->style()->unpolish(starttime);
 starttime->style()->polish(starttime);
@@ -270,7 +273,7 @@ timebooking->StartTime = starttime->text().trimmed();
 }
 if(endtime->text().trimmed().isEmpty()){
 errors = true;
-errorString += "End Time Can't be Empty! \n";
+errorString += QObject::tr("End Time Can't be Empty! \n");
 endtime->setObjectName("error");
 endtime->style()->unpolish(endtime);
 endtime->style()->polish(endtime);
@@ -285,7 +288,7 @@ timebooking->EndTime = endtime->text().trimmed();
 }
 if(breaktime->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Break Time Can't be Empty! \n";
+errorString += QObject::tr("Break Time Can't be Empty! \n");
 breaktime->setObjectName("error");
 breaktime->style()->unpolish(breaktime);
 breaktime->style()->polish(breaktime);
@@ -303,11 +306,11 @@ if(timebooking->ProjectID == 0)
 timebooking->ProjectID = project->getKey();
 if(timebooking->ServiceID == 0) 
 timebooking->ServiceID = service->getKey();
-if(timebooking->EmployeeID == 0) 
-timebooking->EmployeeID = employee->getKey();
+if(timebooking->UserID == 0) 
+timebooking->UserID = user->getKey();
 if(note->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Note Can't be Empty! \n";
+errorString += QObject::tr("Note Can't be Empty! \n");
 note->setObjectName("error");
 note->style()->unpolish(note);
 note->style()->polish(note);
@@ -323,7 +326,7 @@ timebooking->Note = note->text().trimmed();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "TimeBooking",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("TimeBooking"),errorString.trimmed());
 return false; 
  }
 }

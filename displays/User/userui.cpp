@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: userui.cpp
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@ UserUI::UserUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 user = new User();
-flowLayout = new FlowLayout(formPanel);
+flowLayout = new FlowLayout(this);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QPushButton* save = new QPushButton("Save");
@@ -28,35 +28,34 @@ QPushButton* save = new QPushButton("Save");
  this->controllers->addControllerButton(clear);  
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+ block0Layout->setMinimumWidth(330);
 name = new QLineEdit();
 QStringList* list = new QStringList(User::GetStringList());
 QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectUser()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 username = new QLineEdit();
-block0Layout->addRow("Username",username);
+block0Layout->addRow(QObject::tr("User Name"),username);
 password = new QLineEdit();
-block0Layout->addRow("Password",password);
-lastlogin = new QLineEdit();
-block0Layout->addRow("Last Login",lastlogin);
-employee = new ERPComboBox();
-employee->addItems(Employee::GetHashList());
-block0Layout->addRow("Employee",employee);
-active = new QCheckBox();
-block0Layout->addRow("active",active);
-lastip = new QLineEdit();
-block0Layout->addRow("lastI P",lastip);
+block0Layout->addRow(QObject::tr("Password"),password);
+language = new ERPComboBox();
+language->addItems(Language::GetPairList());
+block0Layout->addRow(QObject::tr("Language"),language);
+contact = new ERPComboBox();
+contact->addItems(Contact::GetPairList());
+block0Layout->addRow(QObject::tr("Contact"),contact);
 flowLayout->addWidget(block0Layout);
 
 }
 ERPDisplay* UserUI::p_instance = 0;
 void UserUI::ShowUI() { 
-	if (p_instance == 0) { 
-		p_instance = new UserUI(mainwindow::GetMainDisplay());
-	} 
-	mainwindow::ShowDisplay(p_instance); 
+	if (p_instance != 0) 
+	p_instance->deleteLater(); 
+	p_instance = new UserUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
 }
 UserUI*UserUI::GetUI(){ 
  	if (p_instance == 0) { 
@@ -68,25 +67,21 @@ void UserUI::fill(User* user){
 clear();
 this->user = user;
 name->setText(user->Name);
-username->setText(user->Username);
+username->setText(user->UserName);
 password->setText(user->Password);
-lastlogin->setText(user->LastLogin);
-active->setChecked(user->active);
-lastip->setText(user->lastIP);
+language->setIndexByKey(user->LanguageID);
+contact->setIndexByKey(user->ContactID);
 } 
 void UserUI::clear(){ 
 delete this->user;
 username->setText("");
 password->setText("");
-lastlogin->setText("");
-active->setChecked(false);
-lastip->setText("");
 this->user = new User();
 } 
 void UserUI::selectUser(){ 
-if(User::GetStringList().contains(name->text()))
+if(User::GetStringList().contains(this->user->Name))
 {
-User* con = User::Get(name->text());
+User* con = User::Get(this->user->Name);
 if(this->user->UserID != con->UserID){
 fill(con);
 }
@@ -99,7 +94,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -114,7 +109,7 @@ user->Name = name->text().trimmed();
 }
 if(username->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Username Can't be Empty! \n";
+errorString += QObject::tr("User Name Can't be Empty! \n");
 username->setObjectName("error");
 username->style()->unpolish(username);
 username->style()->polish(username);
@@ -125,11 +120,11 @@ username->setObjectName("username");
 username->style()->unpolish(username);
 username->style()->polish(username);
 username->update();
-user->Username = username->text().trimmed();
+user->UserName = username->text().trimmed();
 }
 if(password->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Password Can't be Empty! \n";
+errorString += QObject::tr("Password Can't be Empty! \n");
 password->setObjectName("error");
 password->style()->unpolish(password);
 password->style()->polish(password);
@@ -142,39 +137,10 @@ password->style()->polish(password);
 password->update();
 user->Password = password->text().trimmed();
 }
-if(lastlogin->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Last Login Can't be Empty! \n";
-lastlogin->setObjectName("error");
-lastlogin->style()->unpolish(lastlogin);
-lastlogin->style()->polish(lastlogin);
-lastlogin->update();
-}
-else { 
-lastlogin->setObjectName("lastlogin");
-lastlogin->style()->unpolish(lastlogin);
-lastlogin->style()->polish(lastlogin);
-lastlogin->update();
-user->LastLogin = lastlogin->text().trimmed();
-}
-if(user->EmployeeID == 0) 
-user->EmployeeID = employee->getKey();
-user->active = active->text().trimmed().toInt();
-if(lastip->text().trimmed().isEmpty()){
-errors = true;
-errorString += "lastI P Can't be Empty! \n";
-lastip->setObjectName("error");
-lastip->style()->unpolish(lastip);
-lastip->style()->polish(lastip);
-lastip->update();
-}
-else { 
-lastip->setObjectName("lastip");
-lastip->style()->unpolish(lastip);
-lastip->style()->polish(lastip);
-lastip->update();
-user->lastIP = lastip->text().trimmed();
-}
+if(!language->isHidden()) 
+user->LanguageID = language->getKey();
+if(!contact->isHidden()) 
+user->ContactID = contact->getKey();
 if(!errors) {
 user->save();
 if(!errors){
@@ -182,10 +148,69 @@ UserIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "User",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("User"),errorString.trimmed());
 return false; 
  }
 }
 void UserUI::cancel(){ 
 UserIndexUI::ShowUI();
+}
+bool UserUI::updateModel(){ 
+bool errors = false;
+QString errorString =  "";
+if(name->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Name Can't be Empty! \n");
+name->setObjectName("error");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+}
+else { 
+name->setObjectName("name");
+name->style()->unpolish(name);
+name->style()->polish(name);
+name->update();
+user->Name = name->text().trimmed();
+}
+if(username->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("User Name Can't be Empty! \n");
+username->setObjectName("error");
+username->style()->unpolish(username);
+username->style()->polish(username);
+username->update();
+}
+else { 
+username->setObjectName("username");
+username->style()->unpolish(username);
+username->style()->polish(username);
+username->update();
+user->UserName = username->text().trimmed();
+}
+if(password->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Password Can't be Empty! \n");
+password->setObjectName("error");
+password->style()->unpolish(password);
+password->style()->polish(password);
+password->update();
+}
+else { 
+password->setObjectName("password");
+password->style()->unpolish(password);
+password->style()->polish(password);
+password->update();
+user->Password = password->text().trimmed();
+}
+if(user->LanguageID == 0) 
+user->LanguageID = language->getKey();
+if(user->ContactID == 0) 
+user->ContactID = contact->getKey();
+if(!errors){
+	return true;
+}
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("User"),errorString.trimmed());
+return false; 
+ }
 }

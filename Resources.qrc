@@ -11,6 +11,6 @@
     </qresource>
     <qresource prefix="/">
         <file>Resources/icons/home.ico</file>
-        <file>ERP.qm</file>
+        <file>erp_ar.qm</file>
     </qresource>
 </RCC>

@@ -7,7 +7,8 @@
 #include "erpmodel.h"
 #include "company.h"
 #include "tax.h"
-#include "employee.h"
+#include "language.h"
+#include "user.h"
 #include "contact.h"
 #include "contacttelephone.h"
 #include "contactemail.h"
@@ -254,22 +255,16 @@ bool ErpModel::init(){
 			country->save();
 		}
 	}
-	Employee::Init();
-	if(Employee::GetAll().count() < 2){
-		Employee* employee = new Employee("Mwzaf"+QString::number(Employee::GetAll().count()),"","");
-		employee->save();
-	}
 
-	/*	User::Init();
-	if(User::GetAll().count() < 2){
-		User* user = new User("User"+QString::number(User::GetAll().count()),"username","password","5/5/5",1,1,"192.168.1.1","","");
-		user->save();
-	}*/
 
 	Contact::Init();
-	for(int i = 0; i < 0; i++){
-//		Contact* cont = new Contact("Mr.","Contact"+QString::number(Contact::GetAll().count()),"5/5/5",1,1,Contact::GetAll().count(),"AA","na","na",1,1,1,"na","na","na","na");
-//		cont->save();
+	if(Contact::GetAll().count() < 1){
+		Contact* contact = new Contact("Employee1","Mr."+QString::number(Contact::GetAll().count()),"5/5/5",4,1,Contact::GetAll().count(),"AA","na","na",1,1,"na","na","na","na");
+		contact->save();
+	}
+	for(int i = 0; i < 100; i++){
+		Contact* cont = new Contact("Mr.","Contact"+QString::number(Contact::GetAll().count()),"5/5/5",1,1,Contact::GetAll().count(),"AA","na","na",1,1,"na","na","na","na");
+		cont->save();
 	}
 
 	Currency::Init();
@@ -296,7 +291,16 @@ bool ErpModel::init(){
 		tax = new Tax("20","","");
 		tax->save();
 	}
-	Employee::Init();
+	Language::Init();
+	if(Language::GetAll().count() < 1){
+		Language* language = new Language("Arabic",":/erp_ar.qm","","");
+		language->save();
+	}
+	User::Init();
+	if(User::GetAll().count() < 1){
+		User* user = new User("Default User","admin","admin",1,1,"","");
+		user->save();
+	}
 	Contact::Init();
 	ContactTelephone::Init();
 	ContactEmail::Init();

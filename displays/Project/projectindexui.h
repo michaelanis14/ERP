@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectindexui.h
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -14,6 +14,7 @@
 #include "../../Model/project.h"
 #include "../../Model/projectstatus.h"
 #include "../../Model/contact.h"
+#include "../../Model/projectsales.h"
 
 #include "../Task/taskui.h"
 #include "../ProjectContactPerson/projectcontactpersonui.h"

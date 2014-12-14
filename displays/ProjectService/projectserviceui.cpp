@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectserviceui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -55,6 +55,8 @@ ProjectServiceUI*ProjectServiceUI::GetUI(){
 void ProjectServiceUI::fill(ProjectService* projectservice){ 
 clear();
 this->projectservice = projectservice;
+project->setIndexByKey(projectservice->ProjectID);
+service->setIndexByKey(projectservice->ServiceID);
 } 
 void ProjectServiceUI::clear(){ 
 delete this->projectservice;
@@ -85,7 +87,7 @@ ProjectServiceIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ProjectService",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ProjectService"),errorString.trimmed());
 return false; 
  }
 }
@@ -102,7 +104,7 @@ projectservice->ServiceID = service->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ProjectService",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ProjectService"),errorString.trimmed());
 return false; 
  }
 }

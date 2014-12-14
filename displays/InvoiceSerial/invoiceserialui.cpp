@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceserialui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -80,7 +80,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -95,7 +95,7 @@ invoiceserial->Title = title->text().trimmed();
 }
 if(serial->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Serial Can't be Empty! \n";
+errorString += QObject::tr("Serial Can't be Empty! \n");
 serial->setObjectName("error");
 serial->style()->unpolish(serial);
 serial->style()->polish(serial);
@@ -115,7 +115,7 @@ InvoiceSerialIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "InvoiceSerial",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("InvoiceSerial"),errorString.trimmed());
 return false; 
  }
 }
@@ -127,7 +127,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -142,7 +142,7 @@ invoiceserial->Title = title->text().trimmed();
 }
 if(serial->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Serial Can't be Empty! \n";
+errorString += QObject::tr("Serial Can't be Empty! \n");
 serial->setObjectName("error");
 serial->style()->unpolish(serial);
 serial->style()->polish(serial);
@@ -158,7 +158,7 @@ invoiceserial->Serial = serial->text().trimmed().toInt();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "InvoiceSerial",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("InvoiceSerial"),errorString.trimmed());
 return false; 
  }
 }

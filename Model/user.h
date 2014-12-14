@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: user.h
-**   Created on: Wed Nov 26 16:22:56 EET 2014
+**   Created on: Sun Dec 14 22:39:11 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,19 +16,17 @@ class User  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	User();
-	User(QString Name,QString Username,QString Password,QString LastLogin,int EmployeeID,bool active,QString lastIP,QString CreatedOn,QString EditedOn);	int UserID;
+	User(QString Name,QString UserName,QString Password,int LanguageID,int ContactID,QString CreatedOn,QString EditedOn);	int UserID;
 	QString Name;
-	QString Username;
+	QString UserName;
 	QString Password;
-	QString LastLogin;
-	int EmployeeID;
-	bool active;
-	QString lastIP;
+	int LanguageID;
+	int ContactID;
 	QString CreatedOn;
 	QString EditedOn;
-	QList<User*> users;
 	static bool Init();
 	bool save();
+	bool save(QSqlRecord &record);
 	bool remove();
 	User* get();
 	User* get(const QModelIndex &index);
@@ -38,7 +36,8 @@ public:
 	static QList<User*> Search(QString keyword);
 	static QList<User*> QuerySelect(QString select);
 	static QList<QString> GetStringList();
-	static QHash<int,QString> GetHashList();
+	static QList<QPair< int,QString > > GetPairList();
+	static QList<QPair< int,QString > > GetPairList(QList<User*> users);
 	static int GetIndex(QString title);
 	static User* GetInstance();
 	Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -47,16 +46,14 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	User(int UserID,QString Name,QString Username,QString Password,QString LastLogin,int EmployeeID,bool active,QString lastIP,QString CreatedOn,QString EditedOn);	static User* p_instance;
-	bool setName(int UserID, const QString &name);
-	bool setUsername(int UserID, const QString &username);
-	bool setPassword(int UserID, const QString &password);
-	bool setLastLogin(int UserID, const QString &lastlogin);
-	bool setEmployeeID(int UserID, const QString &employeeid);
-	bool setactive(int UserID, const QString &active);
-	bool setlastIP(int UserID, const QString &lastip);
-	bool setCreatedOn(int UserID, const QString &createdon);
-	bool setEditedOn(int UserID, const QString &editedon);
+	User(int UserID,QString Name,QString UserName,QString Password,int LanguageID,int ContactID,QString CreatedOn,QString EditedOn);	static User* p_instance;
+	bool setName(int UserID, const QString &Name);
+	bool setUserName(int UserID, const QString &UserName);
+	bool setPassword(int UserID, const QString &Password);
+	bool setLanguageID(int UserID, const QString &LanguageID);
+	bool setContactID(int UserID, const QString &ContactID);
+	bool setCreatedOn(int UserID, const QString &CreatedOn);
+	bool setEditedOn(int UserID, const QString &EditedOn);
 
 };
 #endif

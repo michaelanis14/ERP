@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -61,8 +61,10 @@ PaymentUI*PaymentUI::GetUI(){
 void PaymentUI::fill(Payment* payment){ 
 clear();
 this->payment = payment;
+invoice->setIndexByKey(payment->InvoiceID);
 totalamount->setText(QString::number(payment->TotalAmount));
 comment->setText(payment->Comment);
+paymenttype->setIndexByKey(payment->PaymentTypeID);
 } 
 void PaymentUI::clear(){ 
 delete this->payment;
@@ -88,7 +90,7 @@ if(!invoice->isHidden())
 payment->InvoiceID = invoice->getKey();
 if(totalamount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Total Amount Can't be Empty! \n";
+errorString += QObject::tr("Total Amount Can't be Empty! \n");
 totalamount->setObjectName("error");
 totalamount->style()->unpolish(totalamount);
 totalamount->style()->polish(totalamount);
@@ -103,7 +105,7 @@ payment->TotalAmount = totalamount->text().trimmed().toDouble();
 }
 if(comment->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Comment Can't be Empty! \n";
+errorString += QObject::tr("Comment Can't be Empty! \n");
 comment->setObjectName("error");
 comment->style()->unpolish(comment);
 comment->style()->polish(comment);
@@ -125,7 +127,7 @@ PaymentIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Payment",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Payment"),errorString.trimmed());
 return false; 
  }
 }
@@ -139,7 +141,7 @@ if(payment->InvoiceID == 0)
 payment->InvoiceID = invoice->getKey();
 if(totalamount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Total Amount Can't be Empty! \n";
+errorString += QObject::tr("Total Amount Can't be Empty! \n");
 totalamount->setObjectName("error");
 totalamount->style()->unpolish(totalamount);
 totalamount->style()->polish(totalamount);
@@ -154,7 +156,7 @@ payment->TotalAmount = totalamount->text().trimmed().toDouble();
 }
 if(comment->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Comment Can't be Empty! \n";
+errorString += QObject::tr("Comment Can't be Empty! \n");
 comment->setObjectName("error");
 comment->style()->unpolish(comment);
 comment->style()->polish(comment);
@@ -172,7 +174,7 @@ payment->PaymentTypeID = paymenttype->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Payment",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Payment"),errorString.trimmed());
 return false; 
  }
 }

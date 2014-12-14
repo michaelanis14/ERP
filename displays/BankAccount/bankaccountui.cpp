@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:12 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -78,12 +78,15 @@ void BankAccountUI::fill(BankAccount* bankaccount){
 clear();
 this->bankaccount = bankaccount;
 name->setText(bankaccount->Name);
+country->setIndexByKey(bankaccount->CountryID);
 bankcode->setText(bankaccount->BankCode);
 bankaddress->setText(bankaccount->BankAddress);
 accountnumber->setText(bankaccount->AccountNumber);
 accountowner->setText(bankaccount->AccountOwner);
 iban->setText(bankaccount->IBAN);
 bic->setText(bankaccount->BIC);
+currency->setIndexByKey(bankaccount->CurrencyID);
+contact->setIndexByKey(bankaccount->ContactID);
 } 
 void BankAccountUI::clear(){ 
 delete this->bankaccount;
@@ -111,7 +114,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -128,7 +131,7 @@ if(!country->isHidden())
 bankaccount->CountryID = country->getKey();
 if(bankcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Bank Code Can't be Empty! \n";
+errorString += QObject::tr("Bank Code Can't be Empty! \n");
 bankcode->setObjectName("error");
 bankcode->style()->unpolish(bankcode);
 bankcode->style()->polish(bankcode);
@@ -143,7 +146,7 @@ bankaccount->BankCode = bankcode->text().trimmed();
 }
 if(bankaddress->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Bank Address Can't be Empty! \n";
+errorString += QObject::tr("Bank Address Can't be Empty! \n");
 bankaddress->setObjectName("error");
 bankaddress->style()->unpolish(bankaddress);
 bankaddress->style()->polish(bankaddress);
@@ -158,7 +161,7 @@ bankaccount->BankAddress = bankaddress->text().trimmed();
 }
 if(accountnumber->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Account Number Can't be Empty! \n";
+errorString += QObject::tr("Account Number Can't be Empty! \n");
 accountnumber->setObjectName("error");
 accountnumber->style()->unpolish(accountnumber);
 accountnumber->style()->polish(accountnumber);
@@ -173,7 +176,7 @@ bankaccount->AccountNumber = accountnumber->text().trimmed();
 }
 if(accountowner->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Account Owner Can't be Empty! \n";
+errorString += QObject::tr("Account Owner Can't be Empty! \n");
 accountowner->setObjectName("error");
 accountowner->style()->unpolish(accountowner);
 accountowner->style()->polish(accountowner);
@@ -188,7 +191,7 @@ bankaccount->AccountOwner = accountowner->text().trimmed();
 }
 if(iban->text().trimmed().isEmpty()){
 errors = true;
-errorString += "I B A N Can't be Empty! \n";
+errorString += QObject::tr("I B A N Can't be Empty! \n");
 iban->setObjectName("error");
 iban->style()->unpolish(iban);
 iban->style()->polish(iban);
@@ -203,7 +206,7 @@ bankaccount->IBAN = iban->text().trimmed();
 }
 if(bic->text().trimmed().isEmpty()){
 errors = true;
-errorString += "B I C Can't be Empty! \n";
+errorString += QObject::tr("B I C Can't be Empty! \n");
 bic->setObjectName("error");
 bic->style()->unpolish(bic);
 bic->style()->polish(bic);
@@ -227,7 +230,7 @@ BankAccountIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "BankAccount",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("BankAccount"),errorString.trimmed());
 return false; 
  }
 }
@@ -239,7 +242,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -256,7 +259,7 @@ if(bankaccount->CountryID == 0)
 bankaccount->CountryID = country->getKey();
 if(bankcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Bank Code Can't be Empty! \n";
+errorString += QObject::tr("Bank Code Can't be Empty! \n");
 bankcode->setObjectName("error");
 bankcode->style()->unpolish(bankcode);
 bankcode->style()->polish(bankcode);
@@ -271,7 +274,7 @@ bankaccount->BankCode = bankcode->text().trimmed();
 }
 if(bankaddress->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Bank Address Can't be Empty! \n";
+errorString += QObject::tr("Bank Address Can't be Empty! \n");
 bankaddress->setObjectName("error");
 bankaddress->style()->unpolish(bankaddress);
 bankaddress->style()->polish(bankaddress);
@@ -286,7 +289,7 @@ bankaccount->BankAddress = bankaddress->text().trimmed();
 }
 if(accountnumber->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Account Number Can't be Empty! \n";
+errorString += QObject::tr("Account Number Can't be Empty! \n");
 accountnumber->setObjectName("error");
 accountnumber->style()->unpolish(accountnumber);
 accountnumber->style()->polish(accountnumber);
@@ -301,7 +304,7 @@ bankaccount->AccountNumber = accountnumber->text().trimmed();
 }
 if(accountowner->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Account Owner Can't be Empty! \n";
+errorString += QObject::tr("Account Owner Can't be Empty! \n");
 accountowner->setObjectName("error");
 accountowner->style()->unpolish(accountowner);
 accountowner->style()->polish(accountowner);
@@ -316,7 +319,7 @@ bankaccount->AccountOwner = accountowner->text().trimmed();
 }
 if(iban->text().trimmed().isEmpty()){
 errors = true;
-errorString += "I B A N Can't be Empty! \n";
+errorString += QObject::tr("I B A N Can't be Empty! \n");
 iban->setObjectName("error");
 iban->style()->unpolish(iban);
 iban->style()->polish(iban);
@@ -331,7 +334,7 @@ bankaccount->IBAN = iban->text().trimmed();
 }
 if(bic->text().trimmed().isEmpty()){
 errors = true;
-errorString += "B I C Can't be Empty! \n";
+errorString += QObject::tr("B I C Can't be Empty! \n");
 bic->setObjectName("error");
 bic->style()->unpolish(bic);
 bic->style()->polish(bic);
@@ -351,7 +354,7 @@ bankaccount->ContactID = contact->getKey();
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "BankAccount",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("BankAccount"),errorString.trimmed());
 return false; 
  }
 }

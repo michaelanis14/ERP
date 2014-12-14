@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -104,7 +104,7 @@ productimageui->controllers->setFixedHeight(0);
 ProductImages.append(productimageui);
 RemovebtnWidgets* rmproductimage = new RemovebtnWidgets(0,productimageui);
 QObject::connect(rmproductimage, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProductImage(QWidget*)));
-block2Layout->addRow("ProductImage"+QString::number(ProductImages.count()),rmproductimage);
+block2Layout->addRow(QObject::tr("ProductImage")+QString::number(ProductImages.count()),rmproductimage);
 }
 void ProductUI::addProductImage(ProductImage* ProductImage){ 
 ProductImageUI* productimageui = new ProductImageUI();
@@ -129,11 +129,14 @@ clear();
 this->product = product;
 name->setText(product->Name);
 shortdescription->setText(product->ShortDescription);
+unit->setIndexByKey(product->UnitID);
 sellingprice->setText(QString::number(product->SellingPrice));
 netcoast->setText(QString::number(product->NetCoast));
 trademarginrate->setText(QString::number(product->TradeMarginRate));
+tax->setIndexByKey(product->TaxID);
 information->setText(product->information);
 barcode->setText(product->Barcode);
+productcategory->setIndexByKey(product->ProductCategoryID);
 criticalamount->setText(QString::number(product->CriticalAmount));
 foreach(ProductImage* productimage, product->productimages) {
 addProductImage(productimage);
@@ -175,7 +178,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -190,7 +193,7 @@ product->Name = name->text().trimmed();
 }
 if(shortdescription->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Short Description Can't be Empty! \n";
+errorString += QObject::tr("Short Description Can't be Empty! \n");
 shortdescription->setObjectName("error");
 shortdescription->style()->unpolish(shortdescription);
 shortdescription->style()->polish(shortdescription);
@@ -207,7 +210,7 @@ if(!unit->isHidden())
 product->UnitID = unit->getKey();
 if(sellingprice->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Selling Price Can't be Empty! \n";
+errorString += QObject::tr("Selling Price Can't be Empty! \n");
 sellingprice->setObjectName("error");
 sellingprice->style()->unpolish(sellingprice);
 sellingprice->style()->polish(sellingprice);
@@ -222,7 +225,7 @@ product->SellingPrice = sellingprice->text().trimmed().toDouble();
 }
 if(netcoast->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Net Coast Can't be Empty! \n";
+errorString += QObject::tr("Net Coast Can't be Empty! \n");
 netcoast->setObjectName("error");
 netcoast->style()->unpolish(netcoast);
 netcoast->style()->polish(netcoast);
@@ -237,7 +240,7 @@ product->NetCoast = netcoast->text().trimmed().toDouble();
 }
 if(trademarginrate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Trade Margin Rate Can't be Empty! \n";
+errorString += QObject::tr("Trade Margin Rate Can't be Empty! \n");
 trademarginrate->setObjectName("error");
 trademarginrate->style()->unpolish(trademarginrate);
 trademarginrate->style()->polish(trademarginrate);
@@ -254,7 +257,7 @@ if(!tax->isHidden())
 product->TaxID = tax->getKey();
 if(information->text().trimmed().isEmpty()){
 errors = true;
-errorString += "information Can't be Empty! \n";
+errorString += QObject::tr("information Can't be Empty! \n");
 information->setObjectName("error");
 information->style()->unpolish(information);
 information->style()->polish(information);
@@ -269,7 +272,7 @@ product->information = information->text().trimmed();
 }
 if(barcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Barcode Can't be Empty! \n";
+errorString += QObject::tr("Barcode Can't be Empty! \n");
 barcode->setObjectName("error");
 barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
@@ -286,7 +289,7 @@ if(!productcategory->isHidden())
 product->ProductCategoryID = productcategory->getKey();
 if(criticalamount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Critical Amount Can't be Empty! \n";
+errorString += QObject::tr("Critical Amount Can't be Empty! \n");
 criticalamount->setObjectName("error");
 criticalamount->style()->unpolish(criticalamount);
 criticalamount->style()->polish(criticalamount);
@@ -308,7 +311,7 @@ for(int w = 0; w < ProductImages.length(); w++){
 if(ProductImages.at(j) != ProductImages.at(w))
 if(ProductImages.at(j)->name->text() == ProductImages.at(w)->name->text()){
 errors = true; 
- errorString += "ProductImage has the same name \n";
+ errorString += QObject::tr("ProductImage has the same name \n");
 ProductImages.at(j)->name->setObjectName("error");
 ProductImages.at(j)->name->style()->unpolish(ProductImages.at(j)->name);
 ProductImages.at(j)->name->style()->polish(ProductImages.at(j)->name);
@@ -335,7 +338,7 @@ ProductIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "Product",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("Product"),errorString.trimmed());
 return false; 
  }
 }
@@ -347,7 +350,7 @@ bool errors = false;
 QString errorString =  "";
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -362,7 +365,7 @@ product->Name = name->text().trimmed();
 }
 if(shortdescription->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Short Description Can't be Empty! \n";
+errorString += QObject::tr("Short Description Can't be Empty! \n");
 shortdescription->setObjectName("error");
 shortdescription->style()->unpolish(shortdescription);
 shortdescription->style()->polish(shortdescription);
@@ -379,7 +382,7 @@ if(product->UnitID == 0)
 product->UnitID = unit->getKey();
 if(sellingprice->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Selling Price Can't be Empty! \n";
+errorString += QObject::tr("Selling Price Can't be Empty! \n");
 sellingprice->setObjectName("error");
 sellingprice->style()->unpolish(sellingprice);
 sellingprice->style()->polish(sellingprice);
@@ -394,7 +397,7 @@ product->SellingPrice = sellingprice->text().trimmed().toDouble();
 }
 if(netcoast->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Net Coast Can't be Empty! \n";
+errorString += QObject::tr("Net Coast Can't be Empty! \n");
 netcoast->setObjectName("error");
 netcoast->style()->unpolish(netcoast);
 netcoast->style()->polish(netcoast);
@@ -409,7 +412,7 @@ product->NetCoast = netcoast->text().trimmed().toDouble();
 }
 if(trademarginrate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Trade Margin Rate Can't be Empty! \n";
+errorString += QObject::tr("Trade Margin Rate Can't be Empty! \n");
 trademarginrate->setObjectName("error");
 trademarginrate->style()->unpolish(trademarginrate);
 trademarginrate->style()->polish(trademarginrate);
@@ -426,7 +429,7 @@ if(product->TaxID == 0)
 product->TaxID = tax->getKey();
 if(information->text().trimmed().isEmpty()){
 errors = true;
-errorString += "information Can't be Empty! \n";
+errorString += QObject::tr("information Can't be Empty! \n");
 information->setObjectName("error");
 information->style()->unpolish(information);
 information->style()->polish(information);
@@ -441,7 +444,7 @@ product->information = information->text().trimmed();
 }
 if(barcode->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Barcode Can't be Empty! \n";
+errorString += QObject::tr("Barcode Can't be Empty! \n");
 barcode->setObjectName("error");
 barcode->style()->unpolish(barcode);
 barcode->style()->polish(barcode);
@@ -458,7 +461,7 @@ if(product->ProductCategoryID == 0)
 product->ProductCategoryID = productcategory->getKey();
 if(criticalamount->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Critical Amount Can't be Empty! \n";
+errorString += QObject::tr("Critical Amount Can't be Empty! \n");
 criticalamount->setObjectName("error");
 criticalamount->style()->unpolish(criticalamount);
 criticalamount->style()->polish(criticalamount);
@@ -480,7 +483,7 @@ for(int w = 0; w < ProductImages.length(); w++){
 if(ProductImages.at(j) != ProductImages.at(w))
 if(ProductImages.at(j)->name->text() == ProductImages.at(w)->name->text()){
 errors = true; 
- errorString += "ProductImage has the same name \n";
+ errorString +=QObject::tr( "ProductImage has the same name \n");
 ProductImages.at(j)->name->setObjectName("error");
 ProductImages.at(j)->name->style()->unpolish(ProductImages.at(j)->name);
 ProductImages.at(j)->name->style()->polish(ProductImages.at(j)->name);
@@ -495,7 +498,7 @@ if(!ProductImages.at(i)->updateModel()){
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "Product",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Product"),errorString.trimmed());
 return false; 
  }
 }

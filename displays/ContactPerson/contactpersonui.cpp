@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -104,7 +104,7 @@ contactpersontelephoneui->controllers->setFixedHeight(0);
 ContactPersonTelephones.append(contactpersontelephoneui);
 RemovebtnWidgets* rmcontactpersontelephone = new RemovebtnWidgets(0,contactpersontelephoneui);
 QObject::connect(rmcontactpersontelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonTelephone(QWidget*)));
-block1Layout->addRow("ContactPersonTelephone"+QString::number(ContactPersonTelephones.count()),rmcontactpersontelephone);
+block1Layout->addRow(QObject::tr("ContactPersonTelephone")+QString::number(ContactPersonTelephones.count()),rmcontactpersontelephone);
 }
 void ContactPersonUI::addContactPersonTelephone(ContactPersonTelephone* ContactPersonTelephone){ 
 ContactPersonTelephoneUI* contactpersontelephoneui = new ContactPersonTelephoneUI();
@@ -131,7 +131,7 @@ contactpersonemailui->controllers->setFixedHeight(0);
 ContactPersonEmails.append(contactpersonemailui);
 RemovebtnWidgets* rmcontactpersonemail = new RemovebtnWidgets(0,contactpersonemailui);
 QObject::connect(rmcontactpersonemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonEmail(QWidget*)));
-block2Layout->addRow("ContactPersonEmail"+QString::number(ContactPersonEmails.count()),rmcontactpersonemail);
+block2Layout->addRow(QObject::tr("ContactPersonEmail")+QString::number(ContactPersonEmails.count()),rmcontactpersonemail);
 }
 void ContactPersonUI::addContactPersonEmail(ContactPersonEmail* ContactPersonEmail){ 
 ContactPersonEmailUI* contactpersonemailui = new ContactPersonEmailUI();
@@ -158,7 +158,7 @@ projectcontactpersonui->controllers->setFixedHeight(0);
 ProjectContactPersons.append(projectcontactpersonui);
 RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
 QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
-block3Layout->addRow("ProjectContactPerson"+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
+block3Layout->addRow(QObject::tr("ProjectContactPerson")+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
 }
 void ContactPersonUI::addProjectContactPerson(ProjectContactPerson* ProjectContactPerson){ 
 ProjectContactPersonUI* projectcontactpersonui = new ProjectContactPersonUI();
@@ -182,6 +182,7 @@ void ContactPersonUI::fill(ContactPerson* contactperson){
 clear();
 this->contactperson = contactperson;
 title->setText(contactperson->Title);
+contact->setIndexByKey(contactperson->ContactID);
 name->setText(contactperson->Name);
 lastname->setText(contactperson->LastName);
 position->setText(contactperson->Position);
@@ -231,7 +232,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -248,7 +249,7 @@ if(!contact->isHidden())
 contactperson->ContactID = contact->getKey();
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -263,7 +264,7 @@ contactperson->Name = name->text().trimmed();
 }
 if(lastname->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Last Name Can't be Empty! \n";
+errorString += QObject::tr("Last Name Can't be Empty! \n");
 lastname->setObjectName("error");
 lastname->style()->unpolish(lastname);
 lastname->style()->polish(lastname);
@@ -278,7 +279,7 @@ contactperson->LastName = lastname->text().trimmed();
 }
 if(position->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Position Can't be Empty! \n";
+errorString += QObject::tr("Position Can't be Empty! \n");
 position->setObjectName("error");
 position->style()->unpolish(position);
 position->style()->polish(position);
@@ -293,7 +294,7 @@ contactperson->Position = position->text().trimmed();
 }
 if(birthdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Birthdate Can't be Empty! \n";
+errorString += QObject::tr("Birthdate Can't be Empty! \n");
 birthdate->setObjectName("error");
 birthdate->style()->unpolish(birthdate);
 birthdate->style()->polish(birthdate);
@@ -308,7 +309,7 @@ contactperson->Birthdate = birthdate->text().trimmed();
 }
 if(number->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Number Can't be Empty! \n";
+errorString += QObject::tr("Number Can't be Empty! \n");
 number->setObjectName("error");
 number->style()->unpolish(number);
 number->style()->polish(number);
@@ -330,7 +331,7 @@ for(int w = 0; w < ContactPersonTelephones.length(); w++){
 if(ContactPersonTelephones.at(j) != ContactPersonTelephones.at(w))
 if(ContactPersonTelephones.at(j)->description->text() == ContactPersonTelephones.at(w)->description->text()){
 errors = true; 
- errorString += "ContactPersonTelephone has the same description \n";
+ errorString += QObject::tr("ContactPersonTelephone has the same description \n");
 ContactPersonTelephones.at(j)->description->setObjectName("error");
 ContactPersonTelephones.at(j)->description->style()->unpolish(ContactPersonTelephones.at(j)->description);
 ContactPersonTelephones.at(j)->description->style()->polish(ContactPersonTelephones.at(j)->description);
@@ -345,7 +346,7 @@ for(int w = 0; w < ContactPersonEmails.length(); w++){
 if(ContactPersonEmails.at(j) != ContactPersonEmails.at(w))
 if(ContactPersonEmails.at(j)->description->text() == ContactPersonEmails.at(w)->description->text()){
 errors = true; 
- errorString += "ContactPersonEmail has the same description \n";
+ errorString += QObject::tr("ContactPersonEmail has the same description \n");
 ContactPersonEmails.at(j)->description->setObjectName("error");
 ContactPersonEmails.at(j)->description->style()->unpolish(ContactPersonEmails.at(j)->description);
 ContactPersonEmails.at(j)->description->style()->polish(ContactPersonEmails.at(j)->description);
@@ -400,7 +401,7 @@ ContactPersonIndexUI::ShowUI();
 return true;}
 else return false;
 }
-else{ QMessageBox::warning(this, "ContactPerson",errorString.trimmed());
+else{ QMessageBox::warning(this, QObject::tr("ContactPerson"),errorString.trimmed());
 return false; 
  }
 }
@@ -412,7 +413,7 @@ bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Title Can't be Empty! \n";
+errorString += QObject::tr("Title Can't be Empty! \n");
 title->setObjectName("error");
 title->style()->unpolish(title);
 title->style()->polish(title);
@@ -429,7 +430,7 @@ if(contactperson->ContactID == 0)
 contactperson->ContactID = contact->getKey();
 if(name->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Name Can't be Empty! \n";
+errorString += QObject::tr("Name Can't be Empty! \n");
 name->setObjectName("error");
 name->style()->unpolish(name);
 name->style()->polish(name);
@@ -444,7 +445,7 @@ contactperson->Name = name->text().trimmed();
 }
 if(lastname->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Last Name Can't be Empty! \n";
+errorString += QObject::tr("Last Name Can't be Empty! \n");
 lastname->setObjectName("error");
 lastname->style()->unpolish(lastname);
 lastname->style()->polish(lastname);
@@ -459,7 +460,7 @@ contactperson->LastName = lastname->text().trimmed();
 }
 if(position->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Position Can't be Empty! \n";
+errorString += QObject::tr("Position Can't be Empty! \n");
 position->setObjectName("error");
 position->style()->unpolish(position);
 position->style()->polish(position);
@@ -474,7 +475,7 @@ contactperson->Position = position->text().trimmed();
 }
 if(birthdate->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Birthdate Can't be Empty! \n";
+errorString += QObject::tr("Birthdate Can't be Empty! \n");
 birthdate->setObjectName("error");
 birthdate->style()->unpolish(birthdate);
 birthdate->style()->polish(birthdate);
@@ -489,7 +490,7 @@ contactperson->Birthdate = birthdate->text().trimmed();
 }
 if(number->text().trimmed().isEmpty()){
 errors = true;
-errorString += "Number Can't be Empty! \n";
+errorString += QObject::tr("Number Can't be Empty! \n");
 number->setObjectName("error");
 number->style()->unpolish(number);
 number->style()->polish(number);
@@ -511,7 +512,7 @@ for(int w = 0; w < ContactPersonTelephones.length(); w++){
 if(ContactPersonTelephones.at(j) != ContactPersonTelephones.at(w))
 if(ContactPersonTelephones.at(j)->description->text() == ContactPersonTelephones.at(w)->description->text()){
 errors = true; 
- errorString += "ContactPersonTelephone has the same description \n";
+ errorString +=QObject::tr( "ContactPersonTelephone has the same description \n");
 ContactPersonTelephones.at(j)->description->setObjectName("error");
 ContactPersonTelephones.at(j)->description->style()->unpolish(ContactPersonTelephones.at(j)->description);
 ContactPersonTelephones.at(j)->description->style()->polish(ContactPersonTelephones.at(j)->description);
@@ -526,7 +527,7 @@ for(int w = 0; w < ContactPersonEmails.length(); w++){
 if(ContactPersonEmails.at(j) != ContactPersonEmails.at(w))
 if(ContactPersonEmails.at(j)->description->text() == ContactPersonEmails.at(w)->description->text()){
 errors = true; 
- errorString += "ContactPersonEmail has the same description \n";
+ errorString +=QObject::tr( "ContactPersonEmail has the same description \n");
 ContactPersonEmails.at(j)->description->setObjectName("error");
 ContactPersonEmails.at(j)->description->style()->unpolish(ContactPersonEmails.at(j)->description);
 ContactPersonEmails.at(j)->description->style()->polish(ContactPersonEmails.at(j)->description);
@@ -553,7 +554,7 @@ if(!ProjectContactPersons.at(i)->updateModel()){
 if(!errors){
 	return true;
 }
-else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, "ContactPerson",errorString.trimmed());
+else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ContactPerson"),errorString.trimmed());
 return false; 
  }
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: accessui.h
-**   Created on: Sat Dec 13 21:50:44 EET 2014
+**   Created on: Sun Dec 14 22:39:13 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,7 +15,7 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/access.h"
 #include "../../Model/access.h"
-#include "../../Model/employee.h"
+#include "../../Model/user.h"
 
 
 #include <QWidget>
@@ -59,6 +59,7 @@ public:
 	QCheckBox* projectcontactperson;
 	QCheckBox* projectproduct;
 	QCheckBox* projectservice;
+	QCheckBox* projectsales;
 	QCheckBox* unit;
 	QCheckBox* productcategory;
 	QCheckBox* productimage;
@@ -87,9 +88,10 @@ public:
 	QCheckBox* paymenttype;
 	QCheckBox* payment;
 	QCheckBox* task;
+	QCheckBox* language;
 	QCheckBox* timebooking;
 	QLineEdit*hashkey;
-	ERPComboBox*employee;
+	ERPComboBox*user;
 	void fill(Access* access);
 Access* access;
 private:
