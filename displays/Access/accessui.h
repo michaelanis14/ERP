@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: accessui.h
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,6 +13,7 @@
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
 #include "../CommonUI/RemovebtnWidgets.h"
+#include "../../Model/access.h"
 #include "../../Model/access.h"
 #include "../../Model/employee.h"
 
@@ -33,8 +34,8 @@ public:
 	static AccessUI* GetUI();
 	ERPFormBlock* block0Layout;
 	QLineEdit*title;
+	QCheckBox* company;
 	QCheckBox* tax;
-	QCheckBox* employee;
 	QCheckBox* contact;
 	QCheckBox* contacttelephone;
 	QCheckBox* contactemail;
@@ -81,7 +82,7 @@ public:
 	QCheckBox* invoicestate;
 	QCheckBox* invoiceserial;
 	QCheckBox* invoice;
-	QDateEdit*invoicestatedate;
+	QCheckBox* invoicestated;
 	QCheckBox* invoicefreeline;
 	QCheckBox* paymenttype;
 	QCheckBox* payment;
@@ -89,8 +90,6 @@ public:
 	QCheckBox* timebooking;
 	QLineEdit*hashkey;
 	ERPComboBox*employee;
-	QLineEdit*createdon;
-	QLineEdit*editedon;
 	void fill(Access* access);
 Access* access;
 private:

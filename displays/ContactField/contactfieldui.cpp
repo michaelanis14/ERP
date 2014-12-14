@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfieldui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,12 +31,12 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 description = new QLineEdit();
-block0Layout->addRow("Description",description);
+block0Layout->addRow(QObject::tr("Description"),description);
 fieldtype = new ERPComboBox();
 fieldtype->addItems(FieldType::GetPairList());
-block0Layout->addRow("Field Type",fieldtype);
+block0Layout->addRow(QObject::tr("Field Type"),fieldtype);
 defaults = new QCheckBox();
-block0Layout->addRow("Defaults",defaults);
+block0Layout->addRow(QObject::tr("Defaults"),defaults);
 flowLayout->addWidget(block0Layout);
 
 }

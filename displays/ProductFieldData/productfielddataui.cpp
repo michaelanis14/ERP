@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productfielddataui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,12 +32,12 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 product = new ERPComboBox();
 product->addItems(Product::GetPairList());
-block0Layout->addRow("Product",product);
+block0Layout->addRow(QObject::tr("Product"),product);
 productfield = new ERPComboBox();
 productfield->addItems(ProductField::GetPairList());
-block0Layout->addRow("Product Field",productfield);
+block0Layout->addRow(QObject::tr("Product Field"),productfield);
 value = new QLineEdit();
-block0Layout->addRow("Value",value);
+block0Layout->addRow(QObject::tr("Value"),value);
 flowLayout->addWidget(block0Layout);
 
 }

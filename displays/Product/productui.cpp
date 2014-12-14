@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,30 +37,30 @@ QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectProduct()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 shortdescription = new QLineEdit();
-block0Layout->addRow("Short Description",shortdescription);
+block0Layout->addRow(QObject::tr("Short Description"),shortdescription);
 unit = new ERPComboBox();
 unit->addItems(Unit::GetPairList());
-block0Layout->addRow("Unit",unit);
+block0Layout->addRow(QObject::tr("Unit"),unit);
 sellingprice = new QLineEdit();
 sellingprice->setValidator( doubleValidator );
-block0Layout->addRow("Selling Price",sellingprice);
+block0Layout->addRow(QObject::tr("Selling Price"),sellingprice);
 netcoast = new QLineEdit();
 netcoast->setValidator( doubleValidator );
-block0Layout->addRow("Net Coast",netcoast);
+block0Layout->addRow(QObject::tr("Net Coast"),netcoast);
 trademarginrate = new QLineEdit();
 trademarginrate->setValidator( doubleValidator );
-block0Layout->addRow("Trade Margin Rate",trademarginrate);
+block0Layout->addRow(QObject::tr("Trade Margin Rate"),trademarginrate);
 tax = new ERPComboBox();
 tax->addItems(Tax::GetPairList());
-block0Layout->addRow("Tax",tax);
+block0Layout->addRow(QObject::tr("Tax"),tax);
 information = new QLineEdit();
-block0Layout->addRow("information",information);
+block0Layout->addRow(QObject::tr("information"),information);
 barcode = new QLineEdit();
 QObject::connect(barcode, SIGNAL(textChanged(QString)), this, SLOT(barcodeChanged(QString)));
-block0Layout->addRow("Barcode",barcode);
-barcodeDisplay = new Barcode(0,0); block0Layout->addRow("Barcode",barcodeDisplay); generatebarcode = new QPushButton("Generate Barcode"); QObject::connect(generatebarcode, SIGNAL(clicked()), this, SLOT(generateBarcode())); block0Layout->addRow("",generatebarcode);
+block0Layout->addRow(QObject::tr("Barcode"),barcode);
+barcodeDisplay = new Barcode(0,0); block0Layout->addRow(QObject::tr("Barcode"),barcodeDisplay); generatebarcode = new QPushButton(QObject::tr("Generate Barcode")); QObject::connect(generatebarcode, SIGNAL(clicked()), this, SLOT(generateBarcode())); block0Layout->addRow("",generatebarcode);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
@@ -68,10 +68,10 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block1Layout->setMinimumWidth(330);
 productcategory = new ERPComboBox();
 productcategory->addItems(ProductCategory::GetPairList());
-block1Layout->addRow("Product Category",productcategory);
+block1Layout->addRow(QObject::tr("Product Category"),productcategory);
 criticalamount = new QLineEdit();
 criticalamount->setValidator( doubleValidator );
-block1Layout->addRow("Critical Amount",criticalamount);
+block1Layout->addRow(QObject::tr("Critical Amount"),criticalamount);
 flowLayout->addWidget(block1Layout);
 
 block2Layout = new ERPFormBlock;
@@ -114,7 +114,7 @@ productimageui->fill(ProductImage);
 ProductImages.append(productimageui);
 RemovebtnWidgets* rmproductimage = new RemovebtnWidgets(0,productimageui);
 QObject::connect(rmproductimage, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProductImage(QWidget*)));
-block2Layout->addRow("ProductImage"+QString::number(ProductImages.count()),rmproductimage);
+block2Layout->addRow(QObject::tr("ProductImage") +QString::number(ProductImages.count()),rmproductimage);
 }
 void ProductUI::removeProductImage(QWidget* widget){ 
 if(ProductImages.count()  > 0){

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: taskui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,13 +31,13 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 note = new QLineEdit();
-block0Layout->addRow("Note",note);
+block0Layout->addRow(QObject::tr("Note"),note);
 project = new ERPComboBox();
 project->addItems(Project::GetPairList());
-block0Layout->addRow("Project",project);
+block0Layout->addRow(QObject::tr("Project"),project);
 contactperson = new ERPComboBox();
 contactperson->addItems(ContactPerson::GetPairList());
-block0Layout->addRow("Contact Person",contactperson);
+block0Layout->addRow(QObject::tr("Contact Person"),contactperson);
 flowLayout->addWidget(block0Layout);
 
 }

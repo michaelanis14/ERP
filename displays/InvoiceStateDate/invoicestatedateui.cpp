@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicestatedateui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,14 +32,14 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 invoice = new ERPComboBox();
 invoice->addItems(Invoice::GetPairList());
-block0Layout->addRow("Invoice",invoice);
+block0Layout->addRow(QObject::tr("Invoice"),invoice);
 invoicestate = new ERPComboBox();
 invoicestate->addItems(InvoiceState::GetPairList());
-block0Layout->addRow("Invoice State",invoicestate);
+block0Layout->addRow(QObject::tr("Invoice State"),invoicestate);
 date = new QDateEdit(QDate::currentDate());
 date->setCalendarPopup(true);
 date->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Date",date);
+block0Layout->addRow(QObject::tr("Date"),date);
 flowLayout->addWidget(block0Layout);
 
 }

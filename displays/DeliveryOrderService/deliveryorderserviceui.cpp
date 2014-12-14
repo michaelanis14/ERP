@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderserviceui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -33,13 +33,13 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 deliveryorder = new ERPComboBox();
 deliveryorder->addItems(DeliveryOrder::GetPairList());
-block0Layout->addRow("Delivery Order",deliveryorder);
+block0Layout->addRow(QObject::tr("Delivery Order"),deliveryorder);
 service = new ERPComboBox();
 service->addItems(Service::GetPairList());
-block0Layout->addRow("Service",service);
+block0Layout->addRow(QObject::tr("Service"),service);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
-block0Layout->addRow("Amount",amount);
+block0Layout->addRow(QObject::tr("Amount"),amount);
 flowLayout->addWidget(block0Layout);
 
 }

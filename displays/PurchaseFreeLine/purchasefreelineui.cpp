@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasefreelineui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -33,18 +33,18 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 purchase = new ERPComboBox();
 purchase->addItems(Purchase::GetPairList());
-block0Layout->addRow("Purchase",purchase);
+block0Layout->addRow(QObject::tr("Purchase"),purchase);
 description = new QLineEdit();
-block0Layout->addRow("Description",description);
+block0Layout->addRow(QObject::tr("Description"),description);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
-block0Layout->addRow("Amount",amount);
+block0Layout->addRow(QObject::tr("Amount"),amount);
 price = new QLineEdit();
 price->setValidator( doubleValidator );
-block0Layout->addRow("Price",price);
+block0Layout->addRow(QObject::tr("Price"),price);
 flowLayout->addWidget(block0Layout);
 
 }

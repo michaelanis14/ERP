@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: accessui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,7 +12,7 @@ AccessUI::AccessUI(QWidget *parent) :ERPDisplay(parent)
 {
 
 access = new Access();
-flowLayout = new FlowLayout(this);
+flowLayout = new FlowLayout(formPanel);
 flowLayout->setContentsMargins(0,0,0,0);
 
 QPushButton* save = new QPushButton("Save");
@@ -31,120 +31,120 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 title = new QLineEdit();
-block0Layout->addRow("Title",title);
+block0Layout->addRow(QObject::tr("Title"),title);
+company = new QCheckBox();
+block0Layout->addRow(QObject::tr("Company"),company);
 tax = new QCheckBox();
-block0Layout->addRow("Tax",tax);
-employee = new QCheckBox();
-block0Layout->addRow("Employee",employee);
+block0Layout->addRow(QObject::tr("Tax"),tax);
 contact = new QCheckBox();
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 contacttelephone = new QCheckBox();
-block0Layout->addRow("Contact Telephone",contacttelephone);
+block0Layout->addRow(QObject::tr("Contact Telephone"),contacttelephone);
 contactemail = new QCheckBox();
-block0Layout->addRow("Contact Email",contactemail);
+block0Layout->addRow(QObject::tr("Contact Email"),contactemail);
 bankaccount = new QCheckBox();
-block0Layout->addRow("Bank Account",bankaccount);
+block0Layout->addRow(QObject::tr("Bank Account"),bankaccount);
 contactclass = new QCheckBox();
-block0Layout->addRow("Contact Class",contactclass);
+block0Layout->addRow(QObject::tr("Contact Class"),contactclass);
 contacttype = new QCheckBox();
-block0Layout->addRow("Contact Type",contacttype);
+block0Layout->addRow(QObject::tr("Contact Type"),contacttype);
 country = new QCheckBox();
-block0Layout->addRow("Country",country);
+block0Layout->addRow(QObject::tr("Country"),country);
 currency = new QCheckBox();
-block0Layout->addRow("Currency",currency);
+block0Layout->addRow(QObject::tr("Currency"),currency);
 contactstatus = new QCheckBox();
-block0Layout->addRow("Contact Status",contactstatus);
+block0Layout->addRow(QObject::tr("Contact Status"),contactstatus);
 fieldtype = new QCheckBox();
-block0Layout->addRow("Field Type",fieldtype);
+block0Layout->addRow(QObject::tr("Field Type"),fieldtype);
 contactfield = new QCheckBox();
-block0Layout->addRow("Contact Field",contactfield);
+block0Layout->addRow(QObject::tr("Contact Field"),contactfield);
 contactfielddata = new QCheckBox();
-block0Layout->addRow("Contact Field Data",contactfielddata);
+block0Layout->addRow(QObject::tr("Contact Field Data"),contactfielddata);
 contactpersonfield = new QCheckBox();
-block0Layout->addRow("Contact Person Field",contactpersonfield);
+block0Layout->addRow(QObject::tr("Contact Person Field"),contactpersonfield);
 contactpersonfielddata = new QCheckBox();
-block0Layout->addRow("Contact Person Field Data",contactpersonfielddata);
+block0Layout->addRow(QObject::tr("Contact Person Field Data"),contactpersonfielddata);
 contactperson = new QCheckBox();
-block0Layout->addRow("Contact Person",contactperson);
+block0Layout->addRow(QObject::tr("Contact Person"),contactperson);
 contactpersontelephone = new QCheckBox();
-block0Layout->addRow("Contact Person Telephone",contactpersontelephone);
+block0Layout->addRow(QObject::tr("Contact Person Telephone"),contactpersontelephone);
 contactpersonemail = new QCheckBox();
-block0Layout->addRow("Contact Person Email",contactpersonemail);
+block0Layout->addRow(QObject::tr("Contact Person Email"),contactpersonemail);
 projectstatus = new QCheckBox();
-block0Layout->addRow("Project Status",projectstatus);
+block0Layout->addRow(QObject::tr("Project Status"),projectstatus);
 project = new QCheckBox();
-block0Layout->addRow("Project",project);
+block0Layout->addRow(QObject::tr("Project"),project);
 projectfile = new QCheckBox();
-block0Layout->addRow("Project File",projectfile);
+block0Layout->addRow(QObject::tr("Project File"),projectfile);
 projectcontactperson = new QCheckBox();
-block0Layout->addRow("Project Contact Person",projectcontactperson);
+block0Layout->addRow(QObject::tr("Project Contact Person"),projectcontactperson);
 projectproduct = new QCheckBox();
-block0Layout->addRow("Project Product",projectproduct);
+block0Layout->addRow(QObject::tr("Project Product"),projectproduct);
 projectservice = new QCheckBox();
-block0Layout->addRow("Project Service",projectservice);
+block0Layout->addRow(QObject::tr("Project Service"),projectservice);
 unit = new QCheckBox();
-block0Layout->addRow("Unit",unit);
+block0Layout->addRow(QObject::tr("Unit"),unit);
 productcategory = new QCheckBox();
-block0Layout->addRow("Product Category",productcategory);
+block0Layout->addRow(QObject::tr("Product Category"),productcategory);
 productimage = new QCheckBox();
-block0Layout->addRow("Product Image",productimage);
+block0Layout->addRow(QObject::tr("Product Image"),productimage);
 product = new QCheckBox();
-block0Layout->addRow("Product",product);
+block0Layout->addRow(QObject::tr("Product"),product);
 productfield = new QCheckBox();
-block0Layout->addRow("Product Field",productfield);
+block0Layout->addRow(QObject::tr("Product Field"),productfield);
 productfielddata = new QCheckBox();
-block0Layout->addRow("Product Field Data",productfielddata);
+block0Layout->addRow(QObject::tr("Product Field Data"),productfielddata);
 service = new QCheckBox();
-block0Layout->addRow("Service",service);
+block0Layout->addRow(QObject::tr("Service"),service);
 store = new QCheckBox();
-block0Layout->addRow("Store",store);
+block0Layout->addRow(QObject::tr("Store"),store);
 purchasestatus = new QCheckBox();
-block0Layout->addRow("Purchase Status",purchasestatus);
+block0Layout->addRow(QObject::tr("Purchase Status"),purchasestatus);
 purchaseserial = new QCheckBox();
-block0Layout->addRow("Purchase Serial",purchaseserial);
+block0Layout->addRow(QObject::tr("Purchase Serial"),purchaseserial);
 purchase = new QCheckBox();
-block0Layout->addRow("Purchase",purchase);
+block0Layout->addRow(QObject::tr("Purchase"),purchase);
 purchasestoreproduct = new QCheckBox();
-block0Layout->addRow("Purchase Store Product",purchasestoreproduct);
+block0Layout->addRow(QObject::tr("Purchase Store Product"),purchasestoreproduct);
 purchasefreeline = new QCheckBox();
-block0Layout->addRow("Purchase Free Line",purchasefreeline);
+block0Layout->addRow(QObject::tr("Purchase Free Line"),purchasefreeline);
 deliveryorderstatus = new QCheckBox();
-block0Layout->addRow("Delivery Order Status",deliveryorderstatus);
+block0Layout->addRow(QObject::tr("Delivery Order Status"),deliveryorderstatus);
 deliveryorder = new QCheckBox();
-block0Layout->addRow("Delivery Order",deliveryorder);
+block0Layout->addRow(QObject::tr("Delivery Order"),deliveryorder);
 deliveryorderstoreproduct = new QCheckBox();
-block0Layout->addRow("Delivery Order Store Product",deliveryorderstoreproduct);
+block0Layout->addRow(QObject::tr("Delivery Order Store Product"),deliveryorderstoreproduct);
 deliveryorderservice = new QCheckBox();
-block0Layout->addRow("Delivery Order Service",deliveryorderservice);
+block0Layout->addRow(QObject::tr("Delivery Order Service"),deliveryorderservice);
 deliveryorderfreeline = new QCheckBox();
-block0Layout->addRow("Delivery Order Freeline",deliveryorderfreeline);
+block0Layout->addRow(QObject::tr("Delivery Order Freeline"),deliveryorderfreeline);
 invoiceperiod = new QCheckBox();
-block0Layout->addRow("Invoice Period",invoiceperiod);
+block0Layout->addRow(QObject::tr("Invoice Period"),invoiceperiod);
 invoiceyear = new QCheckBox();
-block0Layout->addRow("Invoice Year",invoiceyear);
+block0Layout->addRow(QObject::tr("Invoice Year"),invoiceyear);
 invoicestate = new QCheckBox();
-block0Layout->addRow("Invoice State",invoicestate);
+block0Layout->addRow(QObject::tr("Invoice State"),invoicestate);
 invoiceserial = new QCheckBox();
-block0Layout->addRow("Invoice Serial",invoiceserial);
+block0Layout->addRow(QObject::tr("Invoice Serial"),invoiceserial);
 invoice = new QCheckBox();
-block0Layout->addRow("Invoice",invoice);
-invoicestatedate = new QCheckBox();
-block0Layout->addRow("Invoice State Date",invoicestatedate);
+block0Layout->addRow(QObject::tr("Invoice"),invoice);
+invoicestated = new QCheckBox();
+block0Layout->addRow(QObject::tr("Invoice State D"),invoicestated);
 invoicefreeline = new QCheckBox();
-block0Layout->addRow("Invoice Freeline",invoicefreeline);
+block0Layout->addRow(QObject::tr("Invoice Freeline"),invoicefreeline);
 paymenttype = new QCheckBox();
-block0Layout->addRow("Payment Type",paymenttype);
+block0Layout->addRow(QObject::tr("Payment Type"),paymenttype);
 payment = new QCheckBox();
-block0Layout->addRow("Payment",payment);
+block0Layout->addRow(QObject::tr("Payment"),payment);
 task = new QCheckBox();
-block0Layout->addRow("Task",task);
+block0Layout->addRow(QObject::tr("Task"),task);
 timebooking = new QCheckBox();
-block0Layout->addRow("Time Booking",timebooking);
+block0Layout->addRow(QObject::tr("Time Booking"),timebooking);
 hashkey = new QLineEdit();
-block0Layout->addRow("hashKey",hashkey);
+block0Layout->addRow(QObject::tr("hashKey"),hashkey);
 employee = new ERPComboBox();
 employee->addItems(Employee::GetPairList());
-block0Layout->addRow("Employee",employee);
+block0Layout->addRow(QObject::tr("Employee"),employee);
 flowLayout->addWidget(block0Layout);
 
 }
@@ -164,10 +164,9 @@ AccessUI*AccessUI::GetUI(){
 void AccessUI::fill(Access* access){ 
 clear();
 this->access = access;
-company->setChecked(access->Company);
 title->setText(access->Title);
+company->setChecked(access->Company);
 tax->setChecked(access->Tax);
-employee->setChecked(access->Employee);
 contact->setChecked(access->Contact);
 contacttelephone->setChecked(access->ContactTelephone);
 contactemail->setChecked(access->ContactEmail);
@@ -214,7 +213,7 @@ invoiceyear->setChecked(access->InvoiceYear);
 invoicestate->setChecked(access->InvoiceState);
 invoiceserial->setChecked(access->InvoiceSerial);
 invoice->setChecked(access->Invoice);
-invoicestatedate->setDate(QDate::fromString(access->InvoiceStateDate));
+invoicestated->setChecked(access->InvoiceStateD);
 invoicefreeline->setChecked(access->InvoiceFreeline);
 paymenttype->setChecked(access->PaymentType);
 payment->setChecked(access->Payment);
@@ -224,10 +223,9 @@ hashkey->setText(access->hashKey);
 } 
 void AccessUI::clear(){ 
 delete this->access;
-company->setChecked(false);
 title->setText("");
+company->setChecked(false);
 tax->setChecked(false);
-employee->setChecked(false);
 contact->setChecked(false);
 contacttelephone->setChecked(false);
 contactemail->setChecked(false);
@@ -274,7 +272,7 @@ invoiceyear->setChecked(false);
 invoicestate->setChecked(false);
 invoiceserial->setChecked(false);
 invoice->setChecked(false);
-invoicestatedate->setDate(QDate::currentDate());
+invoicestated->setChecked(false);
 invoicefreeline->setChecked(false);
 paymenttype->setChecked(false);
 payment->setChecked(false);
@@ -312,8 +310,8 @@ title->style()->polish(title);
 title->update();
 access->Title = title->text().trimmed();
 }
+access->Company = company->text().trimmed().toInt();
 access->Tax = tax->text().trimmed().toInt();
-access->Employee = employee->text().trimmed().toInt();
 access->Contact = contact->text().trimmed().toInt();
 access->ContactTelephone = contacttelephone->text().trimmed().toInt();
 access->ContactEmail = contactemail->text().trimmed().toInt();
@@ -360,7 +358,7 @@ access->InvoiceYear = invoiceyear->text().trimmed().toInt();
 access->InvoiceState = invoicestate->text().trimmed().toInt();
 access->InvoiceSerial = invoiceserial->text().trimmed().toInt();
 access->Invoice = invoice->text().trimmed().toInt();
-access->InvoiceStateDate = invoicestatedate->text().trimmed().toInt();
+access->InvoiceStateD = invoicestated->text().trimmed().toInt();
 access->InvoiceFreeline = invoicefreeline->text().trimmed().toInt();
 access->PaymentType = paymenttype->text().trimmed().toInt();
 access->Payment = payment->text().trimmed().toInt();
@@ -383,36 +381,6 @@ access->hashKey = hashkey->text().trimmed();
 }
 if(!employee->isHidden()) 
 access->EmployeeID = employee->getKey();
-if(createdon->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Created O N Can't be Empty! \n";
-createdon->setObjectName("error");
-createdon->style()->unpolish(createdon);
-createdon->style()->polish(createdon);
-createdon->update();
-}
-else { 
-createdon->setObjectName("createdon");
-createdon->style()->unpolish(createdon);
-createdon->style()->polish(createdon);
-createdon->update();
-access->CreatedON = createdon->text().trimmed();
-}
-if(editedon->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Edited O N Can't be Empty! \n";
-editedon->setObjectName("error");
-editedon->style()->unpolish(editedon);
-editedon->style()->polish(editedon);
-editedon->update();
-}
-else { 
-editedon->setObjectName("editedon");
-editedon->style()->unpolish(editedon);
-editedon->style()->polish(editedon);
-editedon->update();
-access->EditedON = editedon->text().trimmed();
-}
 if(!errors) {
 access->save();
 if(!errors){
@@ -445,8 +413,8 @@ title->style()->polish(title);
 title->update();
 access->Title = title->text().trimmed();
 }
+access->Company = company->text().trimmed().toInt();
 access->Tax = tax->text().trimmed().toInt();
-access->Employee = employee->text().trimmed().toInt();
 access->Contact = contact->text().trimmed().toInt();
 access->ContactTelephone = contacttelephone->text().trimmed().toInt();
 access->ContactEmail = contactemail->text().trimmed().toInt();
@@ -493,7 +461,7 @@ access->InvoiceYear = invoiceyear->text().trimmed().toInt();
 access->InvoiceState = invoicestate->text().trimmed().toInt();
 access->InvoiceSerial = invoiceserial->text().trimmed().toInt();
 access->Invoice = invoice->text().trimmed().toInt();
-access->InvoiceStateDate = invoicestatedate->text().trimmed().toInt();
+access->InvoiceStateD = invoicestated->text().trimmed().toInt();
 access->InvoiceFreeline = invoicefreeline->text().trimmed().toInt();
 access->PaymentType = paymenttype->text().trimmed().toInt();
 access->Payment = payment->text().trimmed().toInt();
@@ -516,36 +484,6 @@ access->hashKey = hashkey->text().trimmed();
 }
 if(access->EmployeeID == 0) 
 access->EmployeeID = employee->getKey();
-if(createdon->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Created O N Can't be Empty! \n";
-createdon->setObjectName("error");
-createdon->style()->unpolish(createdon);
-createdon->style()->polish(createdon);
-createdon->update();
-}
-else { 
-createdon->setObjectName("createdon");
-createdon->style()->unpolish(createdon);
-createdon->style()->polish(createdon);
-createdon->update();
-access->CreatedON = createdon->text().trimmed();
-}
-if(editedon->text().trimmed().isEmpty()){
-errors = true;
-errorString += "Edited O N Can't be Empty! \n";
-editedon->setObjectName("error");
-editedon->style()->unpolish(editedon);
-editedon->style()->polish(editedon);
-editedon->update();
-}
-else { 
-editedon->setObjectName("editedon");
-editedon->style()->unpolish(editedon);
-editedon->style()->polish(editedon);
-editedon->update();
-access->EditedON = editedon->text().trimmed();
-}
 if(!errors){
 	return true;
 }

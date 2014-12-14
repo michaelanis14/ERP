@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactui.h
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -59,6 +59,7 @@ public:
 	QLineEdit*address;
 	QLineEdit*postalcode;
 	QLineEdit*city;
+	QLineEdit*blablabla;
 	ERPComboBox*country;
 	ERPComboBox*contactstatus;
 	ERPComboBox*employee;

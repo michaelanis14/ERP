@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersontelephoneui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,13 +32,13 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 description = new QLineEdit();
-block0Layout->addRow("Description",description);
+block0Layout->addRow(QObject::tr("Description"),description);
 number = new QLineEdit();
 number->setValidator( intValidator );
-block0Layout->addRow("Number",number);
+block0Layout->addRow(QObject::tr("Number"),number);
 contactperson = new ERPComboBox();
 contactperson->addItems(ContactPerson::GetPairList());
-block0Layout->addRow("Contact Person",contactperson);
+block0Layout->addRow(QObject::tr("Contact Person"),contactperson);
 flowLayout->addWidget(block0Layout);
 
 }

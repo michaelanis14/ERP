@@ -110,37 +110,37 @@ mainwindow::mainwindow()
 
 	btnHome = new QToolButton(navigation);
 	btnHome->setIcon(icon1);
-	btnHome->setText("Home");
+	btnHome->setText(QObject::tr("Home"));
 	navigation->addButton(btnHome);
 	connect(this->btnHome, SIGNAL(clicked()), this, SLOT(btnHomeClicked()));
 
 	btnContacts = new QToolButton(navigation);
 	btnContacts->setIcon(icon1);
-	btnContacts->setText("Contacts");
+	btnContacts->setText(QObject::tr("Contacts"));
 	navigation->addButton(btnContacts);
 	connect(this->btnContacts, SIGNAL(clicked()), this, SLOT(btnContactsClicked()));
 
 	btnProjects = new QToolButton(navigation);
 	btnProjects->setIcon(icon1);
-	btnProjects->setText("Projects");
+	btnProjects->setText(QObject::tr("Projects"));
 	navigation->addButton(btnProjects);
 	connect(this->btnProjects, SIGNAL(clicked()), this, SLOT(btnProjectsClicked()));
 
 	btnProducts = new QToolButton(navigation);
 	btnProducts->setIcon(icon1);
-	btnProducts->setText("Products");
+	btnProducts->setText(QObject::tr("Products"));
 	navigation->addButton(btnProducts);
 	connect(this->btnProducts, SIGNAL(clicked()), this, SLOT(btnProductsClicked()));
 
 	btnAccounting = new QToolButton(navigation);
 	btnAccounting->setIcon(icon1);
-	btnAccounting->setText("Accounting");
+	btnAccounting->setText(QObject::tr("Accounting"));
 	navigation->addButton(btnAccounting);
 	connect(this->btnAccounting, SIGNAL(clicked()), this, SLOT(btnAccountingClicked()));
 
 	btnReports = new QToolButton(navigation);
 	btnReports->setIcon(icon1);
-	btnReports->setText("Reports");
+	btnReports->setText(QObject::tr("Reports"));
 	navigation->addButton(btnReports);
 	connect(this->btnReports, SIGNAL(clicked()), this, SLOT(btnReportsClicked()));
 
@@ -153,47 +153,47 @@ mainwindow::mainwindow()
 	boxLayout->setContentsMargins(this->navigation->width(), this->innerNavigation->height(), 0, 0);
 
 //Home
-	inNavAccess = new QPushButton(icon1,"Access");
+	inNavAccess = new QPushButton(icon1,QObject::tr("Access"));
 	inNavAccess->setObjectName("inNavAccess");
 	connect(this->inNavAccess, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
 
 
 //Contacts
-	inNavContacts = new QPushButton(icon1,"Contacts");
+	inNavContacts = new QPushButton(icon1,QObject::tr("Contacts"));
 	inNavContacts->setObjectName("inNavContacts");
 	connect(this->inNavContacts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 	inNavcontactPersones = new QPushButton(icon1,"ContactPersone");
 	inNavcontactPersones->setObjectName("inNavcontactPersones");
 	connect(this->inNavcontactPersones, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 //Projects
-	inNavProjects =	 new QPushButton(icon1,"Projects");
+	inNavProjects =	 new QPushButton(icon1,QObject::tr("Projects"));
 	inNavProjects->setObjectName("inNavProjects");
 	connect(this->inNavProjects, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
-	inNavTimeBookings = new QPushButton(icon1,"TimeBookings");
+	inNavTimeBookings = new QPushButton(icon1,QObject::tr("TimeBookings"));
 	inNavTimeBookings->setObjectName("inNavTimeBookings");
 	connect(this->inNavTimeBookings, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
-	inNavServices = new QPushButton(icon1,"Service");
+	inNavServices = new QPushButton(icon1,QObject::tr("Service"));
 	inNavServices->setObjectName("inNavService");
 	connect(this->inNavServices, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
 
 //Products
-	inNavProducts = new QPushButton(icon1,"Products");
+	inNavProducts = new QPushButton(icon1,QObject::tr("Products"));
 	inNavProducts->setObjectName("inNavProducts");
 	connect(this->inNavProducts, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-		inNavStoreHouse = new QPushButton(icon1,"Store House");
+		inNavStoreHouse = new QPushButton(icon1,QObject::tr("Store House"));
 	inNavStoreHouse->setObjectName("inNavStoreHouse");
 	connect(this->inNavStoreHouse, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-	inNavPurchase = new QPushButton(icon1,"Purchase");
+	inNavPurchase = new QPushButton(icon1,QObject::tr("Purchase"));
 	inNavPurchase->setObjectName("inNavPurchase");
 	connect(this->inNavPurchase, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-	inNavDeliveryOrder = new QPushButton(icon1,"Delivery Order");
+	inNavDeliveryOrder = new QPushButton(icon1,QObject::tr("Delivery Order"));
 	inNavDeliveryOrder->setObjectName("inNavDeliveryOrder");
 	connect(this->inNavDeliveryOrder, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-	inNavStoreStatus = new QPushButton(icon1,"StoreStatus");
+	inNavStoreStatus = new QPushButton(icon1,QObject::tr("StoreStatus"));
 	inNavStoreStatus->setObjectName("inNavStoreStatus");
 	connect(this->inNavStoreStatus, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 

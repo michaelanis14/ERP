@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestatusindexui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -28,10 +28,10 @@ ERPFormBlock* block0Layout = new ERPFormBlock;
   add = new QPushButton("Add"); 
  QObject::connect(add, SIGNAL(clicked()), this, SLOT(addRow())); 
  add->setObjectName("add"); 
- remove = new QPushButton("Remove"); 
+ remove = new QPushButton(QObject::tr("Remove")); 
  remove->setObjectName("remove"); 
  QObject::connect(remove, SIGNAL(clicked()), this, SLOT(removeRow())); 
- edit = new QPushButton("Edit"); 
+ edit = new QPushButton(QObject::tr("Edit")); 
  QObject::connect(edit, SIGNAL(clicked()), this, SLOT(editRow())); 
  edit->setObjectName("edit"); 
  edit->setEnabled(false); 

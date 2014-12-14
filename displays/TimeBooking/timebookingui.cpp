@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: timebookingui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -33,30 +33,30 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
 startdate = new QDateEdit(QDate::currentDate());
 startdate->setCalendarPopup(true);
 startdate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Start Date",startdate);
+block0Layout->addRow(QObject::tr("Start Date"),startdate);
 enddate = new QDateEdit(QDate::currentDate());
 enddate->setCalendarPopup(true);
 enddate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("End Date",enddate);
+block0Layout->addRow(QObject::tr("End Date"),enddate);
 starttime = new QLineEdit();
-block0Layout->addRow("Start Time",starttime);
+block0Layout->addRow(QObject::tr("Start Time"),starttime);
 endtime = new QLineEdit();
-block0Layout->addRow("End Time",endtime);
+block0Layout->addRow(QObject::tr("End Time"),endtime);
 breaktime = new QLineEdit();
-block0Layout->addRow("Break Time",breaktime);
+block0Layout->addRow(QObject::tr("Break Time"),breaktime);
 onlytimebooking = new QCheckBox();
-block0Layout->addRow("Only Time Booking",onlytimebooking);
+block0Layout->addRow(QObject::tr("Only Time Booking"),onlytimebooking);
 project = new ERPComboBox();
 project->addItems(Project::GetPairList());
-block0Layout->addRow("Project",project);
+block0Layout->addRow(QObject::tr("Project"),project);
 service = new ERPComboBox();
 service->addItems(Service::GetPairList());
-block0Layout->addRow("Service",service);
+block0Layout->addRow(QObject::tr("Service"),service);
 employee = new ERPComboBox();
 employee->addItems(Employee::GetPairList());
-block0Layout->addRow("Employee",employee);
+block0Layout->addRow(QObject::tr("Employee"),employee);
 note = new QLineEdit();
-block0Layout->addRow("Note",note);
+block0Layout->addRow(QObject::tr("Note"),note);
 flowLayout->addWidget(block0Layout);
 
 }

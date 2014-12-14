@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: companyui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -36,11 +36,11 @@ QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectCompany()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 header = new QLineEdit();
-block0Layout->addRow("Header",header);
+block0Layout->addRow(QObject::tr("Header"),header);
 footer = new QLineEdit();
-block0Layout->addRow("Footer",footer);
+block0Layout->addRow(QObject::tr("Footer"),footer);
 flowLayout->addWidget(block0Layout);
 
 }

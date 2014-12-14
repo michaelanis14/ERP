@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectproductui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,10 +32,10 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 project = new ERPComboBox();
 project->addItems(Project::GetPairList());
-block0Layout->addRow("Project",project);
+block0Layout->addRow(QObject::tr("Project"),project);
 product = new ERPComboBox();
 product->addItems(Product::GetPairList());
-block0Layout->addRow("Product",product);
+block0Layout->addRow(QObject::tr("Product"),product);
 flowLayout->addWidget(block0Layout);
 
 }

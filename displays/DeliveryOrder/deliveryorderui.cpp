@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,38 +31,38 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 serial = new QLineEdit();
-block0Layout->addRow("Serial",serial);
+block0Layout->addRow(QObject::tr("Serial"),serial);
 barcode = new QLineEdit();
 QObject::connect(barcode, SIGNAL(textChanged(QString)), this, SLOT(barcodeChanged(QString)));
-block0Layout->addRow("Barcode",barcode);
-barcodeDisplay = new Barcode(0,0); block0Layout->addRow("Barcode",barcodeDisplay); generatebarcode = new QPushButton("Generate Barcode"); QObject::connect(generatebarcode, SIGNAL(clicked()), this, SLOT(generateBarcode())); block0Layout->addRow("",generatebarcode);
+block0Layout->addRow(QObject::tr("Barcode"),barcode);
+barcodeDisplay = new Barcode(0,0); block0Layout->addRow(QObject::tr("Barcode"),barcodeDisplay); generatebarcode = new QPushButton(QObject::tr("Generate Barcode")); QObject::connect(generatebarcode, SIGNAL(clicked()), this, SLOT(generateBarcode())); block0Layout->addRow("",generatebarcode);
 deliveryorderstatus = new ERPComboBox();
 deliveryorderstatus->addItems(DeliveryOrderStatus::GetPairList());
-block0Layout->addRow("Delivery Order Status",deliveryorderstatus);
+block0Layout->addRow(QObject::tr("Delivery Order Status"),deliveryorderstatus);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 creationdate = new QDateEdit(QDate::currentDate());
 creationdate->setCalendarPopup(true);
 creationdate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Creation Date",creationdate);
+block0Layout->addRow(QObject::tr("Creation Date"),creationdate);
 deliverydate = new QDateEdit(QDate::currentDate());
 deliverydate->setCalendarPopup(true);
 deliverydate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Delivery Date",deliverydate);
+block0Layout->addRow(QObject::tr("Delivery Date"),deliverydate);
 note = new QLineEdit();
-block0Layout->addRow("Note",note);
+block0Layout->addRow(QObject::tr("Note"),note);
 header = new QLineEdit();
-block0Layout->addRow("Header",header);
+block0Layout->addRow(QObject::tr("Header"),header);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block1Layout->setMinimumWidth(330);
 footer = new QLineEdit();
-block1Layout->addRow("Footer",footer);
+block1Layout->addRow(QObject::tr("Footer"),footer);
 deliveryaddress = new QLineEdit();
-block1Layout->addRow("Delivery Address",deliveryaddress);
+block1Layout->addRow(QObject::tr("Delivery Address"),deliveryaddress);
 AddRemoveButtons* addremoveDeliveryOrderStoreProductButtons = new AddRemoveButtons();
 block1Layout->addRow("DeliveryOrderStoreProducts",addremoveDeliveryOrderStoreProductButtons);
 QObject::connect(addremoveDeliveryOrderStoreProductButtons, SIGNAL(addPressed()), this, SLOT(addDeliveryOrderStoreProduct()));
@@ -123,7 +123,7 @@ deliveryorderstoreproductui->fill(DeliveryOrderStoreProduct);
 DeliveryOrderStoreProducts.append(deliveryorderstoreproductui);
 RemovebtnWidgets* rmdeliveryorderstoreproduct = new RemovebtnWidgets(0,deliveryorderstoreproductui);
 QObject::connect(rmdeliveryorderstoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderStoreProduct(QWidget*)));
-block1Layout->addRow("DeliveryOrderStoreProduct"+QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
+block1Layout->addRow(QObject::tr("DeliveryOrderStoreProduct") +QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
 }
 void DeliveryOrderUI::removeDeliveryOrderStoreProduct(QWidget* widget){ 
 if(DeliveryOrderStoreProducts.count()  > 0){
@@ -150,7 +150,7 @@ deliveryorderserviceui->fill(DeliveryOrderService);
 DeliveryOrderServices.append(deliveryorderserviceui);
 RemovebtnWidgets* rmdeliveryorderservice = new RemovebtnWidgets(0,deliveryorderserviceui);
 QObject::connect(rmdeliveryorderservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderService(QWidget*)));
-block2Layout->addRow("DeliveryOrderService"+QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
+block2Layout->addRow(QObject::tr("DeliveryOrderService") +QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
 }
 void DeliveryOrderUI::removeDeliveryOrderService(QWidget* widget){ 
 if(DeliveryOrderServices.count()  > 0){
@@ -177,7 +177,7 @@ deliveryorderfreelineui->fill(DeliveryOrderFreeline);
 DeliveryOrderFreelines.append(deliveryorderfreelineui);
 RemovebtnWidgets* rmdeliveryorderfreeline = new RemovebtnWidgets(0,deliveryorderfreelineui);
 QObject::connect(rmdeliveryorderfreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderFreeline(QWidget*)));
-block3Layout->addRow("DeliveryOrderFreeline"+QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
+block3Layout->addRow(QObject::tr("DeliveryOrderFreeline") +QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
 }
 void DeliveryOrderUI::removeDeliveryOrderFreeline(QWidget* widget){ 
 if(DeliveryOrderFreelines.count()  > 0){

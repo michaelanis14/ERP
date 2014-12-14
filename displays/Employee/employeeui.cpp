@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: employeeui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -36,7 +36,7 @@ QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectEmployee()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 flowLayout->addWidget(block0Layout);
 
 }

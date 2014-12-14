@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: storeui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -36,16 +36,16 @@ QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectStore()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 address = new QLineEdit();
-block0Layout->addRow("Address",address);
+block0Layout->addRow(QObject::tr("Address"),address);
 postalcode = new QLineEdit();
-block0Layout->addRow("Postal Code",postalcode);
+block0Layout->addRow(QObject::tr("Postal Code"),postalcode);
 city = new QLineEdit();
-block0Layout->addRow("City",city);
+block0Layout->addRow(QObject::tr("City"),city);
 country = new ERPComboBox();
 country->addItems(Country::GetPairList());
-block0Layout->addRow("Country",country);
+block0Layout->addRow(QObject::tr("Country"),country);
 flowLayout->addWidget(block0Layout);
 
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,13 +31,13 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 title = new QLineEdit();
-block0Layout->addRow("Title",title);
+block0Layout->addRow(QObject::tr("Title"),title);
 projectstatus = new ERPComboBox();
 projectstatus->addItems(ProjectStatus::GetPairList());
-block0Layout->addRow("Project Status",projectstatus);
+block0Layout->addRow(QObject::tr("Project Status"),projectstatus);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
@@ -46,20 +46,20 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
 startdate = new QDateEdit(QDate::currentDate());
 startdate->setCalendarPopup(true);
 startdate->setDisplayFormat("ddd dd/MM/yyyy");
-block1Layout->addRow("Start Date",startdate);
+block1Layout->addRow(QObject::tr("Start Date"),startdate);
 enddate = new QDateEdit(QDate::currentDate());
 enddate->setCalendarPopup(true);
 enddate->setDisplayFormat("ddd dd/MM/yyyy");
-block1Layout->addRow("End Date",enddate);
+block1Layout->addRow(QObject::tr("End Date"),enddate);
 willbeinvoiced = new QCheckBox();
-block1Layout->addRow("Will Be Invoiced",willbeinvoiced);
+block1Layout->addRow(QObject::tr("Will Be Invoiced"),willbeinvoiced);
 flowLayout->addWidget(block1Layout);
 
 block2Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block2Layout->setMinimumWidth(330);
 note = new QLineEdit();
-block2Layout->addRow("Note",note);
+block2Layout->addRow(QObject::tr("Note"),note);
 flowLayout->addWidget(block2Layout);
 
 block3Layout = new ERPFormBlock;
@@ -138,7 +138,7 @@ taskui->fill(Task);
 Tasks.append(taskui);
 RemovebtnWidgets* rmtask = new RemovebtnWidgets(0,taskui);
 QObject::connect(rmtask, SIGNAL(removePressed(QWidget*)), this, SLOT(removeTask(QWidget*)));
-block3Layout->addRow("Task"+QString::number(Tasks.count()),rmtask);
+block3Layout->addRow(QObject::tr("Task") +QString::number(Tasks.count()),rmtask);
 }
 void ProjectUI::removeTask(QWidget* widget){ 
 if(Tasks.count()  > 0){
@@ -165,7 +165,7 @@ projectcontactpersonui->fill(ProjectContactPerson);
 ProjectContactPersons.append(projectcontactpersonui);
 RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
 QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
-block4Layout->addRow("ProjectContactPerson"+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
+block4Layout->addRow(QObject::tr("ProjectContactPerson") +QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
 }
 void ProjectUI::removeProjectContactPerson(QWidget* widget){ 
 if(ProjectContactPersons.count()  > 0){
@@ -192,7 +192,7 @@ projectproductui->fill(ProjectProduct);
 ProjectProducts.append(projectproductui);
 RemovebtnWidgets* rmprojectproduct = new RemovebtnWidgets(0,projectproductui);
 QObject::connect(rmprojectproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectProduct(QWidget*)));
-block5Layout->addRow("ProjectProduct"+QString::number(ProjectProducts.count()),rmprojectproduct);
+block5Layout->addRow(QObject::tr("ProjectProduct") +QString::number(ProjectProducts.count()),rmprojectproduct);
 }
 void ProjectUI::removeProjectProduct(QWidget* widget){ 
 if(ProjectProducts.count()  > 0){
@@ -219,7 +219,7 @@ projectserviceui->fill(ProjectService);
 ProjectServices.append(projectserviceui);
 RemovebtnWidgets* rmprojectservice = new RemovebtnWidgets(0,projectserviceui);
 QObject::connect(rmprojectservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectService(QWidget*)));
-block6Layout->addRow("ProjectService"+QString::number(ProjectServices.count()),rmprojectservice);
+block6Layout->addRow(QObject::tr("ProjectService") +QString::number(ProjectServices.count()),rmprojectservice);
 }
 void ProjectUI::removeProjectService(QWidget* widget){ 
 if(ProjectServices.count()  > 0){
@@ -246,7 +246,7 @@ projectfileui->fill(ProjectFile);
 ProjectFiles.append(projectfileui);
 RemovebtnWidgets* rmprojectfile = new RemovebtnWidgets(0,projectfileui);
 QObject::connect(rmprojectfile, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectFile(QWidget*)));
-block7Layout->addRow("ProjectFile"+QString::number(ProjectFiles.count()),rmprojectfile);
+block7Layout->addRow(QObject::tr("ProjectFile") +QString::number(ProjectFiles.count()),rmprojectfile);
 }
 void ProjectUI::removeProjectFile(QWidget* widget){ 
 if(ProjectFiles.count()  > 0){

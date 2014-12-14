@@ -2,9 +2,9 @@
 #include <QtWidgets/QApplication>
 #include <QtGui>
 #include <QtWidgets/QWidget>
-
+#include <QTranslator>
 #include <QtCore/QCoreApplication>
-
+//#include <QTextCodec>
 #include "displays/mainwindow.h"
 #include "displays/Contact/contactindexui.h"
 #include "Model/erpmodel.h"
@@ -103,7 +103,11 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 	ErpModel::GetInstance()->init();
-
+	QTranslator translator;
+	translator.load(":/ERP.qm");
+	a.installTranslator(&translator);
+	//translator.translate("MainWindow", "English");
+	// QTextCodec::setCodecForTr(QTextCodec::codecForName("utf8"));
 	mainwindow w;
 	//w.show();
 	ContactIndexUI::ShowUI();

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymenttypeui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -31,7 +31,7 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 description = new QLineEdit();
-block0Layout->addRow("Description",description);
+block0Layout->addRow(QObject::tr("Description"),description);
 flowLayout->addWidget(block0Layout);
 
 }

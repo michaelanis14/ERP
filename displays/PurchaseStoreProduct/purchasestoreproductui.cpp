@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchasestoreproductui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -33,19 +33,19 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 store = new ERPComboBox();
 store->addItems(Store::GetPairList());
-block0Layout->addRow("Store",store);
+block0Layout->addRow(QObject::tr("Store"),store);
 purchase = new ERPComboBox();
 purchase->addItems(Purchase::GetPairList());
-block0Layout->addRow("Purchase",purchase);
+block0Layout->addRow(QObject::tr("Purchase"),purchase);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 product = new ERPComboBox();
 product->addItems(Product::GetPairList());
-block0Layout->addRow("Product",product);
+block0Layout->addRow(QObject::tr("Product"),product);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
-block0Layout->addRow("Amount",amount);
+block0Layout->addRow(QObject::tr("Amount"),amount);
 flowLayout->addWidget(block0Layout);
 
 }

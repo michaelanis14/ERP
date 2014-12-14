@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: purchaseui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,15 +32,15 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 purchaseserial = new ERPComboBox();
 purchaseserial->addItems(PurchaseSerial::GetPairList());
-block0Layout->addRow("Purchase Serial",purchaseserial);
+block0Layout->addRow(QObject::tr("Purchase Serial"),purchaseserial);
 creationdate = new QDateEdit(QDate::currentDate());
 creationdate->setCalendarPopup(true);
 creationdate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Creation Date",creationdate);
+block0Layout->addRow(QObject::tr("Creation Date"),creationdate);
 deliverydate = new QDateEdit(QDate::currentDate());
 deliverydate->setCalendarPopup(true);
 deliverydate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Delivery Date",deliverydate);
+block0Layout->addRow(QObject::tr("Delivery Date"),deliverydate);
 AddRemoveButtons* addremovePurchaseStoreProductButtons = new AddRemoveButtons();
 block0Layout->addRow("PurchaseStoreProducts",addremovePurchaseStoreProductButtons);
 QObject::connect(addremovePurchaseStoreProductButtons, SIGNAL(addPressed()), this, SLOT(addPurchaseStoreProduct()));
@@ -82,7 +82,7 @@ purchasestoreproductui->fill(PurchaseStoreProduct);
 PurchaseStoreProducts.append(purchasestoreproductui);
 RemovebtnWidgets* rmpurchasestoreproduct = new RemovebtnWidgets(0,purchasestoreproductui);
 QObject::connect(rmpurchasestoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseStoreProduct(QWidget*)));
-block0Layout->addRow("PurchaseStoreProduct"+QString::number(PurchaseStoreProducts.count()),rmpurchasestoreproduct);
+block0Layout->addRow(QObject::tr("PurchaseStoreProduct") +QString::number(PurchaseStoreProducts.count()),rmpurchasestoreproduct);
 }
 void PurchaseUI::removePurchaseStoreProduct(QWidget* widget){ 
 if(PurchaseStoreProducts.count()  > 0){
@@ -109,7 +109,7 @@ purchasefreelineui->fill(PurchaseFreeLine);
 PurchaseFreeLines.append(purchasefreelineui);
 RemovebtnWidgets* rmpurchasefreeline = new RemovebtnWidgets(0,purchasefreelineui);
 QObject::connect(rmpurchasefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseFreeLine(QWidget*)));
-block0Layout->addRow("PurchaseFreeLine"+QString::number(PurchaseFreeLines.count()),rmpurchasefreeline);
+block0Layout->addRow(QObject::tr("PurchaseFreeLine") +QString::number(PurchaseFreeLines.count()),rmpurchasefreeline);
 }
 void PurchaseUI::removePurchaseFreeLine(QWidget* widget){ 
 if(PurchaseFreeLines.count()  > 0){

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceserialui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,10 +32,10 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 title = new QLineEdit();
-block0Layout->addRow("Title",title);
+block0Layout->addRow(QObject::tr("Title"),title);
 serial = new QLineEdit();
 serial->setValidator( intValidator );
-block0Layout->addRow("Serial",serial);
+block0Layout->addRow(QObject::tr("Serial"),serial);
 flowLayout->addWidget(block0Layout);
 
 }

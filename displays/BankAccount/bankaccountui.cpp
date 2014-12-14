@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccountui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -36,28 +36,28 @@ QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectBankAccount()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 country = new ERPComboBox();
 country->addItems(Country::GetPairList());
-block0Layout->addRow("Country",country);
+block0Layout->addRow(QObject::tr("Country"),country);
 bankcode = new QLineEdit();
-block0Layout->addRow("Bank Code",bankcode);
+block0Layout->addRow(QObject::tr("Bank Code"),bankcode);
 bankaddress = new QLineEdit();
-block0Layout->addRow("Bank Address",bankaddress);
+block0Layout->addRow(QObject::tr("Bank Address"),bankaddress);
 accountnumber = new QLineEdit();
-block0Layout->addRow("Account Number",accountnumber);
+block0Layout->addRow(QObject::tr("Account Number"),accountnumber);
 accountowner = new QLineEdit();
-block0Layout->addRow("Account Owner",accountowner);
+block0Layout->addRow(QObject::tr("Account Owner"),accountowner);
 iban = new QLineEdit();
-block0Layout->addRow("I B A N",iban);
+block0Layout->addRow(QObject::tr("I B A N"),iban);
 bic = new QLineEdit();
-block0Layout->addRow("B I C",bic);
+block0Layout->addRow(QObject::tr("B I C"),bic);
 currency = new ERPComboBox();
 currency->addItems(Currency::GetPairList());
-block0Layout->addRow("Currency",currency);
+block0Layout->addRow(QObject::tr("Currency"),currency);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 flowLayout->addWidget(block0Layout);
 
 }

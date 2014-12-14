@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreelineui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,19 +32,19 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 description = new QLineEdit();
-block0Layout->addRow("Description",description);
+block0Layout->addRow(QObject::tr("Description"),description);
 invoice = new ERPComboBox();
 invoice->addItems(Invoice::GetPairList());
-block0Layout->addRow("Invoice",invoice);
+block0Layout->addRow(QObject::tr("Invoice"),invoice);
 price = new QLineEdit();
 price->setValidator( doubleValidator );
-block0Layout->addRow("Price",price);
+block0Layout->addRow(QObject::tr("Price"),price);
 tax = new ERPComboBox();
 tax->addItems(Tax::GetPairList());
-block0Layout->addRow("Tax",tax);
+block0Layout->addRow(QObject::tr("Tax"),tax);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
-block0Layout->addRow("Amount",amount);
+block0Layout->addRow(QObject::tr("Amount"),amount);
 flowLayout->addWidget(block0Layout);
 
 }

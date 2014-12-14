@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: serviceui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,25 +37,25 @@ QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectService()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 shortdescription = new QLineEdit();
-block0Layout->addRow("Short Description",shortdescription);
+block0Layout->addRow(QObject::tr("Short Description"),shortdescription);
 sellingprice = new QLineEdit();
 sellingprice->setValidator( doubleValidator );
-block0Layout->addRow("Selling Price",sellingprice);
+block0Layout->addRow(QObject::tr("Selling Price"),sellingprice);
 netcoast = new QLineEdit();
 netcoast->setValidator( doubleValidator );
-block0Layout->addRow("Net Coast",netcoast);
+block0Layout->addRow(QObject::tr("Net Coast"),netcoast);
 trademarginrate = new QLineEdit();
 trademarginrate->setValidator( doubleValidator );
-block0Layout->addRow("Trade Margin Rate",trademarginrate);
+block0Layout->addRow(QObject::tr("Trade Margin Rate"),trademarginrate);
 tax = new ERPComboBox();
 tax->addItems(Tax::GetPairList());
-block0Layout->addRow("Tax",tax);
+block0Layout->addRow(QObject::tr("Tax"),tax);
 barcode = new QLineEdit();
 QObject::connect(barcode, SIGNAL(textChanged(QString)), this, SLOT(barcodeChanged(QString)));
-block0Layout->addRow("Barcode",barcode);
-barcodeDisplay = new Barcode(0,0); block0Layout->addRow("Barcode",barcodeDisplay); generatebarcode = new QPushButton("Generate Barcode"); QObject::connect(generatebarcode, SIGNAL(clicked()), this, SLOT(generateBarcode())); block0Layout->addRow("",generatebarcode);
+block0Layout->addRow(QObject::tr("Barcode"),barcode);
+barcodeDisplay = new Barcode(0,0); block0Layout->addRow(QObject::tr("Barcode"),barcodeDisplay); generatebarcode = new QPushButton(QObject::tr("Generate Barcode")); QObject::connect(generatebarcode, SIGNAL(clicked()), this, SLOT(generateBarcode())); block0Layout->addRow("",generatebarcode);
 flowLayout->addWidget(block0Layout);
 
 }

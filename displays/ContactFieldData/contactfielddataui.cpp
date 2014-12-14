@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactfielddataui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,12 +32,12 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 contactfield = new ERPComboBox();
 contactfield->addItems(ContactField::GetPairList());
-block0Layout->addRow("Contact Field",contactfield);
+block0Layout->addRow(QObject::tr("Contact Field"),contactfield);
 value = new QLineEdit();
-block0Layout->addRow("Value",value);
+block0Layout->addRow(QObject::tr("Value"),value);
 flowLayout->addWidget(block0Layout);
 
 }

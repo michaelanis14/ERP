@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectfileui.cpp
-**   Created on: Sat Dec 13 13:51:04 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -36,16 +36,16 @@ QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectProjectFile()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 imageLabel =  new QLabel();
- Add = new QPushButton("Browse");
+ Add = new QPushButton(QObject::tr("Browse"));
 QObject::connect(Add, SIGNAL(clicked()), this, SLOT(on_loadImageButton_clicked()));
 imagedata = new QVariant();
-block0Layout->addRow("Image: ",imageLabel);
+block0Layout->addRow(QObject::tr("Image: "),imageLabel);
 block0Layout->addRow("",Add);
 project = new ERPComboBox();
 project->addItems(Project::GetPairList());
-block0Layout->addRow("Project",project);
+block0Layout->addRow(QObject::tr("Project"),project);
 flowLayout->addWidget(block0Layout);
 
 }

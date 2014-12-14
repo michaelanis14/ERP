@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Sat Dec 13 13:51:05 EET 2014
+#   Created on: Sat Dec 13 21:50:44 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
@@ -32,6 +32,7 @@ SOURCES += main.cpp \
 	Model/erpmodel.cpp \
 	Model/company.cpp \
 	Model/tax.cpp \
+	Model/access.cpp \
 	Model/employee.cpp \
 	Model/contact.cpp \
 	Model/contacttelephone.cpp \
@@ -91,6 +92,8 @@ SOURCES += main.cpp \
 	displays/Company/companyui.cpp \
 	displays/Tax/taxindexui.cpp \
 	displays/Tax/taxui.cpp \
+	displays/Access/accessindexui.cpp \
+	displays/Access/accessui.cpp \
 	displays/Employee/employeeindexui.cpp \
 	displays/Employee/employeeui.cpp \
 	displays/Contact/contactindexui.cpp \
@@ -212,6 +215,7 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/erpmodel.h \
 	Model/company.h \
 	Model/tax.h \
+	Model/access.h \
 	Model/employee.h \
 	Model/contact.h \
 	Model/contacttelephone.h \
@@ -271,6 +275,8 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Company/companyui.h \
 	displays/Tax/taxindexui.h \
 	displays/Tax/taxui.h \
+	displays/Access/accessindexui.h \
+	displays/Access/accessui.h \
 	displays/Employee/employeeindexui.h \
 	displays/Employee/employeeui.h \
 	displays/Contact/contactindexui.h \

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,28 +32,28 @@ block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
 title = new QLineEdit();
-block0Layout->addRow("Title",title);
+block0Layout->addRow(QObject::tr("Title"),title);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
-block0Layout->addRow("Contact",contact);
+block0Layout->addRow(QObject::tr("Contact"),contact);
 name = new QLineEdit();
 QStringList* list = new QStringList(ContactPerson::GetStringList());
 QCompleter *completer = new QCompleter(*list);
 completer->setCaseSensitivity(Qt::CaseInsensitive);
 name->setCompleter(completer);
 QObject::connect(name, SIGNAL(editingFinished()), this, SLOT(selectContactPerson()));
-block0Layout->addRow("Name",name);
+block0Layout->addRow(QObject::tr("Name"),name);
 lastname = new QLineEdit();
-block0Layout->addRow("Last Name",lastname);
+block0Layout->addRow(QObject::tr("Last Name"),lastname);
 position = new QLineEdit();
-block0Layout->addRow("Position",position);
+block0Layout->addRow(QObject::tr("Position"),position);
 birthdate = new QDateEdit(QDate::currentDate());
 birthdate->setCalendarPopup(true);
 birthdate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Birthdate",birthdate);
+block0Layout->addRow(QObject::tr("Birthdate"),birthdate);
 number = new QLineEdit();
 number->setValidator( intValidator );
-block0Layout->addRow("Number",number);
+block0Layout->addRow(QObject::tr("Number"),number);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
@@ -114,7 +114,7 @@ contactpersontelephoneui->fill(ContactPersonTelephone);
 ContactPersonTelephones.append(contactpersontelephoneui);
 RemovebtnWidgets* rmcontactpersontelephone = new RemovebtnWidgets(0,contactpersontelephoneui);
 QObject::connect(rmcontactpersontelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonTelephone(QWidget*)));
-block1Layout->addRow("ContactPersonTelephone"+QString::number(ContactPersonTelephones.count()),rmcontactpersontelephone);
+block1Layout->addRow(QObject::tr("ContactPersonTelephone") +QString::number(ContactPersonTelephones.count()),rmcontactpersontelephone);
 }
 void ContactPersonUI::removeContactPersonTelephone(QWidget* widget){ 
 if(ContactPersonTelephones.count()  > 0){
@@ -141,7 +141,7 @@ contactpersonemailui->fill(ContactPersonEmail);
 ContactPersonEmails.append(contactpersonemailui);
 RemovebtnWidgets* rmcontactpersonemail = new RemovebtnWidgets(0,contactpersonemailui);
 QObject::connect(rmcontactpersonemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonEmail(QWidget*)));
-block2Layout->addRow("ContactPersonEmail"+QString::number(ContactPersonEmails.count()),rmcontactpersonemail);
+block2Layout->addRow(QObject::tr("ContactPersonEmail") +QString::number(ContactPersonEmails.count()),rmcontactpersonemail);
 }
 void ContactPersonUI::removeContactPersonEmail(QWidget* widget){ 
 if(ContactPersonEmails.count()  > 0){
@@ -168,7 +168,7 @@ projectcontactpersonui->fill(ProjectContactPerson);
 ProjectContactPersons.append(projectcontactpersonui);
 RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
 QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
-block3Layout->addRow("ProjectContactPerson"+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
+block3Layout->addRow(QObject::tr("ProjectContactPerson") +QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
 }
 void ContactPersonUI::removeProjectContactPerson(QWidget* widget){ 
 if(ProjectContactPersons.count()  > 0){

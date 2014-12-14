@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceui.cpp
-**   Created on: Sat Dec 13 13:51:05 EET 2014
+**   Created on: Sat Dec 13 21:50:44 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -33,34 +33,34 @@ if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 invoiceserial = new ERPComboBox();
 invoiceserial->addItems(InvoiceSerial::GetPairList());
-block0Layout->addRow("Invoice Serial",invoiceserial);
+block0Layout->addRow(QObject::tr("Invoice Serial"),invoiceserial);
 creationdate = new QDateEdit(QDate::currentDate());
 creationdate->setCalendarPopup(true);
 creationdate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Creation Date",creationdate);
+block0Layout->addRow(QObject::tr("Creation Date"),creationdate);
 enddate = new QDateEdit(QDate::currentDate());
 enddate->setCalendarPopup(true);
 enddate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("End Date",enddate);
+block0Layout->addRow(QObject::tr("End Date"),enddate);
 invoiceperiod = new ERPComboBox();
 invoiceperiod->addItems(InvoicePeriod::GetPairList());
-block0Layout->addRow("Invoice Period",invoiceperiod);
+block0Layout->addRow(QObject::tr("Invoice Period"),invoiceperiod);
 invoiceyear = new ERPComboBox();
 invoiceyear->addItems(InvoiceYear::GetPairList());
-block0Layout->addRow("Invoice Year",invoiceyear);
+block0Layout->addRow(QObject::tr("Invoice Year"),invoiceyear);
 project = new ERPComboBox();
 project->addItems(Project::GetPairList());
-block0Layout->addRow("Project",project);
+block0Layout->addRow(QObject::tr("Project"),project);
 duedate = new QDateEdit(QDate::currentDate());
 duedate->setCalendarPopup(true);
 duedate->setDisplayFormat("ddd dd/MM/yyyy");
-block0Layout->addRow("Due Date",duedate);
+block0Layout->addRow(QObject::tr("Due Date"),duedate);
 discount = new QLineEdit();
 discount->setValidator( doubleValidator );
-block0Layout->addRow("discount",discount);
+block0Layout->addRow(QObject::tr("discount"),discount);
 allowance = new QLineEdit();
 allowance->setValidator( doubleValidator );
-block0Layout->addRow("Allowance",allowance);
+block0Layout->addRow(QObject::tr("Allowance"),allowance);
 AddRemoveButtons* addremoveInvoiceStateDateButtons = new AddRemoveButtons();
 block0Layout->addRow("InvoiceStateDates",addremoveInvoiceStateDateButtons);
 QObject::connect(addremoveInvoiceStateDateButtons, SIGNAL(addPressed()), this, SLOT(addInvoiceStateDate()));
@@ -74,9 +74,9 @@ block0Layout->addRow("Payments",addremovePaymentButtons);
 QObject::connect(addremovePaymentButtons, SIGNAL(addPressed()), this, SLOT(addPayment()));
 
 header = new QLineEdit();
-block0Layout->addRow("Header",header);
+block0Layout->addRow(QObject::tr("Header"),header);
 footer = new QLineEdit();
-block0Layout->addRow("Footer",footer);
+block0Layout->addRow(QObject::tr("Footer"),footer);
 flowLayout->addWidget(block0Layout);
 
 }
@@ -110,7 +110,7 @@ invoicestatedateui->fill(InvoiceStateDate);
 InvoiceStateDates.append(invoicestatedateui);
 RemovebtnWidgets* rminvoicestatedate = new RemovebtnWidgets(0,invoicestatedateui);
 QObject::connect(rminvoicestatedate, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceStateDate(QWidget*)));
-block0Layout->addRow("InvoiceStateDate"+QString::number(InvoiceStateDates.count()),rminvoicestatedate);
+block0Layout->addRow(QObject::tr("InvoiceStateDate") +QString::number(InvoiceStateDates.count()),rminvoicestatedate);
 }
 void InvoiceUI::removeInvoiceStateDate(QWidget* widget){ 
 if(InvoiceStateDates.count()  > 0){
@@ -137,7 +137,7 @@ invoicefreelineui->fill(InvoiceFreeline);
 InvoiceFreelines.append(invoicefreelineui);
 RemovebtnWidgets* rminvoicefreeline = new RemovebtnWidgets(0,invoicefreelineui);
 QObject::connect(rminvoicefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceFreeline(QWidget*)));
-block0Layout->addRow("InvoiceFreeline"+QString::number(InvoiceFreelines.count()),rminvoicefreeline);
+block0Layout->addRow(QObject::tr("InvoiceFreeline") +QString::number(InvoiceFreelines.count()),rminvoicefreeline);
 }
 void InvoiceUI::removeInvoiceFreeline(QWidget* widget){ 
 if(InvoiceFreelines.count()  > 0){
@@ -164,7 +164,7 @@ paymentui->fill(Payment);
 Payments.append(paymentui);
 RemovebtnWidgets* rmpayment = new RemovebtnWidgets(0,paymentui);
 QObject::connect(rmpayment, SIGNAL(removePressed(QWidget*)), this, SLOT(removePayment(QWidget*)));
-block0Layout->addRow("Payment"+QString::number(Payments.count()),rmpayment);
+block0Layout->addRow(QObject::tr("Payment") +QString::number(Payments.count()),rmpayment);
 }
 void InvoiceUI::removePayment(QWidget* widget){ 
 if(Payments.count()  > 0){
