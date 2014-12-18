@@ -8,7 +8,7 @@
 #include "company.h"
 #include "tax.h"
 #include "language.h"
-#include "user.h"
+
 #include "contact.h"
 #include "contacttelephone.h"
 #include "contactemail.h"
@@ -40,6 +40,7 @@
 #include "purchasestoreproduct.h"
 #include "purchasefreeline.h"
 #include "deliveryorderstatus.h"
+#include "deliveryorderserial.h"
 #include "deliveryorder.h"
 #include "deliveryorderstoreproduct.h"
 #include "deliveryorderservice.h"
@@ -55,6 +56,7 @@
 #include "payment.h"
 #include "contactpersonfielddata.h"
 #include "task.h"
+#include "projectsales.h"
 #include "projectcontactperson.h"
 #include "projectproduct.h"
 #include "projectservice.h"
@@ -72,6 +74,10 @@
 
 ErpModel::ErpModel()
 {
+	LoggedUser = new User();
+	UserAccessList =   QList<Access*>();
+
+
 	db = QSqlDatabase::addDatabase("QMYSQL");
 	db.setConnectOptions();
 	db.setHostName("localhost");
@@ -259,12 +265,8 @@ bool ErpModel::init(){
 
 	Contact::Init();
 	if(Contact::GetAll().count() < 1){
-		Contact* contact = new Contact("Employee1","Mr."+QString::number(Contact::GetAll().count()),"5/5/5",4,1,Contact::GetAll().count(),"AA","na","na",1,1,"na","na","na","na");
+		Contact* contact = new Contact("Employee1","Mr."+QString::number(Contact::GetAll().count()),QDate::currentDate(),4,1,Contact::GetAll().count(),"AA","na","na",1,1,"na","na","na","na");
 		contact->save();
-	}
-	for(int i = 0; i < 100; i++){
-		Contact* cont = new Contact("Mr.","Contact"+QString::number(Contact::GetAll().count()),"5/5/5",1,1,Contact::GetAll().count(),"AA","na","na",1,1,"na","na","na","na");
-		cont->save();
 	}
 
 	Currency::Init();
@@ -337,10 +339,7 @@ bool ErpModel::init(){
 		poriductCat->save();
 	}
 	Product::Init();
-	for(int i = 0; i < 0; i++){
-		Product* product = new Product("Product"+QString::number(Product::GetAll().count()),"ShortDescription",1,10,8,90,1,"information","98989898009",1,0,"date","date");
-		product->save();
-	}
+
 	ProductImage::Init();
 	ProductField::Init();
 	ProductFieldData::Init();
@@ -355,7 +354,10 @@ bool ErpModel::init(){
 		projectStatus = new ProjectStatus("Finished","","");
 		projectStatus->save();
 	}
+
+
 	Project::Init();
+	ProjectSales::Init();
 	ProjectFile::Init();
 	ProjectProduct::Init();
 	ProjectService::Init();
@@ -383,6 +385,11 @@ bool ErpModel::init(){
 		deliveryOrderStatus = new DeliveryOrderStatus("Canceled","","");
 		deliveryOrderStatus->save();
 	}
+	DeliveryOrderSerial::Init();
+	if(DeliveryOrderSerial::GetAll().count() < 1){
+		DeliveryOrderSerial *deliveryOrderSerial = new DeliveryOrderSerial("DELV",1,"","");
+		deliveryOrderSerial->save();
+	}
 	DeliveryOrder::Init();
 	DeliveryOrderStoreProduct::Init();
 	DeliveryOrderService::Init();
@@ -404,10 +411,30 @@ bool ErpModel::init(){
 	ContactPersonFieldData::Init();
 	Task::Init();
 	Access::Init();
+	if(Access::GetAll().count() < 1){
+		Access *access = new Access("Access Control",1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,"1",1,"","");
+		access->save();
+	}
 
 
 
-
+	for(int i = 0; i < 10; i++){
+		Contact* cont = new Contact("Contact"+QString::number(Contact::GetAll().count()),"Mr.",QDate::currentDate(),1,1,Contact::GetAll().count(),"AA","na","na",1,1,"na","na","na","na");
+		cont->save();
+	}
+	for(int i = 0; i < 10; i++){
+		Product* product = new Product("Product"+QString::number(Product::GetAll().count()),"ShortDescription",1,10,8,90,1,"information","98989898009",1,0,"date","date");
+		product->save();
+	}
 
 	return true;
+}
+
+QList<QString> toStringList(QList<QPair< int,QString > > pairList){
+
+	QList<QString> list;
+	for(int i = 0; i < pairList.length(); i++){
+	  list.append(pairList.at(i).second);
+  }
+	return list;
 }

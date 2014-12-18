@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: payment.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -71,9 +71,9 @@ Payment* Payment::GetInstance() {
 return p_instance;
 }
 bool Payment::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(PaymentID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Payment (InvoiceID,TotalAmount,Comment,PaymentTypeID,CreatedOn,EditedOn)"
 "VALUES ('" +QString::number(this->InvoiceID)+"','"+QString::number(this->TotalAmount)+"','"+QString(this->Comment)+"','"+QString::number(this->PaymentTypeID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

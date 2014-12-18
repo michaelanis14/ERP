@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorder.h
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,13 +19,13 @@ class DeliveryOrder  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	DeliveryOrder();
-	DeliveryOrder(QString Serial,QString Barcode,int DeliveryOrderStatusID,int ContactID,QString CreationDate,QString DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	int DeliveryOrderID;
-	QString Serial;
-	QString Barcode;
+	DeliveryOrder(int DeliveryOrderSerialID,int DeliveryOrderStatusID,int ContactID,int ProjectID,QDate CreationDate,QDate DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	int DeliveryOrderID;
+	int DeliveryOrderSerialID;
 	int DeliveryOrderStatusID;
 	int ContactID;
-	QString CreationDate;
-	QString DeliveryDate;
+	int ProjectID;
+	QDate CreationDate;
+	QDate DeliveryDate;
 	QString Note;
 	QString Header;
 	QString Footer;
@@ -57,11 +57,11 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	DeliveryOrder(int DeliveryOrderID,QString Serial,QString Barcode,int DeliveryOrderStatusID,int ContactID,QString CreationDate,QString DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	static DeliveryOrder* p_instance;
-	bool setSerial(int DeliveryOrderID, const QString &Serial);
-	bool setBarcode(int DeliveryOrderID, const QString &Barcode);
+	DeliveryOrder(int DeliveryOrderID,int DeliveryOrderSerialID,int DeliveryOrderStatusID,int ContactID,int ProjectID,QDate CreationDate,QDate DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	static DeliveryOrder* p_instance;
+	bool setDeliveryOrderSerialID(int DeliveryOrderID, const QString &DeliveryOrderSerialID);
 	bool setDeliveryOrderStatusID(int DeliveryOrderID, const QString &DeliveryOrderStatusID);
 	bool setContactID(int DeliveryOrderID, const QString &ContactID);
+	bool setProjectID(int DeliveryOrderID, const QString &ProjectID);
 	bool setCreationDate(int DeliveryOrderID, const QString &CreationDate);
 	bool setDeliveryDate(int DeliveryOrderID, const QString &DeliveryDate);
 	bool setNote(int DeliveryOrderID, const QString &Note);

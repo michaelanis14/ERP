@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: timebookingui.h
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Wed Dec 17 16:42:29 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -14,6 +14,7 @@
 #include "../CommonUI/addremovebuttons.h"
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/timebooking.h"
+#include "../../Model/erpmodel.h"
 #include "../../Model/timebooking.h"
 #include "../../Model/project.h"
 #include "../../Model/service.h"
@@ -35,6 +36,7 @@ public:
 	static void ShowUI();
 	static TimeBookingUI* GetUI();
 	ERPFormBlock* block0Layout;
+	QLineEdit*title;
 	QDateEdit*startdate;
 	QDateEdit*enddate;
 	QLineEdit*starttime;

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contact.h
-**   Created on: Sun Dec 14 22:39:11 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,10 +19,10 @@ class Contact  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Contact();
-	Contact(QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
+	Contact(QString Name,QString Salutation,QDate BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	int ContactID;
 	QString Name;
 	QString Salutation;
-	QString BirthdateOrDateOfFoundation;
+	QDate BirthdateOrDateOfFoundation;
 	int ContactTypeID;
 	int ContactClassID;
 	int Serial;
@@ -60,7 +60,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Contact(int ContactID,QString Name,QString Salutation,QString BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
+	Contact(int ContactID,QString Name,QString Salutation,QDate BirthdateOrDateOfFoundation,int ContactTypeID,int ContactClassID,int Serial,QString Address,QString PostalCode,QString City,int CountryID,int ContactStatusID,QString Website,QString TaxNumber,QString CreatedOn,QString EditedOn);	static Contact* p_instance;
 	bool setName(int ContactID, const QString &Name);
 	bool setSalutation(int ContactID, const QString &Salutation);
 	bool setBirthdateOrDateOfFoundation(int ContactID, const QString &BirthdateOrDateOfFoundation);

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderui.h
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,11 +13,13 @@
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/addremovebuttons.h"
 #include "../CommonUI/RemovebtnWidgets.h"
-#include "../CommonUI/barcode.h"
 #include "../../Model/deliveryorder.h"
+#include "../../Model/erpmodel.h"
 #include "../../Model/deliveryorder.h"
+#include "../../Model/deliveryorderserial.h"
 #include "../../Model/deliveryorderstatus.h"
 #include "../../Model/contact.h"
+#include "../../Model/project.h"
 
 #include "../DeliveryOrderStoreProduct/deliveryorderstoreproductui.h"
 #include "../DeliveryOrderService/deliveryorderserviceui.h"
@@ -45,12 +47,10 @@ public:
 	QList<DeliveryOrderStoreProductUI*> DeliveryOrderStoreProducts;
 	QList<DeliveryOrderServiceUI*> DeliveryOrderServices;
 	QList<DeliveryOrderFreelineUI*> DeliveryOrderFreelines;
-	QLineEdit*serial;
-	QLineEdit*barcode;
-	Barcode* barcodeDisplay;
-	QPushButton* generatebarcode;
+	ERPComboBox*deliveryorderserial;
 	ERPComboBox*deliveryorderstatus;
 	ERPComboBox*contact;
+	ERPComboBox*project;
 	QDateEdit*creationdate;
 	QDateEdit*deliverydate;
 	QLineEdit*note;
@@ -74,8 +74,6 @@ private slots:
 	void selectDeliveryOrder();
 	void cancel();
 	void clear();
-	void generateBarcode();
-	void barcodeChanged(QString barcode);
 public slots:
 	bool save();
 	bool updateModel();

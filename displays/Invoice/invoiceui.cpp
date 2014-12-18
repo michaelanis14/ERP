@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: invoiceui.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Wed Dec 17 16:42:29 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "invoiceui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 InvoiceUI::InvoiceUI(QWidget *parent) :ERPDisplay(parent)
@@ -82,11 +83,17 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* InvoiceUI::p_instance = 0;
 void InvoiceUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->Invoice) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new InvoiceUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 InvoiceUI*InvoiceUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
@@ -102,11 +109,11 @@ RemovebtnWidgets* rminvoicestatedate = new RemovebtnWidgets(0,invoicestatedateui
 QObject::connect(rminvoicestatedate, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceStateDate(QWidget*)));
 block0Layout->addRow(QObject::tr("InvoiceStateDate")+QString::number(InvoiceStateDates.count()),rminvoicestatedate);
 }
-void InvoiceUI::addInvoiceStateDate(InvoiceStateDate* InvoiceStateDate){ 
+void InvoiceUI::addInvoiceStateDate(InvoiceStateDate* invoicestatedate){ 
 InvoiceStateDateUI* invoicestatedateui = new InvoiceStateDateUI();
 invoicestatedateui->block0Layout->hideRow(invoicestatedateui->invoice);
 invoicestatedateui->controllers->setFixedHeight(0);
-invoicestatedateui->fill(InvoiceStateDate);
+invoicestatedateui->fill(invoicestatedate);
 InvoiceStateDates.append(invoicestatedateui);
 RemovebtnWidgets* rminvoicestatedate = new RemovebtnWidgets(0,invoicestatedateui);
 QObject::connect(rminvoicestatedate, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceStateDate(QWidget*)));
@@ -129,11 +136,11 @@ RemovebtnWidgets* rminvoicefreeline = new RemovebtnWidgets(0,invoicefreelineui);
 QObject::connect(rminvoicefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceFreeline(QWidget*)));
 block0Layout->addRow(QObject::tr("InvoiceFreeline")+QString::number(InvoiceFreelines.count()),rminvoicefreeline);
 }
-void InvoiceUI::addInvoiceFreeline(InvoiceFreeline* InvoiceFreeline){ 
+void InvoiceUI::addInvoiceFreeline(InvoiceFreeline* invoicefreeline){ 
 InvoiceFreelineUI* invoicefreelineui = new InvoiceFreelineUI();
 invoicefreelineui->block0Layout->hideRow(invoicefreelineui->invoice);
 invoicefreelineui->controllers->setFixedHeight(0);
-invoicefreelineui->fill(InvoiceFreeline);
+invoicefreelineui->fill(invoicefreeline);
 InvoiceFreelines.append(invoicefreelineui);
 RemovebtnWidgets* rminvoicefreeline = new RemovebtnWidgets(0,invoicefreelineui);
 QObject::connect(rminvoicefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeInvoiceFreeline(QWidget*)));
@@ -156,11 +163,11 @@ RemovebtnWidgets* rmpayment = new RemovebtnWidgets(0,paymentui);
 QObject::connect(rmpayment, SIGNAL(removePressed(QWidget*)), this, SLOT(removePayment(QWidget*)));
 block0Layout->addRow(QObject::tr("Payment")+QString::number(Payments.count()),rmpayment);
 }
-void InvoiceUI::addPayment(Payment* Payment){ 
+void InvoiceUI::addPayment(Payment* payment){ 
 PaymentUI* paymentui = new PaymentUI();
 paymentui->block0Layout->hideRow(paymentui->invoice);
 paymentui->controllers->setFixedHeight(0);
-paymentui->fill(Payment);
+paymentui->fill(payment);
 Payments.append(paymentui);
 RemovebtnWidgets* rmpayment = new RemovebtnWidgets(0,paymentui);
 QObject::connect(rmpayment, SIGNAL(removePressed(QWidget*)), this, SLOT(removePayment(QWidget*)));
@@ -178,12 +185,12 @@ void InvoiceUI::fill(Invoice* invoice){
 clear();
 this->invoice = invoice;
 invoiceserial->setIndexByKey(invoice->InvoiceSerialID);
-creationdate->setDate(QDate::fromString(invoice->CreationDate));
-enddate->setDate(QDate::fromString(invoice->EndDate));
+creationdate->setDate(invoice->CreationDate);
+enddate->setDate(invoice->EndDate);
 invoiceperiod->setIndexByKey(invoice->InvoicePeriodID);
 invoiceyear->setIndexByKey(invoice->InvoiceYearID);
 project->setIndexByKey(invoice->ProjectID);
-duedate->setDate(QDate::fromString(invoice->DueDate));
+duedate->setDate(invoice->DueDate);
 discount->setText(QString::number(invoice->discount));
 allowance->setText(QString::number(invoice->Allowance));
 foreach(InvoiceStateDate* invoicestatedate, invoice->invoicestatedates) {
@@ -247,7 +254,7 @@ creationdate->setObjectName("creationdate");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
 creationdate->update();
-invoice->CreationDate = creationdate->text().trimmed();
+invoice->CreationDate.setDate(creationdate->date().year(),creationdate->date().month(),creationdate->date().day());
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
@@ -262,7 +269,7 @@ enddate->setObjectName("enddate");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
 enddate->update();
-invoice->EndDate = enddate->text().trimmed();
+invoice->EndDate.setDate(enddate->date().year(),enddate->date().month(),enddate->date().day());
 }
 if(!invoiceperiod->isHidden()) 
 invoice->InvoicePeriodID = invoiceperiod->getKey();
@@ -283,7 +290,7 @@ duedate->setObjectName("duedate");
 duedate->style()->unpolish(duedate);
 duedate->style()->polish(duedate);
 duedate->update();
-invoice->DueDate = duedate->text().trimmed();
+invoice->DueDate.setDate(duedate->date().year(),duedate->date().month(),duedate->date().day());
 }
 if(discount->text().trimmed().isEmpty()){
 errors = true;
@@ -434,7 +441,7 @@ creationdate->setObjectName("creationdate");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
 creationdate->update();
-invoice->CreationDate = creationdate->text().trimmed();
+invoice->CreationDate.fromString(creationdate->text().trimmed());
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
@@ -449,7 +456,7 @@ enddate->setObjectName("enddate");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
 enddate->update();
-invoice->EndDate = enddate->text().trimmed();
+invoice->EndDate.fromString(enddate->text().trimmed());
 }
 if(invoice->InvoicePeriodID == 0) 
 invoice->InvoicePeriodID = invoiceperiod->getKey();
@@ -470,7 +477,7 @@ duedate->setObjectName("duedate");
 duedate->style()->unpolish(duedate);
 duedate->style()->polish(duedate);
 duedate->update();
-invoice->DueDate = duedate->text().trimmed();
+invoice->DueDate.fromString(duedate->text().trimmed());
 }
 if(discount->text().trimmed().isEmpty()){
 errors = true;

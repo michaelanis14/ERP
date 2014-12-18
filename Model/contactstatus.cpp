@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactstatus.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -56,9 +56,9 @@ ContactStatus* ContactStatus::GetInstance() {
 return p_instance;
 }
 bool ContactStatus::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(ContactStatusID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactStatus (Description,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Description)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

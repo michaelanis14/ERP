@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: timebooking.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -11,8 +11,9 @@ TimeBooking::TimeBooking()
  : QSqlRelationalTableModel(){
 
 this->TimeBookingID = 0 ;
-this->StartDate = "";
-this->EndDate = "";
+this->Title = "";
+this->StartDate = QDate();
+this->EndDate = QDate();
 this->StartTime = "";
 this->EndTime = "";
 this->BreakTime = "";
@@ -25,12 +26,13 @@ this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("TimeBooking");
 this->setEditStrategy(QSqlTableModel::OnManualSubmit);
-this->setRelation(7, QSqlRelation("Project", "ProjectID", "Title"));
-this->setRelation(8, QSqlRelation("Service", "ServiceID", "Name"));
-this->setRelation(9, QSqlRelation("User", "UserID", "Name"));
+this->setRelation(8, QSqlRelation("Project", "ProjectID", "Title"));
+this->setRelation(9, QSqlRelation("Service", "ServiceID", "Name"));
+this->setRelation(10, QSqlRelation("User", "UserID", "Name"));
 }
-TimeBooking::TimeBooking(int TimeBookingID,QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+TimeBooking::TimeBooking(int TimeBookingID,QString Title,QDate StartDate,QDate EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->TimeBookingID = TimeBookingID ;
+this->Title = Title ;
 this->StartDate = StartDate ;
 this->EndDate = EndDate ;
 this->StartTime = StartTime ;
@@ -45,8 +47,9 @@ this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-TimeBooking::TimeBooking(QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+TimeBooking::TimeBooking(QString Title,QDate StartDate,QDate EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->TimeBookingID = 0 ;
+this->Title = Title ;
 this->StartDate = StartDate ;
 this->EndDate = EndDate ;
 this->StartTime = StartTime ;
@@ -68,9 +71,10 @@ QString table = "TimeBooking";
 QString query =
 "(TimeBookingID INT NOT NULL AUTO_INCREMENT, "
 "PRIMARY KEY (TimeBookingID),"
-"StartDate VARCHAR(40) NOT NULL, "
-" KEY(StartDate),"
-"EndDate VARCHAR(40) NOT NULL, "
+"Title VARCHAR(40) NOT NULL, "
+" KEY(Title),"
+"StartDate DATE NOT NULL, "
+"EndDate DATE NOT NULL, "
 "StartTime VARCHAR(40) NOT NULL, "
 "EndTime VARCHAR(40) NOT NULL, "
 "BreakTime VARCHAR(40) NOT NULL, "
@@ -86,7 +90,7 @@ QString query =
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 QList<QPair<QString,QString> >variables;
-variables.append(qMakePair(QString(" INT"),QString("TimeBookingID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("StartDate")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EndDate")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("StartTime")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EndTime")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("BreakTime")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("OnlyTimeBooking")));variables.append(qMakePair(QString(" INT"),QString("ProjectID")));variables.append(qMakePair(QString(" INT"),QString("ServiceID")));variables.append(qMakePair(QString(" INT"),QString("UserID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Note")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
+variables.append(qMakePair(QString(" INT"),QString("TimeBookingID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Title")));variables.append(qMakePair(QString(""),QString("StartDate")));variables.append(qMakePair(QString(""),QString("EndDate")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("StartTime")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EndTime")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("BreakTime")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("OnlyTimeBooking")));variables.append(qMakePair(QString(" INT"),QString("ProjectID")));variables.append(qMakePair(QString(" INT"),QString("ServiceID")));variables.append(qMakePair(QString(" INT"),QString("UserID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Note")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 TimeBooking* TimeBooking::p_instance = 0;
@@ -98,14 +102,14 @@ TimeBooking* TimeBooking::GetInstance() {
 return p_instance;
 }
 bool TimeBooking::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(TimeBookingID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO TimeBooking (StartDate,EndDate,StartTime,EndTime,BreakTime,OnlyTimeBooking,ProjectID,ServiceID,UserID,Note,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->StartDate)+"','"+QString(this->EndDate)+"','"+QString(this->StartTime)+"','"+QString(this->EndTime)+"','"+QString(this->BreakTime)+"','"+QString::number(this->OnlyTimeBooking)+"','"+QString::number(this->ProjectID)+"','"+QString::number(this->ServiceID)+"','"+QString::number(this->UserID)+"','"+QString(this->Note)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+this->CreatedOn = QDate::currentDate().toString();
+ErpModel::GetInstance()->qeryExec("INSERT INTO TimeBooking (Title,StartDate,EndDate,StartTime,EndTime,BreakTime,OnlyTimeBooking,ProjectID,ServiceID,UserID,Note,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Title)+"','"+(this->StartDate.toString("yyyy-MM-dd"))+"','"+(this->EndDate.toString("yyyy-MM-dd"))+"','"+QString(this->StartTime)+"','"+QString(this->EndTime)+"','"+QString(this->BreakTime)+"','"+QString::number(this->OnlyTimeBooking)+"','"+QString::number(this->ProjectID)+"','"+QString::number(this->ServiceID)+"','"+QString::number(this->UserID)+"','"+QString(this->Note)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE TimeBooking SET "	"StartDate = '"+QString(this->StartDate)+"',"+"EndDate = '"+QString(this->EndDate)+"',"+"StartTime = '"+QString(this->StartTime)+"',"+"EndTime = '"+QString(this->EndTime)+"',"+"BreakTime = '"+QString(this->BreakTime)+"',"+"OnlyTimeBooking = '"+QString::number(this->OnlyTimeBooking)+"',"+"ProjectID = '"+QString::number(this->ProjectID)+"',"+"ServiceID = '"+QString::number(this->ServiceID)+"',"+"UserID = '"+QString::number(this->UserID)+"',"+"Note = '"+QString(this->Note)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE TimeBookingID ='"+QString::number(this->TimeBookingID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  TimeBookingID FROM TimeBooking WHERE StartDate = '"+StartDate+"' AND EditedOn = '"+this->EditedOn+"'"  );
+ErpModel::GetInstance()->qeryExec("UPDATE TimeBooking SET "	"Title = '"+QString(this->Title)+"',"+"StartDate = '"+(this->StartDate.toString("yyyy-MM-dd"))+"',"+"EndDate = '"+(this->EndDate.toString("yyyy-MM-dd"))+"',"+"StartTime = '"+QString(this->StartTime)+"',"+"EndTime = '"+QString(this->EndTime)+"',"+"BreakTime = '"+QString(this->BreakTime)+"',"+"OnlyTimeBooking = '"+QString::number(this->OnlyTimeBooking)+"',"+"ProjectID = '"+QString::number(this->ProjectID)+"',"+"ServiceID = '"+QString::number(this->ServiceID)+"',"+"UserID = '"+QString::number(this->UserID)+"',"+"Note = '"+QString(this->Note)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE TimeBookingID ='"+QString::number(this->TimeBookingID)+"'");
+ }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  TimeBookingID FROM TimeBooking WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
  this->TimeBookingID = query.value(0).toInt();	
@@ -133,7 +137,7 @@ if(TimeBookingID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM TimeBooking"
 "WHERE TimeBookingID ='"+QString::number(this->TimeBookingID)+"'"));
 while (query.next()) {
-return new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString());
+return new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toDate(),query.value(3).toDate(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString());
  }
 
 }
@@ -144,7 +148,7 @@ QList<TimeBooking*> TimeBooking::GetAll() {
 	QList<TimeBooking*> timebookings =   QList<TimeBooking*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM TimeBooking ORDER BY TimeBookingID ASC"));
 	while (query.next()) {
-timebookings.append(new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString()));
+timebookings.append(new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toDate(),query.value(3).toDate(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString()));
 	}
 	return timebookings;
 }
@@ -154,7 +158,7 @@ TimeBooking* timebooking = new TimeBooking();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM TimeBooking WHERE TimeBookingID = '"+QString::number(id)+"' ORDER BY TimeBookingID ASC "));
 while (query.next()) {
-timebooking = new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString());
+timebooking = new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toDate(),query.value(3).toDate(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString());
  }
 
 }
@@ -171,9 +175,9 @@ else return new TimeBooking();
 TimeBooking* TimeBooking::Get(QString name) {
 TimeBooking* timebooking = new TimeBooking();
 if(name != NULL) {
-QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM TimeBooking WHERE StartDate = '"+name+"'"));
+QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM TimeBooking WHERE Title = '"+name+"'"));
 while (query.next()) {
-timebooking = new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString());
+timebooking = new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toDate(),query.value(3).toDate(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString());
 
  }
 
@@ -186,8 +190,7 @@ QList<TimeBooking*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM TimeBooking"
 "WHERE" 
-"StartDate LIKE '%"+keyword+"%'"
-"OR EndDate LIKE '%"+keyword+"%'"
+"Title LIKE '%"+keyword+"%'"
 "OR StartTime LIKE '%"+keyword+"%'"
 "OR EndTime LIKE '%"+keyword+"%'"
 "OR BreakTime LIKE '%"+keyword+"%'"
@@ -196,7 +199,7 @@ QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM TimeBooking
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString()));
+list.append(new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toDate(),query.value(3).toDate(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString()));
  }
 
 }
@@ -208,6 +211,7 @@ QList<QString> TimeBooking::GetStringList() {
 	QList<TimeBooking*> timebookings =   QList<TimeBooking*>();
 timebookings = GetAll();
 	for(int i = 0; i <timebookings.count(); i++){
+		list.append(timebookings[i]->Title);
 	}
 	return list;
 }
@@ -217,7 +221,7 @@ QList<QPair< int,QString > > TimeBooking::GetPairList() {
 	QList<TimeBooking*> timebookings =   QList<TimeBooking*>();
 timebookings = GetAll();
 	for(int i = 0; i <timebookings.count(); i++){
-		list.append(qMakePair(timebookings[i]->TimeBookingID,timebookings[i]->StartDate));
+		list.append(qMakePair(timebookings[i]->TimeBookingID,timebookings[i]->Title));
 	}
 	return list;
 }
@@ -225,7 +229,7 @@ timebookings = GetAll();
 QList<QPair< int,QString > > TimeBooking::GetPairList(QList<TimeBooking*> timebookings) {
 	QList<QPair<int,QString > > list;
 	for(int i = 0; i <timebookings.count(); i++){
-		list.append(qMakePair(timebookings[i]->TimeBookingID,timebookings[i]->StartDate));
+		list.append(qMakePair(timebookings[i]->TimeBookingID,timebookings[i]->Title));
 	}
 	return list;
 }
@@ -234,7 +238,7 @@ int TimeBooking::GetIndex(QString name) {
 	QList<TimeBooking*> timebookings =   QList<TimeBooking*>();
 timebookings = GetAll();
 	for(int i = 0; i <timebookings.count(); i++){
-		if(timebookings[i]->StartDate == name){
+		if(timebookings[i]->Title == name){
 			return i;
 		}
 	}
@@ -246,7 +250,7 @@ QList<TimeBooking*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM TimeBooking WHERE "+select+"" ));
 while (query.next()) {
-list.append(new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toString(),query.value(3).toString(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toString(),query.value(11).toString(),query.value(12).toString()));
+list.append(new TimeBooking(query.value(0).toInt(),query.value(1).toString(),query.value(2).toDate(),query.value(3).toDate(),query.value(4).toString(),query.value(5).toString(),query.value(6).toString(),query.value(7).toInt(),query.value(8).toInt(),query.value(9).toInt(),query.value(10).toInt(),query.value(11).toString(),query.value(12).toString(),query.value(13).toString()));
  }
 
 }
@@ -257,7 +261,7 @@ Qt::ItemFlags TimeBooking::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 9 || index.column() == 10 || index.column() == 11 || index.column() == 12 || index.column() == 13)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -270,28 +274,30 @@ int id = data(primaryKeyIndex).toInt();
 bool ok = true;
 if((data(QSqlRelationalTableModel::index(index.row(), index.column())).toString() != value.toString().toLower())){
 if (index.column() == 1)
-ok = setStartDate(id, value.toString());
+ok = setTitle(id, value.toString());
 else if (index.column() == 2)
-ok = setEndDate(id, value.toString());
+ok = setStartDate(id, value.toString());
 else if (index.column() == 3)
-ok = setStartTime(id, value.toString());
+ok = setEndDate(id, value.toString());
 else if (index.column() == 4)
-ok = setEndTime(id, value.toString());
+ok = setStartTime(id, value.toString());
 else if (index.column() == 5)
-ok = setBreakTime(id, value.toString());
+ok = setEndTime(id, value.toString());
 else if (index.column() == 6)
-ok = setOnlyTimeBooking(id, value.toString());
+ok = setBreakTime(id, value.toString());
 else if (index.column() == 7)
-ok = setProjectID(id, value.toString());
+ok = setOnlyTimeBooking(id, value.toString());
 else if (index.column() == 8)
-ok = setServiceID(id, value.toString());
+ok = setProjectID(id, value.toString());
 else if (index.column() == 9)
-ok = setUserID(id, value.toString());
+ok = setServiceID(id, value.toString());
 else if (index.column() == 10)
-ok = setNote(id, value.toString());
+ok = setUserID(id, value.toString());
 else if (index.column() == 11)
-ok = setCreatedOn(id, value.toString());
+ok = setNote(id, value.toString());
 else if (index.column() == 12)
+ok = setCreatedOn(id, value.toString());
+else if (index.column() == 13)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -310,21 +316,31 @@ return ok;
 void TimeBooking::refresh() {
 if(!ErpModel::GetInstance()->db.isOpen()&&!ErpModel::GetInstance()->db.open())
 qDebug() <<"Couldn't open DataBase at Refresh() TimeBooking!";
-this->setHeaderData(1, Qt::Horizontal, QObject::tr("Start Date"));
-this->setHeaderData(2, Qt::Horizontal, QObject::tr("End Date"));
-this->setHeaderData(3, Qt::Horizontal, QObject::tr("Start Time"));
-this->setHeaderData(4, Qt::Horizontal, QObject::tr("End Time"));
-this->setHeaderData(5, Qt::Horizontal, QObject::tr("Break Time"));
-this->setHeaderData(6, Qt::Horizontal, QObject::tr("Only Time Booking"));
-this->setHeaderData(7, Qt::Horizontal, QObject::tr("Project"));
-this->setHeaderData(8, Qt::Horizontal, QObject::tr("Service"));
-this->setHeaderData(9, Qt::Horizontal, QObject::tr("User"));
-this->setHeaderData(10, Qt::Horizontal, QObject::tr("Note"));
-this->setHeaderData(11, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(12, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(1, Qt::Horizontal, QObject::tr("Title"));
+this->setHeaderData(2, Qt::Horizontal, QObject::tr("Start Date"));
+this->setHeaderData(3, Qt::Horizontal, QObject::tr("End Date"));
+this->setHeaderData(4, Qt::Horizontal, QObject::tr("Start Time"));
+this->setHeaderData(5, Qt::Horizontal, QObject::tr("End Time"));
+this->setHeaderData(6, Qt::Horizontal, QObject::tr("Break Time"));
+this->setHeaderData(7, Qt::Horizontal, QObject::tr("Only Time Booking"));
+this->setHeaderData(8, Qt::Horizontal, QObject::tr("Project"));
+this->setHeaderData(9, Qt::Horizontal, QObject::tr("Service"));
+this->setHeaderData(10, Qt::Horizontal, QObject::tr("User"));
+this->setHeaderData(11, Qt::Horizontal, QObject::tr("Note"));
+this->setHeaderData(12, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(13, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();
+}
+bool TimeBooking::setTitle(int TimeBookingID, const QString &Title) {
+QSqlQuery query;
+query.prepare("update TimeBooking set Title = ? where TimeBookingID = ?");
+query.addBindValue(Title);
+query.addBindValue(TimeBookingID);
+if( !query.exec() )
+qDebug() << query.lastError().text();
+return true;
 }
 bool TimeBooking::setStartDate(int TimeBookingID, const QString &StartDate) {
 QSqlQuery query;

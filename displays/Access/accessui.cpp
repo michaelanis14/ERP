@@ -1,11 +1,12 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: accessui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Wed Dec 17 14:40:22 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "accessui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 AccessUI::AccessUI(QWidget *parent) :ERPDisplay(parent)
@@ -24,14 +25,20 @@ QPushButton* save = new QPushButton("Save");
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- this->controllers->addControllerButton(save); 
- this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(save);
+ this->controllers->addControllerButton(clear);
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 title = new QLineEdit();
 block0Layout->addRow(QObject::tr("Title"),title);
+admin = new QCheckBox();
+block0Layout->addRow(QObject::tr("Admin"),admin);
+deliveryorderserial = new QCheckBox();
+block0Layout->addRow(QObject::tr("Delivery Order Serial"),deliveryorderserial);
+deliveryorder = new QCheckBox();
+block0Layout->addRow(QObject::tr("Delivery Order"),deliveryorder);
 company = new QCheckBox();
 block0Layout->addRow(QObject::tr("Company"),company);
 tax = new QCheckBox();
@@ -112,8 +119,6 @@ purchasefreeline = new QCheckBox();
 block0Layout->addRow(QObject::tr("Purchase Free Line"),purchasefreeline);
 deliveryorderstatus = new QCheckBox();
 block0Layout->addRow(QObject::tr("Delivery Order Status"),deliveryorderstatus);
-deliveryorder = new QCheckBox();
-block0Layout->addRow(QObject::tr("Delivery Order"),deliveryorder);
 deliveryorderstoreproduct = new QCheckBox();
 block0Layout->addRow(QObject::tr("Delivery Order Store Product"),deliveryorderstoreproduct);
 deliveryorderservice = new QCheckBox();
@@ -130,8 +135,8 @@ invoiceserial = new QCheckBox();
 block0Layout->addRow(QObject::tr("Invoice Serial"),invoiceserial);
 invoice = new QCheckBox();
 block0Layout->addRow(QObject::tr("Invoice"),invoice);
-invoicestated = new QCheckBox();
-block0Layout->addRow(QObject::tr("Invoice State D"),invoicestated);
+invoicestatedate = new QCheckBox();
+block0Layout->addRow(QObject::tr("Invoice State Date"),invoicestatedate);
 invoicefreeline = new QCheckBox();
 block0Layout->addRow(QObject::tr("Invoice Freeline"),invoicefreeline);
 paymenttype = new QCheckBox();
@@ -144,6 +149,8 @@ language = new QCheckBox();
 block0Layout->addRow(QObject::tr("Language"),language);
 timebooking = new QCheckBox();
 block0Layout->addRow(QObject::tr("Time Booking"),timebooking);
+login = new QCheckBox();
+block0Layout->addRow(QObject::tr("Login"),login);
 hashkey = new QLineEdit();
 block0Layout->addRow(QObject::tr("hashKey"),hashkey);
 user = new ERPComboBox();
@@ -153,22 +160,31 @@ flowLayout->addWidget(block0Layout);
 
 }
 ERPDisplay* AccessUI::p_instance = 0;
-void AccessUI::ShowUI() { 
-	if (p_instance != 0) 
-	p_instance->deleteLater(); 
-	p_instance = new AccessUI(mainwindow::GetMainDisplay()); 
-  mainwindow::ShowDisplay(p_instance); 
+void AccessUI::ShowUI() {
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0)
+ LoginUI::ShowUI();
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->Admin)
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission"));
+ else{	if (p_instance != 0)
+	p_instance->deleteLater();
+	p_instance = new AccessUI(mainwindow::GetMainDisplay());
+  mainwindow::ShowDisplay(p_instance);
 }
-AccessUI*AccessUI::GetUI(){ 
- 	if (p_instance == 0) { 
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
-	} 
-	return (AccessUI*) p_instance; 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
+AccessUI*AccessUI::GetUI(){
+	if (p_instance == 0) {
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
+	}
+	return (AccessUI*) p_instance;
 }
-void AccessUI::fill(Access* access){ 
+void AccessUI::fill(Access* access){
 clear();
 this->access = access;
 title->setText(access->Title);
+admin->setChecked(access->Admin);
+deliveryorderserial->setChecked(access->DeliveryOrderSerial);
+deliveryorder->setChecked(access->DeliveryOrder);
 company->setChecked(access->Company);
 tax->setChecked(access->Tax);
 contact->setChecked(access->Contact);
@@ -209,7 +225,6 @@ purchase->setChecked(access->Purchase);
 purchasestoreproduct->setChecked(access->PurchaseStoreProduct);
 purchasefreeline->setChecked(access->PurchaseFreeLine);
 deliveryorderstatus->setChecked(access->DeliveryOrderStatus);
-deliveryorder->setChecked(access->DeliveryOrder);
 deliveryorderstoreproduct->setChecked(access->DeliveryOrderStoreProduct);
 deliveryorderservice->setChecked(access->DeliveryOrderService);
 deliveryorderfreeline->setChecked(access->DeliveryOrderFreeline);
@@ -218,19 +233,23 @@ invoiceyear->setChecked(access->InvoiceYear);
 invoicestate->setChecked(access->InvoiceState);
 invoiceserial->setChecked(access->InvoiceSerial);
 invoice->setChecked(access->Invoice);
-invoicestated->setChecked(access->InvoiceStateD);
+invoicestatedate->setChecked(access->InvoiceStateDate);
 invoicefreeline->setChecked(access->InvoiceFreeline);
 paymenttype->setChecked(access->PaymentType);
 payment->setChecked(access->Payment);
 task->setChecked(access->Task);
 language->setChecked(access->Language);
 timebooking->setChecked(access->TimeBooking);
+login->setChecked(access->Login);
 hashkey->setText(access->hashKey);
 user->setIndexByKey(access->UserID);
-} 
-void AccessUI::clear(){ 
+}
+void AccessUI::clear(){
 delete this->access;
 title->setText("");
+admin->setChecked(false);
+deliveryorderserial->setChecked(false);
+deliveryorder->setChecked(false);
 company->setChecked(false);
 tax->setChecked(false);
 contact->setChecked(false);
@@ -271,7 +290,6 @@ purchase->setChecked(false);
 purchasestoreproduct->setChecked(false);
 purchasefreeline->setChecked(false);
 deliveryorderstatus->setChecked(false);
-deliveryorder->setChecked(false);
 deliveryorderstoreproduct->setChecked(false);
 deliveryorderservice->setChecked(false);
 deliveryorderfreeline->setChecked(false);
@@ -280,17 +298,18 @@ invoiceyear->setChecked(false);
 invoicestate->setChecked(false);
 invoiceserial->setChecked(false);
 invoice->setChecked(false);
-invoicestated->setChecked(false);
+invoicestatedate->setChecked(false);
 invoicefreeline->setChecked(false);
 paymenttype->setChecked(false);
 payment->setChecked(false);
 task->setChecked(false);
 language->setChecked(false);
 timebooking->setChecked(false);
+login->setChecked(false);
 hashkey->setText("");
 this->access = new Access();
-} 
-void AccessUI::selectAccess(){ 
+}
+void AccessUI::selectAccess(){
 if(Access::GetStringList().contains(this->access->Title))
 {
 Access* con = Access::Get(this->access->Title);
@@ -301,7 +320,7 @@ fill(con);
 else if(access->AccessID != 0)
 clear();
 }
-bool AccessUI::save(){ 
+bool AccessUI::save(){
 bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
@@ -312,13 +331,16 @@ title->style()->unpolish(title);
 title->style()->polish(title);
 title->update();
 }
-else { 
+else {
 title->setObjectName("title");
 title->style()->unpolish(title);
 title->style()->polish(title);
 title->update();
 access->Title = title->text().trimmed();
 }
+access->Admin = admin->text().trimmed().toInt();
+access->DeliveryOrderSerial = deliveryorderserial->text().trimmed().toInt();
+access->DeliveryOrder = deliveryorder->text().trimmed().toInt();
 access->Company = company->text().trimmed().toInt();
 access->Tax = tax->text().trimmed().toInt();
 access->Contact = contact->text().trimmed().toInt();
@@ -359,7 +381,6 @@ access->Purchase = purchase->text().trimmed().toInt();
 access->PurchaseStoreProduct = purchasestoreproduct->text().trimmed().toInt();
 access->PurchaseFreeLine = purchasefreeline->text().trimmed().toInt();
 access->DeliveryOrderStatus = deliveryorderstatus->text().trimmed().toInt();
-access->DeliveryOrder = deliveryorder->text().trimmed().toInt();
 access->DeliveryOrderStoreProduct = deliveryorderstoreproduct->text().trimmed().toInt();
 access->DeliveryOrderService = deliveryorderservice->text().trimmed().toInt();
 access->DeliveryOrderFreeline = deliveryorderfreeline->text().trimmed().toInt();
@@ -368,13 +389,14 @@ access->InvoiceYear = invoiceyear->text().trimmed().toInt();
 access->InvoiceState = invoicestate->text().trimmed().toInt();
 access->InvoiceSerial = invoiceserial->text().trimmed().toInt();
 access->Invoice = invoice->text().trimmed().toInt();
-access->InvoiceStateD = invoicestated->text().trimmed().toInt();
+access->InvoiceStateDate = invoicestatedate->text().trimmed().toInt();
 access->InvoiceFreeline = invoicefreeline->text().trimmed().toInt();
 access->PaymentType = paymenttype->text().trimmed().toInt();
 access->Payment = payment->text().trimmed().toInt();
 access->Task = task->text().trimmed().toInt();
 access->Language = language->text().trimmed().toInt();
 access->TimeBooking = timebooking->text().trimmed().toInt();
+access->Login = login->text().trimmed().toInt();
 if(hashkey->text().trimmed().isEmpty()){
 errors = true;
 errorString += QObject::tr("hashKey Can't be Empty! \n");
@@ -383,14 +405,14 @@ hashkey->style()->unpolish(hashkey);
 hashkey->style()->polish(hashkey);
 hashkey->update();
 }
-else { 
+else {
 hashkey->setObjectName("hashkey");
 hashkey->style()->unpolish(hashkey);
 hashkey->style()->polish(hashkey);
 hashkey->update();
 access->hashKey = hashkey->text().trimmed();
 }
-if(!user->isHidden()) 
+if(!user->isHidden())
 access->UserID = user->getKey();
 if(!errors) {
 access->save();
@@ -400,13 +422,13 @@ return true;}
 else return false;
 }
 else{ QMessageBox::warning(this, QObject::tr("Access"),errorString.trimmed());
-return false; 
+return false;
  }
 }
-void AccessUI::cancel(){ 
+void AccessUI::cancel(){
 AccessIndexUI::ShowUI();
 }
-bool AccessUI::updateModel(){ 
+bool AccessUI::updateModel(){
 bool errors = false;
 QString errorString =  "";
 if(title->text().trimmed().isEmpty()){
@@ -417,13 +439,16 @@ title->style()->unpolish(title);
 title->style()->polish(title);
 title->update();
 }
-else { 
+else {
 title->setObjectName("title");
 title->style()->unpolish(title);
 title->style()->polish(title);
 title->update();
 access->Title = title->text().trimmed();
 }
+access->Admin = admin->text().trimmed().toInt();
+access->DeliveryOrderSerial = deliveryorderserial->text().trimmed().toInt();
+access->DeliveryOrder = deliveryorder->text().trimmed().toInt();
 access->Company = company->text().trimmed().toInt();
 access->Tax = tax->text().trimmed().toInt();
 access->Contact = contact->text().trimmed().toInt();
@@ -464,7 +489,6 @@ access->Purchase = purchase->text().trimmed().toInt();
 access->PurchaseStoreProduct = purchasestoreproduct->text().trimmed().toInt();
 access->PurchaseFreeLine = purchasefreeline->text().trimmed().toInt();
 access->DeliveryOrderStatus = deliveryorderstatus->text().trimmed().toInt();
-access->DeliveryOrder = deliveryorder->text().trimmed().toInt();
 access->DeliveryOrderStoreProduct = deliveryorderstoreproduct->text().trimmed().toInt();
 access->DeliveryOrderService = deliveryorderservice->text().trimmed().toInt();
 access->DeliveryOrderFreeline = deliveryorderfreeline->text().trimmed().toInt();
@@ -473,13 +497,14 @@ access->InvoiceYear = invoiceyear->text().trimmed().toInt();
 access->InvoiceState = invoicestate->text().trimmed().toInt();
 access->InvoiceSerial = invoiceserial->text().trimmed().toInt();
 access->Invoice = invoice->text().trimmed().toInt();
-access->InvoiceStateD = invoicestated->text().trimmed().toInt();
+access->InvoiceStateDate = invoicestatedate->text().trimmed().toInt();
 access->InvoiceFreeline = invoicefreeline->text().trimmed().toInt();
 access->PaymentType = paymenttype->text().trimmed().toInt();
 access->Payment = payment->text().trimmed().toInt();
 access->Task = task->text().trimmed().toInt();
 access->Language = language->text().trimmed().toInt();
 access->TimeBooking = timebooking->text().trimmed().toInt();
+access->Login = login->text().trimmed().toInt();
 if(hashkey->text().trimmed().isEmpty()){
 errors = true;
 errorString += QObject::tr("hashKey Can't be Empty! \n");
@@ -488,19 +513,19 @@ hashkey->style()->unpolish(hashkey);
 hashkey->style()->polish(hashkey);
 hashkey->update();
 }
-else { 
+else {
 hashkey->setObjectName("hashkey");
 hashkey->style()->unpolish(hashkey);
 hashkey->style()->polish(hashkey);
 hashkey->update();
 access->hashKey = hashkey->text().trimmed();
 }
-if(access->UserID == 0) 
+if(access->UserID == 0)
 access->UserID = user->getKey();
 if(!errors){
 	return true;
 }
 else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("Access"),errorString.trimmed());
-return false; 
+return false;
  }
 }

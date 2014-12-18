@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: productui.h
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -15,6 +15,7 @@
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../CommonUI/barcode.h"
 #include "../../Model/product.h"
+#include "../../Model/erpmodel.h"
 #include "../../Model/product.h"
 #include "../../Model/unit.h"
 #include "../../Model/tax.h"

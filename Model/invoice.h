@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoice.h
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,14 +19,14 @@ class Invoice  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Invoice();
-	Invoice(int InvoiceSerialID,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	int InvoiceID;
+	Invoice(int InvoiceSerialID,QDate CreationDate,QDate EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QDate DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	int InvoiceID;
 	int InvoiceSerialID;
-	QString CreationDate;
-	QString EndDate;
+	QDate CreationDate;
+	QDate EndDate;
 	int InvoicePeriodID;
 	int InvoiceYearID;
 	int ProjectID;
-	QString DueDate;
+	QDate DueDate;
 	double discount;
 	double Allowance;
 	QList<InvoiceStateDate*> invoicestatedates;
@@ -58,7 +58,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Invoice(int InvoiceID,int InvoiceSerialID,QString CreationDate,QString EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QString DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	static Invoice* p_instance;
+	Invoice(int InvoiceID,int InvoiceSerialID,QDate CreationDate,QDate EndDate,int InvoicePeriodID,int InvoiceYearID,int ProjectID,QDate DueDate,double discount,double Allowance,QString Header,QString Footer,QString CreatedOn,QString EditedOn);	static Invoice* p_instance;
 	bool setInvoiceSerialID(int InvoiceID, const QString &InvoiceSerialID);
 	bool setCreationDate(int InvoiceID, const QString &CreationDate);
 	bool setEndDate(int InvoiceID, const QString &EndDate);

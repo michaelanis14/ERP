@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: project.h
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -10,6 +10,7 @@
 #include <QSqlRelationalTableModel>
 #include <QSqlError>
 #include <QtGui>
+#include "projectsales.h"
 #include "task.h"
 #include "projectcontactperson.h"
 #include "projectproduct.h"
@@ -21,15 +22,15 @@ class Project  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Project();
-	Project(QString Title,int ProjectStatusID,int ContactID,QString StartDate,QString EndDate,bool WillBeInvoiced,QString Note,int ProjectSalesID,QString CreatedOn,QString EditedOn);	int ProjectID;
+	Project(QString Title,int ProjectStatusID,int ContactID,QDate StartDate,QDate EndDate,bool WillBeInvoiced,QString Note,QString CreatedOn,QString EditedOn);	int ProjectID;
 	QString Title;
 	int ProjectStatusID;
 	int ContactID;
-	QString StartDate;
-	QString EndDate;
+	QDate StartDate;
+	QDate EndDate;
 	bool WillBeInvoiced;
 	QString Note;
-	int ProjectSalesID;
+	QList<ProjectSales*> projectsaless;
 	QList<Task*> tasks;
 	QList<ProjectContactPerson*> projectcontactpersons;
 	QList<ProjectProduct*> projectproducts;
@@ -59,7 +60,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Project(int ProjectID,QString Title,int ProjectStatusID,int ContactID,QString StartDate,QString EndDate,bool WillBeInvoiced,QString Note,int ProjectSalesID,QString CreatedOn,QString EditedOn);	static Project* p_instance;
+	Project(int ProjectID,QString Title,int ProjectStatusID,int ContactID,QDate StartDate,QDate EndDate,bool WillBeInvoiced,QString Note,QString CreatedOn,QString EditedOn);	static Project* p_instance;
 	bool setTitle(int ProjectID, const QString &Title);
 	bool setProjectStatusID(int ProjectID, const QString &ProjectStatusID);
 	bool setContactID(int ProjectID, const QString &ContactID);
@@ -67,7 +68,6 @@ private:
 	bool setEndDate(int ProjectID, const QString &EndDate);
 	bool setWillBeInvoiced(int ProjectID, const QString &WillBeInvoiced);
 	bool setNote(int ProjectID, const QString &Note);
-	bool setProjectSalesID(int ProjectID, const QString &ProjectSalesID);
 	bool setCreatedOn(int ProjectID, const QString &CreatedOn);
 	bool setEditedOn(int ProjectID, const QString &EditedOn);
 

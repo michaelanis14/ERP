@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: contactui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "contactui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 ContactUI::ContactUI(QWidget *parent) :ERPDisplay(parent)
@@ -121,11 +122,17 @@ flowLayout->addWidget(block7Layout);
 }
 ERPDisplay* ContactUI::p_instance = 0;
 void ContactUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->Contact) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new ContactUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 ContactUI*ContactUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
@@ -141,11 +148,11 @@ RemovebtnWidgets* rmcontacttelephone = new RemovebtnWidgets(0,contacttelephoneui
 QObject::connect(rmcontacttelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactTelephone(QWidget*)));
 block3Layout->addRow(QObject::tr("ContactTelephone")+QString::number(ContactTelephones.count()),rmcontacttelephone);
 }
-void ContactUI::addContactTelephone(ContactTelephone* ContactTelephone){ 
+void ContactUI::addContactTelephone(ContactTelephone* contacttelephone){ 
 ContactTelephoneUI* contacttelephoneui = new ContactTelephoneUI();
 contacttelephoneui->block0Layout->hideRow(contacttelephoneui->contact);
 contacttelephoneui->controllers->setFixedHeight(0);
-contacttelephoneui->fill(ContactTelephone);
+contacttelephoneui->fill(contacttelephone);
 ContactTelephones.append(contacttelephoneui);
 RemovebtnWidgets* rmcontacttelephone = new RemovebtnWidgets(0,contacttelephoneui);
 QObject::connect(rmcontacttelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactTelephone(QWidget*)));
@@ -168,11 +175,11 @@ RemovebtnWidgets* rmcontactemail = new RemovebtnWidgets(0,contactemailui);
 QObject::connect(rmcontactemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactEmail(QWidget*)));
 block4Layout->addRow(QObject::tr("ContactEmail")+QString::number(ContactEmails.count()),rmcontactemail);
 }
-void ContactUI::addContactEmail(ContactEmail* ContactEmail){ 
+void ContactUI::addContactEmail(ContactEmail* contactemail){ 
 ContactEmailUI* contactemailui = new ContactEmailUI();
 contactemailui->block0Layout->hideRow(contactemailui->contact);
 contactemailui->controllers->setFixedHeight(0);
-contactemailui->fill(ContactEmail);
+contactemailui->fill(contactemail);
 ContactEmails.append(contactemailui);
 RemovebtnWidgets* rmcontactemail = new RemovebtnWidgets(0,contactemailui);
 QObject::connect(rmcontactemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactEmail(QWidget*)));
@@ -195,11 +202,11 @@ RemovebtnWidgets* rmbankaccount = new RemovebtnWidgets(0,bankaccountui);
 QObject::connect(rmbankaccount, SIGNAL(removePressed(QWidget*)), this, SLOT(removeBankAccount(QWidget*)));
 block5Layout->addRow(QObject::tr("BankAccount")+QString::number(BankAccounts.count()),rmbankaccount);
 }
-void ContactUI::addBankAccount(BankAccount* BankAccount){ 
+void ContactUI::addBankAccount(BankAccount* bankaccount){ 
 BankAccountUI* bankaccountui = new BankAccountUI();
 bankaccountui->block0Layout->hideRow(bankaccountui->contact);
 bankaccountui->controllers->setFixedHeight(0);
-bankaccountui->fill(BankAccount);
+bankaccountui->fill(bankaccount);
 BankAccounts.append(bankaccountui);
 RemovebtnWidgets* rmbankaccount = new RemovebtnWidgets(0,bankaccountui);
 QObject::connect(rmbankaccount, SIGNAL(removePressed(QWidget*)), this, SLOT(removeBankAccount(QWidget*)));
@@ -218,7 +225,7 @@ clear();
 this->contact = contact;
 name->setText(contact->Name);
 salutation->setText(contact->Salutation);
-birthdateordateoffoundation->setDate(QDate::fromString(contact->BirthdateOrDateOfFoundation));
+birthdateordateoffoundation->setDate(contact->BirthdateOrDateOfFoundation);
 contacttype->setIndexByKey(contact->ContactTypeID);
 contactclass->setIndexByKey(contact->ContactClassID);
 serial->setText(QString::number(contact->Serial));
@@ -317,7 +324,7 @@ birthdateordateoffoundation->setObjectName("birthdateordateoffoundation");
 birthdateordateoffoundation->style()->unpolish(birthdateordateoffoundation);
 birthdateordateoffoundation->style()->polish(birthdateordateoffoundation);
 birthdateordateoffoundation->update();
-contact->BirthdateOrDateOfFoundation = birthdateordateoffoundation->text().trimmed();
+contact->BirthdateOrDateOfFoundation.setDate(birthdateordateoffoundation->date().year(),birthdateordateoffoundation->date().month(),birthdateordateoffoundation->date().day());
 }
 if(!contacttype->isHidden()) 
 contact->ContactTypeID = contacttype->getKey();
@@ -564,7 +571,7 @@ birthdateordateoffoundation->setObjectName("birthdateordateoffoundation");
 birthdateordateoffoundation->style()->unpolish(birthdateordateoffoundation);
 birthdateordateoffoundation->style()->polish(birthdateordateoffoundation);
 birthdateordateoffoundation->update();
-contact->BirthdateOrDateOfFoundation = birthdateordateoffoundation->text().trimmed();
+contact->BirthdateOrDateOfFoundation.fromString(birthdateordateoffoundation->text().trimmed());
 }
 if(contact->ContactTypeID == 0) 
 contact->ContactTypeID = contacttype->getKey();

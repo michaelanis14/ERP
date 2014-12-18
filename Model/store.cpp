@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: store.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -74,9 +74,9 @@ Store* Store::GetInstance() {
 return p_instance;
 }
 bool Store::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(StoreID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Store (Name,Address,PostalCode,City,CountryID,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->Address)+"','"+QString(this->PostalCode)+"','"+QString(this->City)+"','"+QString::number(this->CountryID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

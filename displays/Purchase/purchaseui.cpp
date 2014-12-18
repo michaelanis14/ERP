@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: purchaseui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "purchaseui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 PurchaseUI::PurchaseUI(QWidget *parent) :ERPDisplay(parent)
@@ -54,11 +55,17 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* PurchaseUI::p_instance = 0;
 void PurchaseUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->Purchase) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new PurchaseUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 PurchaseUI*PurchaseUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
@@ -74,11 +81,11 @@ RemovebtnWidgets* rmpurchasestoreproduct = new RemovebtnWidgets(0,purchasestorep
 QObject::connect(rmpurchasestoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseStoreProduct(QWidget*)));
 block0Layout->addRow(QObject::tr("PurchaseStoreProduct")+QString::number(PurchaseStoreProducts.count()),rmpurchasestoreproduct);
 }
-void PurchaseUI::addPurchaseStoreProduct(PurchaseStoreProduct* PurchaseStoreProduct){ 
+void PurchaseUI::addPurchaseStoreProduct(PurchaseStoreProduct* purchasestoreproduct){ 
 PurchaseStoreProductUI* purchasestoreproductui = new PurchaseStoreProductUI();
 purchasestoreproductui->block0Layout->hideRow(purchasestoreproductui->purchase);
 purchasestoreproductui->controllers->setFixedHeight(0);
-purchasestoreproductui->fill(PurchaseStoreProduct);
+purchasestoreproductui->fill(purchasestoreproduct);
 PurchaseStoreProducts.append(purchasestoreproductui);
 RemovebtnWidgets* rmpurchasestoreproduct = new RemovebtnWidgets(0,purchasestoreproductui);
 QObject::connect(rmpurchasestoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseStoreProduct(QWidget*)));
@@ -101,11 +108,11 @@ RemovebtnWidgets* rmpurchasefreeline = new RemovebtnWidgets(0,purchasefreelineui
 QObject::connect(rmpurchasefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseFreeLine(QWidget*)));
 block0Layout->addRow(QObject::tr("PurchaseFreeLine")+QString::number(PurchaseFreeLines.count()),rmpurchasefreeline);
 }
-void PurchaseUI::addPurchaseFreeLine(PurchaseFreeLine* PurchaseFreeLine){ 
+void PurchaseUI::addPurchaseFreeLine(PurchaseFreeLine* purchasefreeline){ 
 PurchaseFreeLineUI* purchasefreelineui = new PurchaseFreeLineUI();
 purchasefreelineui->block0Layout->hideRow(purchasefreelineui->purchase);
 purchasefreelineui->controllers->setFixedHeight(0);
-purchasefreelineui->fill(PurchaseFreeLine);
+purchasefreelineui->fill(purchasefreeline);
 PurchaseFreeLines.append(purchasefreelineui);
 RemovebtnWidgets* rmpurchasefreeline = new RemovebtnWidgets(0,purchasefreelineui);
 QObject::connect(rmpurchasefreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removePurchaseFreeLine(QWidget*)));
@@ -123,8 +130,8 @@ void PurchaseUI::fill(Purchase* purchase){
 clear();
 this->purchase = purchase;
 purchaseserial->setIndexByKey(purchase->PurchaseSerialID);
-creationdate->setDate(QDate::fromString(purchase->CreationDate));
-deliverydate->setDate(QDate::fromString(purchase->DeliveryDate));
+creationdate->setDate(purchase->CreationDate);
+deliverydate->setDate(purchase->DeliveryDate);
 foreach(PurchaseStoreProduct* purchasestoreproduct, purchase->purchasestoreproducts) {
 addPurchaseStoreProduct(purchasestoreproduct);
 }
@@ -175,7 +182,7 @@ creationdate->setObjectName("creationdate");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
 creationdate->update();
-purchase->CreationDate = creationdate->text().trimmed();
+purchase->CreationDate.setDate(creationdate->date().year(),creationdate->date().month(),creationdate->date().day());
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
@@ -190,7 +197,7 @@ deliverydate->setObjectName("deliverydate");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
 deliverydate->update();
-purchase->DeliveryDate = deliverydate->text().trimmed();
+purchase->DeliveryDate.setDate(deliverydate->date().year(),deliverydate->date().month(),deliverydate->date().day());
 }
 for(int j = 0; j < PurchaseFreeLines.length(); j++){
 PurchaseFreeLines.at(j)->description->setObjectName("description");
@@ -267,7 +274,7 @@ creationdate->setObjectName("creationdate");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
 creationdate->update();
-purchase->CreationDate = creationdate->text().trimmed();
+purchase->CreationDate.fromString(creationdate->text().trimmed());
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
@@ -282,7 +289,7 @@ deliverydate->setObjectName("deliverydate");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
 deliverydate->update();
-purchase->DeliveryDate = deliverydate->text().trimmed();
+purchase->DeliveryDate.fromString(deliverydate->text().trimmed());
 }
 for(int j = 0; j < PurchaseFreeLines.length(); j++){
 PurchaseFreeLines.at(j)->description->setObjectName("description");

@@ -167,8 +167,8 @@ void CreatePurchase::removePurchaseStoreProduct(QWidget* widget){
 void CreatePurchase::fill(Purchase* purchase){
 	clear();
 	this->purchase = purchase;
-	creationdate->setDate(QDate::fromString(purchase->CreationDate));
-	deliverydate->setDate(QDate::fromString(purchase->DeliveryDate));
+	creationdate->setDate(purchase->CreationDate);
+	deliverydate->setDate(purchase->DeliveryDate);
 	foreach(PurchaseStoreProduct* purchasestoreproduct, purchase->purchasestoreproducts) {
 		addPurchaseStoreProduct(purchasestoreproduct);
 	}
@@ -181,15 +181,15 @@ void CreatePurchase::clear(){
 	this->purchase = new Purchase();
 }
 void CreatePurchase::selectPurchase(){
-	if(Purchase::GetStringList().contains(this->purchase->CreationDate))
+	if(Purchase::GetStringList().contains(QString::number(this->purchase->PurchaseSerialID)))
 	{
-		Purchase* con = Purchase::Get(this->purchase->CreationDate);
-		if(this->purchase->PurchaseID != con->PurchaseID){
-			fill(con);
-		}
+	Purchase* con = Purchase::Get(QString::number(this->purchase->PurchaseSerialID));
+	if(this->purchase->PurchaseID != con->PurchaseID){
+	fill(con);
+	}
 	}
 	else if(purchase->PurchaseID != 0)
-		clear();
+	clear();
 }
 bool CreatePurchase::save(){
 	bool errors = false;
@@ -207,7 +207,7 @@ bool CreatePurchase::save(){
 		creationdate->style()->unpolish(creationdate);
 		creationdate->style()->polish(creationdate);
 		creationdate->update();
-		purchase->CreationDate = creationdate->text().trimmed();
+		purchase->CreationDate.fromString(creationdate->text().trimmed());
 	}
 	if(deliverydate->text().trimmed().isEmpty()){
 		errors = true;
@@ -222,7 +222,7 @@ bool CreatePurchase::save(){
 		deliverydate->style()->unpolish(deliverydate);
 		deliverydate->style()->polish(deliverydate);
 		deliverydate->update();
-		purchase->DeliveryDate = deliverydate->text().trimmed();
+		purchase->DeliveryDate.fromString(deliverydate->text());
 	}
 	if(!errors) {
 		purchase->save();
@@ -268,7 +268,7 @@ bool CreatePurchase::updateModel(){
 		creationdate->style()->unpolish(creationdate);
 		creationdate->style()->polish(creationdate);
 		creationdate->update();
-		purchase->CreationDate = creationdate->text().trimmed();
+		purchase->CreationDate.fromString(creationdate->text());
 	}
 	if(deliverydate->text().trimmed().isEmpty()){
 		errors = true;
@@ -283,7 +283,7 @@ bool CreatePurchase::updateModel(){
 		deliverydate->style()->unpolish(deliverydate);
 		deliverydate->style()->polish(deliverydate);
 		deliverydate->update();
-		purchase->DeliveryDate = deliverydate->text().trimmed();
+		purchase->DeliveryDate.fromString(deliverydate->text().trimmed());
 	}
 	for(int i = 0; i < PurchaseStoreProducts.length(); i++){
 		if(!PurchaseStoreProducts.at(i)->updateModel()){

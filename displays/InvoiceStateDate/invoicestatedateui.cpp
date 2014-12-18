@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: invoicestatedateui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Wed Dec 17 16:42:29 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "invoicestatedateui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 InvoiceStateDateUI::InvoiceStateDateUI(QWidget *parent) :ERPDisplay(parent)
@@ -45,11 +46,17 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* InvoiceStateDateUI::p_instance = 0;
 void InvoiceStateDateUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->InvoiceStateDate) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new InvoiceStateDateUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 InvoiceStateDateUI*InvoiceStateDateUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
@@ -61,7 +68,7 @@ clear();
 this->invoicestatedate = invoicestatedate;
 invoice->setIndexByKey(invoicestatedate->InvoiceID);
 invoicestate->setIndexByKey(invoicestatedate->InvoiceStateID);
-date->setDate(QDate::fromString(invoicestatedate->Date));
+date->setDate(invoicestatedate->Date);
 } 
 void InvoiceStateDateUI::clear(){ 
 delete this->invoicestatedate;
@@ -99,7 +106,7 @@ date->setObjectName("date");
 date->style()->unpolish(date);
 date->style()->polish(date);
 date->update();
-invoicestatedate->Date = date->text().trimmed();
+invoicestatedate->Date.setDate(date->date().year(),date->date().month(),date->date().day());
 }
 if(!errors) {
 invoicestatedate->save();
@@ -135,7 +142,7 @@ date->setObjectName("date");
 date->style()->unpolish(date);
 date->style()->polish(date);
 date->update();
-invoicestatedate->Date = date->text().trimmed();
+invoicestatedate->Date.fromString(date->text().trimmed());
 }
 if(!errors){
 	return true;

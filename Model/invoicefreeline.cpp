@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoicefreeline.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -75,9 +75,9 @@ InvoiceFreeline* InvoiceFreeline::GetInstance() {
 return p_instance;
 }
 bool InvoiceFreeline::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(InvoiceFreelineID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO InvoiceFreeline (Description,InvoiceID,Price,TaxID,Amount,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Description)+"','"+QString::number(this->InvoiceID)+"','"+QString::number(this->Price)+"','"+QString::number(this->TaxID)+"','"+QString::number(this->Amount)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

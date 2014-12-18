@@ -18,6 +18,7 @@
 #include "displays/Project/projectindexui.h"
 #include "displays/TimeBooking/timebookingindexui.h"
 #include "displays/Access/accessindexui.h"
+#include "displays/Login/loginui.h"
 
 /**
 * A class.
@@ -157,6 +158,10 @@ mainwindow::mainwindow()
 	inNavAccess->setObjectName("inNavAccess");
 	connect(this->inNavAccess, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
+	inNavLogin = new QPushButton(icon1,QObject::tr("Log in"));
+	inNavLogin->setObjectName("inNavLogin");
+	connect(this->inNavLogin, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
 
 
 //Contacts
@@ -291,6 +296,7 @@ void mainwindow::mousePressEvent(QMouseEvent *event)
 void mainwindow::btnHomeClicked() {
 	innerNavigation->removeAll();
 	innerNavigation->addButton(inNavAccess);
+	innerNavigation->addButton(inNavLogin);
 	inNavAccess->click();
 
 
@@ -342,6 +348,9 @@ void mainwindow::innerNavClicked(){
 		TimeBookingIndexUI::ShowUI();
 	else  if(sender->objectName() == "inNavAccess")
 		AccessIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavLogin")
+		LoginUI::ShowUI();
+
 
 
 }

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectfile.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -66,9 +66,9 @@ ProjectFile* ProjectFile::GetInstance() {
 return p_instance;
 }
 bool ProjectFile::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(ProjectFileID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ProjectFile (Name,imageData,ProjectID,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+(this->imageData.toString())+"','"+QString::number(this->ProjectID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

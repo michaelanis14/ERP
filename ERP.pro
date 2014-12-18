@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Sun Dec 14 22:39:13 EET 2014
+#   Created on: Thu Dec 18 10:59:52 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
@@ -30,9 +30,11 @@ SOURCES += main.cpp \
 	displays/CommonUI/ean13.cpp  \
 	displays/CommonUI/erptableview.cpp  \
 	Model/erpmodel.cpp \
+	Model/deliveryorderserial.cpp \
+	Model/deliveryorder.cpp \
+	Model/access.cpp \
 	Model/company.cpp \
 	Model/tax.cpp \
-	Model/access.cpp \
 	Model/user.cpp \
 	Model/contact.cpp \
 	Model/contacttelephone.cpp \
@@ -72,7 +74,6 @@ SOURCES += main.cpp \
 	Model/purchasestoreproduct.cpp \
 	Model/purchasefreeline.cpp \
 	Model/deliveryorderstatus.cpp \
-	Model/deliveryorder.cpp \
 	Model/deliveryorderstoreproduct.cpp \
 	Model/deliveryorderservice.cpp \
 	Model/deliveryorderfreeline.cpp \
@@ -88,14 +89,19 @@ SOURCES += main.cpp \
 	Model/task.cpp \
 	Model/language.cpp \
 	Model/timebooking.cpp \
+	Model/login.cpp \
 	displays/Product/ProductStoreStateUI.cpp \ 
 	 displays/Purchase/createpurchase.cpp \
+	displays/DeliveryOrderSerial/deliveryorderserialindexui.cpp \
+	displays/DeliveryOrderSerial/deliveryorderserialui.cpp \
+	displays/DeliveryOrder/deliveryorderindexui.cpp \
+	displays/DeliveryOrder/deliveryorderui.cpp \
+	displays/Access/accessindexui.cpp \
+	displays/Access/accessui.cpp \
 	displays/Company/companyindexui.cpp \
 	displays/Company/companyui.cpp \
 	displays/Tax/taxindexui.cpp \
 	displays/Tax/taxui.cpp \
-	displays/Access/accessindexui.cpp \
-	displays/Access/accessui.cpp \
 	displays/User/userindexui.cpp \
 	displays/User/userui.cpp \
 	displays/Contact/contactindexui.cpp \
@@ -174,8 +180,6 @@ SOURCES += main.cpp \
 	displays/PurchaseFreeLine/purchasefreelineui.cpp \
 	displays/DeliveryOrderStatus/deliveryorderstatusindexui.cpp \
 	displays/DeliveryOrderStatus/deliveryorderstatusui.cpp \
-	displays/DeliveryOrder/deliveryorderindexui.cpp \
-	displays/DeliveryOrder/deliveryorderui.cpp \
 	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductindexui.cpp \
 	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductui.cpp \
 	displays/DeliveryOrderService/deliveryorderserviceindexui.cpp \
@@ -205,7 +209,9 @@ SOURCES += main.cpp \
 	displays/Language/languageindexui.cpp \
 	displays/Language/languageui.cpp \
 	displays/TimeBooking/timebookingindexui.cpp \
-	displays/TimeBooking/timebookingui.cpp
+	displays/TimeBooking/timebookingui.cpp \
+	displays/Login/loginindexui.cpp \
+	displays/Login/loginui.cpp
 
 HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/erpcombobox.h \
@@ -219,9 +225,11 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/ean13.h  \
 	displays/CommonUI/erptableview.h  \
 	Model/erpmodel.h \
+	Model/deliveryorderserial.h \
+	Model/deliveryorder.h \
+	Model/access.h \
 	Model/company.h \
 	Model/tax.h \
-	Model/access.h \
 	Model/user.h \
 	Model/contact.h \
 	Model/contacttelephone.h \
@@ -261,7 +269,6 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/purchasestoreproduct.h \
 	Model/purchasefreeline.h \
 	Model/deliveryorderstatus.h \
-	Model/deliveryorder.h \
 	Model/deliveryorderstoreproduct.h \
 	Model/deliveryorderservice.h \
 	Model/deliveryorderfreeline.h \
@@ -277,14 +284,19 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/task.h \
 	Model/language.h \
 	Model/timebooking.h \
+	Model/login.h \
 	displays/Product/ProductStoreStateUI.h \
 	 displays/Purchase/createpurchase.h \
+	displays/DeliveryOrderSerial/deliveryorderserialindexui.h \
+	displays/DeliveryOrderSerial/deliveryorderserialui.h \
+	displays/DeliveryOrder/deliveryorderindexui.h \
+	displays/DeliveryOrder/deliveryorderui.h \
+	displays/Access/accessindexui.h \
+	displays/Access/accessui.h \
 	displays/Company/companyindexui.h \
 	displays/Company/companyui.h \
 	displays/Tax/taxindexui.h \
 	displays/Tax/taxui.h \
-	displays/Access/accessindexui.h \
-	displays/Access/accessui.h \
 	displays/User/userindexui.h \
 	displays/User/userui.h \
 	displays/Contact/contactindexui.h \
@@ -363,8 +375,6 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/PurchaseFreeLine/purchasefreelineui.h \
 	displays/DeliveryOrderStatus/deliveryorderstatusindexui.h \
 	displays/DeliveryOrderStatus/deliveryorderstatusui.h \
-	displays/DeliveryOrder/deliveryorderindexui.h \
-	displays/DeliveryOrder/deliveryorderui.h \
 	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductindexui.h \
 	displays/DeliveryOrderStoreProduct/deliveryorderstoreproductui.h \
 	displays/DeliveryOrderService/deliveryorderserviceindexui.h \
@@ -394,7 +404,9 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/Language/languageindexui.h \
 	displays/Language/languageui.h \
 	displays/TimeBooking/timebookingindexui.h \
-	displays/TimeBooking/timebookingui.h 
+	displays/TimeBooking/timebookingui.h \
+	displays/Login/loginindexui.h \
+	displays/Login/loginui.h 
 
 TRANSLATIONS = erp_ar.ts
 FORMS	+= mainwindow.ui

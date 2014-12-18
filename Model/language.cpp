@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: language.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -60,9 +60,9 @@ Language* Language::GetInstance() {
 return p_instance;
 }
 bool Language::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(LanguageID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Language (Title,File,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Title)+"','"+QString(this->File)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

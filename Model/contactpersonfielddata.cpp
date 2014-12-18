@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonfielddata.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -69,9 +69,9 @@ ContactPersonFieldData* ContactPersonFieldData::GetInstance() {
 return p_instance;
 }
 bool ContactPersonFieldData::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(ContactPersonFieldDataID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactPersonFieldData (ContactPersonID,ContactPersonFieldID,Value,CreatedOn,EditedOn)"
 "VALUES ('" +QString::number(this->ContactPersonID)+"','"+QString::number(this->ContactPersonFieldID)+"','"+QString(this->Value)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

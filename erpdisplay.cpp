@@ -1,4 +1,5 @@
 ﻿#include "erpdisplay.h"
+#include "displays/MainWindow.h"
 
 
 /**
@@ -49,16 +50,17 @@ void ERPDisplay::resizeEvent(QResizeEvent * event){
 		this->scrollAreaFormPanel->setFixedWidth(event->size().width());
 		this->controllers->setGeometry(0,this->scrollAreaFormPanel->height(),this->width(),40);
 	}
-//	if()
-	/*	*/
+
 	QWidget::resizeEvent(event);
 
 }
 
 void ERPDisplay::showEvent(QShowEvent * event){
-	if(this->parent() != 0){
-
-	//	this->scrollAreaFormPanel->setFixedWidth(((QWidget*)this->parent())->width());
+	if(false){
+		this->formPanel->setFixedWidth(mainwindow::GetMainDisplay()->width());
+		this->scrollAreaFormPanel->setFixedHeight(mainwindow::GetMainDisplay()->height() - this->controllers->height());
+		this->scrollAreaFormPanel->setFixedWidth(mainwindow::GetMainDisplay()->width());
+		this->controllers->setGeometry(0,this->scrollAreaFormPanel->height(),this->width(),40);
 	}
 
 	event->accept();

@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: userui.cpp
-**   Created on: Sun Dec 14 22:39:11 EET 2014
+**   Created on: Wed Dec 17 16:42:29 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "userui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 UserUI::UserUI(QWidget *parent) :ERPDisplay(parent)
@@ -52,11 +53,17 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* UserUI::p_instance = 0;
 void UserUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->Admin) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new UserUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 UserUI*UserUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 

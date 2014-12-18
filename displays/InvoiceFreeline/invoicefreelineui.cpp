@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: invoicefreelineui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Wed Dec 17 16:42:29 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "invoicefreelineui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 InvoiceFreelineUI::InvoiceFreelineUI(QWidget *parent) :ERPDisplay(parent)
@@ -50,11 +51,17 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* InvoiceFreelineUI::p_instance = 0;
 void InvoiceFreelineUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->InvoiceFreeline) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new InvoiceFreelineUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 InvoiceFreelineUI*InvoiceFreelineUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 

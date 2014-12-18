@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: timebooking.h
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,9 +16,10 @@ class TimeBooking  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	TimeBooking();
-	TimeBooking(QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn);	int TimeBookingID;
-	QString StartDate;
-	QString EndDate;
+	TimeBooking(QString Title,QDate StartDate,QDate EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn);	int TimeBookingID;
+	QString Title;
+	QDate StartDate;
+	QDate EndDate;
 	QString StartTime;
 	QString EndTime;
 	QString BreakTime;
@@ -51,7 +52,8 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	TimeBooking(int TimeBookingID,QString StartDate,QString EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn);	static TimeBooking* p_instance;
+	TimeBooking(int TimeBookingID,QString Title,QDate StartDate,QDate EndDate,QString StartTime,QString EndTime,QString BreakTime,bool OnlyTimeBooking,int ProjectID,int ServiceID,int UserID,QString Note,QString CreatedOn,QString EditedOn);	static TimeBooking* p_instance;
+	bool setTitle(int TimeBookingID, const QString &Title);
 	bool setStartDate(int TimeBookingID, const QString &StartDate);
 	bool setEndDate(int TimeBookingID, const QString &EndDate);
 	bool setStartTime(int TimeBookingID, const QString &StartTime);

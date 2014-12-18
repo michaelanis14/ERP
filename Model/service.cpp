@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: service.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -82,9 +82,9 @@ Service* Service::GetInstance() {
 return p_instance;
 }
 bool Service::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(ServiceID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Service (Name,ShortDescription,SellingPrice,NetCoast,TradeMarginRate,TaxID,Barcode,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->ShortDescription)+"','"+QString::number(this->SellingPrice)+"','"+QString::number(this->NetCoast)+"','"+QString::number(this->TradeMarginRate)+"','"+QString::number(this->TaxID)+"','"+QString(this->Barcode)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

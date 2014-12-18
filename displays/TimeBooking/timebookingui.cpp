@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: timebookingui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Wed Dec 17 16:42:29 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "timebookingui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 TimeBookingUI::TimeBookingUI(QWidget *parent) :ERPDisplay(parent)
@@ -30,6 +31,8 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
+title = new QLineEdit();
+block0Layout->addRow(QObject::tr("Title"),title);
 startdate = new QDateEdit(QDate::currentDate());
 startdate->setCalendarPopup(true);
 startdate->setDisplayFormat("ddd dd/MM/yyyy");
@@ -62,11 +65,17 @@ flowLayout->addWidget(block0Layout);
 }
 ERPDisplay* TimeBookingUI::p_instance = 0;
 void TimeBookingUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->TimeBooking) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new TimeBookingUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 TimeBookingUI*TimeBookingUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
@@ -76,8 +85,9 @@ TimeBookingUI*TimeBookingUI::GetUI(){
 void TimeBookingUI::fill(TimeBooking* timebooking){ 
 clear();
 this->timebooking = timebooking;
-startdate->setDate(QDate::fromString(timebooking->StartDate));
-enddate->setDate(QDate::fromString(timebooking->EndDate));
+title->setText(timebooking->Title);
+startdate->setDate(timebooking->StartDate);
+enddate->setDate(timebooking->EndDate);
 starttime->setText(timebooking->StartTime);
 endtime->setText(timebooking->EndTime);
 breaktime->setText(timebooking->BreakTime);
@@ -89,6 +99,7 @@ note->setText(timebooking->Note);
 } 
 void TimeBookingUI::clear(){ 
 delete this->timebooking;
+title->setText("");
 startdate->setDate(QDate::currentDate());
 enddate->setDate(QDate::currentDate());
 starttime->setText("");
@@ -99,9 +110,9 @@ note->setText("");
 this->timebooking = new TimeBooking();
 } 
 void TimeBookingUI::selectTimeBooking(){ 
-if(TimeBooking::GetStringList().contains(this->timebooking->StartDate))
+if(TimeBooking::GetStringList().contains(this->timebooking->Title))
 {
-TimeBooking* con = TimeBooking::Get(this->timebooking->StartDate);
+TimeBooking* con = TimeBooking::Get(this->timebooking->Title);
 if(this->timebooking->TimeBookingID != con->TimeBookingID){
 fill(con);
 }
@@ -112,6 +123,21 @@ clear();
 bool TimeBookingUI::save(){ 
 bool errors = false;
 QString errorString =  "";
+if(title->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Title Can't be Empty! \n");
+title->setObjectName("error");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+}
+else { 
+title->setObjectName("title");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+timebooking->Title = title->text().trimmed();
+}
 if(startdate->text().trimmed().isEmpty()){
 errors = true;
 errorString += QObject::tr("Start Date Can't be Empty! \n");
@@ -125,7 +151,7 @@ startdate->setObjectName("startdate");
 startdate->style()->unpolish(startdate);
 startdate->style()->polish(startdate);
 startdate->update();
-timebooking->StartDate = startdate->text().trimmed();
+timebooking->StartDate.setDate(startdate->date().year(),startdate->date().month(),startdate->date().day());
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
@@ -140,7 +166,7 @@ enddate->setObjectName("enddate");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
 enddate->update();
-timebooking->EndDate = enddate->text().trimmed();
+timebooking->EndDate.setDate(enddate->date().year(),enddate->date().month(),enddate->date().day());
 }
 if(starttime->text().trimmed().isEmpty()){
 errors = true;
@@ -226,6 +252,21 @@ TimeBookingIndexUI::ShowUI();
 bool TimeBookingUI::updateModel(){ 
 bool errors = false;
 QString errorString =  "";
+if(title->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Title Can't be Empty! \n");
+title->setObjectName("error");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+}
+else { 
+title->setObjectName("title");
+title->style()->unpolish(title);
+title->style()->polish(title);
+title->update();
+timebooking->Title = title->text().trimmed();
+}
 if(startdate->text().trimmed().isEmpty()){
 errors = true;
 errorString += QObject::tr("Start Date Can't be Empty! \n");
@@ -239,7 +280,7 @@ startdate->setObjectName("startdate");
 startdate->style()->unpolish(startdate);
 startdate->style()->polish(startdate);
 startdate->update();
-timebooking->StartDate = startdate->text().trimmed();
+timebooking->StartDate.fromString(startdate->text().trimmed());
 }
 if(enddate->text().trimmed().isEmpty()){
 errors = true;
@@ -254,7 +295,7 @@ enddate->setObjectName("enddate");
 enddate->style()->unpolish(enddate);
 enddate->style()->polish(enddate);
 enddate->update();
-timebooking->EndDate = enddate->text().trimmed();
+timebooking->EndDate.fromString(enddate->text().trimmed());
 }
 if(starttime->text().trimmed().isEmpty()){
 errors = true;

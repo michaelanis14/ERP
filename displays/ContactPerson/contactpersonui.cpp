@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "contactpersonui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 ContactPersonUI::ContactPersonUI(QWidget *parent) :ERPDisplay(parent)
@@ -86,11 +87,17 @@ flowLayout->addWidget(block3Layout);
 }
 ERPDisplay* ContactPersonUI::p_instance = 0;
 void ContactPersonUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->ContactPerson) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new ContactPersonUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 ContactPersonUI*ContactPersonUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
@@ -106,11 +113,11 @@ RemovebtnWidgets* rmcontactpersontelephone = new RemovebtnWidgets(0,contactperso
 QObject::connect(rmcontactpersontelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonTelephone(QWidget*)));
 block1Layout->addRow(QObject::tr("ContactPersonTelephone")+QString::number(ContactPersonTelephones.count()),rmcontactpersontelephone);
 }
-void ContactPersonUI::addContactPersonTelephone(ContactPersonTelephone* ContactPersonTelephone){ 
+void ContactPersonUI::addContactPersonTelephone(ContactPersonTelephone* contactpersontelephone){ 
 ContactPersonTelephoneUI* contactpersontelephoneui = new ContactPersonTelephoneUI();
 contactpersontelephoneui->block0Layout->hideRow(contactpersontelephoneui->contactperson);
 contactpersontelephoneui->controllers->setFixedHeight(0);
-contactpersontelephoneui->fill(ContactPersonTelephone);
+contactpersontelephoneui->fill(contactpersontelephone);
 ContactPersonTelephones.append(contactpersontelephoneui);
 RemovebtnWidgets* rmcontactpersontelephone = new RemovebtnWidgets(0,contactpersontelephoneui);
 QObject::connect(rmcontactpersontelephone, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonTelephone(QWidget*)));
@@ -133,11 +140,11 @@ RemovebtnWidgets* rmcontactpersonemail = new RemovebtnWidgets(0,contactpersonema
 QObject::connect(rmcontactpersonemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonEmail(QWidget*)));
 block2Layout->addRow(QObject::tr("ContactPersonEmail")+QString::number(ContactPersonEmails.count()),rmcontactpersonemail);
 }
-void ContactPersonUI::addContactPersonEmail(ContactPersonEmail* ContactPersonEmail){ 
+void ContactPersonUI::addContactPersonEmail(ContactPersonEmail* contactpersonemail){ 
 ContactPersonEmailUI* contactpersonemailui = new ContactPersonEmailUI();
 contactpersonemailui->block0Layout->hideRow(contactpersonemailui->contactperson);
 contactpersonemailui->controllers->setFixedHeight(0);
-contactpersonemailui->fill(ContactPersonEmail);
+contactpersonemailui->fill(contactpersonemail);
 ContactPersonEmails.append(contactpersonemailui);
 RemovebtnWidgets* rmcontactpersonemail = new RemovebtnWidgets(0,contactpersonemailui);
 QObject::connect(rmcontactpersonemail, SIGNAL(removePressed(QWidget*)), this, SLOT(removeContactPersonEmail(QWidget*)));
@@ -160,11 +167,11 @@ RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontact
 QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
 block3Layout->addRow(QObject::tr("ProjectContactPerson")+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
 }
-void ContactPersonUI::addProjectContactPerson(ProjectContactPerson* ProjectContactPerson){ 
+void ContactPersonUI::addProjectContactPerson(ProjectContactPerson* projectcontactperson){ 
 ProjectContactPersonUI* projectcontactpersonui = new ProjectContactPersonUI();
 projectcontactpersonui->block0Layout->hideRow(projectcontactpersonui->contactperson);
 projectcontactpersonui->controllers->setFixedHeight(0);
-projectcontactpersonui->fill(ProjectContactPerson);
+projectcontactpersonui->fill(projectcontactperson);
 ProjectContactPersons.append(projectcontactpersonui);
 RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
 QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
@@ -186,7 +193,7 @@ contact->setIndexByKey(contactperson->ContactID);
 name->setText(contactperson->Name);
 lastname->setText(contactperson->LastName);
 position->setText(contactperson->Position);
-birthdate->setDate(QDate::fromString(contactperson->Birthdate));
+birthdate->setDate(contactperson->Birthdate);
 number->setText(QString::number(contactperson->Number));
 foreach(ContactPersonTelephone* contactpersontelephone, contactperson->contactpersontelephones) {
 addContactPersonTelephone(contactpersontelephone);
@@ -305,7 +312,7 @@ birthdate->setObjectName("birthdate");
 birthdate->style()->unpolish(birthdate);
 birthdate->style()->polish(birthdate);
 birthdate->update();
-contactperson->Birthdate = birthdate->text().trimmed();
+contactperson->Birthdate.setDate(birthdate->date().year(),birthdate->date().month(),birthdate->date().day());
 }
 if(number->text().trimmed().isEmpty()){
 errors = true;
@@ -486,7 +493,7 @@ birthdate->setObjectName("birthdate");
 birthdate->style()->unpolish(birthdate);
 birthdate->style()->polish(birthdate);
 birthdate->update();
-contactperson->Birthdate = birthdate->text().trimmed();
+contactperson->Birthdate.fromString(birthdate->text().trimmed());
 }
 if(number->text().trimmed().isEmpty()){
 errors = true;

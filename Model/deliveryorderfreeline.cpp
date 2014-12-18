@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderfreeline.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -69,9 +69,9 @@ DeliveryOrderFreeline* DeliveryOrderFreeline::GetInstance() {
 return p_instance;
 }
 bool DeliveryOrderFreeline::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(DeliveryOrderFreelineID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO DeliveryOrderFreeline (DeliveryOrderID,Description,Amount,Price,CreatedOn,EditedOn)"
 "VALUES ('" +QString::number(this->DeliveryOrderID)+"','"+QString(this->Description)+"','"+QString::number(this->Amount)+"','"+QString::number(this->Price)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

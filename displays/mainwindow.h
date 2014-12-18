@@ -33,6 +33,7 @@ public:
 	class QToolButton* btnReports;
 //Home
 		class QPushButton* inNavAccess;
+		class QPushButton* inNavLogin;
 
 //Contacts
 	class QPushButton* inNavContacts;

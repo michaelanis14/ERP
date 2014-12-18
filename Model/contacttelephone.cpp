@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contacttelephone.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -66,9 +66,9 @@ ContactTelephone* ContactTelephone::GetInstance() {
 return p_instance;
 }
 bool ContactTelephone::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(ContactTelephoneID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO ContactTelephone (Description,Number,ContactID,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Description)+"','"+QString::number(this->Number)+"','"+QString::number(this->ContactID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

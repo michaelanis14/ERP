@@ -1,11 +1,12 @@
 /**************************************************************************
 **   File: deliveryorderui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "deliveryorderui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 
 DeliveryOrderUI::DeliveryOrderUI(QWidget *parent) :ERPDisplay(parent)
@@ -30,18 +31,18 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-serial = new QLineEdit();
-block0Layout->addRow(QObject::tr("Serial"),serial);
-barcode = new QLineEdit();
-QObject::connect(barcode, SIGNAL(textChanged(QString)), this, SLOT(barcodeChanged(QString)));
-block0Layout->addRow(QObject::tr("Barcode"),barcode);
-barcodeDisplay = new Barcode(0,0); block0Layout->addRow(QObject::tr("Barcode"),barcodeDisplay); generatebarcode = new QPushButton(QObject::tr("Generate Barcode")); QObject::connect(generatebarcode, SIGNAL(clicked()), this, SLOT(generateBarcode())); block0Layout->addRow("",generatebarcode);
+deliveryorderserial = new ERPComboBox();
+deliveryorderserial->addItems(DeliveryOrderSerial::GetPairList());
+block0Layout->addRow(QObject::tr("Delivery Order Serial"),deliveryorderserial);
 deliveryorderstatus = new ERPComboBox();
 deliveryorderstatus->addItems(DeliveryOrderStatus::GetPairList());
 block0Layout->addRow(QObject::tr("Delivery Order Status"),deliveryorderstatus);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
 block0Layout->addRow(QObject::tr("Contact"),contact);
+project = new ERPComboBox();
+project->addItems(Project::GetPairList());
+block0Layout->addRow(QObject::tr("Project"),project);
 creationdate = new QDateEdit(QDate::currentDate());
 creationdate->setCalendarPopup(true);
 creationdate->setDisplayFormat("ddd dd/MM/yyyy");
@@ -52,54 +53,60 @@ deliverydate->setDisplayFormat("ddd dd/MM/yyyy");
 block0Layout->addRow(QObject::tr("Delivery Date"),deliverydate);
 note = new QLineEdit();
 block0Layout->addRow(QObject::tr("Note"),note);
-header = new QLineEdit();
-block0Layout->addRow(QObject::tr("Header"),header);
 flowLayout->addWidget(block0Layout);
 
 block1Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block1Layout->setMinimumWidth(330);
+header = new QLineEdit();
+block1Layout->addRow(QObject::tr("Header"),header);
 footer = new QLineEdit();
 block1Layout->addRow(QObject::tr("Footer"),footer);
 deliveryaddress = new QLineEdit();
 block1Layout->addRow(QObject::tr("Delivery Address"),deliveryaddress);
-AddRemoveButtons* addremoveDeliveryOrderStoreProductButtons = new AddRemoveButtons();
-block1Layout->addRow("DeliveryOrderStoreProducts",addremoveDeliveryOrderStoreProductButtons);
-QObject::connect(addremoveDeliveryOrderStoreProductButtons, SIGNAL(addPressed()), this, SLOT(addDeliveryOrderStoreProduct()));
-
 flowLayout->addWidget(block1Layout);
 
 block2Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block2Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveDeliveryOrderServiceButtons = new AddRemoveButtons();
-block2Layout->addRow("DeliveryOrderServices",addremoveDeliveryOrderServiceButtons);
-QObject::connect(addremoveDeliveryOrderServiceButtons, SIGNAL(addPressed()), this, SLOT(addDeliveryOrderService()));
+AddRemoveButtons* addremoveDeliveryOrderStoreProductButtons = new AddRemoveButtons();
+block2Layout->addRow("DeliveryOrderStoreProducts",addremoveDeliveryOrderStoreProductButtons);
+QObject::connect(addremoveDeliveryOrderStoreProductButtons, SIGNAL(addPressed()), this, SLOT(addDeliveryOrderStoreProduct()));
 
 flowLayout->addWidget(block2Layout);
 
 block3Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block3Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveDeliveryOrderFreelineButtons = new AddRemoveButtons();
-block3Layout->addRow("DeliveryOrderFreelines",addremoveDeliveryOrderFreelineButtons);
-QObject::connect(addremoveDeliveryOrderFreelineButtons, SIGNAL(addPressed()), this, SLOT(addDeliveryOrderFreeline()));
+AddRemoveButtons* addremoveDeliveryOrderServiceButtons = new AddRemoveButtons();
+block3Layout->addRow("DeliveryOrderServices",addremoveDeliveryOrderServiceButtons);
+QObject::connect(addremoveDeliveryOrderServiceButtons, SIGNAL(addPressed()), this, SLOT(addDeliveryOrderService()));
 
 flowLayout->addWidget(block3Layout);
 
 block4Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block4Layout->setMinimumWidth(330);
+AddRemoveButtons* addremoveDeliveryOrderFreelineButtons = new AddRemoveButtons();
+block4Layout->addRow("DeliveryOrderFreelines",addremoveDeliveryOrderFreelineButtons);
+QObject::connect(addremoveDeliveryOrderFreelineButtons, SIGNAL(addPressed()), this, SLOT(addDeliveryOrderFreeline()));
+
 flowLayout->addWidget(block4Layout);
 
 }
 ERPDisplay* DeliveryOrderUI::p_instance = 0;
 void DeliveryOrderUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->DeliveryOrder) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
 	p_instance = new DeliveryOrderUI(mainwindow::GetMainDisplay()); 
   mainwindow::ShowDisplay(p_instance); 
-}
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 DeliveryOrderUI*DeliveryOrderUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
@@ -113,24 +120,24 @@ deliveryorderstoreproductui->controllers->setFixedHeight(0);
 DeliveryOrderStoreProducts.append(deliveryorderstoreproductui);
 RemovebtnWidgets* rmdeliveryorderstoreproduct = new RemovebtnWidgets(0,deliveryorderstoreproductui);
 QObject::connect(rmdeliveryorderstoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderStoreProduct(QWidget*)));
-block1Layout->addRow(QObject::tr("DeliveryOrderStoreProduct")+QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
+block2Layout->addRow(QObject::tr("DeliveryOrderStoreProduct")+QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
 }
-void DeliveryOrderUI::addDeliveryOrderStoreProduct(DeliveryOrderStoreProduct* DeliveryOrderStoreProduct){ 
+void DeliveryOrderUI::addDeliveryOrderStoreProduct(DeliveryOrderStoreProduct* deliveryorderstoreproduct){ 
 DeliveryOrderStoreProductUI* deliveryorderstoreproductui = new DeliveryOrderStoreProductUI();
 deliveryorderstoreproductui->block0Layout->hideRow(deliveryorderstoreproductui->deliveryorder);
 deliveryorderstoreproductui->controllers->setFixedHeight(0);
-deliveryorderstoreproductui->fill(DeliveryOrderStoreProduct);
+deliveryorderstoreproductui->fill(deliveryorderstoreproduct);
 DeliveryOrderStoreProducts.append(deliveryorderstoreproductui);
 RemovebtnWidgets* rmdeliveryorderstoreproduct = new RemovebtnWidgets(0,deliveryorderstoreproductui);
 QObject::connect(rmdeliveryorderstoreproduct, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderStoreProduct(QWidget*)));
-block1Layout->addRow(QObject::tr("DeliveryOrderStoreProduct") +QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
+block2Layout->addRow(QObject::tr("DeliveryOrderStoreProduct") +QString::number(DeliveryOrderStoreProducts.count()),rmdeliveryorderstoreproduct);
 }
 void DeliveryOrderUI::removeDeliveryOrderStoreProduct(QWidget* widget){ 
 if(DeliveryOrderStoreProducts.count()  > 0){
 DeliveryOrderStoreProductUI* deliveryorderstoreproductui = (DeliveryOrderStoreProductUI*) widget;
 DeliveryOrderStoreProducts.removeOne(deliveryorderstoreproductui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block1Layout->removeRow(sender);
+block2Layout->removeRow(sender);
 }
 }
 void DeliveryOrderUI::addDeliveryOrderService(){ 
@@ -140,24 +147,24 @@ deliveryorderserviceui->controllers->setFixedHeight(0);
 DeliveryOrderServices.append(deliveryorderserviceui);
 RemovebtnWidgets* rmdeliveryorderservice = new RemovebtnWidgets(0,deliveryorderserviceui);
 QObject::connect(rmdeliveryorderservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderService(QWidget*)));
-block2Layout->addRow(QObject::tr("DeliveryOrderService")+QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
+block3Layout->addRow(QObject::tr("DeliveryOrderService")+QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
 }
-void DeliveryOrderUI::addDeliveryOrderService(DeliveryOrderService* DeliveryOrderService){ 
+void DeliveryOrderUI::addDeliveryOrderService(DeliveryOrderService* deliveryorderservice){ 
 DeliveryOrderServiceUI* deliveryorderserviceui = new DeliveryOrderServiceUI();
 deliveryorderserviceui->block0Layout->hideRow(deliveryorderserviceui->deliveryorder);
 deliveryorderserviceui->controllers->setFixedHeight(0);
-deliveryorderserviceui->fill(DeliveryOrderService);
+deliveryorderserviceui->fill(deliveryorderservice);
 DeliveryOrderServices.append(deliveryorderserviceui);
 RemovebtnWidgets* rmdeliveryorderservice = new RemovebtnWidgets(0,deliveryorderserviceui);
 QObject::connect(rmdeliveryorderservice, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderService(QWidget*)));
-block2Layout->addRow(QObject::tr("DeliveryOrderService") +QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
+block3Layout->addRow(QObject::tr("DeliveryOrderService") +QString::number(DeliveryOrderServices.count()),rmdeliveryorderservice);
 }
 void DeliveryOrderUI::removeDeliveryOrderService(QWidget* widget){ 
 if(DeliveryOrderServices.count()  > 0){
 DeliveryOrderServiceUI* deliveryorderserviceui = (DeliveryOrderServiceUI*) widget;
 DeliveryOrderServices.removeOne(deliveryorderserviceui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block2Layout->removeRow(sender);
+block3Layout->removeRow(sender);
 }
 }
 void DeliveryOrderUI::addDeliveryOrderFreeline(){ 
@@ -167,35 +174,35 @@ deliveryorderfreelineui->controllers->setFixedHeight(0);
 DeliveryOrderFreelines.append(deliveryorderfreelineui);
 RemovebtnWidgets* rmdeliveryorderfreeline = new RemovebtnWidgets(0,deliveryorderfreelineui);
 QObject::connect(rmdeliveryorderfreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderFreeline(QWidget*)));
-block3Layout->addRow(QObject::tr("DeliveryOrderFreeline")+QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
+block4Layout->addRow(QObject::tr("DeliveryOrderFreeline")+QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
 }
-void DeliveryOrderUI::addDeliveryOrderFreeline(DeliveryOrderFreeline* DeliveryOrderFreeline){ 
+void DeliveryOrderUI::addDeliveryOrderFreeline(DeliveryOrderFreeline* deliveryorderfreeline){ 
 DeliveryOrderFreelineUI* deliveryorderfreelineui = new DeliveryOrderFreelineUI();
 deliveryorderfreelineui->block0Layout->hideRow(deliveryorderfreelineui->deliveryorder);
 deliveryorderfreelineui->controllers->setFixedHeight(0);
-deliveryorderfreelineui->fill(DeliveryOrderFreeline);
+deliveryorderfreelineui->fill(deliveryorderfreeline);
 DeliveryOrderFreelines.append(deliveryorderfreelineui);
 RemovebtnWidgets* rmdeliveryorderfreeline = new RemovebtnWidgets(0,deliveryorderfreelineui);
 QObject::connect(rmdeliveryorderfreeline, SIGNAL(removePressed(QWidget*)), this, SLOT(removeDeliveryOrderFreeline(QWidget*)));
-block3Layout->addRow(QObject::tr("DeliveryOrderFreeline") +QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
+block4Layout->addRow(QObject::tr("DeliveryOrderFreeline") +QString::number(DeliveryOrderFreelines.count()),rmdeliveryorderfreeline);
 }
 void DeliveryOrderUI::removeDeliveryOrderFreeline(QWidget* widget){ 
 if(DeliveryOrderFreelines.count()  > 0){
 DeliveryOrderFreelineUI* deliveryorderfreelineui = (DeliveryOrderFreelineUI*) widget;
 DeliveryOrderFreelines.removeOne(deliveryorderfreelineui);
 RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block3Layout->removeRow(sender);
+block4Layout->removeRow(sender);
 }
 }
 void DeliveryOrderUI::fill(DeliveryOrder* deliveryorder){ 
 clear();
 this->deliveryorder = deliveryorder;
-serial->setText(deliveryorder->Serial);
-barcode->setText(deliveryorder->Barcode);
+deliveryorderserial->setIndexByKey(deliveryorder->DeliveryOrderSerialID);
 deliveryorderstatus->setIndexByKey(deliveryorder->DeliveryOrderStatusID);
 contact->setIndexByKey(deliveryorder->ContactID);
-creationdate->setDate(QDate::fromString(deliveryorder->CreationDate));
-deliverydate->setDate(QDate::fromString(deliveryorder->DeliveryDate));
+project->setIndexByKey(deliveryorder->ProjectID);
+creationdate->setDate(deliveryorder->CreationDate);
+deliverydate->setDate(deliveryorder->DeliveryDate);
 note->setText(deliveryorder->Note);
 header->setText(deliveryorder->Header);
 footer->setText(deliveryorder->Footer);
@@ -215,8 +222,6 @@ delete this->deliveryorder;
 this->DeliveryOrderStoreProducts.clear();
 this->DeliveryOrderServices.clear();
 this->DeliveryOrderFreelines.clear();
-serial->setText("");
-barcode->setText("");
 creationdate->setDate(QDate::currentDate());
 deliverydate->setDate(QDate::currentDate());
 note->setText("");
@@ -232,9 +237,9 @@ if(child->parent()->parent()->parent() != 0)
 this->deliveryorder = new DeliveryOrder();
 } 
 void DeliveryOrderUI::selectDeliveryOrder(){ 
-if(DeliveryOrder::GetStringList().contains(this->deliveryorder->Serial))
+if(DeliveryOrder::GetStringList().contains(QString::number(this->deliveryorder->DeliveryOrderSerialID)))
 {
-DeliveryOrder* con = DeliveryOrder::Get(this->deliveryorder->Serial);
+DeliveryOrder* con = DeliveryOrder::Get(QString::number(this->deliveryorder->DeliveryOrderSerialID));
 if(this->deliveryorder->DeliveryOrderID != con->DeliveryOrderID){
 fill(con);
 }
@@ -242,45 +247,17 @@ fill(con);
 else if(deliveryorder->DeliveryOrderID != 0)
 clear();
 }
-void DeliveryOrderUI::generateBarcode(){ QString number = ""; for(int i = 0; i < 13; i++)  number += QString::number(rand() % 10); barcode->setText(number); barcodeDisplay->barcode = number; barcodeDisplay->repaint(); }
-void DeliveryOrderUI::barcodeChanged(QString barcode){ if(this->barcode->text().count() > 13) this->barcode->setText(this->barcode->text().remove(12,20)); barcodeDisplay->barcode = barcode; barcodeDisplay->repaint(); }
 bool DeliveryOrderUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(serial->text().trimmed().isEmpty()){
-errors = true;
-errorString += QObject::tr("Serial Can't be Empty! \n");
-serial->setObjectName("error");
-serial->style()->unpolish(serial);
-serial->style()->polish(serial);
-serial->update();
-}
-else { 
-serial->setObjectName("serial");
-serial->style()->unpolish(serial);
-serial->style()->polish(serial);
-serial->update();
-deliveryorder->Serial = serial->text().trimmed();
-}
-if(barcode->text().trimmed().isEmpty()){
-errors = true;
-errorString += QObject::tr("Barcode Can't be Empty! \n");
-barcode->setObjectName("error");
-barcode->style()->unpolish(barcode);
-barcode->style()->polish(barcode);
-barcode->update();
-}
-else { 
-barcode->setObjectName("barcode");
-barcode->style()->unpolish(barcode);
-barcode->style()->polish(barcode);
-barcode->update();
-deliveryorder->Barcode = barcode->text().trimmed();
-}
+if(!deliveryorderserial->isHidden()) 
+deliveryorder->DeliveryOrderSerialID = deliveryorderserial->getKey();
 if(!deliveryorderstatus->isHidden()) 
 deliveryorder->DeliveryOrderStatusID = deliveryorderstatus->getKey();
 if(!contact->isHidden()) 
 deliveryorder->ContactID = contact->getKey();
+if(!project->isHidden()) 
+deliveryorder->ProjectID = project->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
 errorString += QObject::tr("Creation Date Can't be Empty! \n");
@@ -294,7 +271,7 @@ creationdate->setObjectName("creationdate");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
 creationdate->update();
-deliveryorder->CreationDate = creationdate->text().trimmed();
+deliveryorder->CreationDate.setDate(creationdate->date().year(),creationdate->date().month(),creationdate->date().day());
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
@@ -309,7 +286,7 @@ deliverydate->setObjectName("deliverydate");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
 deliverydate->update();
-deliveryorder->DeliveryDate = deliverydate->text().trimmed();
+deliveryorder->DeliveryDate.setDate(deliverydate->date().year(),deliverydate->date().month(),deliverydate->date().day());
 }
 if(note->text().trimmed().isEmpty()){
 errors = true;
@@ -445,40 +422,14 @@ DeliveryOrderIndexUI::ShowUI();
 bool DeliveryOrderUI::updateModel(){ 
 bool errors = false;
 QString errorString =  "";
-if(serial->text().trimmed().isEmpty()){
-errors = true;
-errorString += QObject::tr("Serial Can't be Empty! \n");
-serial->setObjectName("error");
-serial->style()->unpolish(serial);
-serial->style()->polish(serial);
-serial->update();
-}
-else { 
-serial->setObjectName("serial");
-serial->style()->unpolish(serial);
-serial->style()->polish(serial);
-serial->update();
-deliveryorder->Serial = serial->text().trimmed();
-}
-if(barcode->text().trimmed().isEmpty()){
-errors = true;
-errorString += QObject::tr("Barcode Can't be Empty! \n");
-barcode->setObjectName("error");
-barcode->style()->unpolish(barcode);
-barcode->style()->polish(barcode);
-barcode->update();
-}
-else { 
-barcode->setObjectName("barcode");
-barcode->style()->unpolish(barcode);
-barcode->style()->polish(barcode);
-barcode->update();
-deliveryorder->Barcode = barcode->text().trimmed();
-}
+if(deliveryorder->DeliveryOrderSerialID == 0) 
+deliveryorder->DeliveryOrderSerialID = deliveryorderserial->getKey();
 if(deliveryorder->DeliveryOrderStatusID == 0) 
 deliveryorder->DeliveryOrderStatusID = deliveryorderstatus->getKey();
 if(deliveryorder->ContactID == 0) 
 deliveryorder->ContactID = contact->getKey();
+if(deliveryorder->ProjectID == 0) 
+deliveryorder->ProjectID = project->getKey();
 if(creationdate->text().trimmed().isEmpty()){
 errors = true;
 errorString += QObject::tr("Creation Date Can't be Empty! \n");
@@ -492,7 +443,7 @@ creationdate->setObjectName("creationdate");
 creationdate->style()->unpolish(creationdate);
 creationdate->style()->polish(creationdate);
 creationdate->update();
-deliveryorder->CreationDate = creationdate->text().trimmed();
+deliveryorder->CreationDate.fromString(creationdate->text().trimmed());
 }
 if(deliverydate->text().trimmed().isEmpty()){
 errors = true;
@@ -507,7 +458,7 @@ deliverydate->setObjectName("deliverydate");
 deliverydate->style()->unpolish(deliverydate);
 deliverydate->style()->polish(deliverydate);
 deliverydate->update();
-deliveryorder->DeliveryDate = deliverydate->text().trimmed();
+deliveryorder->DeliveryDate.fromString(deliverydate->text().trimmed());
 }
 if(note->text().trimmed().isEmpty()){
 errors = true;

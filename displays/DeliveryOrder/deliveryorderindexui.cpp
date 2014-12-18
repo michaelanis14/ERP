@@ -1,12 +1,13 @@
 /**************************************************************************
 **   File: deliveryorderindexui.cpp
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 
 #include "deliveryorderindexui.h"
 #include "deliveryorderui.h"
+#include "../Login/loginui.h"
 #include "../MainWindow.h"
 #include "../../Model/erpmodel.h"
 
@@ -43,11 +44,17 @@ this->controllers->addControllerButton(add);
 }
 ERPDisplay* DeliveryOrderIndexUI::p_instance = 0;
 void DeliveryOrderIndexUI::ShowUI() { 
-	if (p_instance != 0) 
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
+ LoginUI::ShowUI(); 
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->DeliveryOrder) 
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
+ else{	if (p_instance != 0) 
 	p_instance->deleteLater(); 
-	p_instance = new DeliveryOrderIndexUI(mainwindow::GetMainDisplay()); 	
- mainwindow::ShowDisplay(p_instance); 
-}
+	p_instance = new DeliveryOrderIndexUI(mainwindow::GetMainDisplay()); 
+  mainwindow::ShowDisplay(p_instance); 
+} 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
 DeliveryOrderIndexUI*DeliveryOrderIndexUI::GetUI(){ 
  	if (p_instance == 0) { 
 		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 

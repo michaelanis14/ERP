@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: bankaccount.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -98,9 +98,9 @@ BankAccount* BankAccount::GetInstance() {
 return p_instance;
 }
 bool BankAccount::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(BankAccountID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO BankAccount (Name,CountryID,BankCode,BankAddress,AccountNumber,AccountOwner,IBAN,BIC,CurrencyID,ContactID,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString::number(this->CountryID)+"','"+QString(this->BankCode)+"','"+QString(this->BankAddress)+"','"+QString(this->AccountNumber)+"','"+QString(this->AccountOwner)+"','"+QString(this->IBAN)+"','"+QString(this->BIC)+"','"+QString::number(this->CurrencyID)+"','"+QString::number(this->ContactID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

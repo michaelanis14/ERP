@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: tax.cpp
-**   Created on: Sun Dec 14 22:39:11 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -56,9 +56,9 @@ Tax* Tax::GetInstance() {
 return p_instance;
 }
 bool Tax::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(TaxID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Tax (Title,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Title)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

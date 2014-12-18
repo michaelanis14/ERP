@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: projectui.h
-**   Created on: Sun Dec 14 22:39:13 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -14,11 +14,12 @@
 #include "../CommonUI/addremovebuttons.h"
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/project.h"
+#include "../../Model/erpmodel.h"
 #include "../../Model/project.h"
 #include "../../Model/projectstatus.h"
 #include "../../Model/contact.h"
-#include "../../Model/projectsales.h"
 
+#include "../ProjectSales/projectsalesui.h"
 #include "../Task/taskui.h"
 #include "../ProjectContactPerson/projectcontactpersonui.h"
 #include "../ProjectProduct/projectproductui.h"
@@ -48,6 +49,7 @@ public:
 	ERPFormBlock* block6Layout;
 	ERPFormBlock* block7Layout;
 	ERPFormBlock* block8Layout;
+	QList<ProjectSalesUI*> ProjectSaless;
 	QList<TaskUI*> Tasks;
 	QList<ProjectContactPersonUI*> ProjectContactPersons;
 	QList<ProjectProductUI*> ProjectProducts;
@@ -60,12 +62,14 @@ public:
 	QDateEdit*enddate;
 	QCheckBox* willbeinvoiced;
 	QLineEdit*note;
-	ERPComboBox*projectsales;
 	void fill(Project* project);
 Project* project;
 private:
 	static ERPDisplay* p_instance;
 private slots:
+	void addProjectSales();
+	void addProjectSales(ProjectSales* ProjectSales);
+	void removeProjectSales(QWidget* widget);
 	void addTask();
 	void addTask(Task* Task);
 	void removeTask(QWidget* widget);

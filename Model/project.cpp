@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: project.cpp
-**   Created on: Sun Dec 14 22:39:12 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -14,11 +14,10 @@ this->ProjectID = 0 ;
 this->Title = "";
 this->ProjectStatusID = 0 ;
 this->ContactID = 0 ;
-this->StartDate = "";
-this->EndDate = "";
+this->StartDate = QDate();
+this->EndDate = QDate();
 this->WillBeInvoiced = 0 ;
 this->Note = "";
-this->ProjectSalesID = 0 ;
 this->CreatedOn = "";
 this->EditedOn = "";
 this->setTable("Project");
@@ -26,7 +25,7 @@ this->setEditStrategy(QSqlTableModel::OnManualSubmit);
 this->setRelation(2, QSqlRelation("ProjectStatus", "ProjectStatusID", "Description"));
 this->setRelation(3, QSqlRelation("Contact", "ContactID", "Name"));
 }
-Project::Project(int ProjectID,QString Title,int ProjectStatusID,int ContactID,QString StartDate,QString EndDate,bool WillBeInvoiced,QString Note,int ProjectSalesID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Project::Project(int ProjectID,QString Title,int ProjectStatusID,int ContactID,QDate StartDate,QDate EndDate,bool WillBeInvoiced,QString Note,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ProjectID = ProjectID ;
 this->Title = Title ;
 this->ProjectStatusID = ProjectStatusID ;
@@ -35,12 +34,11 @@ this->StartDate = StartDate ;
 this->EndDate = EndDate ;
 this->WillBeInvoiced = WillBeInvoiced ;
 this->Note = Note ;
-this->ProjectSalesID = ProjectSalesID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
 
-Project::Project(QString Title,int ProjectStatusID,int ContactID,QString StartDate,QString EndDate,bool WillBeInvoiced,QString Note,int ProjectSalesID,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
+Project::Project(QString Title,int ProjectStatusID,int ContactID,QDate StartDate,QDate EndDate,bool WillBeInvoiced,QString Note,QString CreatedOn,QString EditedOn) : QSqlRelationalTableModel(){
 this->ProjectID = 0 ;
 this->Title = Title ;
 this->ProjectStatusID = ProjectStatusID ;
@@ -49,7 +47,6 @@ this->StartDate = StartDate ;
 this->EndDate = EndDate ;
 this->WillBeInvoiced = WillBeInvoiced ;
 this->Note = Note ;
-this->ProjectSalesID = ProjectSalesID ;
 this->CreatedOn = CreatedOn ;
 this->EditedOn = EditedOn ;
 }
@@ -67,17 +64,15 @@ QString query =
 "FOREIGN KEY (ProjectStatusID) REFERENCES ProjectStatus(ProjectStatusID)  ON DELETE CASCADE,"
 "ContactID INT NOT NULL, "
 "FOREIGN KEY (ContactID) REFERENCES Contact(ContactID)  ON DELETE CASCADE,"
-"StartDate VARCHAR(40) NOT NULL, "
-"EndDate VARCHAR(40) NOT NULL, "
+"StartDate DATE NOT NULL, "
+"EndDate DATE NOT NULL, "
 "WillBeInvoiced VARCHAR(1) NOT NULL, "
 "Note VARCHAR(40) NOT NULL, "
-"ProjectSalesID INT NOT NULL, "
-"FOREIGN KEY (ProjectSalesID) REFERENCES ProjectSales(ProjectSalesID)  ON DELETE CASCADE,"
 "CreatedOn VARCHAR(40) NOT NULL, "
 "EditedOn VARCHAR(40) NOT NULL, KEY(EditedOn) )" ;
 
 QList<QPair<QString,QString> >variables;
-variables.append(qMakePair(QString(" INT"),QString("ProjectID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Title")));variables.append(qMakePair(QString(" INT"),QString("ProjectStatusID")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("StartDate")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EndDate")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("WillBeInvoiced")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Note")));variables.append(qMakePair(QString(" INT"),QString("ProjectSalesID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
+variables.append(qMakePair(QString(" INT"),QString("ProjectID")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Title")));variables.append(qMakePair(QString(" INT"),QString("ProjectStatusID")));variables.append(qMakePair(QString(" INT"),QString("ContactID")));variables.append(qMakePair(QString(""),QString("StartDate")));variables.append(qMakePair(QString(""),QString("EndDate")));variables.append(qMakePair(QString(" VARCHAR(1)"),QString("WillBeInvoiced")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("Note")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("CreatedOn")));variables.append(qMakePair(QString(" VARCHAR(40)"),QString("EditedOn")));ErpModel::GetInstance()->createTable(table,query,variables);
 return true;
 }
 Project* Project::p_instance = 0;
@@ -89,13 +84,13 @@ Project* Project::GetInstance() {
 return p_instance;
 }
 bool Project::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(ProjectID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
-ErpModel::GetInstance()->qeryExec("INSERT INTO Project (Title,ProjectStatusID,ContactID,StartDate,EndDate,WillBeInvoiced,Note,ProjectSalesID,CreatedOn,EditedOn)"
-"VALUES ('" +QString(this->Title)+"','"+QString::number(this->ProjectStatusID)+"','"+QString::number(this->ContactID)+"','"+QString(this->StartDate)+"','"+QString(this->EndDate)+"','"+QString::number(this->WillBeInvoiced)+"','"+QString(this->Note)+"','"+QString::number(this->ProjectSalesID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+this->CreatedOn = QDate::currentDate().toString();
+ErpModel::GetInstance()->qeryExec("INSERT INTO Project (Title,ProjectStatusID,ContactID,StartDate,EndDate,WillBeInvoiced,Note,CreatedOn,EditedOn)"
+"VALUES ('" +QString(this->Title)+"','"+QString::number(this->ProjectStatusID)+"','"+QString::number(this->ContactID)+"','"+(this->StartDate.toString("yyyy-MM-dd"))+"','"+(this->EndDate.toString("yyyy-MM-dd"))+"','"+QString::number(this->WillBeInvoiced)+"','"+QString(this->Note)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {
-ErpModel::GetInstance()->qeryExec("UPDATE Project SET "	"Title = '"+QString(this->Title)+"',"+"ProjectStatusID = '"+QString::number(this->ProjectStatusID)+"',"+"ContactID = '"+QString::number(this->ContactID)+"',"+"StartDate = '"+QString(this->StartDate)+"',"+"EndDate = '"+QString(this->EndDate)+"',"+"WillBeInvoiced = '"+QString::number(this->WillBeInvoiced)+"',"+"Note = '"+QString(this->Note)+"',"+"ProjectSalesID = '"+QString::number(this->ProjectSalesID)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProjectID ='"+QString::number(this->ProjectID)+"'");
+ErpModel::GetInstance()->qeryExec("UPDATE Project SET "	"Title = '"+QString(this->Title)+"',"+"ProjectStatusID = '"+QString::number(this->ProjectStatusID)+"',"+"ContactID = '"+QString::number(this->ContactID)+"',"+"StartDate = '"+(this->StartDate.toString("yyyy-MM-dd"))+"',"+"EndDate = '"+(this->EndDate.toString("yyyy-MM-dd"))+"',"+"WillBeInvoiced = '"+QString::number(this->WillBeInvoiced)+"',"+"Note = '"+QString(this->Note)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProjectID ='"+QString::number(this->ProjectID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProjectID FROM Project WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
 while (query.next()) { 
  if(query.value(0).toInt() != 0){ 
@@ -124,7 +119,7 @@ if(ProjectID!= 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Project"
 "WHERE ProjectID ='"+QString::number(this->ProjectID)+"'"));
 while (query.next()) {
-return new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString());
+return new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toDate(),query.value(5).toDate(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString());
  }
 
 }
@@ -135,7 +130,7 @@ QList<Project*> Project::GetAll() {
 	QList<Project*> projects =   QList<Project*>();
 	QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Project ORDER BY ProjectID ASC"));
 	while (query.next()) {
-projects.append(new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString()));
+projects.append(new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toDate(),query.value(5).toDate(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
 	}
 	return projects;
 }
@@ -145,8 +140,9 @@ Project* project = new Project();
 if(id != 0) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT * FROM Project WHERE ProjectID = '"+QString::number(id)+"' ORDER BY ProjectID ASC "));
 while (query.next()) {
-project = new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString());
+project = new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toDate(),query.value(5).toDate(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString());
  }
+project->projectsaless = ProjectSales::QuerySelect("ProjectID = " + QString::number(id));
 project->tasks = Task::QuerySelect("ProjectID = " + QString::number(id));
 project->projectcontactpersons = ProjectContactPerson::QuerySelect("ProjectID = " + QString::number(id));
 project->projectproducts = ProjectProduct::QuerySelect("ProjectID = " + QString::number(id));
@@ -169,9 +165,10 @@ Project* project = new Project();
 if(name != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Project WHERE Title = '"+name+"'"));
 while (query.next()) {
-project = new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString());
+project = new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toDate(),query.value(5).toDate(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString());
 
  }
+project->projectsaless = ProjectSales::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 project->tasks = Task::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 project->projectcontactpersons = ProjectContactPerson::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 project->projectproducts = ProjectProduct::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
@@ -188,14 +185,12 @@ if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Project"
 "WHERE" 
 "Title LIKE '%"+keyword+"%'"
-"OR StartDate LIKE '%"+keyword+"%'"
-"OR EndDate LIKE '%"+keyword+"%'"
 "OR Note LIKE '%"+keyword+"%'"
 "OR CreatedOn LIKE '%"+keyword+"%'"
 "OR EditedOn LIKE '%"+keyword+"%'"
 ));
 while (query.next()) {
-list.append(new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString()));
+list.append(new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toDate(),query.value(5).toDate(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
  }
 
 }
@@ -246,7 +241,7 @@ QList<Project*>list;
 if(select != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Project WHERE "+select+"" ));
 while (query.next()) {
-list.append(new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toString(),query.value(5).toString(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toInt(),query.value(9).toString(),query.value(10).toString()));
+list.append(new Project(query.value(0).toInt(),query.value(1).toString(),query.value(2).toInt(),query.value(3).toInt(),query.value(4).toDate(),query.value(5).toDate(),query.value(6).toInt(),query.value(7).toString(),query.value(8).toString(),query.value(9).toString()));
  }
 
 }
@@ -257,7 +252,7 @@ Qt::ItemFlags Project::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 8 || index.column() == 14 || index.column() == 15)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 14 || index.column() == 15)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -283,8 +278,6 @@ else if (index.column() == 6)
 ok = setWillBeInvoiced(id, value.toString());
 else if (index.column() == 7)
 ok = setNote(id, value.toString());
-else if (index.column() == 8)
-ok = setProjectSalesID(id, value.toString());
 else if (index.column() == 14)
 ok = setCreatedOn(id, value.toString());
 else if (index.column() == 15)
@@ -313,7 +306,6 @@ this->setHeaderData(4, Qt::Horizontal, QObject::tr("Start Date"));
 this->setHeaderData(5, Qt::Horizontal, QObject::tr("End Date"));
 this->setHeaderData(6, Qt::Horizontal, QObject::tr("Will Be Invoiced"));
 this->setHeaderData(7, Qt::Horizontal, QObject::tr("Note"));
-this->setHeaderData(8, Qt::Horizontal, QObject::tr("Project Sales"));
 this->setHeaderData(14, Qt::Horizontal, QObject::tr("Created On"));
 this->setHeaderData(15, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
@@ -378,15 +370,6 @@ bool Project::setNote(int ProjectID, const QString &Note) {
 QSqlQuery query;
 query.prepare("update Project set Note = ? where ProjectID = ?");
 query.addBindValue(Note);
-query.addBindValue(ProjectID);
-if( !query.exec() )
-qDebug() << query.lastError().text();
-return true;
-}
-bool Project::setProjectSalesID(int ProjectID, const QString &ProjectSalesID) {
-QSqlQuery query;
-query.prepare("update Project set ProjectSalesID = ? where ProjectID = ?");
-query.addBindValue(ProjectSalesID);
 query.addBindValue(ProjectID);
 if( !query.exec() )
 qDebug() << query.lastError().text();

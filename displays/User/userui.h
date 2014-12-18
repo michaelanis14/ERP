@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: userui.h
-**   Created on: Sun Dec 14 22:39:11 EET 2014
+**   Created on: Wed Dec 17 16:42:29 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -14,6 +14,7 @@
 #include "../CommonUI/addremovebuttons.h"
 #include "../CommonUI/RemovebtnWidgets.h"
 #include "../../Model/user.h"
+#include "../../Model/erpmodel.h"
 #include "../../Model/user.h"
 #include "../../Model/language.h"
 #include "../../Model/contact.h"

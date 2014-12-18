@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: user.cpp
-**   Created on: Sun Dec 14 22:39:11 EET 2014
+**   Created on: Thu Dec 18 10:59:52 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -76,9 +76,9 @@ User* User::GetInstance() {
 return p_instance;
 }
 bool User::save() {
-this->EditedOn = QDateTime::currentDateTime().toString();
+this->EditedOn = QDate::currentDate().toString();
 if(UserID== 0) {
-this->CreatedOn = QDateTime::currentDateTime().toString();
+this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO User (Name,UserName,Password,LanguageID,ContactID,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->UserName)+"','"+QString(this->Password)+"','"+QString::number(this->LanguageID)+"','"+QString::number(this->ContactID)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
 }else {

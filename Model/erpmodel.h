@@ -6,6 +6,8 @@
 
 #ifndef ERPMODEL_H
 #define ERPMODEL_H
+#include "user.h"
+#include "access.h"
 
 #include <QSqlQuery>
 #include <QPair>
@@ -16,6 +18,9 @@ class ErpModel
 public:
 	ErpModel();
 	QSqlDatabase db;
+	User* LoggedUser;
+	QList<QString> toStringList(QList<QPair<int, QString> > pairList);
+	QList<Access*> UserAccessList;
 	static ErpModel* GetInstance();
 	QSqlQuery qeryExec(QString q);
 	bool createTable(QString table,QString query,QList<QPair<QString,QString> >variables);
