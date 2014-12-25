@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorder.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Fri Dec 19 13:01:03 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -19,7 +19,8 @@ class DeliveryOrder  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	DeliveryOrder();
-	DeliveryOrder(int DeliveryOrderSerialID,int DeliveryOrderStatusID,int ContactID,int ProjectID,QDate CreationDate,QDate DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	int DeliveryOrderID;
+	DeliveryOrder(int Serial,int DeliveryOrderSerialID,int DeliveryOrderStatusID,int ContactID,int ProjectID,QDate CreationDate,QDate DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	int DeliveryOrderID;
+	int Serial;
 	int DeliveryOrderSerialID;
 	int DeliveryOrderStatusID;
 	int ContactID;
@@ -57,7 +58,8 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	DeliveryOrder(int DeliveryOrderID,int DeliveryOrderSerialID,int DeliveryOrderStatusID,int ContactID,int ProjectID,QDate CreationDate,QDate DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	static DeliveryOrder* p_instance;
+	DeliveryOrder(int DeliveryOrderID,int Serial,int DeliveryOrderSerialID,int DeliveryOrderStatusID,int ContactID,int ProjectID,QDate CreationDate,QDate DeliveryDate,QString Note,QString Header,QString Footer,QString DeliveryAddress,QString CreatedOn,QString EditedOn);	static DeliveryOrder* p_instance;
+	bool setSerial(int DeliveryOrderID, const QString &Serial);
 	bool setDeliveryOrderSerialID(int DeliveryOrderID, const QString &DeliveryOrderSerialID);
 	bool setDeliveryOrderStatusID(int DeliveryOrderID, const QString &DeliveryOrderStatusID);
 	bool setContactID(int DeliveryOrderID, const QString &ContactID);

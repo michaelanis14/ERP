@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: accessui.h
-**   Created on: Wed Dec 17 14:40:22 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -61,7 +61,6 @@ public:
 	QCheckBox* project;
 	QCheckBox* projectfile;
 	QCheckBox* projectcontactperson;
-	QCheckBox* projectproduct;
 	QCheckBox* projectservice;
 	QCheckBox* projectsales;
 	QCheckBox* unit;
@@ -77,10 +76,17 @@ public:
 	QCheckBox* purchase;
 	QCheckBox* purchasestoreproduct;
 	QCheckBox* purchasefreeline;
+	QCheckBox* returnpurchase;
+	QCheckBox* returnpurchasestoreproduct;
+	QCheckBox* returnpurchasefreeline;
 	QCheckBox* deliveryorderstatus;
 	QCheckBox* deliveryorderstoreproduct;
 	QCheckBox* deliveryorderservice;
 	QCheckBox* deliveryorderfreeline;
+	QCheckBox* returndeliveryorder;
+	QCheckBox* returndeliveryorderstoreproduct;
+	QCheckBox* returndeliveryorderservice;
+	QCheckBox* returndeliveryorderfreeline;
 	QCheckBox* invoiceperiod;
 	QCheckBox* invoiceyear;
 	QCheckBox* invoicestate;

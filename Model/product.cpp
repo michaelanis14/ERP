@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: product.cpp
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 12:57:58 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -110,17 +110,17 @@ ErpModel::GetInstance()->qeryExec("INSERT INTO Product (Name,ShortDescription,Un
 }else {
 ErpModel::GetInstance()->qeryExec("UPDATE Product SET "	"Name = '"+QString(this->Name)+"',"+"ShortDescription = '"+QString(this->ShortDescription)+"',"+"UnitID = '"+QString::number(this->UnitID)+"',"+"SellingPrice = '"+QString::number(this->SellingPrice)+"',"+"NetCoast = '"+QString::number(this->NetCoast)+"',"+"TradeMarginRate = '"+QString::number(this->TradeMarginRate)+"',"+"TaxID = '"+QString::number(this->TaxID)+"',"+"information = '"+QString(this->information)+"',"+"Barcode = '"+QString(this->Barcode)+"',"+"ProductCategoryID = '"+QString::number(this->ProductCategoryID)+"',"+"CriticalAmount = '"+QString::number(this->CriticalAmount)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ProductID ='"+QString::number(this->ProductID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ProductID FROM Product WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
-while (query.next()) { 
- if(query.value(0).toInt() != 0){ 
- this->ProductID = query.value(0).toInt();	
- } 
+while (query.next()) {
+ if(query.value(0).toInt() != 0){
+ this->ProductID = query.value(0).toInt();
+ }
  }
 return true;
 }
 bool Product::save(QSqlRecord &record) {
-	if(ErpModel::GetInstance()->db.open()) 
- if(this->insertRowIntoTable(record)) 
- return true; 
+	if(ErpModel::GetInstance()->db.open())
+ if(this->insertRowIntoTable(record))
+ return true;
  return false;
 }
 
@@ -167,8 +167,8 @@ return product;
 }
 
 Product* Product::get(const QModelIndex &index) {
-QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
- if(data(primaryKeyIndex).toInt() != 0) 
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+ if(data(primaryKeyIndex).toInt() != 0)
  return Get(data(primaryKeyIndex).toInt());
 else return new Product();
 }
@@ -191,7 +191,7 @@ QList<Product*> Product::Search(QString keyword) {
 QList<Product*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Product"
-"WHERE" 
+"WHERE"
 "Name LIKE '%"+keyword+"%'"
 "OR ShortDescription LIKE '%"+keyword+"%'"
 "OR information LIKE '%"+keyword+"%'"

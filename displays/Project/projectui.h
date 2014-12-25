@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: projectui.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -22,7 +22,6 @@
 #include "../ProjectSales/projectsalesui.h"
 #include "../Task/taskui.h"
 #include "../ProjectContactPerson/projectcontactpersonui.h"
-#include "../ProjectProduct/projectproductui.h"
 #include "../ProjectService/projectserviceui.h"
 #include "../ProjectFile/projectfileui.h"
 
@@ -52,7 +51,6 @@ public:
 	QList<ProjectSalesUI*> ProjectSaless;
 	QList<TaskUI*> Tasks;
 	QList<ProjectContactPersonUI*> ProjectContactPersons;
-	QList<ProjectProductUI*> ProjectProducts;
 	QList<ProjectServiceUI*> ProjectServices;
 	QList<ProjectFileUI*> ProjectFiles;
 	QLineEdit*title;
@@ -76,9 +74,6 @@ private slots:
 	void addProjectContactPerson();
 	void addProjectContactPerson(ProjectContactPerson* ProjectContactPerson);
 	void removeProjectContactPerson(QWidget* widget);
-	void addProjectProduct();
-	void addProjectProduct(ProjectProduct* ProjectProduct);
-	void removeProjectProduct(QWidget* widget);
 	void addProjectService();
 	void addProjectService(ProjectService* ProjectService);
 	void removeProjectService(QWidget* widget);
@@ -91,5 +86,6 @@ private slots:
 public slots:
 	bool save();
 	bool updateModel();
+	void selectionChanged(QString);
 };
 #endif

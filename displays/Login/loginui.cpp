@@ -20,7 +20,7 @@ LoginUI::LoginUI(QWidget *parent) :ERPDisplay(parent)
 	QObject::connect(save, SIGNAL(clicked()), this, SLOT(save()));
 	save->setObjectName("save");
 
-
+	ErpModel::GetInstance()->LoggedUser->UserID = 0;
 
 	block0Layout = new ERPFormBlock;
 	if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
@@ -128,6 +128,7 @@ void LoginUI::showEvent(QShowEvent * event){
 	if(this->parent() != 0){
 		mainwindow::GetMainDisplay()->navigation->setHidden(true);
 		this->controllers->setGeometry(0,this->height()-200,this->width(),40);
+		mainwindow::GetMainDisplay()->innerNavigation->removeAll();
 	}
 	event->accept();
 }

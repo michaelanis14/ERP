@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: invoiceui.h
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Fri Dec 19 22:39:36 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -17,13 +17,17 @@
 #include "../../Model/erpmodel.h"
 #include "../../Model/invoice.h"
 #include "../../Model/invoiceserial.h"
+#include "../../Model/contact.h"
+#include "../../Model/project.h"
 #include "../../Model/invoiceperiod.h"
 #include "../../Model/invoiceyear.h"
-#include "../../Model/project.h"
+#include "../../Model/deliveryorder.h"
 
-#include "../InvoiceStateDate/invoicestatedateui.h"
+
+#include "../InvoiceStoreProduct/invoicestoreproductui.h"
+#include "../InvoiceService/invoiceserviceui.h"
+#include "../InvoiceDeliveryOrderFreeline/invoicedeliveryorderfreelineui.h"
 #include "../InvoiceFreeline/invoicefreelineui.h"
-#include "../Payment/paymentui.h"
 
 #include <QWidget>
 #include <QLineEdit>
@@ -40,39 +44,54 @@ public:
 	static void ShowUI();
 	static InvoiceUI* GetUI();
 	ERPFormBlock* block0Layout;
-	QList<InvoiceStateDateUI*> InvoiceStateDates;
+	ERPFormBlock* block1Layout;
+	ERPFormBlock* block2Layout;
+	ERPFormBlock* block3Layout;
+	ERPFormBlock* block4Layout;
+	ERPFormBlock* block5Layout;
+	ERPFormBlock* block6Layout;
+	ERPFormBlock* block7Layout;
+	ERPFormBlock* block8Layout;
+	QList<InvoiceStoreProductUI*> InvoiceStoreProducts;
+	QList<InvoiceServiceUI*> InvoiceServices;
+	QList<InvoiceDeliveryOrderFreelineUI*> InvoiceDeliveryOrderFreelines;
 	QList<InvoiceFreelineUI*> InvoiceFreelines;
-	QList<PaymentUI*> Payments;
+	QLineEdit*serial;
 	ERPComboBox*invoiceserial;
-	QDateEdit*creationdate;
-	QDateEdit*enddate;
+	ERPComboBox*contact;
+	ERPComboBox*project;
+	QDateEdit*date;
 	ERPComboBox*invoiceperiod;
 	ERPComboBox*invoiceyear;
-	ERPComboBox*project;
 	QDateEdit*duedate;
 	QLineEdit*discount;
 	QLineEdit*allowance;
 	QLineEdit*header;
 	QLineEdit*footer;
+	QLineEdit*note;
 	void fill(Invoice* invoice);
 Invoice* invoice;
 private:
 	static ERPDisplay* p_instance;
 private slots:
-	void addInvoiceStateDate();
-	void addInvoiceStateDate(InvoiceStateDate* InvoiceStateDate);
-	void removeInvoiceStateDate(QWidget* widget);
+	void addInvoiceStoreProduct();
+	void addInvoiceStoreProduct(InvoiceStoreProduct* InvoiceStoreProduct);
+	void removeInvoiceStoreProduct(QWidget* widget);
+	void addInvoiceService();
+	void addInvoiceService(InvoiceService* InvoiceService);
+	void removeInvoiceService(QWidget* widget);
+	void addInvoiceDeliveryOrderFreeline();
+	void addInvoiceDeliveryOrderFreeline(InvoiceDeliveryOrderFreeline* InvoiceDeliveryOrderFreeline);
+	void removeInvoiceDeliveryOrderFreeline(QWidget* widget);
 	void addInvoiceFreeline();
 	void addInvoiceFreeline(InvoiceFreeline* InvoiceFreeline);
 	void removeInvoiceFreeline(QWidget* widget);
-	void addPayment();
-	void addPayment(Payment* Payment);
-	void removePayment(QWidget* widget);
 	void selectInvoice();
 	void cancel();
 	void clear();
 public slots:
 	bool save();
 	bool updateModel();
+	void selectionChanged(QString);
 };
 #endif

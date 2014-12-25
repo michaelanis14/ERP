@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymenttype.cpp
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Sat Dec 20 02:32:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/

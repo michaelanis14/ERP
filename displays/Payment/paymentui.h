@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentui.h
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Sat Dec 20 02:32:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,8 +16,9 @@
 #include "../../Model/payment.h"
 #include "../../Model/erpmodel.h"
 #include "../../Model/payment.h"
-#include "../../Model/invoice.h"
 #include "../../Model/paymenttype.h"
+#include "../../Model/contact.h"
+#include "../../Model/project.h"
 
 
 #include <QWidget>
@@ -35,10 +36,13 @@ public:
 	static void ShowUI();
 	static PaymentUI* GetUI();
 	ERPFormBlock* block0Layout;
-	ERPComboBox*invoice;
-	QLineEdit*totalamount;
-	QLineEdit*comment;
 	ERPComboBox*paymenttype;
+	ERPComboBox*contact;
+	ERPComboBox*project;
+	QDateEdit*date;
+	QLineEdit*netamount;
+	QLineEdit*grossamount;
+	QLineEdit*comment;
 	void fill(Payment* payment);
 Payment* payment;
 private:

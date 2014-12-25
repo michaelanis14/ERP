@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: access.h
-**   Created on: Wed Dec 17 14:40:22 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,7 +16,7 @@ class Access  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Access();
-	Access(QString Title,bool Admin,bool DeliveryOrderSerial,bool DeliveryOrder,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectProduct,bool ProjectService,bool ProjectSales,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateDate,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool Language,bool TimeBooking,bool Login,QString hashKey,int UserID,QString CreatedOn,QString EditedOn);	int AccessID;
+	Access(QString Title,bool Admin,bool DeliveryOrderSerial,bool DeliveryOrder,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectService,bool ProjectSales,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool ReturnPurchase,bool ReturnPurchaseStoreProduct,bool ReturnPurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool ReturnDeliveryOrder,bool ReturnDeliveryOrderStoreProduct,bool ReturnDeliveryOrderService,bool ReturnDeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateDate,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool Language,bool TimeBooking,bool Login,QString hashKey,int UserID,QString CreatedOn,QString EditedOn);	int AccessID;
 	QString Title;
 	bool Admin;
 	bool DeliveryOrderSerial;
@@ -44,7 +44,6 @@ public:
 	bool Project;
 	bool ProjectFile;
 	bool ProjectContactPerson;
-	bool ProjectProduct;
 	bool ProjectService;
 	bool ProjectSales;
 	bool Unit;
@@ -60,10 +59,17 @@ public:
 	bool Purchase;
 	bool PurchaseStoreProduct;
 	bool PurchaseFreeLine;
+	bool ReturnPurchase;
+	bool ReturnPurchaseStoreProduct;
+	bool ReturnPurchaseFreeLine;
 	bool DeliveryOrderStatus;
 	bool DeliveryOrderStoreProduct;
 	bool DeliveryOrderService;
 	bool DeliveryOrderFreeline;
+	bool ReturnDeliveryOrder;
+	bool ReturnDeliveryOrderStoreProduct;
+	bool ReturnDeliveryOrderService;
+	bool ReturnDeliveryOrderFreeline;
 	bool InvoicePeriod;
 	bool InvoiceYear;
 	bool InvoiceState;
@@ -103,7 +109,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Access(int AccessID,QString Title,bool Admin,bool DeliveryOrderSerial,bool DeliveryOrder,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectProduct,bool ProjectService,bool ProjectSales,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateDate,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool Language,bool TimeBooking,bool Login,QString hashKey,int UserID,QString CreatedOn,QString EditedOn);	static Access* p_instance;
+	Access(int AccessID,QString Title,bool Admin,bool DeliveryOrderSerial,bool DeliveryOrder,bool Company,bool Tax,bool Contact,bool ContactTelephone,bool ContactEmail,bool BankAccount,bool ContactClass,bool ContactType,bool Country,bool Currency,bool ContactStatus,bool FieldType,bool ContactField,bool ContactFieldData,bool ContactPersonField,bool ContactPersonFieldData,bool ContactPerson,bool ContactPersonTelephone,bool ContactPersonEmail,bool ProjectStatus,bool Project,bool ProjectFile,bool ProjectContactPerson,bool ProjectService,bool ProjectSales,bool Unit,bool ProductCategory,bool ProductImage,bool Product,bool ProductField,bool ProductFieldData,bool Service,bool Store,bool PurchaseStatus,bool PurchaseSerial,bool Purchase,bool PurchaseStoreProduct,bool PurchaseFreeLine,bool ReturnPurchase,bool ReturnPurchaseStoreProduct,bool ReturnPurchaseFreeLine,bool DeliveryOrderStatus,bool DeliveryOrderStoreProduct,bool DeliveryOrderService,bool DeliveryOrderFreeline,bool ReturnDeliveryOrder,bool ReturnDeliveryOrderStoreProduct,bool ReturnDeliveryOrderService,bool ReturnDeliveryOrderFreeline,bool InvoicePeriod,bool InvoiceYear,bool InvoiceState,bool InvoiceSerial,bool Invoice,bool InvoiceStateDate,bool InvoiceFreeline,bool PaymentType,bool Payment,bool Task,bool Language,bool TimeBooking,bool Login,QString hashKey,int UserID,QString CreatedOn,QString EditedOn);	static Access* p_instance;
 	bool setTitle(int AccessID, const QString &Title);
 	bool setAdmin(int AccessID, const QString &Admin);
 	bool setDeliveryOrderSerial(int AccessID, const QString &DeliveryOrderSerial);
@@ -131,7 +137,6 @@ private:
 	bool setProject(int AccessID, const QString &Project);
 	bool setProjectFile(int AccessID, const QString &ProjectFile);
 	bool setProjectContactPerson(int AccessID, const QString &ProjectContactPerson);
-	bool setProjectProduct(int AccessID, const QString &ProjectProduct);
 	bool setProjectService(int AccessID, const QString &ProjectService);
 	bool setProjectSales(int AccessID, const QString &ProjectSales);
 	bool setUnit(int AccessID, const QString &Unit);
@@ -147,10 +152,17 @@ private:
 	bool setPurchase(int AccessID, const QString &Purchase);
 	bool setPurchaseStoreProduct(int AccessID, const QString &PurchaseStoreProduct);
 	bool setPurchaseFreeLine(int AccessID, const QString &PurchaseFreeLine);
+	bool setReturnPurchase(int AccessID, const QString &ReturnPurchase);
+	bool setReturnPurchaseStoreProduct(int AccessID, const QString &ReturnPurchaseStoreProduct);
+	bool setReturnPurchaseFreeLine(int AccessID, const QString &ReturnPurchaseFreeLine);
 	bool setDeliveryOrderStatus(int AccessID, const QString &DeliveryOrderStatus);
 	bool setDeliveryOrderStoreProduct(int AccessID, const QString &DeliveryOrderStoreProduct);
 	bool setDeliveryOrderService(int AccessID, const QString &DeliveryOrderService);
 	bool setDeliveryOrderFreeline(int AccessID, const QString &DeliveryOrderFreeline);
+	bool setReturnDeliveryOrder(int AccessID, const QString &ReturnDeliveryOrder);
+	bool setReturnDeliveryOrderStoreProduct(int AccessID, const QString &ReturnDeliveryOrderStoreProduct);
+	bool setReturnDeliveryOrderService(int AccessID, const QString &ReturnDeliveryOrderService);
+	bool setReturnDeliveryOrderFreeline(int AccessID, const QString &ReturnDeliveryOrderFreeline);
 	bool setInvoicePeriod(int AccessID, const QString &InvoicePeriod);
 	bool setInvoiceYear(int AccessID, const QString &InvoiceYear);
 	bool setInvoiceState(int AccessID, const QString &InvoiceState);

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: project.cpp
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 12:57:58 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -145,7 +145,6 @@ project = new Project(query.value(0).toInt(),query.value(1).toString(),query.val
 project->projectsaless = ProjectSales::QuerySelect("ProjectID = " + QString::number(id));
 project->tasks = Task::QuerySelect("ProjectID = " + QString::number(id));
 project->projectcontactpersons = ProjectContactPerson::QuerySelect("ProjectID = " + QString::number(id));
-project->projectproducts = ProjectProduct::QuerySelect("ProjectID = " + QString::number(id));
 project->projectservices = ProjectService::QuerySelect("ProjectID = " + QString::number(id));
 project->projectfiles = ProjectFile::QuerySelect("ProjectID = " + QString::number(id));
 
@@ -171,7 +170,6 @@ project = new Project(query.value(0).toInt(),query.value(1).toString(),query.val
 project->projectsaless = ProjectSales::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 project->tasks = Task::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 project->projectcontactpersons = ProjectContactPerson::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
-project->projectproducts = ProjectProduct::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 project->projectservices = ProjectService::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 project->projectfiles = ProjectFile::QuerySelect("ProjectID = " +QString::number(project->ProjectID));
 
@@ -252,7 +250,7 @@ Qt::ItemFlags Project::flags(const QModelIndex &index) const {
 Qt::ItemFlags flags = QSqlRelationalTableModel::flags(index);
 flags ^= Qt::ItemIsEditable;
 if (
-index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 14 || index.column() == 15)
+index.column() == 1 || index.column() == 2 || index.column() == 3 || index.column() == 4 || index.column() == 5 || index.column() == 6 || index.column() == 7 || index.column() == 13 || index.column() == 14)
 flags |= Qt::ItemIsEditable;
 return flags;
 }
@@ -278,9 +276,9 @@ else if (index.column() == 6)
 ok = setWillBeInvoiced(id, value.toString());
 else if (index.column() == 7)
 ok = setNote(id, value.toString());
-else if (index.column() == 14)
+else if (index.column() == 13)
 ok = setCreatedOn(id, value.toString());
-else if (index.column() == 15)
+else if (index.column() == 14)
 ok = setEditedOn(id, value.toString());
 refresh();
 }
@@ -306,8 +304,8 @@ this->setHeaderData(4, Qt::Horizontal, QObject::tr("Start Date"));
 this->setHeaderData(5, Qt::Horizontal, QObject::tr("End Date"));
 this->setHeaderData(6, Qt::Horizontal, QObject::tr("Will Be Invoiced"));
 this->setHeaderData(7, Qt::Horizontal, QObject::tr("Note"));
-this->setHeaderData(14, Qt::Horizontal, QObject::tr("Created On"));
-this->setHeaderData(15, Qt::Horizontal, QObject::tr("Edited On"));
+this->setHeaderData(13, Qt::Horizontal, QObject::tr("Created On"));
+this->setHeaderData(14, Qt::Horizontal, QObject::tr("Edited On"));
 	this->select();
 //	if(ErpModel::GetInstance()->db.isOpen())
 //		ErpModel::GetInstance()->db.close();

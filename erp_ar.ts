@@ -142,7 +142,7 @@
     </message>
     <message>
         <source>Product</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">صنف</translation>
     </message>
     <message>
         <source>Product Field</source>

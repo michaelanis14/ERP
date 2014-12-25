@@ -1,6 +1,6 @@
-﻿/**************************************************************************
+/**************************************************************************
 **   File: loginindexui.h
-**   Created on: Wed Dec 17 14:47:08 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -27,16 +27,17 @@ public:
 	explicit LoginIndexUI(QWidget *parent = 0);
 	static void ShowUI();
 	static LoginIndexUI* GetUI();
-ERPTableView *tabel;
- Login *model;
- QPushButton* add;
- QPushButton* remove;
+ERPTableView *tabel; 
+ Login *model; 
+ QPushButton* add; 
+ QPushButton* remove; 
  QPushButton* edit;
 private:
 	static ERPDisplay* p_instance;
 private slots:
-	void addRow();
- void removeRow();
+	void addRow(); 
+ void removeRow(); 
+ void editRow(); 
  void onSelectionChanged();
 protected:
 void showEvent(QShowEvent * event);

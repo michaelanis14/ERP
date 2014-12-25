@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactpersonui.cpp
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 20:39:34 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,8 +32,6 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-title = new QLineEdit();
-block0Layout->addRow(QObject::tr("Title"),title);
 contact = new ERPComboBox();
 contact->addItems(Contact::GetPairList());
 block0Layout->addRow(QObject::tr("Contact"),contact);
@@ -74,15 +72,6 @@ block2Layout->addRow("ContactPersonEmails",addremoveContactPersonEmailButtons);
 QObject::connect(addremoveContactPersonEmailButtons, SIGNAL(addPressed()), this, SLOT(addContactPersonEmail()));
 
 flowLayout->addWidget(block2Layout);
-
-block3Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
- block3Layout->setMinimumWidth(330);
-AddRemoveButtons* addremoveProjectContactPersonButtons = new AddRemoveButtons();
-block3Layout->addRow("ProjectContactPersons",addremoveProjectContactPersonButtons);
-QObject::connect(addremoveProjectContactPersonButtons, SIGNAL(addPressed()), this, SLOT(addProjectContactPerson()));
-
-flowLayout->addWidget(block3Layout);
 
 }
 ERPDisplay* ContactPersonUI::p_instance = 0;
@@ -158,37 +147,9 @@ RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
 block2Layout->removeRow(sender);
 }
 }
-void ContactPersonUI::addProjectContactPerson(){ 
-ProjectContactPersonUI* projectcontactpersonui = new ProjectContactPersonUI();
-projectcontactpersonui->block0Layout->hideRow(projectcontactpersonui->contactperson);
-projectcontactpersonui->controllers->setFixedHeight(0);
-ProjectContactPersons.append(projectcontactpersonui);
-RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
-QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
-block3Layout->addRow(QObject::tr("ProjectContactPerson")+QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
-}
-void ContactPersonUI::addProjectContactPerson(ProjectContactPerson* projectcontactperson){ 
-ProjectContactPersonUI* projectcontactpersonui = new ProjectContactPersonUI();
-projectcontactpersonui->block0Layout->hideRow(projectcontactpersonui->contactperson);
-projectcontactpersonui->controllers->setFixedHeight(0);
-projectcontactpersonui->fill(projectcontactperson);
-ProjectContactPersons.append(projectcontactpersonui);
-RemovebtnWidgets* rmprojectcontactperson = new RemovebtnWidgets(0,projectcontactpersonui);
-QObject::connect(rmprojectcontactperson, SIGNAL(removePressed(QWidget*)), this, SLOT(removeProjectContactPerson(QWidget*)));
-block3Layout->addRow(QObject::tr("ProjectContactPerson") +QString::number(ProjectContactPersons.count()),rmprojectcontactperson);
-}
-void ContactPersonUI::removeProjectContactPerson(QWidget* widget){ 
-if(ProjectContactPersons.count()  > 0){
-ProjectContactPersonUI* projectcontactpersonui = (ProjectContactPersonUI*) widget;
-ProjectContactPersons.removeOne(projectcontactpersonui);
-RemovebtnWidgets* sender = (RemovebtnWidgets*) this->sender();
-block3Layout->removeRow(sender);
-}
-}
 void ContactPersonUI::fill(ContactPerson* contactperson){ 
 clear();
 this->contactperson = contactperson;
-title->setText(contactperson->Title);
 contact->setIndexByKey(contactperson->ContactID);
 name->setText(contactperson->Name);
 lastname->setText(contactperson->LastName);
@@ -201,16 +162,11 @@ addContactPersonTelephone(contactpersontelephone);
 foreach(ContactPersonEmail* contactpersonemail, contactperson->contactpersonemails) {
 addContactPersonEmail(contactpersonemail);
 }
-foreach(ProjectContactPerson* projectcontactperson, contactperson->projectcontactpersons) {
-addProjectContactPerson(projectcontactperson);
-}
 } 
 void ContactPersonUI::clear(){ 
 delete this->contactperson;
 this->ContactPersonTelephones.clear();
 this->ContactPersonEmails.clear();
-this->ProjectContactPersons.clear();
-title->setText("");
 lastname->setText("");
 position->setText("");
 birthdate->setDate(QDate::currentDate());
@@ -224,9 +180,9 @@ if(child->parent()->parent()->parent() != 0)
 this->contactperson = new ContactPerson();
 } 
 void ContactPersonUI::selectContactPerson(){ 
-if(ContactPerson::GetStringList().contains(this->contactperson->Title))
+if(ContactPerson::GetStringList().contains(QString::number(this->contactperson->ContactID)))
 {
-ContactPerson* con = ContactPerson::Get(this->contactperson->Title);
+ContactPerson* con = ContactPerson::Get(QString::number(this->contactperson->ContactID));
 if(this->contactperson->ContactPersonID != con->ContactPersonID){
 fill(con);
 }
@@ -237,21 +193,6 @@ clear();
 bool ContactPersonUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += QObject::tr("Title Can't be Empty! \n");
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-contactperson->Title = title->text().trimmed();
-}
 if(!contact->isHidden()) 
 contactperson->ContactID = contact->getKey();
 if(name->text().trimmed().isEmpty()){
@@ -389,20 +330,6 @@ flag = true;}}
 if(!flag){
 contactperson->contactpersonemails.at(i)->remove();}
 }
-for(int i = 0; i < ProjectContactPersons.length(); i++){
-ProjectContactPersons.at(i)->projectcontactperson->ContactPersonID= contactperson->ContactPersonID;
-if(!ProjectContactPersons.at(i)->save()){ 
- errors = true; 
- break; } 
-}
-for(int i = 0; i < contactperson->projectcontactpersons.length(); i++){
-bool flag = false;
-for(int j = 0; j < ProjectContactPersons.length(); j++){
-if(contactperson->projectcontactpersons.at(i)->ProjectContactPersonID == ProjectContactPersons.at(j)->projectcontactperson->ProjectContactPersonID){
-flag = true;}}
-if(!flag){
-contactperson->projectcontactpersons.at(i)->remove();}
-}
 if(!errors){
 ContactPersonIndexUI::ShowUI();
 return true;}
@@ -418,21 +345,6 @@ ContactPersonIndexUI::ShowUI();
 bool ContactPersonUI::updateModel(){ 
 bool errors = false;
 QString errorString =  "";
-if(title->text().trimmed().isEmpty()){
-errors = true;
-errorString += QObject::tr("Title Can't be Empty! \n");
-title->setObjectName("error");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-}
-else { 
-title->setObjectName("title");
-title->style()->unpolish(title);
-title->style()->polish(title);
-title->update();
-contactperson->Title = title->text().trimmed();
-}
 if(contactperson->ContactID == 0) 
 contactperson->ContactID = contact->getKey();
 if(name->text().trimmed().isEmpty()){
@@ -549,12 +461,6 @@ if(!ContactPersonTelephones.at(i)->updateModel()){
 for(int i = 0; i < ContactPersonEmails.length(); i++){
 ContactPersonEmails.at(i)->contactpersonemail->ContactPersonID= contactperson->ContactPersonID;
 if(!ContactPersonEmails.at(i)->updateModel()){ 
- errors = true; 
- break; } 
-}
-for(int i = 0; i < ProjectContactPersons.length(); i++){
-ProjectContactPersons.at(i)->projectcontactperson->ContactPersonID= contactperson->ContactPersonID;
-if(!ProjectContactPersons.at(i)->updateModel()){ 
  errors = true; 
  break; } 
 }

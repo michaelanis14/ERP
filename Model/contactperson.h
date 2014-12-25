@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: contactperson.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 20:39:34 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,15 +12,13 @@
 #include <QtGui>
 #include "contactpersontelephone.h"
 #include "contactpersonemail.h"
-#include "projectcontactperson.h"
 
 class ContactPerson  : public QSqlRelationalTableModel
 {
 	Q_OBJECT
 public:
 	ContactPerson();
-	ContactPerson(QString Title,int ContactID,QString Name,QString LastName,QString Position,QDate Birthdate,int Number,QString CreatedOn,QString EditedOn);	int ContactPersonID;
-	QString Title;
+	ContactPerson(int ContactID,QString Name,QString LastName,QString Position,QDate Birthdate,int Number,QString CreatedOn,QString EditedOn);	int ContactPersonID;
 	int ContactID;
 	QString Name;
 	QString LastName;
@@ -29,7 +27,6 @@ public:
 	int Number;
 	QList<ContactPersonTelephone*> contactpersontelephones;
 	QList<ContactPersonEmail*> contactpersonemails;
-	QList<ProjectContactPerson*> projectcontactpersons;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
@@ -54,8 +51,7 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	ContactPerson(int ContactPersonID,QString Title,int ContactID,QString Name,QString LastName,QString Position,QDate Birthdate,int Number,QString CreatedOn,QString EditedOn);	static ContactPerson* p_instance;
-	bool setTitle(int ContactPersonID, const QString &Title);
+	ContactPerson(int ContactPersonID,int ContactID,QString Name,QString LastName,QString Position,QDate Birthdate,int Number,QString CreatedOn,QString EditedOn);	static ContactPerson* p_instance;
 	bool setContactID(int ContactPersonID, const QString &ContactID);
 	bool setName(int ContactPersonID, const QString &Name);
 	bool setLastName(int ContactPersonID, const QString &LastName);

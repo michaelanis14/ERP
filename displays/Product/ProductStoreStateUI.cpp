@@ -76,24 +76,23 @@ void ProductStoreStateUI::refreshTabel(){
 	int row = 0; //row
 
 	foreach(Product* p,products){
-		QList<PurchaseStoreProduct*> purchases = PurchaseStoreProduct::QuerySelect("ProductID ="+ QString::number(p->ProductID)+" AND StoreID = " +QString::number(store->getKey()));
-		int purchasesSum = 0;
-		for(int i = 0; i < purchases.size();i++){
-			purchasesSum += (purchases[i]->Amount);
-		}
+		int purchasesSum = ErpModel::GetInstance()->qeryExec("Select Sum(Amount) From PurchaseStoreProduct Where ProductID ="+ QString::number(p->ProductID)+" AND StoreID = " +QString::number(store->getKey())).value(0).toInt();
+		int returnPurchasesSum = ErpModel::GetInstance()->qeryExec("Select Sum(Amount) From ReturnPurchaseStoreProduct Where ProductID ="+ QString::number(p->ProductID)+" AND StoreID = " +QString::number(store->getKey())).value(0).toInt();
 
-		QList<DeliveryOrderStoreProduct*> deliveries = DeliveryOrderStoreProduct::QuerySelect("ProductID = "+ QString::number(p->ProductID)+" AND StoreID = " +QString::number(store->getKey()));
-		int deliveriesSum = 0;
-		for(int i = 0; i < deliveries.size();i++){
-			deliveriesSum += (deliveries[i]->Amount);
-		}
+		int delvery = ErpModel::GetInstance()->qeryExec("Select Sum(Amount) From DeliveryOrderStoreProduct Where ProductID ="+ QString::number(p->ProductID)+" AND StoreID = " +QString::number(store->getKey())).value(0).toInt();
+		int returnDelivry = ErpModel::GetInstance()->qeryExec("Select Sum(Amount) From ReturnDeliveryOrderStoreProduct Where ProductID ="+ QString::number(p->ProductID)+" AND StoreID = " +QString::number(store->getKey())).value(0).toInt();
+
+
+		int total = (purchasesSum - returnPurchasesSum) -(delvery - returnDelivry);
+
+
 
 		model->setItem(row,0,new QStandardItem(QString::number(p->ProductID)));
 		model->setItem(row,1,new QStandardItem(store->currentText()));
 
 		model->setItem(row,2,new QStandardItem(p->Barcode));
 		model->setItem(row,3,new QStandardItem(p->Name));
-		model->setItem(row,4,new QStandardItem(QString::number(purchasesSum - deliveriesSum)));
+		model->setItem(row,4,new QStandardItem(QString::number(total)));
 
 		row++;
 	}

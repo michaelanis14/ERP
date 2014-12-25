@@ -1,10 +1,11 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: contact.cpp
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 12:57:58 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
 #include "contact.h"
+#include "project.h"
 #include "erpmodel.h"
 
 Contact::Contact()
@@ -117,20 +118,27 @@ if(ContactID== 0) {
 this->CreatedOn = QDate::currentDate().toString();
 ErpModel::GetInstance()->qeryExec("INSERT INTO Contact (Name,Salutation,BirthdateOrDateOfFoundation,ContactTypeID,ContactClassID,Serial,Address,PostalCode,City,CountryID,ContactStatusID,Website,TaxNumber,CreatedOn,EditedOn)"
 "VALUES ('" +QString(this->Name)+"','"+QString(this->Salutation)+"','"+(this->BirthdateOrDateOfFoundation.toString("yyyy-MM-dd"))+"','"+QString::number(this->ContactTypeID)+"','"+QString::number(this->ContactClassID)+"','"+QString::number(this->Serial)+"','"+QString(this->Address)+"','"+QString(this->PostalCode)+"','"+QString(this->City)+"','"+QString::number(this->CountryID)+"','"+QString::number(this->ContactStatusID)+"','"+QString(this->Website)+"','"+QString(this->TaxNumber)+"','"+QString(this->CreatedOn)+"','"+QString(this->EditedOn)+"')");
+QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactID FROM Contact WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
+while (query.next()) {
+ if(query.value(0).toInt() != 0){
+ this->ContactID = query.value(0).toInt();
+
+ }
+ }
+if(ContactTypeID == 1 ||ContactTypeID == 3){
+Project * MainProject = new Project (QObject::tr("Main Project"),1,this->ContactID,QDate::currentDate(),QDate::currentDate().addYears(10),true,QObject::tr("No Notes"),QDate::currentDate().toString("yyyy-MM-dd"),QDate::currentDate().toString("yyyy-MM-dd"));
+MainProject->save();
+}
 }else {
 ErpModel::GetInstance()->qeryExec("UPDATE Contact SET "	"Name = '"+QString(this->Name)+"',"+"Salutation = '"+QString(this->Salutation)+"',"+"BirthdateOrDateOfFoundation = '"+(this->BirthdateOrDateOfFoundation.toString("yyyy-MM-dd"))+"',"+"ContactTypeID = '"+QString::number(this->ContactTypeID)+"',"+"ContactClassID = '"+QString::number(this->ContactClassID)+"',"+"Serial = '"+QString::number(this->Serial)+"',"+"Address = '"+QString(this->Address)+"',"+"PostalCode = '"+QString(this->PostalCode)+"',"+"City = '"+QString(this->City)+"',"+"CountryID = '"+QString::number(this->CountryID)+"',"+"ContactStatusID = '"+QString::number(this->ContactStatusID)+"',"+"Website = '"+QString(this->Website)+"',"+"TaxNumber = '"+QString(this->TaxNumber)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE ContactID ='"+QString::number(this->ContactID)+"'");
- }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  ContactID FROM Contact WHERE Name = '"+Name+"' AND EditedOn = '"+this->EditedOn+"'"  );
-while (query.next()) { 
- if(query.value(0).toInt() != 0){ 
- this->ContactID = query.value(0).toInt();	
- } 
  }
+
 return true;
 }
 bool Contact::save(QSqlRecord &record) {
-	if(ErpModel::GetInstance()->db.open()) 
- if(this->insertRowIntoTable(record)) 
- return true; 
+	if(ErpModel::GetInstance()->db.open())
+ if(this->insertRowIntoTable(record))
+ return true;
  return false;
 }
 
@@ -179,8 +187,8 @@ return contact;
 }
 
 Contact* Contact::get(const QModelIndex &index) {
-QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
- if(data(primaryKeyIndex).toInt() != 0) 
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+ if(data(primaryKeyIndex).toInt() != 0)
  return Get(data(primaryKeyIndex).toInt());
 else return new Contact();
 }
@@ -205,7 +213,7 @@ QList<Contact*> Contact::Search(QString keyword) {
 QList<Contact*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM Contact"
-"WHERE" 
+"WHERE"
 "Name LIKE '%"+keyword+"%'"
 "OR Salutation LIKE '%"+keyword+"%'"
 "OR Address LIKE '%"+keyword+"%'"

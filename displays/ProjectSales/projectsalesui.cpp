@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: projectsalesui.cpp
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Thu Dec 18 12:57:58 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -25,51 +25,51 @@ QPushButton* save = new QPushButton("Save");
  QPushButton* clear = new QPushButton("Clear");
  QObject::connect(clear, SIGNAL(clicked()), this, SLOT(clear()));
  clear->setObjectName("clear");
- this->controllers->addControllerButton(save); 
- this->controllers->addControllerButton(clear);  
+ this->controllers->addControllerButton(save);
+ this->controllers->addControllerButton(clear);
  this->controllers->addControllerButton(cancel);
 block0Layout = new ERPFormBlock;
-if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
+if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel")
  block0Layout->setMinimumWidth(330);
 project = new ERPComboBox();
 project->addItems(Project::GetPairList());
 block0Layout->addRow(QObject::tr("Project"),project);
 contact = new ERPComboBox();
-contact->addItems(Contact::GetPairList());
+contact->addItems(Contact::GetPairList((Contact::QuerySelect("ContactTypeID = 4"))));
 block0Layout->addRow(QObject::tr("Contact"),contact);
 flowLayout->addWidget(block0Layout);
 
 }
 ERPDisplay* ProjectSalesUI::p_instance = 0;
-void ProjectSalesUI::ShowUI() { 
- if(ErpModel::GetInstance()->LoggedUser->UserID == 0) 
- LoginUI::ShowUI(); 
- else if(ErpModel::GetInstance()->UserAccessList.length() > 0){ 
- if( !ErpModel::GetInstance()->UserAccessList.at(0)->ProjectSales) 
- QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission")); 
- else{	if (p_instance != 0) 
-	p_instance->deleteLater(); 
-	p_instance = new ProjectSalesUI(mainwindow::GetMainDisplay()); 
-  mainwindow::ShowDisplay(p_instance); 
-} 
- }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
-ProjectSalesUI*ProjectSalesUI::GetUI(){ 
- 	if (p_instance == 0) { 
-		p_instance = new ERPDisplay(mainwindow::GetMainDisplay()); 
-	} 
-	return (ProjectSalesUI*) p_instance; 
+void ProjectSalesUI::ShowUI() {
+ if(ErpModel::GetInstance()->LoggedUser->UserID == 0)
+ LoginUI::ShowUI();
+ else if(ErpModel::GetInstance()->UserAccessList.length() > 0){
+ if( !ErpModel::GetInstance()->UserAccessList.at(0)->ProjectSales)
+ QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have Permission"));
+ else{	if (p_instance != 0)
+	p_instance->deleteLater();
+	p_instance = new ProjectSalesUI(mainwindow::GetMainDisplay());
+  mainwindow::ShowDisplay(p_instance);
 }
-void ProjectSalesUI::fill(ProjectSales* projectsales){ 
+ }else	QMessageBox::warning(0, QObject::tr("Access Permission"),QObject::tr("You do not have a Permission List")); }
+ProjectSalesUI*ProjectSalesUI::GetUI(){
+	if (p_instance == 0) {
+		p_instance = new ERPDisplay(mainwindow::GetMainDisplay());
+	}
+	return (ProjectSalesUI*) p_instance;
+}
+void ProjectSalesUI::fill(ProjectSales* projectsales){
 clear();
 this->projectsales = projectsales;
 project->setIndexByKey(projectsales->ProjectID);
 contact->setIndexByKey(projectsales->ContactID);
-} 
-void ProjectSalesUI::clear(){ 
+}
+void ProjectSalesUI::clear(){
 delete this->projectsales;
 this->projectsales = new ProjectSales();
-} 
-void ProjectSalesUI::selectProjectSales(){ 
+}
+void ProjectSalesUI::selectProjectSales(){
 if(ProjectSales::GetStringList().contains(QString::number(this->projectsales->ProjectID)))
 {
 ProjectSales* con = ProjectSales::Get(QString::number(this->projectsales->ProjectID));
@@ -80,12 +80,12 @@ fill(con);
 else if(projectsales->ProjectSalesID != 0)
 clear();
 }
-bool ProjectSalesUI::save(){ 
+bool ProjectSalesUI::save(){
 bool errors = false;
 QString errorString =  "";
-if(!project->isHidden()) 
+if(!project->isHidden())
 projectsales->ProjectID = project->getKey();
-if(!contact->isHidden()) 
+if(!contact->isHidden())
 projectsales->ContactID = contact->getKey();
 if(!errors) {
 projectsales->save();
@@ -95,23 +95,23 @@ return true;}
 else return false;
 }
 else{ QMessageBox::warning(this, QObject::tr("ProjectSales"),errorString.trimmed());
-return false; 
+return false;
  }
 }
-void ProjectSalesUI::cancel(){ 
+void ProjectSalesUI::cancel(){
 ProjectSalesIndexUI::ShowUI();
 }
-bool ProjectSalesUI::updateModel(){ 
+bool ProjectSalesUI::updateModel(){
 bool errors = false;
 QString errorString =  "";
-if(projectsales->ProjectID == 0) 
+if(projectsales->ProjectID == 0)
 projectsales->ProjectID = project->getKey();
-if(projectsales->ContactID == 0) 
+if(projectsales->ContactID == 0)
 projectsales->ContactID = contact->getKey();
 if(!errors){
 	return true;
 }
 else{ if(!errorString.trimmed().isEmpty()) QMessageBox::warning(this, QObject::tr("ProjectSales"),errorString.trimmed());
-return false; 
+return false;
  }
 }

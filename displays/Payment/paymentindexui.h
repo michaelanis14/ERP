@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentindexui.h
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Sat Dec 20 02:32:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -12,8 +12,9 @@
 #include "../CommonUI/erpcombobox.h"
 #include "../CommonUI/erptableview.h"
 #include "../../Model/payment.h"
-#include "../../Model/invoice.h"
 #include "../../Model/paymenttype.h"
+#include "../../Model/contact.h"
+#include "../../Model/project.h"
 
 
 #include <QWidget>

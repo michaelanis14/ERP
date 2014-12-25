@@ -30,7 +30,7 @@ public:
 	class QToolButton* btnProjects;
 	class QToolButton* btnProducts;
 	class QToolButton* btnAccounting;
-	class QToolButton* btnReports;
+	class QToolButton* btnInvoices;
 //Home
 		class QPushButton* inNavAccess;
 		class QPushButton* inNavLogin;
@@ -38,7 +38,7 @@ public:
 //Contacts
 	class QPushButton* inNavContacts;
 	class QPushButton* inNavcontactPersones;
-	class QPushButton* inNavcontactType;
+	class QPushButton* inNavTask;
 
 //Project
 		class QPushButton* inNavProjects;
@@ -48,8 +48,17 @@ public:
 	class QPushButton* inNavProducts;
 	class QPushButton* inNavStoreHouse;
 	class QPushButton* inNavPurchase;
+	class QPushButton* inNavReturnPurchase;
 	class QPushButton* inNavDeliveryOrder;
+	class QPushButton* inNavReturnDeliveryOrder;
 	class QPushButton* inNavStoreStatus;
+
+//Invoices
+		class QPushButton* inNavInvoices;
+		class QPushButton* inNavPayments;
+//Accounting
+		class QPushButton* inNavCustomer;
+		class QPushButton* inNavSupplier;
 private:
 	static mainwindow* p_instance;
 	class ERPDisplay* currentDisplay;
@@ -64,7 +73,7 @@ protected slots:
 	void btnProjectsClicked();
 	void btnProductsClicked();
 	void btnAccountingClicked();
-	void btnReportsClicked();
+	void btnInvoicesClicked();
 	void innerNavClicked();
 };
 

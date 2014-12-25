@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: purchaseserial.cpp
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -68,17 +68,17 @@ ErpModel::GetInstance()->qeryExec("INSERT INTO PurchaseSerial (Title,Serial,Crea
 }else {
 ErpModel::GetInstance()->qeryExec("UPDATE PurchaseSerial SET "	"Title = '"+QString(this->Title)+"',"+"Serial = '"+QString::number(this->Serial)+"',"+"CreatedOn = '"+QString(this->CreatedOn)+"',"+"EditedOn = '"+QString(this->EditedOn)+"' WHERE PurchaseSerialID ='"+QString::number(this->PurchaseSerialID)+"'");
  }QSqlQuery query = ErpModel::GetInstance()->qeryExec("SELECT  PurchaseSerialID FROM PurchaseSerial WHERE Title = '"+Title+"' AND EditedOn = '"+this->EditedOn+"'"  );
-while (query.next()) { 
- if(query.value(0).toInt() != 0){ 
- this->PurchaseSerialID = query.value(0).toInt();	
- } 
+while (query.next()) {
+ if(query.value(0).toInt() != 0){
+ this->PurchaseSerialID = query.value(0).toInt();
+ }
  }
 return true;
 }
 bool PurchaseSerial::save(QSqlRecord &record) {
-	if(ErpModel::GetInstance()->db.open()) 
- if(this->insertRowIntoTable(record)) 
- return true; 
+	if(ErpModel::GetInstance()->db.open())
+ if(this->insertRowIntoTable(record))
+ return true;
  return false;
 }
 
@@ -124,8 +124,8 @@ return purchaseserial;
 }
 
 PurchaseSerial* PurchaseSerial::get(const QModelIndex &index) {
-QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0); 
- if(data(primaryKeyIndex).toInt() != 0) 
+QModelIndex primaryKeyIndex = QSqlRelationalTableModel::index(index.row(), 0);
+ if(data(primaryKeyIndex).toInt() != 0)
  return Get(data(primaryKeyIndex).toInt());
 else return new PurchaseSerial();
 }
@@ -147,7 +147,7 @@ QList<PurchaseSerial*> PurchaseSerial::Search(QString keyword) {
 QList<PurchaseSerial*>list;
 if(keyword != NULL) {
 QSqlQuery query = (ErpModel::GetInstance()->qeryExec("SELECT *  FROM PurchaseSerial"
-"WHERE" 
+"WHERE"
 "Title LIKE '%"+keyword+"%'"
 "OR CreatedOn LIKE '%"+keyword+"%'"
 "OR EditedOn LIKE '%"+keyword+"%'"
@@ -175,7 +175,7 @@ QList<QPair< int,QString > > PurchaseSerial::GetPairList() {
 	QList<PurchaseSerial*> purchaseserials =   QList<PurchaseSerial*>();
 purchaseserials = GetAll();
 	for(int i = 0; i <purchaseserials.count(); i++){
-		list.append(qMakePair(purchaseserials[i]->PurchaseSerialID,purchaseserials[i]->Title));
+		list.append(qMakePair(purchaseserials[i]->PurchaseSerialID,purchaseserials[i]->Title +"-"+ QString::number(purchaseserials[i]->Serial) ));
 	}
 	return list;
 }
@@ -183,7 +183,7 @@ purchaseserials = GetAll();
 QList<QPair< int,QString > > PurchaseSerial::GetPairList(QList<PurchaseSerial*> purchaseserials) {
 	QList<QPair<int,QString > > list;
 	for(int i = 0; i <purchaseserials.count(); i++){
-		list.append(qMakePair(purchaseserials[i]->PurchaseSerialID,purchaseserials[i]->Title));
+		list.append(qMakePair(purchaseserials[i]->PurchaseSerialID,purchaseserials[i]->Title+"-"+ QString::number(purchaseserials[i]->Serial)));
 	}
 	return list;
 }

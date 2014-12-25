@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: invoiceindexui.h
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Fri Dec 19 22:39:36 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -13,13 +13,15 @@
 #include "../CommonUI/erptableview.h"
 #include "../../Model/invoice.h"
 #include "../../Model/invoiceserial.h"
+#include "../../Model/contact.h"
+#include "../../Model/project.h"
 #include "../../Model/invoiceperiod.h"
 #include "../../Model/invoiceyear.h"
-#include "../../Model/project.h"
 
-#include "../InvoiceStateDate/invoicestatedateui.h"
+#include "../InvoiceStoreProduct/invoicestoreproductui.h"
+#include "../InvoiceService/invoiceserviceui.h"
+#include "../InvoiceDeliveryOrderFreeline/invoicedeliveryorderfreelineui.h"
 #include "../InvoiceFreeline/invoicefreelineui.h"
-#include "../Payment/paymentui.h"
 
 #include <QWidget>
 #include <QLineEdit>

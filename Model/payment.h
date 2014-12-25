@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: payment.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Sat Dec 20 02:32:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,11 +16,14 @@ class Payment  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	Payment();
-	Payment(int InvoiceID,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn);	int PaymentID;
-	int InvoiceID;
-	double TotalAmount;
-	QString Comment;
+	Payment(int PaymentTypeID,int ContactID,int ProjectID,QDate Date,double NetAmount,double GrossAmount,QString Comment,QString CreatedOn,QString EditedOn);	int PaymentID;
 	int PaymentTypeID;
+	int ContactID;
+	int ProjectID;
+	QDate Date;
+	double NetAmount;
+	double GrossAmount;
+	QString Comment;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
@@ -45,11 +48,14 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	Payment(int PaymentID,int InvoiceID,double TotalAmount,QString Comment,int PaymentTypeID,QString CreatedOn,QString EditedOn);	static Payment* p_instance;
-	bool setInvoiceID(int PaymentID, const QString &InvoiceID);
-	bool setTotalAmount(int PaymentID, const QString &TotalAmount);
-	bool setComment(int PaymentID, const QString &Comment);
+	Payment(int PaymentID,int PaymentTypeID,int ContactID,int ProjectID,QDate Date,double NetAmount,double GrossAmount,QString Comment,QString CreatedOn,QString EditedOn);	static Payment* p_instance;
 	bool setPaymentTypeID(int PaymentID, const QString &PaymentTypeID);
+	bool setContactID(int PaymentID, const QString &ContactID);
+	bool setProjectID(int PaymentID, const QString &ProjectID);
+	bool setDate(int PaymentID, const QString &Date);
+	bool setNetAmount(int PaymentID, const QString &NetAmount);
+	bool setGrossAmount(int PaymentID, const QString &GrossAmount);
+	bool setComment(int PaymentID, const QString &Comment);
 	bool setCreatedOn(int PaymentID, const QString &CreatedOn);
 	bool setEditedOn(int PaymentID, const QString &EditedOn);
 

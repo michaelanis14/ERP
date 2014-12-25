@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderservice.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -16,10 +16,11 @@ class DeliveryOrderService  : public QSqlRelationalTableModel
 	Q_OBJECT
 public:
 	DeliveryOrderService();
-	DeliveryOrderService(int DeliveryOrderID,int ServiceID,double Amount,QString CreatedOn,QString EditedOn);	int DeliveryOrderServiceID;
+	DeliveryOrderService(int DeliveryOrderID,int ServiceID,double Amount,double Price,QString CreatedOn,QString EditedOn);	int DeliveryOrderServiceID;
 	int DeliveryOrderID;
 	int ServiceID;
 	double Amount;
+	double Price;
 	QString CreatedOn;
 	QString EditedOn;
 	static bool Init();
@@ -44,10 +45,11 @@ public:
 	bool remove(const QModelIndex &index);
 
 private:
-	DeliveryOrderService(int DeliveryOrderServiceID,int DeliveryOrderID,int ServiceID,double Amount,QString CreatedOn,QString EditedOn);	static DeliveryOrderService* p_instance;
+	DeliveryOrderService(int DeliveryOrderServiceID,int DeliveryOrderID,int ServiceID,double Amount,double Price,QString CreatedOn,QString EditedOn);	static DeliveryOrderService* p_instance;
 	bool setDeliveryOrderID(int DeliveryOrderServiceID, const QString &DeliveryOrderID);
 	bool setServiceID(int DeliveryOrderServiceID, const QString &ServiceID);
 	bool setAmount(int DeliveryOrderServiceID, const QString &Amount);
+	bool setPrice(int DeliveryOrderServiceID, const QString &Price);
 	bool setCreatedOn(int DeliveryOrderServiceID, const QString &CreatedOn);
 	bool setEditedOn(int DeliveryOrderServiceID, const QString &EditedOn);
 

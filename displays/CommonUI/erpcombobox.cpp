@@ -19,60 +19,62 @@ ERPComboBox::ERPComboBox(QWidget *parent) :
 	this->addedItems = false;
 }
 void ERPComboBox::addItems(QList<QPair<int, QString> > pairList){
-
+	int c = this->count();
+	for(int i = 0; i < c;i++){
+		QComboBox::removeItem(0);
+	}
 
 	this->items = pairList;
 	QList<QString> list;
 	for(int i = 0; i < pairList.length();i++) {
 		this->addedItems = true;
-
-
+		QComboBox::insertItem(i,pairList.at(i).second);
 		list.append(pairList.at(i).second);
 	}
-	QComboBox::addItems(list);
+
 }
 
 void ERPComboBox::focusOutEvent(QFocusEvent *e)
 {
-if(this->addedItems){
+	if(this->addedItems){
 
-	QRegExp re("\\d*");
-	if(this->currentText()==""){
-		//qDebug() <<"EMP";
-		this->clearEditText();
-		this->setCurrentText(this->itemText(this->currentIndex()));
-	}
-	else if (re.exactMatch(this->currentText())){
-		int index = this->currentText().toInt()-1;
-
-		if(index > -1 && index < this->count() )
-			this->setCurrentIndex(index);
-		else
+		QRegExp re("\\d*");
+		if(this->currentText()==""){
+			//qDebug() <<"EMP";
+			this->clearEditText();
 			this->setCurrentText(this->itemText(this->currentIndex()));
-	}
-	else if(this->completer()->currentCompletion() ==""){
-		//qDebug()  <<"noComp";
-		this->clearEditText();
-		this->setCurrentText(this->itemText(this->currentIndex()));
-	}
-	else{
-		this->clearEditText();
-		this->setCurrentText(this->itemText(this->currentIndex()));
+		}
+		else if (re.exactMatch(this->currentText())){
+			int index = this->currentText().toInt()-1;
 
-	}
+			if(index > -1 && index < this->count() )
+				this->setCurrentIndex(index);
+			else
+				this->setCurrentText(this->itemText(this->currentIndex()));
+		}
+		else if(this->completer()->currentCompletion() ==""){
+			//qDebug()  <<"noComp";
+			this->clearEditText();
+			this->setCurrentText(this->itemText(this->currentIndex()));
+		}
+		else{
+			this->clearEditText();
+			this->setCurrentText(this->itemText(this->currentIndex()));
 
-	this->clearFocus();
-	this->clearMask();
-}
+		}
+
+		this->clearFocus();
+		this->clearMask();
+	}
 	QWidget::focusOutEvent(e);
 
 }
 
 int ERPComboBox::getKey(){
-if(this->addedItems){
-//	qDebug() << currentIndex()<< items.at(currentIndex()).first << items.at(currentIndex()).second;
-return items.at(currentIndex()).first;
-}
+	if(this->addedItems){
+		//	qDebug() << currentIndex()<< items.at(currentIndex()).first << items.at(currentIndex()).second;
+		return items.at(currentIndex()).first;
+	}
 	return 0;
 }
 

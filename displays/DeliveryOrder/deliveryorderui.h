@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: deliveryorderui.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Fri Dec 19 13:01:04 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -47,6 +47,7 @@ public:
 	QList<DeliveryOrderStoreProductUI*> DeliveryOrderStoreProducts;
 	QList<DeliveryOrderServiceUI*> DeliveryOrderServices;
 	QList<DeliveryOrderFreelineUI*> DeliveryOrderFreelines;
+	QLineEdit*serial;
 	ERPComboBox*deliveryorderserial;
 	ERPComboBox*deliveryorderstatus;
 	ERPComboBox*contact;
@@ -77,5 +78,6 @@ private slots:
 public slots:
 	bool save();
 	bool updateModel();
+	void selectionChanged(QString);
 };
 #endif

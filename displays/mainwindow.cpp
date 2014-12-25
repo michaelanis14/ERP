@@ -13,12 +13,16 @@
 #include "displays/Product/ProductStoreStateUI.h"
 #include "displays/Store/storeindexui.h"
 #include "displays/Purchase/purchaseindexui.h"
+#include "displays/ReturnPurchase/returnpurchaseindexui.h"
 #include "displays/DeliveryOrder/deliveryorderindexui.h"
+#include "displays/ReturnDeliveryOrder/returndeliveryorderindexui.h"
 #include "displays/Service/serviceindexui.h"
 #include "displays/Project/projectindexui.h"
 #include "displays/TimeBooking/timebookingindexui.h"
 #include "displays/Access/accessindexui.h"
 #include "displays/Login/loginui.h"
+#include "displays/Invoice/invoiceindexui.h"
+#include "displays/Payment/paymentindexui.h"
 
 /**
 * A class.
@@ -34,7 +38,7 @@
 mainwindow::mainwindow()
 {
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN332
 	this->setCursor(Qt::BlankCursor);
 	this->setWindowFlags(Qt::FramelessWindowHint);
 #endif
@@ -139,11 +143,11 @@ mainwindow::mainwindow()
 	navigation->addButton(btnAccounting);
 	connect(this->btnAccounting, SIGNAL(clicked()), this, SLOT(btnAccountingClicked()));
 
-	btnReports = new QToolButton(navigation);
-	btnReports->setIcon(icon1);
-	btnReports->setText(QObject::tr("Reports"));
-	navigation->addButton(btnReports);
-	connect(this->btnReports, SIGNAL(clicked()), this, SLOT(btnReportsClicked()));
+	btnInvoices = new QToolButton(navigation);
+	btnInvoices->setIcon(icon1);
+	btnInvoices->setText(QObject::tr("Invoices"));
+	navigation->addButton(btnInvoices);
+	connect(this->btnInvoices, SIGNAL(clicked()), this, SLOT(btnInvoicesClicked()));
 
 	innerNavigation = new HNavigationButtons(this);
 	innerNavigation->setGeometry(this->navigation->width(),0,this->width()-this->navigation->width(),40);
@@ -171,7 +175,12 @@ mainwindow::mainwindow()
 	inNavcontactPersones = new QPushButton(icon1,"ContactPersone");
 	inNavcontactPersones->setObjectName("inNavcontactPersones");
 	connect(this->inNavcontactPersones, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
-//Projects
+	inNavTask = new QPushButton(icon1,"Task");
+	inNavTask->setObjectName("inNavTask");
+	connect(this->inNavTask, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
+
+	//Projects
 	inNavProjects =	 new QPushButton(icon1,QObject::tr("Projects"));
 	inNavProjects->setObjectName("inNavProjects");
 	connect(this->inNavProjects, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
@@ -195,13 +204,38 @@ mainwindow::mainwindow()
 	inNavPurchase = new QPushButton(icon1,QObject::tr("Purchase"));
 	inNavPurchase->setObjectName("inNavPurchase");
 	connect(this->inNavPurchase, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavReturnPurchase = new QPushButton(icon1,QObject::tr("Return Purchase"));
+	inNavReturnPurchase->setObjectName("inNavReturnPurchase");
+	connect(this->inNavReturnPurchase, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
 	inNavDeliveryOrder = new QPushButton(icon1,QObject::tr("Delivery Order"));
 	inNavDeliveryOrder->setObjectName("inNavDeliveryOrder");
 	connect(this->inNavDeliveryOrder, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+	inNavReturnDeliveryOrder = new QPushButton(icon1,QObject::tr("Return Delivery Order"));
+	inNavReturnDeliveryOrder->setObjectName("inNavReturnDeliveryOrder");
+	connect(this->inNavReturnDeliveryOrder, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
 	inNavStoreStatus = new QPushButton(icon1,QObject::tr("StoreStatus"));
 	inNavStoreStatus->setObjectName("inNavStoreStatus");
 	connect(this->inNavStoreStatus, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
+	//Invoices
+		inNavInvoices = new QPushButton(icon1,QObject::tr("Invoices"));
+		inNavInvoices->setObjectName("inNavInvoices");
+		connect(this->inNavInvoices, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
+		inNavPayments = new QPushButton(icon1,QObject::tr("Payments"));
+		inNavPayments->setObjectName("inNavPayments");
+		connect(this->inNavPayments, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
+	//Accounting
+			inNavCustomer = new QPushButton(icon1,QObject::tr("Customer"));
+			inNavCustomer->setObjectName("inNavContacts");
+			connect(this->inNavCustomer, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
+
+			inNavSupplier = new QPushButton(icon1,QObject::tr("Supplier"));
+			inNavSupplier->setObjectName("inNavSupplier");
+			connect(this->inNavSupplier, SIGNAL(clicked()), this, SLOT(innerNavClicked()));
 
 
 }
@@ -305,6 +339,7 @@ void mainwindow::btnContactsClicked(){
 	innerNavigation->removeAll();
 	innerNavigation->addButton(inNavContacts);
 	innerNavigation->addButton(inNavcontactPersones);
+	innerNavigation->addButton(inNavTask);
 	inNavContacts->click();
 }
 
@@ -313,12 +348,20 @@ void mainwindow::btnProductsClicked(){
 	innerNavigation->addButton(inNavProducts);
 	innerNavigation->addButton(inNavStoreHouse);
 	innerNavigation->addButton(inNavPurchase);
+	innerNavigation->addButton(inNavReturnPurchase);
 	innerNavigation->addButton(inNavDeliveryOrder);
+	innerNavigation->addButton(inNavReturnDeliveryOrder);
 	innerNavigation->addButton(inNavStoreStatus);
 	inNavProducts->click();
 }
 void mainwindow::btnAccountingClicked(){;}
-void mainwindow::btnReportsClicked(){;}
+void mainwindow::btnInvoicesClicked(){
+
+	innerNavigation->removeAll();
+	innerNavigation->addButton(inNavInvoices);
+	innerNavigation->addButton(inNavPayments);
+	inNavInvoices->click();
+}
 void mainwindow::innerNavClicked(){
 	QPushButton* sender = (QPushButton*) this->sender();
 	if(!sender)
@@ -350,9 +393,16 @@ void mainwindow::innerNavClicked(){
 		AccessIndexUI::ShowUI();
 	else  if(sender->objectName() == "inNavLogin")
 		LoginUI::ShowUI();
-
-
-
+	else  if(sender->objectName() == "inNavReturnPurchase")
+		ReturnPurchaseIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavReturnDeliveryOrder")
+		ReturnDeliveryOrderIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavInvoices")
+		InvoiceIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavPayments")
+		PaymentIndexUI::ShowUI();
+	else  if(sender->objectName() == "inNavTask")
+		TaskIndexUI::ShowUI();
 }
 
 void mainwindow::btnProjectsClicked(){

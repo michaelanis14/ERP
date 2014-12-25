@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: paymentui.cpp
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Sat Dec 20 02:32:00 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -32,17 +32,27 @@ QPushButton* save = new QPushButton("Save");
 block0Layout = new ERPFormBlock;
 if(this->flowLayout && this->flowLayout->parent()->objectName() == "formPanel") 
  block0Layout->setMinimumWidth(330);
-invoice = new ERPComboBox();
-invoice->addItems(Invoice::GetPairList());
-block0Layout->addRow(QObject::tr("Invoice"),invoice);
-totalamount = new QLineEdit();
-totalamount->setValidator( doubleValidator );
-block0Layout->addRow(QObject::tr("Total Amount"),totalamount);
-comment = new QLineEdit();
-block0Layout->addRow(QObject::tr("Comment"),comment);
 paymenttype = new ERPComboBox();
 paymenttype->addItems(PaymentType::GetPairList());
 block0Layout->addRow(QObject::tr("Payment Type"),paymenttype);
+contact = new ERPComboBox();
+contact->addItems(Contact::GetPairList());
+block0Layout->addRow(QObject::tr("Contact"),contact);
+project = new ERPComboBox();
+project->addItems(Project::GetPairList());
+block0Layout->addRow(QObject::tr("Project"),project);
+date = new QDateEdit(QDate::currentDate());
+date->setCalendarPopup(true);
+date->setDisplayFormat("ddd dd/MM/yyyy");
+block0Layout->addRow(QObject::tr("Date"),date);
+netamount = new QLineEdit();
+netamount->setValidator( doubleValidator );
+block0Layout->addRow(QObject::tr("Net Amount"),netamount);
+grossamount = new QLineEdit();
+grossamount->setValidator( doubleValidator );
+block0Layout->addRow(QObject::tr("Gross Amount"),grossamount);
+comment = new QLineEdit();
+block0Layout->addRow(QObject::tr("Comment"),comment);
 flowLayout->addWidget(block0Layout);
 
 }
@@ -68,21 +78,26 @@ PaymentUI*PaymentUI::GetUI(){
 void PaymentUI::fill(Payment* payment){ 
 clear();
 this->payment = payment;
-invoice->setIndexByKey(payment->InvoiceID);
-totalamount->setText(QString::number(payment->TotalAmount));
-comment->setText(payment->Comment);
 paymenttype->setIndexByKey(payment->PaymentTypeID);
+contact->setIndexByKey(payment->ContactID);
+project->setIndexByKey(payment->ProjectID);
+date->setDate(payment->Date);
+netamount->setText(QString::number(payment->NetAmount));
+grossamount->setText(QString::number(payment->GrossAmount));
+comment->setText(payment->Comment);
 } 
 void PaymentUI::clear(){ 
 delete this->payment;
-totalamount->setText("");
+date->setDate(QDate::currentDate());
+netamount->setText("");
+grossamount->setText("");
 comment->setText("");
 this->payment = new Payment();
 } 
 void PaymentUI::selectPayment(){ 
-if(Payment::GetStringList().contains(QString::number(this->payment->InvoiceID)))
+if(Payment::GetStringList().contains(QString::number(this->payment->PaymentTypeID)))
 {
-Payment* con = Payment::Get(QString::number(this->payment->InvoiceID));
+Payment* con = Payment::Get(QString::number(this->payment->PaymentTypeID));
 if(this->payment->PaymentID != con->PaymentID){
 fill(con);
 }
@@ -93,22 +108,56 @@ clear();
 bool PaymentUI::save(){ 
 bool errors = false;
 QString errorString =  "";
-if(!invoice->isHidden()) 
-payment->InvoiceID = invoice->getKey();
-if(totalamount->text().trimmed().isEmpty()){
+if(!paymenttype->isHidden()) 
+payment->PaymentTypeID = paymenttype->getKey();
+if(!contact->isHidden()) 
+payment->ContactID = contact->getKey();
+if(!project->isHidden()) 
+payment->ProjectID = project->getKey();
+if(date->text().trimmed().isEmpty()){
 errors = true;
-errorString += QObject::tr("Total Amount Can't be Empty! \n");
-totalamount->setObjectName("error");
-totalamount->style()->unpolish(totalamount);
-totalamount->style()->polish(totalamount);
-totalamount->update();
+errorString += QObject::tr("Date Can't be Empty! \n");
+date->setObjectName("error");
+date->style()->unpolish(date);
+date->style()->polish(date);
+date->update();
 }
 else { 
-totalamount->setObjectName("totalamount");
-totalamount->style()->unpolish(totalamount);
-totalamount->style()->polish(totalamount);
-totalamount->update();
-payment->TotalAmount = totalamount->text().trimmed().toDouble();
+date->setObjectName("date");
+date->style()->unpolish(date);
+date->style()->polish(date);
+date->update();
+payment->Date.setDate(date->date().year(),date->date().month(),date->date().day());
+}
+if(netamount->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Net Amount Can't be Empty! \n");
+netamount->setObjectName("error");
+netamount->style()->unpolish(netamount);
+netamount->style()->polish(netamount);
+netamount->update();
+}
+else { 
+netamount->setObjectName("netamount");
+netamount->style()->unpolish(netamount);
+netamount->style()->polish(netamount);
+netamount->update();
+payment->NetAmount = netamount->text().trimmed().toDouble();
+}
+if(grossamount->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Gross Amount Can't be Empty! \n");
+grossamount->setObjectName("error");
+grossamount->style()->unpolish(grossamount);
+grossamount->style()->polish(grossamount);
+grossamount->update();
+}
+else { 
+grossamount->setObjectName("grossamount");
+grossamount->style()->unpolish(grossamount);
+grossamount->style()->polish(grossamount);
+grossamount->update();
+payment->GrossAmount = grossamount->text().trimmed().toDouble();
 }
 if(comment->text().trimmed().isEmpty()){
 errors = true;
@@ -125,8 +174,6 @@ comment->style()->polish(comment);
 comment->update();
 payment->Comment = comment->text().trimmed();
 }
-if(!paymenttype->isHidden()) 
-payment->PaymentTypeID = paymenttype->getKey();
 if(!errors) {
 payment->save();
 if(!errors){
@@ -144,22 +191,56 @@ PaymentIndexUI::ShowUI();
 bool PaymentUI::updateModel(){ 
 bool errors = false;
 QString errorString =  "";
-if(payment->InvoiceID == 0) 
-payment->InvoiceID = invoice->getKey();
-if(totalamount->text().trimmed().isEmpty()){
+if(payment->PaymentTypeID == 0) 
+payment->PaymentTypeID = paymenttype->getKey();
+if(payment->ContactID == 0) 
+payment->ContactID = contact->getKey();
+if(payment->ProjectID == 0) 
+payment->ProjectID = project->getKey();
+if(date->text().trimmed().isEmpty()){
 errors = true;
-errorString += QObject::tr("Total Amount Can't be Empty! \n");
-totalamount->setObjectName("error");
-totalamount->style()->unpolish(totalamount);
-totalamount->style()->polish(totalamount);
-totalamount->update();
+errorString += QObject::tr("Date Can't be Empty! \n");
+date->setObjectName("error");
+date->style()->unpolish(date);
+date->style()->polish(date);
+date->update();
 }
 else { 
-totalamount->setObjectName("totalamount");
-totalamount->style()->unpolish(totalamount);
-totalamount->style()->polish(totalamount);
-totalamount->update();
-payment->TotalAmount = totalamount->text().trimmed().toDouble();
+date->setObjectName("date");
+date->style()->unpolish(date);
+date->style()->polish(date);
+date->update();
+payment->Date.fromString(date->text().trimmed());
+}
+if(netamount->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Net Amount Can't be Empty! \n");
+netamount->setObjectName("error");
+netamount->style()->unpolish(netamount);
+netamount->style()->polish(netamount);
+netamount->update();
+}
+else { 
+netamount->setObjectName("netamount");
+netamount->style()->unpolish(netamount);
+netamount->style()->polish(netamount);
+netamount->update();
+payment->NetAmount = netamount->text().trimmed().toDouble();
+}
+if(grossamount->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Gross Amount Can't be Empty! \n");
+grossamount->setObjectName("error");
+grossamount->style()->unpolish(grossamount);
+grossamount->style()->polish(grossamount);
+grossamount->update();
+}
+else { 
+grossamount->setObjectName("grossamount");
+grossamount->style()->unpolish(grossamount);
+grossamount->style()->polish(grossamount);
+grossamount->update();
+payment->GrossAmount = grossamount->text().trimmed().toDouble();
 }
 if(comment->text().trimmed().isEmpty()){
 errors = true;
@@ -176,8 +257,6 @@ comment->style()->polish(comment);
 comment->update();
 payment->Comment = comment->text().trimmed();
 }
-if(payment->PaymentTypeID == 0) 
-payment->PaymentTypeID = paymenttype->getKey();
 if(!errors){
 	return true;
 }

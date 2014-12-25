@@ -1,6 +1,6 @@
 ﻿/**************************************************************************
 **   File: loginindexui.cpp
-**   Created on: Wed Dec 17 14:47:08 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -37,6 +37,7 @@ ERPFormBlock* block0Layout = new ERPFormBlock;
  edit->setObjectName("edit");
  edit->setEnabled(false);
  remove->setEnabled(false);
+
  QObject::connect(tabel->tabel->selectionModel(), &QItemSelectionModel::selectionChanged, this, &LoginIndexUI::onSelectionChanged);
 this->controllers->addControllerButton(add);
  this->controllers->addControllerButton(edit);
@@ -63,7 +64,10 @@ LoginIndexUI*LoginIndexUI::GetUI(){
 }
 void LoginIndexUI::addRow(){
  LoginUI::ShowUI();}
-
+void LoginIndexUI::editRow(){
+ LoginUI::ShowUI();
+ //LoginUI::GetUI()->fill(model->get(tabel->tabel->selectionModel()->selectedRows().last()));
+ }
 void LoginIndexUI::removeRow(){
  model->remove(tabel->tabel->selectionModel()->selectedRows().last());
  }

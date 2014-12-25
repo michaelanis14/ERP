@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: purchaseui.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 23:40:35 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -36,8 +36,11 @@ public:
 	static void ShowUI();
 	static PurchaseUI* GetUI();
 	ERPFormBlock* block0Layout;
+	ERPFormBlock* block1Layout;
+	ERPFormBlock* block2Layout;
 	QList<PurchaseStoreProductUI*> PurchaseStoreProducts;
 	QList<PurchaseFreeLineUI*> PurchaseFreeLines;
+	QLineEdit*serial;
 	ERPComboBox*purchaseserial;
 	QDateEdit*creationdate;
 	QDateEdit*deliverydate;
@@ -58,5 +61,6 @@ private slots:
 public slots:
 	bool save();
 	bool updateModel();
+	void selectionChanged(QString);
 };
 #endif

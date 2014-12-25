@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #   File: ERP.pro
-#   Created on: Thu Dec 18 10:59:52 EET 2014
+#   Created on: Fri Dec 19 21:03:50 EET 2014
 #   Author: Michael Bishara
 #   Copyright: SphinxSolutions.
 #-------------------------------------------------
@@ -30,9 +30,28 @@ SOURCES += main.cpp \
 	displays/CommonUI/ean13.cpp  \
 	displays/CommonUI/erptableview.cpp  \
 	Model/erpmodel.cpp \
+	Model/invoicestoreproduct.cpp \
+	Model/invoiceservice.cpp \
+	Model/access.cpp \
+	Model/invoicedeliveryorderfreeline.cpp \
+	Model/invoiceperiod.cpp \
+	Model/invoiceyear.cpp \
+	Model/invoicestate.cpp \
+	Model/invoiceserial.cpp \
+	Model/invoice.cpp \
+	Model/invoicestatedate.cpp \
+	Model/invoicefreeline.cpp \
+	Model/returndeliveryorder.cpp \
+	Model/returndeliveryorderstoreproduct.cpp \
+	Model/returndeliveryorderservice.cpp \
+	Model/returndeliveryorderfreeline.cpp \
 	Model/deliveryorderserial.cpp \
 	Model/deliveryorder.cpp \
-	Model/access.cpp \
+	Model/returnpurchase.cpp \
+	Model/returnpurchasefreeline.cpp \
+	Model/returnpurchasestoreproduct.cpp \
+	Model/purchase.cpp \
+	Model/contactperson.cpp \
 	Model/company.cpp \
 	Model/tax.cpp \
 	Model/user.cpp \
@@ -50,14 +69,12 @@ SOURCES += main.cpp \
 	Model/contactfielddata.cpp \
 	Model/contactpersonfield.cpp \
 	Model/contactpersonfielddata.cpp \
-	Model/contactperson.cpp \
 	Model/contactpersontelephone.cpp \
 	Model/contactpersonemail.cpp \
 	Model/projectstatus.cpp \
 	Model/project.cpp \
 	Model/projectfile.cpp \
 	Model/projectcontactperson.cpp \
-	Model/projectproduct.cpp \
 	Model/projectservice.cpp \
 	Model/projectsales.cpp \
 	Model/unit.cpp \
@@ -70,20 +87,12 @@ SOURCES += main.cpp \
 	Model/store.cpp \
 	Model/purchasestatus.cpp \
 	Model/purchaseserial.cpp \
-	Model/purchase.cpp \
 	Model/purchasestoreproduct.cpp \
 	Model/purchasefreeline.cpp \
 	Model/deliveryorderstatus.cpp \
 	Model/deliveryorderstoreproduct.cpp \
 	Model/deliveryorderservice.cpp \
 	Model/deliveryorderfreeline.cpp \
-	Model/invoiceperiod.cpp \
-	Model/invoiceyear.cpp \
-	Model/invoicestate.cpp \
-	Model/invoiceserial.cpp \
-	Model/invoice.cpp \
-	Model/invoicestatedate.cpp \
-	Model/invoicefreeline.cpp \
 	Model/paymenttype.cpp \
 	Model/payment.cpp \
 	Model/task.cpp \
@@ -92,12 +101,50 @@ SOURCES += main.cpp \
 	Model/login.cpp \
 	displays/Product/ProductStoreStateUI.cpp \ 
 	 displays/Purchase/createpurchase.cpp \
+	displays/InvoiceStoreProduct/invoicestoreproductindexui.cpp \
+	displays/InvoiceStoreProduct/invoicestoreproductui.cpp \
+	displays/InvoiceService/invoiceserviceindexui.cpp \
+	displays/InvoiceService/invoiceserviceui.cpp \
+	displays/Access/accessindexui.cpp \
+	displays/Access/accessui.cpp \
+	displays/InvoiceDeliveryOrderFreeline/invoicedeliveryorderfreelineindexui.cpp \
+	displays/InvoiceDeliveryOrderFreeline/invoicedeliveryorderfreelineui.cpp \
+	displays/InvoicePeriod/invoiceperiodindexui.cpp \
+	displays/InvoicePeriod/invoiceperiodui.cpp \
+	displays/InvoiceYear/invoiceyearindexui.cpp \
+	displays/InvoiceYear/invoiceyearui.cpp \
+	displays/InvoiceState/invoicestateindexui.cpp \
+	displays/InvoiceState/invoicestateui.cpp \
+	displays/InvoiceSerial/invoiceserialindexui.cpp \
+	displays/InvoiceSerial/invoiceserialui.cpp \
+	displays/Invoice/invoiceindexui.cpp \
+	displays/Invoice/invoiceui.cpp \
+	displays/InvoiceStateDate/invoicestatedateindexui.cpp \
+	displays/InvoiceStateDate/invoicestatedateui.cpp \
+	displays/InvoiceFreeline/invoicefreelineindexui.cpp \
+	displays/InvoiceFreeline/invoicefreelineui.cpp \
+	displays/ReturnDeliveryOrder/returndeliveryorderindexui.cpp \
+	displays/ReturnDeliveryOrder/returndeliveryorderui.cpp \
+	displays/ReturnDeliveryOrderStoreProduct/returndeliveryorderstoreproductindexui.cpp \
+	displays/ReturnDeliveryOrderStoreProduct/returndeliveryorderstoreproductui.cpp \
+	displays/ReturnDeliveryOrderService/returndeliveryorderserviceindexui.cpp \
+	displays/ReturnDeliveryOrderService/returndeliveryorderserviceui.cpp \
+	displays/ReturnDeliveryOrderFreeline/returndeliveryorderfreelineindexui.cpp \
+	displays/ReturnDeliveryOrderFreeline/returndeliveryorderfreelineui.cpp \
 	displays/DeliveryOrderSerial/deliveryorderserialindexui.cpp \
 	displays/DeliveryOrderSerial/deliveryorderserialui.cpp \
 	displays/DeliveryOrder/deliveryorderindexui.cpp \
 	displays/DeliveryOrder/deliveryorderui.cpp \
-	displays/Access/accessindexui.cpp \
-	displays/Access/accessui.cpp \
+	displays/ReturnPurchase/returnpurchaseindexui.cpp \
+	displays/ReturnPurchase/returnpurchaseui.cpp \
+	displays/ReturnPurchaseFreeLine/returnpurchasefreelineindexui.cpp \
+	displays/ReturnPurchaseFreeLine/returnpurchasefreelineui.cpp \
+	displays/ReturnPurchaseStoreProduct/returnpurchasestoreproductindexui.cpp \
+	displays/ReturnPurchaseStoreProduct/returnpurchasestoreproductui.cpp \
+	displays/Purchase/purchaseindexui.cpp \
+	displays/Purchase/purchaseui.cpp \
+	displays/ContactPerson/contactpersonindexui.cpp \
+	displays/ContactPerson/contactpersonui.cpp \
 	displays/Company/companyindexui.cpp \
 	displays/Company/companyui.cpp \
 	displays/Tax/taxindexui.cpp \
@@ -132,8 +179,6 @@ SOURCES += main.cpp \
 	displays/ContactPersonField/contactpersonfieldui.cpp \
 	displays/ContactPersonFieldData/contactpersonfielddataindexui.cpp \
 	displays/ContactPersonFieldData/contactpersonfielddataui.cpp \
-	displays/ContactPerson/contactpersonindexui.cpp \
-	displays/ContactPerson/contactpersonui.cpp \
 	displays/ContactPersonTelephone/contactpersontelephoneindexui.cpp \
 	displays/ContactPersonTelephone/contactpersontelephoneui.cpp \
 	displays/ContactPersonEmail/contactpersonemailindexui.cpp \
@@ -146,8 +191,6 @@ SOURCES += main.cpp \
 	displays/ProjectFile/projectfileui.cpp \
 	displays/ProjectContactPerson/projectcontactpersonindexui.cpp \
 	displays/ProjectContactPerson/projectcontactpersonui.cpp \
-	displays/ProjectProduct/projectproductindexui.cpp \
-	displays/ProjectProduct/projectproductui.cpp \
 	displays/ProjectService/projectserviceindexui.cpp \
 	displays/ProjectService/projectserviceui.cpp \
 	displays/ProjectSales/projectsalesindexui.cpp \
@@ -172,8 +215,6 @@ SOURCES += main.cpp \
 	displays/PurchaseStatus/purchasestatusui.cpp \
 	displays/PurchaseSerial/purchaseserialindexui.cpp \
 	displays/PurchaseSerial/purchaseserialui.cpp \
-	displays/Purchase/purchaseindexui.cpp \
-	displays/Purchase/purchaseui.cpp \
 	displays/PurchaseStoreProduct/purchasestoreproductindexui.cpp \
 	displays/PurchaseStoreProduct/purchasestoreproductui.cpp \
 	displays/PurchaseFreeLine/purchasefreelineindexui.cpp \
@@ -186,20 +227,6 @@ SOURCES += main.cpp \
 	displays/DeliveryOrderService/deliveryorderserviceui.cpp \
 	displays/DeliveryOrderFreeline/deliveryorderfreelineindexui.cpp \
 	displays/DeliveryOrderFreeline/deliveryorderfreelineui.cpp \
-	displays/InvoicePeriod/invoiceperiodindexui.cpp \
-	displays/InvoicePeriod/invoiceperiodui.cpp \
-	displays/InvoiceYear/invoiceyearindexui.cpp \
-	displays/InvoiceYear/invoiceyearui.cpp \
-	displays/InvoiceState/invoicestateindexui.cpp \
-	displays/InvoiceState/invoicestateui.cpp \
-	displays/InvoiceSerial/invoiceserialindexui.cpp \
-	displays/InvoiceSerial/invoiceserialui.cpp \
-	displays/Invoice/invoiceindexui.cpp \
-	displays/Invoice/invoiceui.cpp \
-	displays/InvoiceStateDate/invoicestatedateindexui.cpp \
-	displays/InvoiceStateDate/invoicestatedateui.cpp \
-	displays/InvoiceFreeline/invoicefreelineindexui.cpp \
-	displays/InvoiceFreeline/invoicefreelineui.cpp \
 	displays/PaymentType/paymenttypeindexui.cpp \
 	displays/PaymentType/paymenttypeui.cpp \
 	displays/Payment/paymentindexui.cpp \
@@ -225,9 +252,28 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/CommonUI/ean13.h  \
 	displays/CommonUI/erptableview.h  \
 	Model/erpmodel.h \
+	Model/invoicestoreproduct.h \
+	Model/invoiceservice.h \
+	Model/access.h \
+	Model/invoicedeliveryorderfreeline.h \
+	Model/invoiceperiod.h \
+	Model/invoiceyear.h \
+	Model/invoicestate.h \
+	Model/invoiceserial.h \
+	Model/invoice.h \
+	Model/invoicestatedate.h \
+	Model/invoicefreeline.h \
+	Model/returndeliveryorder.h \
+	Model/returndeliveryorderstoreproduct.h \
+	Model/returndeliveryorderservice.h \
+	Model/returndeliveryorderfreeline.h \
 	Model/deliveryorderserial.h \
 	Model/deliveryorder.h \
-	Model/access.h \
+	Model/returnpurchase.h \
+	Model/returnpurchasefreeline.h \
+	Model/returnpurchasestoreproduct.h \
+	Model/purchase.h \
+	Model/contactperson.h \
 	Model/company.h \
 	Model/tax.h \
 	Model/user.h \
@@ -245,14 +291,12 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/contactfielddata.h \
 	Model/contactpersonfield.h \
 	Model/contactpersonfielddata.h \
-	Model/contactperson.h \
 	Model/contactpersontelephone.h \
 	Model/contactpersonemail.h \
 	Model/projectstatus.h \
 	Model/project.h \
 	Model/projectfile.h \
 	Model/projectcontactperson.h \
-	Model/projectproduct.h \
 	Model/projectservice.h \
 	Model/projectsales.h \
 	Model/unit.h \
@@ -265,20 +309,12 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/store.h \
 	Model/purchasestatus.h \
 	Model/purchaseserial.h \
-	Model/purchase.h \
 	Model/purchasestoreproduct.h \
 	Model/purchasefreeline.h \
 	Model/deliveryorderstatus.h \
 	Model/deliveryorderstoreproduct.h \
 	Model/deliveryorderservice.h \
 	Model/deliveryorderfreeline.h \
-	Model/invoiceperiod.h \
-	Model/invoiceyear.h \
-	Model/invoicestate.h \
-	Model/invoiceserial.h \
-	Model/invoice.h \
-	Model/invoicestatedate.h \
-	Model/invoicefreeline.h \
 	Model/paymenttype.h \
 	Model/payment.h \
 	Model/task.h \
@@ -287,12 +323,50 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	Model/login.h \
 	displays/Product/ProductStoreStateUI.h \
 	 displays/Purchase/createpurchase.h \
+	displays/InvoiceStoreProduct/invoicestoreproductindexui.h \
+	displays/InvoiceStoreProduct/invoicestoreproductui.h \
+	displays/InvoiceService/invoiceserviceindexui.h \
+	displays/InvoiceService/invoiceserviceui.h \
+	displays/Access/accessindexui.h \
+	displays/Access/accessui.h \
+	displays/InvoiceDeliveryOrderFreeline/invoicedeliveryorderfreelineindexui.h \
+	displays/InvoiceDeliveryOrderFreeline/invoicedeliveryorderfreelineui.h \
+	displays/InvoicePeriod/invoiceperiodindexui.h \
+	displays/InvoicePeriod/invoiceperiodui.h \
+	displays/InvoiceYear/invoiceyearindexui.h \
+	displays/InvoiceYear/invoiceyearui.h \
+	displays/InvoiceState/invoicestateindexui.h \
+	displays/InvoiceState/invoicestateui.h \
+	displays/InvoiceSerial/invoiceserialindexui.h \
+	displays/InvoiceSerial/invoiceserialui.h \
+	displays/Invoice/invoiceindexui.h \
+	displays/Invoice/invoiceui.h \
+	displays/InvoiceStateDate/invoicestatedateindexui.h \
+	displays/InvoiceStateDate/invoicestatedateui.h \
+	displays/InvoiceFreeline/invoicefreelineindexui.h \
+	displays/InvoiceFreeline/invoicefreelineui.h \
+	displays/ReturnDeliveryOrder/returndeliveryorderindexui.h \
+	displays/ReturnDeliveryOrder/returndeliveryorderui.h \
+	displays/ReturnDeliveryOrderStoreProduct/returndeliveryorderstoreproductindexui.h \
+	displays/ReturnDeliveryOrderStoreProduct/returndeliveryorderstoreproductui.h \
+	displays/ReturnDeliveryOrderService/returndeliveryorderserviceindexui.h \
+	displays/ReturnDeliveryOrderService/returndeliveryorderserviceui.h \
+	displays/ReturnDeliveryOrderFreeline/returndeliveryorderfreelineindexui.h \
+	displays/ReturnDeliveryOrderFreeline/returndeliveryorderfreelineui.h \
 	displays/DeliveryOrderSerial/deliveryorderserialindexui.h \
 	displays/DeliveryOrderSerial/deliveryorderserialui.h \
 	displays/DeliveryOrder/deliveryorderindexui.h \
 	displays/DeliveryOrder/deliveryorderui.h \
-	displays/Access/accessindexui.h \
-	displays/Access/accessui.h \
+	displays/ReturnPurchase/returnpurchaseindexui.h \
+	displays/ReturnPurchase/returnpurchaseui.h \
+	displays/ReturnPurchaseFreeLine/returnpurchasefreelineindexui.h \
+	displays/ReturnPurchaseFreeLine/returnpurchasefreelineui.h \
+	displays/ReturnPurchaseStoreProduct/returnpurchasestoreproductindexui.h \
+	displays/ReturnPurchaseStoreProduct/returnpurchasestoreproductui.h \
+	displays/Purchase/purchaseindexui.h \
+	displays/Purchase/purchaseui.h \
+	displays/ContactPerson/contactpersonindexui.h \
+	displays/ContactPerson/contactpersonui.h \
 	displays/Company/companyindexui.h \
 	displays/Company/companyui.h \
 	displays/Tax/taxindexui.h \
@@ -327,8 +401,6 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/ContactPersonField/contactpersonfieldui.h \
 	displays/ContactPersonFieldData/contactpersonfielddataindexui.h \
 	displays/ContactPersonFieldData/contactpersonfielddataui.h \
-	displays/ContactPerson/contactpersonindexui.h \
-	displays/ContactPerson/contactpersonui.h \
 	displays/ContactPersonTelephone/contactpersontelephoneindexui.h \
 	displays/ContactPersonTelephone/contactpersontelephoneui.h \
 	displays/ContactPersonEmail/contactpersonemailindexui.h \
@@ -341,8 +413,6 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/ProjectFile/projectfileui.h \
 	displays/ProjectContactPerson/projectcontactpersonindexui.h \
 	displays/ProjectContactPerson/projectcontactpersonui.h \
-	displays/ProjectProduct/projectproductindexui.h \
-	displays/ProjectProduct/projectproductui.h \
 	displays/ProjectService/projectserviceindexui.h \
 	displays/ProjectService/projectserviceui.h \
 	displays/ProjectSales/projectsalesindexui.h \
@@ -367,8 +437,6 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/PurchaseStatus/purchasestatusui.h \
 	displays/PurchaseSerial/purchaseserialindexui.h \
 	displays/PurchaseSerial/purchaseserialui.h \
-	displays/Purchase/purchaseindexui.h \
-	displays/Purchase/purchaseui.h \
 	displays/PurchaseStoreProduct/purchasestoreproductindexui.h \
 	displays/PurchaseStoreProduct/purchasestoreproductui.h \
 	displays/PurchaseFreeLine/purchasefreelineindexui.h \
@@ -381,20 +449,6 @@ HEADERS += displays/mainwindow.h \	erpdisplay.h \
 	displays/DeliveryOrderService/deliveryorderserviceui.h \
 	displays/DeliveryOrderFreeline/deliveryorderfreelineindexui.h \
 	displays/DeliveryOrderFreeline/deliveryorderfreelineui.h \
-	displays/InvoicePeriod/invoiceperiodindexui.h \
-	displays/InvoicePeriod/invoiceperiodui.h \
-	displays/InvoiceYear/invoiceyearindexui.h \
-	displays/InvoiceYear/invoiceyearui.h \
-	displays/InvoiceState/invoicestateindexui.h \
-	displays/InvoiceState/invoicestateui.h \
-	displays/InvoiceSerial/invoiceserialindexui.h \
-	displays/InvoiceSerial/invoiceserialui.h \
-	displays/Invoice/invoiceindexui.h \
-	displays/Invoice/invoiceui.h \
-	displays/InvoiceStateDate/invoicestatedateindexui.h \
-	displays/InvoiceStateDate/invoicestatedateui.h \
-	displays/InvoiceFreeline/invoicefreelineindexui.h \
-	displays/InvoiceFreeline/invoicefreelineui.h \
 	displays/PaymentType/paymenttypeindexui.h \
 	displays/PaymentType/paymenttypeui.h \
 	displays/Payment/paymentindexui.h \

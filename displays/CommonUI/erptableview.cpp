@@ -5,7 +5,7 @@
 **************************************/
 
 #include "erptableview.h"
-
+#include <QSqlRelationalDelegate>
 ERPTableView::ERPTableView(QWidget *parent) :
 	QWidget(parent)
 {
@@ -21,7 +21,7 @@ ERPTableView::ERPTableView(QWidget *parent) :
 	tabel->setSelectionBehavior(QAbstractItemView::SelectRows);
 	tabel->setSelectionMode(QAbstractItemView::SingleSelection);
 
-
+	//tabel->setItemDelegate(new QSqlRelationalDelegate(tabel));
 
 	lblLayout = new QHBoxLayout();
 

@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderserviceui.cpp
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -41,6 +41,9 @@ block0Layout->addRow(QObject::tr("Service"),service);
 amount = new QLineEdit();
 amount->setValidator( doubleValidator );
 block0Layout->addRow(QObject::tr("Amount"),amount);
+price = new QLineEdit();
+price->setValidator( doubleValidator );
+block0Layout->addRow(QObject::tr("Price"),price);
 flowLayout->addWidget(block0Layout);
 
 }
@@ -69,10 +72,12 @@ this->deliveryorderservice = deliveryorderservice;
 deliveryorder->setIndexByKey(deliveryorderservice->DeliveryOrderID);
 service->setIndexByKey(deliveryorderservice->ServiceID);
 amount->setText(QString::number(deliveryorderservice->Amount));
+price->setText(QString::number(deliveryorderservice->Price));
 } 
 void DeliveryOrderServiceUI::clear(){ 
 delete this->deliveryorderservice;
 amount->setText("");
+price->setText("");
 this->deliveryorderservice = new DeliveryOrderService();
 } 
 void DeliveryOrderServiceUI::selectDeliveryOrderService(){ 
@@ -107,6 +112,21 @@ amount->style()->unpolish(amount);
 amount->style()->polish(amount);
 amount->update();
 deliveryorderservice->Amount = amount->text().trimmed().toDouble();
+}
+if(price->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Price Can't be Empty! \n");
+price->setObjectName("error");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+}
+else { 
+price->setObjectName("price");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+deliveryorderservice->Price = price->text().trimmed().toDouble();
 }
 if(!errors) {
 deliveryorderservice->save();
@@ -143,6 +163,21 @@ amount->style()->unpolish(amount);
 amount->style()->polish(amount);
 amount->update();
 deliveryorderservice->Amount = amount->text().trimmed().toDouble();
+}
+if(price->text().trimmed().isEmpty()){
+errors = true;
+errorString += QObject::tr("Price Can't be Empty! \n");
+price->setObjectName("error");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+}
+else { 
+price->setObjectName("price");
+price->style()->unpolish(price);
+price->style()->polish(price);
+price->update();
+deliveryorderservice->Price = price->text().trimmed().toDouble();
 }
 if(!errors){
 	return true;

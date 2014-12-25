@@ -1,6 +1,6 @@
 /**************************************************************************
 **   File: deliveryorderserviceui.h
-**   Created on: Wed Dec 17 16:42:29 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -38,6 +38,7 @@ public:
 	ERPComboBox*deliveryorder;
 	ERPComboBox*service;
 	QLineEdit*amount;
+	QLineEdit*price;
 	void fill(DeliveryOrderService* deliveryorderservice);
 DeliveryOrderService* deliveryorderservice;
 private:

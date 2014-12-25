@@ -1,6 +1,6 @@
-/**************************************************************************
+﻿/**************************************************************************
 **   File: productindexui.h
-**   Created on: Thu Dec 18 10:59:52 EET 2014
+**   Created on: Thu Dec 18 12:57:59 EET 2014
 **   Author: Michael Bishara
 **   Copyright: SphinxSolutions.
 **************************************************************************/
@@ -22,7 +22,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QtSql>
-#include <QSqlRelationalDelegate>
+
 #include <QSqlRelationalTableModel>
 class ProductIndexUI : public ERPDisplay
 {
@@ -31,17 +31,17 @@ public:
 	explicit ProductIndexUI(QWidget *parent = 0);
 	static void ShowUI();
 	static ProductIndexUI* GetUI();
-ERPTableView *tabel; 
- Product *model; 
- QPushButton* add; 
- QPushButton* remove; 
+ERPTableView *tabel;
+ Product *model;
+ QPushButton* add;
+ QPushButton* remove;
  QPushButton* edit;
 private:
 	static ERPDisplay* p_instance;
 private slots:
-	void addRow(); 
- void removeRow(); 
- void editRow(); 
+	void addRow();
+ void removeRow();
+ void editRow();
  void onSelectionChanged();
 protected:
 void showEvent(QShowEvent * event);
